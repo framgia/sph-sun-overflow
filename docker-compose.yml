@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: sphsunoverflow
+      DB_USERNAME: root
+      DB_PASSWORD: password
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/app/backend
+    networks:
+      - app
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app/frontend
+    depends_on:
+      - backend
+    networks:
+      - app
+  db:
+    image: mysql:8.0.31
+    environment:
+      MYSQL_DATABASE: 'sphsunoverflow'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - .dbdata:/var/lib/mysql/
+    networks:
+      - app
+networks:
+  app:
+    driver: bridge
