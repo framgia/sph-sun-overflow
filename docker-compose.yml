@@ -15,8 +15,6 @@ services:
       - db
     ports:
       - 8000:8000
-    volumes:
-      - ./backend:/app/backend
     networks:
       - app
   frontend:
@@ -25,8 +23,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    volumes:
-      - ./frontend:/app/frontend
     depends_on:
       - backend
     networks:
@@ -43,3 +39,4 @@ services:
 networks:
   app:
     driver: bridge
+    

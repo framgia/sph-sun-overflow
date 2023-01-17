@@ -1,22 +1,22 @@
 FROM php:8.1
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+RUN apt-get update -y
+RUN apt-get install -y git curl zip unzip libpng-dev libonig-dev libxml2-dev
+RUN docker-php-ext-install pdo pdo_mysql bcmath
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app/backend
 
+COPY .env.example .env
 COPY . .
 
-EXPOSE 8000
+RUN composer install
+RUN composer dump-autoload
+RUN php artisan key:generate
+RUN chmod 777 -R storage
 
-CMD php artisan serve --host=0.0.0.0
+EXPOSE 8000
+CMD php artisan serve --port=8000 --host=0.0.0.0
