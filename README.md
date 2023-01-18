@@ -17,6 +17,9 @@ SunOverflow is an internal project for the employees of Sun Asterisk PH that aim
 ## Docker setup:
 1. ``git clone git@github.com:framgia/sph-sun-overflow.git``
 2. ``cd sph-sun-overflow``
+2. ``cd backend``
+2. ``cp .env.example .env``
+2. ``cd ..``
 3. ``docker-compose up --build``
 
 ## Documents

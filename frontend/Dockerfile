@@ -1,11 +1,16 @@
 FROM node:alpine
 
-WORKDIR /app/frontend
+ENV PORT 3000
 
-COPY . . 
+WORKDIR /var/www/html/frontend
+
+COPY package.json /var/www/html/frontend
+COPY package-lock.json /var/www/html/frontend
 
 RUN npm install
 
-EXPOSE 3000 
+COPY . /var/www/html/frontend
 
-CMD npm run dev
+EXPOSE 3000
+
+ENTRYPOINT ["npm", "run", "dev"]
