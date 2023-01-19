@@ -35,6 +35,8 @@ COPY . .
 
 RUN composer install
 RUN composer dump-autoload
+RUN chmod -R 777 ./vendor
+RUN chown -R $user:$user .
 RUN chmod 777 -R storage
 
 EXPOSE 8000
