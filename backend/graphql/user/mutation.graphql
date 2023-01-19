@@ -1,0 +1,13 @@
+extend type Mutation {
+    createUser(
+        name: String!
+        email: String!
+        password: String!
+        ): User @create
+    deleteUser(id: ID!): User @delete
+    updateUser(
+        id: ID!,
+        name: String
+        email: String
+        ): User @update
+}
