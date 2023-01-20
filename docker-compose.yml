@@ -19,7 +19,6 @@ services:
     working_dir: /var/www/backend
     volumes:
       - ./backend:/var/www/backend
-      - /var/www/backend/vendor
     networks:
       - sphsunoverflow
     ports:

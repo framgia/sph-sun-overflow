@@ -12,14 +12,29 @@ SunOverflow is an internal project for the employees of Sun Asterisk PH that aim
 
 ## Prerequisites:
 - [Docker-Desktop](https://www.docker.com/products/docker-desktop/)
+- [Nodejs](https://nodejs.org/en/download/)
+- [Composer](https://getcomposer.org/download/)
 
+
+## Manual setup:
+1. ``git clone git@github.com:framgia/sph-sun-overflow.git``
+2. ``cd sph-sun-overflow``
+3. ``cd backend``
+4. ``cp .env.example .env``
+5. ``php artisan serve``
+7. Open another terminal then  ``cd sph-sun-overflow/frontend``
+8. ``npm install``
+9. ``npm run dev``
 
 ## Docker setup:
 1. ``git clone git@github.com:framgia/sph-sun-overflow.git``
 2. ``cd sph-sun-overflow``
-2. ``cd backend``
-2. ``cp .env.example .env``
-2. ``cd ..``
+3. ``cd backend``
+4. ``cp .env.example .env``
+5. ``composer install``
+6. ``cd ../frontend``
+7. ``npm install``
+8. ``cd ..``
 3. ``docker-compose up --build``
 
 ## Documents
