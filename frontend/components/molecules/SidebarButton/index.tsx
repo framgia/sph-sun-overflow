@@ -5,25 +5,8 @@ type SidebarButtonProps = {
   url: string;
 };
 
-import {
-  BookmarkIcon,
-  QuestionsIcon,
-  RolesIcon,
-  TagsIcon,
-  TeamsIcon,
-  UsersIcon,
-} from "../../public/icons";
-
-import {
-  HiBookmark,
-  HiHome,
-  HiCode,
-  HiUsers,
-  HiOutlineUser,
-  HiUserGroup,
-} from "react-icons/hi";
-
 import Link from "next/link";
+import SidebarIcon from "@/components/atoms/SidebarIcon";
 
 const SidebarButton = ({
   IconName,
@@ -31,27 +14,6 @@ const SidebarButton = ({
   isSelected,
   url,
 }: SidebarButtonProps): any => {
-  const getIcon = (): JSX.Element => {
-    if (IconName === "Bookmark") {
-      return <HiBookmark />;
-    }
-    if (IconName === "Questions") {
-      return <HiHome />;
-    }
-    if (IconName === "Roles") {
-      return <HiOutlineUser />;
-    }
-    if (IconName == "Tags") {
-      return <HiCode />;
-    }
-    if (IconName === "Teams") {
-      return <HiUsers />;
-    }
-    if (IconName === "Users") {
-      return <HiUserGroup />;
-    }
-    return <></>;
-  };
   const isActive = (): string =>
     isSelected
       ? " bg-red-100 text-black border-r-4 border-r-[#FF2000] "
@@ -67,10 +29,11 @@ const SidebarButton = ({
                    active:text-black active:border-r-4 active:border-red-400 active:rounded-lg
                    `}
       >
-        {getIcon()}
+        <SidebarIcon name={IconName} />
         <span className="pl-2">{Text}</span>
       </Link>
     </li>
   );
 };
+
 export default SidebarButton;
