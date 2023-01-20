@@ -3,11 +3,11 @@ extend type Mutation {
         name: String!
         email: String!
         password: String!
-        ): User @create
+    ): User @create
     deleteUser(id: ID!): User @delete
     updateUser(
-        id: ID!,
+        id: ID!
         name: String
         email: String
-        ): User @update
+    ): User @update
 }
