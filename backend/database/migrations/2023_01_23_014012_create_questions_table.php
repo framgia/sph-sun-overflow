@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained();
             // $table->foreignId('team_id')->nullable()->constrained()->nullOnDelete();
         });
     }
