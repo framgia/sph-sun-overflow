@@ -11,6 +11,8 @@ const Button = ({
   const getClass = () => {
     if (usage === "primary") {
       return `text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200`;
+    } else if (usage === "light") {
+      return `text-gray-700 bg-white focus:ring-gray-600 hover:bg-slate-100`;
     }
   };
 

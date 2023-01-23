@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import Navbar from '../../organisms/Navbar';
 import Sidebar from '../../organisms/Sidebar';
 
@@ -6,10 +7,16 @@ type LayoutProps = {
 }
 
 const Layout = ({ children } : LayoutProps) => {
+  const router = useRouter();
+
 	return (
 		<>
-      <Navbar />
-      <Sidebar />
+      {router.pathname !== "/login" && (
+        <>
+          <Navbar />
+          <Sidebar />
+        </>
+      )}
       <main>{children}</main>
     </>
 	);
