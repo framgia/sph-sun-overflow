@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('google_id')->unique()->nullable();
             $table->integer('reputation')->default(0);
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreignId('role_id')->nullable()->constrained()->nullOnDelete();
         });
