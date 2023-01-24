@@ -1,0 +1,4 @@
+extend type Query {
+    answer(id: ID! @eq): Answer @find
+    answers: [Answer!]! @all
+}
