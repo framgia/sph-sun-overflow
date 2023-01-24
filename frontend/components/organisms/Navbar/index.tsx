@@ -5,7 +5,7 @@ import UserDropdown from '../../molecules/UserDropdown';
 
 const Navbar = () => {
 	return (
-		<nav className="absolute z-10 w-full p-3 bg-gray-100 shadow">
+		<nav className="absolute z-10 w-full px-3 py-2 md:px-20 bg-gray-100 shadow">
 			<div className="container flex flex-wrap items-center justify-between mx-auto">
 				<Link href="/" className="flex">
 					<span className="text-3xl font-bold tracking-tighter">
