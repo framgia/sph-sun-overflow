@@ -87,10 +87,11 @@ const QuestionForm = (): JSX.Element => {
             <Button
               usage="primary"
               type="submit"
-              children="Post Question"
               onClick={undefined}
               additionalClass=""
-            />
+            >
+              Post Question
+            </Button>
           </div>
         </div>
       </form>
