@@ -15,12 +15,12 @@ interface TagInputProps {
 }
 
 const initialState = {
-  tagsSelected: [],
-  tagSuggestions: [],
+  tagsSelected: [] as ITag[],
+  tagSuggestions: [] as ITag[],
   queryText: "",
 };
 
-export default function TagsInput({ setValue }: TagInputProps) {
+const TagsInput = ({ setValue }: TagInputProps) => {
   let tagsSelected: ITag[];
   let setTagsSelected: (value: ITag[]) => void;
   [tagsSelected, setTagsSelected] = useState<ITag[]>(initialState.tagsSelected);
@@ -132,4 +132,6 @@ export default function TagsInput({ setValue }: TagInputProps) {
       </Combobox>
     </div>
   );
-}
+};
+
+export default TagsInput;

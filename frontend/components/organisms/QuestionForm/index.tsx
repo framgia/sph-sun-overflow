@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import "react-quill/dist/quill.snow.css";
 import TagsInput, { ITag } from "../../molecules/TagsInput";
-import Editor from "../../atoms/Editor";
 import QuestionFormSchema from "./schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { isObjectEmpty } from "@/utils";
-type QuestionPayload = {
+import FormAlert from "@/components/molecules/FormAlert";
+import Button from "@/components/atoms/Button";
+import RichTextEditor from "@/components/molecules/RichTextEditor";
+export type FormValues = {
   title: string;
   description: string;
   tags: ITag[];
@@ -18,15 +19,16 @@ const QuestionForm = (): JSX.Element => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<QuestionPayload>({
+  } = useForm<FormValues>({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
     resolver: yupResolver(QuestionFormSchema),
   });
 
-  const onSubmit = (data: QuestionPayload) => {
+  const onSubmit = (data: FormValues) => {
     if (isObjectEmpty(errors)) {
       //Replace with graphql post request
+      console.log(data);
     }
   };
 
@@ -43,7 +45,7 @@ const QuestionForm = (): JSX.Element => {
         className="flex flex-col"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="QuestionTitle self-center w-4/5 p-6">
+        <div className="QuestionTitle self-center w-4/5 py-4">
           <label
             htmlFor="titleInput"
             className="font-bold mb-2"
@@ -57,16 +59,20 @@ const QuestionForm = (): JSX.Element => {
             {...register("title", {})}
           />
         </div>
-        <div className="Description self-center w-4/5 p-6 mb-8">
+        <div className="Description self-center w-4/5 mb-8 py-4">
           <label
             htmlFor="descriptionInput"
             className="font-bold mb-2"
           >
             Description
           </label>
-          <Editor setValue={setValue} />
+          <RichTextEditor
+            setValue={setValue}
+            usage="description"
+            id="descriptionInput"
+          />
         </div>
-        <div className="Tags self-center w-4/5 p-6">
+        <div className="Tags self-center w-4/5 py-4">
           <label
             htmlFor="tagsInput"
             className="font-bold "
@@ -75,44 +81,16 @@ const QuestionForm = (): JSX.Element => {
           </label>
           <TagsInput setValue={setValue} />
         </div>
-        {!isObjectEmpty(errors) && (
-          <div
-            className="flex self-center w-4/5 p-6 mb-4 text-sm text-red-800 rounded-lg border-2 border-red-800"
-            role="alert"
-          >
-            <svg
-              aria-hidden="true"
-              className="flex-shrink-0 inline w-5 h-5 mr-3"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+        {!isObjectEmpty(errors) && <FormAlert errors={errors} />}
+        <div className="Submit self-center w-4/5 py-4">
+          <div className="float-right">
+            <Button
+              usage="primary"
+              type="submit"
             >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-            <span className="sr-only">Info</span>
-            <div>
-              <span className="font-medium">
-                Ensure that these requirements are met:
-              </span>
-              <ul className="mt-1.5 ml-4 list-disc list-inside">
-                {Object.values(errors).map((errorText, index) => {
-                  return <li key={index}>{errorText.message}</li>;
-                })}
-              </ul>
-            </div>
+              Post Question
+            </Button>
           </div>
-        )}
-        <div className="Submit self-center w-4/5 p-6">
-          <button
-            type="submit"
-            className="border-2 border-red-400 rounded-lg text-red-400 p-2 float-right px-4 "
-          >
-            Post Question
-          </button>
         </div>
       </form>
     </div>
