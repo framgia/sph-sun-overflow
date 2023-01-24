@@ -72,9 +72,5 @@ const Editor = ({ setValue }: EditorProps): any => {
     />
   );
 };
-Editor.defaultProps = {
-  usage: "",
-  editorValue: "",
-};
 
 export default Editor;
