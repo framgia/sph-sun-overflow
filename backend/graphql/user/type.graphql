@@ -1,7 +1,30 @@
 type User {
     id: ID!
-    name: String!
+    first_name: String!
+    last_name: String!
+    avatar: String
     email: String!
+    google_id: String
+    reputation: Int!
     created_at: String!
     updated_at: String
+    role: Role! @belongsTo
+}
+
+type Role {
+    id: ID!
+    name: String!
+    description: String!
+    created_at: String!
+    updated_at: String
+    permissions: [Permission!]! @belongsToMany
+}
+
+type Permission {
+    id: ID!
+    name: String!
+    description: String!
+    created_at: String!
+    updated_at: String
+    roles: [Role!]! @belongsToMany
 }
