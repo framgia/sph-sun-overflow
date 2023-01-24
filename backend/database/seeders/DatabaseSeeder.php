@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             QuestionSeeder::class,
-            AnswerSeeder::class
+            AnswerSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }
