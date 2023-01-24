@@ -4,15 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Question extends Model
+class Answer extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    const OPEN = 0;
-    const CLOSED = 1;
-    const DUPLICATE = 2;
+    use HasFactory;
 
     protected $guarded = [];
 
@@ -21,8 +16,8 @@ class Question extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function answers()
+    public function question()
     {
-        return $this->hasMany(Answer::class);
+        return $this->belongsTo(Question::class);
     }
 }
