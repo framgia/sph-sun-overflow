@@ -1,8 +1,7 @@
 extend type Mutation {
     createAnswer(
         content: String!
-        is_correct: Boolean!
         user_id: ID!
         question_id: ID!
-    ): Answer @create
+    ): Answer! @create
 }
