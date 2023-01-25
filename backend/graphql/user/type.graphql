@@ -10,21 +10,3 @@ type User {
     updated_at: String
     role: Role! @belongsTo
 }
-
-type Role {
-    id: ID!
-    name: String!
-    description: String!
-    created_at: String!
-    updated_at: String
-    permissions: [Permission!]! @belongsToMany
-}
-
-type Permission {
-    id: ID!
-    name: String!
-    description: String!
-    created_at: String!
-    updated_at: String
-    roles: [Role!]! @belongsToMany
-}

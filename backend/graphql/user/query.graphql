@@ -1,10 +1,4 @@
 extend type Query {
     user(id: ID @eq): User @find
     users: [User!]! @all
-
-    role(id: ID @eq): Role @find
-    roles: [Role!]! @all
-
-    permission(id: ID @eq): Permission @find
-    permissions: [Permission!]! @all
 }
