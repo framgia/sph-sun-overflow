@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Answer::class);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'user_tag');
+    }
 }
