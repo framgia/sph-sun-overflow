@@ -1,2 +1,3 @@
 #import user/*.graphql
 #import answer/*.graphql
+#import role/*.graphql

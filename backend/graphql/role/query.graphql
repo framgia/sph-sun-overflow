@@ -1,0 +1,7 @@
+extend type Query {
+    role(id: ID @eq): Role @find
+    roles: [Role!]! @all
+
+    permission(id: ID @eq): Permission @find
+    permissions: [Permission!]! @all
+}
