@@ -17,9 +17,10 @@ const AnswerComponent = () => {
             usage="primary"
             type="submit"
             isDisabled={false}
-            children="Submit Answer"
             onClick={handleOnClick}
-          />
+          >
+            Submit Answer
+          </Button>
         </div>
       </div>
     </div>

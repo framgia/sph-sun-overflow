@@ -1,55 +1,80 @@
-import React, { useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
+import { UseFormSetValue } from "react-hook-form";
+import { ComponentType } from "react";
+import { ReactQuillProps } from "react-quill";
 
-const RichTextEditor = () => {
-  const [modules, setModules] = useState({
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      [
-        {
-          color: ["red", "blue", "yellow", "green", "orange", "pink", "black"],
-        },
-      ],
-      ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image"],
-      ["clean"],
+type RTEProps = {
+  setValue: UseFormSetValue<any>;
+  id: string | undefined;
+  usage: string | undefined;
+};
+
+const modules = {
+  toolbar: [
+    [
+      { header: [1, 2, false] },
+      {
+        color: ["red", "blue", "yellow", "green", "orange", "pink", "black"],
+      },
     ],
-  });
-  const [formats, setfFormats] = useState([
-    "header",
-    "color",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "code-block",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-  ]);
 
-  const ReactQuill = dynamic(
-    () => {
-      return import("react-quill");
-    },
-    { ssr: false }
-  );
+    ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image"],
+    ["clean"],
+  ],
+};
+const formats = [
+  "header",
+  "color",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "code-block",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+];
+const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
+  (): Promise<any> => import("react-quill"),
+  { ssr: false }
+);
+const RichTextEditor = ({
+  setValue,
+  id = undefined,
+  usage = "default",
+}: RTEProps) => {
+  const handleEditor = (editor: string) => {
+    setValue("description", editor);
+  };
+  let style;
+
+  switch (usage) {
+    case "description":
+      style = { height: "10rem" };
+      break;
+    default:
+      style = undefined;
+  }
 
   return (
     <ReactQuill
       className="border-2 border"
       modules={modules}
       formats={formats}
+      onChange={handleEditor}
+      id={id}
+      style={style}
     />
   );
 };
