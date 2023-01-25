@@ -1,0 +1,9 @@
+type Answer {
+    id: ID!
+    content: String!
+    is_correct: Boolean!
+    created_at: String!
+    updated_at: String
+    user_id: ID!
+    question_id: ID!
+}

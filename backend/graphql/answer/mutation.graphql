@@ -1,0 +1,7 @@
+extend type Mutation {
+    createAnswer(
+        content: String!
+        user_id: ID!
+        question_id: ID!
+    ): Answer! @create
+}
