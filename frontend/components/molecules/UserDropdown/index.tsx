@@ -5,12 +5,12 @@ import { HiOutlineLogout, HiOutlineUser  } from "react-icons/hi";
 
 const UserDropdown = () => {
 	return (
-		<Menu as="div" className="relative inline-block text-left">
+		<Menu as="div" className="relative inline-block text-left ml-1">
 			<div>
-				<Menu.Button className="flex m-1 text-sm bg-gray-800 rounded-full md:mr-0 active:ring-2 active:ring-red-500">
+				<Menu.Button className="flex sm:mx-3 text-sm bg-gray-800 rounded-full md:mr-0 active:ring-2 active:ring-red-500">
 					<span className="sr-only">Open user menu</span>
 					<img
-						className="w-9 h-9 rounded-full"
+						className="w-[40px] h-[40px] rounded-full"
 						src="https://www.w3schools.com/howto/img_avatar.png"
 						alt="user photo"
 					/>
