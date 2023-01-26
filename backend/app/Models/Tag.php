@@ -12,7 +12,7 @@ class Tag extends Model
 
     protected $guarded = [];
 
-    public function users()
+    public function users_watching()
     {
         return $this->belongsToMany(User::class);
     }

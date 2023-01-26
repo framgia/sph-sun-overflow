@@ -54,7 +54,7 @@ class User extends Authenticatable
         return $this->hasMany(Answer::class);
     }
 
-    public function tags()
+    public function watched_tags()
     {
         return $this->belongsToMany(Tag::class);
     }
