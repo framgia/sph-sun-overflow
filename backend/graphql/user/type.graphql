@@ -9,5 +9,5 @@ type User {
     created_at: String!
     updated_at: String
     role: Role! @belongsTo
-    watched_tags: [Tag!]! @belongsToMany
+    watchedTags: [Tag!]! @belongsToMany
 }

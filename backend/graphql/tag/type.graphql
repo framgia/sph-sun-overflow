@@ -4,5 +4,5 @@ type Tag {
     description: String!
     created_at: String!
     updated_at: String
-    users_watching: [User!]! @belongsToMany
+    usersWatching: [User!]! @belongsToMany
 }
