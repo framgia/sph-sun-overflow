@@ -11,7 +11,7 @@ const Layout = ({ children } : LayoutProps) => {
   const router = useRouter();
 
 	return (
-		<ProvidersWrapper>
+    <ProvidersWrapper>
       {router.pathname !== "/login" && (
         <>
           <Navbar />
