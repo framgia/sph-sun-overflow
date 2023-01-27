@@ -59,8 +59,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Tag::class);
     }
 
-    public function teams()
+    public function teamsLed()
     {
         return $this->hasMany(Team::class);
+    }
+
+    public function teams()
+    {
+        return $this->hasMany(Member::class, 'user_id');
     }
 }
