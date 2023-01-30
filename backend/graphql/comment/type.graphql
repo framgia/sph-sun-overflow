@@ -1,0 +1,11 @@
+union Commentable = Comment | Answer | Question
+
+type Comment {
+    id: ID!
+    content: String!
+    created_at: String!
+    updated_at: String!
+    user: User! @belongsTo
+    commentable: Commentable! @morphTo
+    notifications: [UserNotification]! @morphMany
+}

@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Answer;
+use App\Models\Comment;
+use App\Models\Vote;
+use App\Observers\AnswerObserver;
+use App\Observers\CommentObserver;
+use App\Observers\VoteObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +24,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+    ];
+
+    protected $observers = [
+        Answer::class => [AnswerObserver::class],
+        Comment::class => [CommentObserver::class],
+        Vote::class => [VoteObserver::class],
     ];
 
     /**

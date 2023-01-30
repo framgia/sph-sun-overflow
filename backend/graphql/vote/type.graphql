@@ -1,0 +1,11 @@
+union Voteable = Vote | Answer | Question
+
+type Vote {
+    id: ID!
+    value: Int!
+    created_at: String!
+    updated_at: String!
+    user: User! @belongsTo
+    voteable: Voteable! @morphTo
+    notifications: [UserNotification]! @morphMany
+}

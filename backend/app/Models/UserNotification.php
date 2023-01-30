@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vote extends Model
+class UserNotification extends Model
 {
     use HasFactory;
 
@@ -16,13 +16,8 @@ class Vote extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function voteable()
+    public function notifiable()
     {
         return $this->morphTo();
-    }
-
-    public function notifications()
-    {
-        return $this->morphMany(UserNotification::class, 'notifiable');
     }
 }

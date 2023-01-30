@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\PostedAnswer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,5 +30,10 @@ class Answer extends Model
     public function votes()
     {
         return $this->morphMany(Vote::class, 'voteable');
+    }
+
+    public function notifications()
+    {
+        return $this->morphMany(UserNotification::class, 'notifiable');
     }
 }

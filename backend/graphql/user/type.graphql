@@ -10,4 +10,8 @@ type User {
     updated_at: String
     role: Role! @belongsTo
     watchedTags: [Tag!]! @belongsToMany
+    questions: [Question!]! @hasMany
+    answers: [Answer!]! @hasMany
+    comments: [Comment!]! @hasMany
+    notifications: [UserNotification!]! @hasMany
 }

@@ -1,5 +1,8 @@
 extend type Mutation {
-    createAnswer(content: String!, user_id: ID!, question_id: ID!): Answer!
-        @create
+    createAnswer(
+        content: String!, 
+        user_id: ID!, 
+        question_id: ID!
+    ): Answer! @create
     updateAnswer(id: ID!, content: String): Answer! @update
 }

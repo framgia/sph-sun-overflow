@@ -1,0 +1,4 @@
+extend type Query {
+    vote(id: ID! @eq): Vote @find
+    votes: [Vote!]! @all
+}
