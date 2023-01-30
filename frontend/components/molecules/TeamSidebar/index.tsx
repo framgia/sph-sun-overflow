@@ -12,15 +12,15 @@ interface ITeam {
 interface TeamTabProps {
   team: ITeam;
 }
-
+const tempList = [
+  { id: 1, name: "nextjs", memberCount: 10 },
+  { id: 2, name: "nextjddasdasddadasdsdadasd", memberCount: 10 },
+  { id: 3, name: "nextjs", memberCount: 20 },
+  { id: 4, name: "nextjs", memberCount: 14 },
+  { id: 5, name: "nextjs", memberCount: 15 },
+];
 const TeamSidebar = () => {
-  const [teams, setTeams] = useState<ITeam[]>([
-    { id: 1, name: "nextjs", memberCount: 10 },
-    { id: 2, name: "nextjddasdasddadasdsdadasd", memberCount: 10 },
-    { id: 3, name: "nextjs", memberCount: 20 },
-    { id: 4, name: "nextjs", memberCount: 14 },
-    { id: 5, name: "nextjs", memberCount: 15 },
-  ] as ITeam[]);
+  const [teams, setTeams] = useState<ITeam[]>([] as ITeam[]);
 
   useEffect(() => {
     //GraphQl import
@@ -32,14 +32,20 @@ const TeamSidebar = () => {
         <span className="text-xl">My Teams</span>
       </div>
       <div className="bg-secondary-gray tags flex flex-wrap p-4">
-        {teams.map((team, index) => {
-          return (
-            <TeamTab
-              team={team}
-              key={index}
-            />
-          );
-        })}
+        {teams.length == 0 && (
+          <div className="text-center text-xl font-medium w-full p-4">
+            Not in Any Teams Yet
+          </div>
+        )}
+        {teams.length > 0 &&
+          teams.map((team, index) => {
+            return (
+              <TeamTab
+                team={team}
+                key={index}
+              />
+            );
+          })}
       </div>
     </div>
   );

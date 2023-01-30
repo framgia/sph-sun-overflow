@@ -10,14 +10,16 @@ interface IUser {
 interface UserTabProps {
   user: IUser;
 }
+
+const tempMembers = [
+  { id: 1, name: "nextjs", role: "FE" },
+  { id: 2, name: "nextjdsdadasd", role: "FE" },
+  { id: 3, name: "nextjs", role: "FE" },
+  { id: 4, name: "nextjs", role: "BE" },
+  { id: 5, name: "nextjs", role: "BE" },
+];
 const TeamMemberSidebar = () => {
-  const [members, setMembers] = useState<IUser[]>([
-    { id: 1, name: "nextjs", role: "FE" },
-    { id: 2, name: "nextjdsdadasd", role: "FE" },
-    { id: 3, name: "nextjs", role: "FE" },
-    { id: 4, name: "nextjs", role: "BE" },
-    { id: 5, name: "nextjs", role: "BE" },
-  ] as IUser[]);
+  const [members, setMembers] = useState<IUser[]>([] as IUser[]);
 
   return (
     <div className="p-1 m-3 drop-shadow-md">
@@ -26,6 +28,11 @@ const TeamMemberSidebar = () => {
         <div className="text-lg text-under">Manage</div>
       </div>
       <div className="bg-secondary-gray tags flex flex-wrap p-4">
+        {members.length == 0 && (
+          <div className="text-center text-xl font-medium w-full p-4">
+            No Other Members
+          </div>
+        )}
         {members.map((member, index) => {
           return (
             <UserTab
