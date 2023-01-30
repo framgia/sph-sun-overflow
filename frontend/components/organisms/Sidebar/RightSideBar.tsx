@@ -1,9 +1,6 @@
-import { useRouter } from 'next/router'
 import WatchedTags from '@/components/molecules/WatchedTags'
 import TeamSidebar from '@/components/molecules/TeamSidebar'
 import TeamMemberSidebar from '@/components/molecules/TeamMembersSidebar'
-import { useQuery } from '@apollo/client'
-import { LOAD_SIDEBAR_1, LOAD_SIDEBAR_2, LOAD_SIDEBAR_3 } from '@/helpers/graphql/Sidebar/Queries'
 type TRightSidebarProps = {
     usage: string
 }
@@ -23,7 +20,7 @@ const RightSideBar = ({ usage }: TRightSidebarProps) => {
 
 const Type1 = () => {
     return (
-        <div className="absolute inset-y-0 right-0 hidden  w-1/6  flex-col pt-32 md:flex lg:flex ">
+        <div className=" hidden w-1/6  flex-col  self-end  pt-32 lg:flex ">
             <WatchedTags />
             <TeamSidebar />
         </div>
@@ -31,14 +28,14 @@ const Type1 = () => {
 }
 const Type2 = () => {
     return (
-        <div className="absolute inset-y-0 right-0 hidden  w-1/6  flex-col pt-32 md:flex lg:flex ">
+        <div className=" hidden w-1/6  flex-col  self-end  pt-32 lg:flex ">
             <TeamMemberSidebar />
         </div>
     )
 }
 const Type3 = () => {
     return (
-        <div className="absolute inset-y-0 right-0 hidden  w-1/6  flex-col pt-32 md:flex lg:flex ">
+        <div className=" hidden w-1/6  flex-col  self-end pt-32 lg:flex ">
             <WatchedTags />
         </div>
     )

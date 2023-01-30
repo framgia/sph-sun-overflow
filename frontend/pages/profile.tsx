@@ -1,7 +1,7 @@
 import { RightSideBar } from "@/components/organisms/Sidebar";
 const profile = () => {
   return (
-    <div>
+    <div className="flex flex-row-reverse">
       profile
       <RightSideBar usage="profile" />
     </div>

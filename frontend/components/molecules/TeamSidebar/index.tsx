@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { isObjectEmpty } from "@/utils";
+import StackedUsers from "@/components/atoms/StackedUsers";
 
 interface ITeam {
   id: number;
@@ -15,7 +16,7 @@ interface TeamTabProps {
 const TeamSidebar = () => {
   const [teams, setTeams] = useState<ITeam[]>([
     { id: 1, name: "nextjs", memberCount: 10 },
-    { id: 2, name: "nextjdsdadasd", memberCount: 10 },
+    { id: 2, name: "nextjddasdasddadasdsdadasd", memberCount: 10 },
     { id: 3, name: "nextjs", memberCount: 20 },
     { id: 4, name: "nextjs", memberCount: 14 },
     { id: 5, name: "nextjs", memberCount: 15 },
@@ -45,21 +46,30 @@ const TeamSidebar = () => {
 };
 
 const TeamTab = ({ team }: TeamTabProps) => {
-  console.log(team);
   if (!isObjectEmpty(team)) {
     return (
       <Link
-        className="flex w-full h-20 my-2 justify-between hover:bg-primary-gray px-2 items-center "
+        className="flex w-full h-20 my-2 justify-between hover:bg-primary-gray px-2 items-center"
         href="#"
       >
-        <div className="flex flex-col align-middle  max-w-20 overflow-hidden text-overflow-ellipsis">
-          <div className="text-xl ">{team.name}</div>
+        <div className="flex flex-col align-middle overflow-hidden">
+          <div className="text-xl overflow-hidden text-ellipsis w-24 ">
+            {team.name}
+          </div>
           <div className="text-md hidden md:text-xs lg:flex">
             {team.memberCount} members
           </div>
         </div>
-        <div className="align-middle hidden md:hidden lg:flex items-center h-full">
-          Images
+        <div className="align-middle hidden xl:flex items-center h-full">
+          <StackedUsers
+            images={[
+              "https://www.w3schools.com/howto/img_avatar.png",
+              "https://www.w3schools.com/howto/img_avatar.png",
+              "https://www.w3schools.com/howto/img_avatar.png",
+              "https://www.w3schools.com/howto/img_avatar.png",
+              "https://www.w3schools.com/howto/img_avatar.png",
+            ]}
+          />
         </div>
       </Link>
     );

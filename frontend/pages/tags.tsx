@@ -1,7 +1,7 @@
 import { RightSideBar } from "@/components/organisms/Sidebar";
 const tags = () => {
   return (
-    <div>
+    <div className="flex flex-row-reverse">
       tags <RightSideBar usage="questions" />
     </div>
   );
