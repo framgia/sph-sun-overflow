@@ -5,11 +5,7 @@ import { HiCheck } from 'react-icons/hi2'
 import { removeItemViaId } from '@/utils'
 import Tag from '../../atoms/Tag'
 import { UseFormSetValue } from 'react-hook-form'
-export type ITag = {
-    id: number
-    title: string
-    description: string
-}
+import { ITag } from '../CustomComboBox'
 interface TagInputProps {
     setValue: UseFormSetValue<any>
 }
