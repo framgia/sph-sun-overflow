@@ -1,0 +1,13 @@
+.quill .ql-container.ql-snow {
+    background-color: white;
+    border-radius: 0 0 1em 1em;
+    border-color: rgb(156 163 175);
+    border-width: 2px;
+}
+
+.quill .ql-toolbar.ql-snow {
+    background-color: white;
+    border-radius: 1em 1em 0 0;
+    border-color: rgb(156 163 175);
+    border-width: 2px;
+}

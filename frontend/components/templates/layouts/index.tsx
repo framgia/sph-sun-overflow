@@ -29,13 +29,9 @@ const Layout = ({ children }: LayoutProps) => {
                     <div className="h-full w-full">{children}</div>
                 </div>
                 {!routeIfLoginPathCheck && (
-                    <Image
-                        src="/images/sun_logo.png"
-                        alt="sun-logo"
-                        width={650}
-                        height={650}
-                        className="fixed -right-16 -bottom-20 -z-50 opacity-10"
-                    />
+                    <div className="fixed -right-16 -bottom-20 -z-50 aspect-square h-[90vh] opacity-10">
+                        <Image src="/images/sun_logo.png" alt="sun-logo" fill />
+                    </div>
                 )}
             </main>
         </ProvidersWrapper>

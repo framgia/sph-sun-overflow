@@ -1,7 +1,7 @@
 import SidebarButton from '../../molecules/SidebarButton'
 import { useRouter } from 'next/router'
 
-const Sidebar = (): JSX.Element => {
+const LeftSideBar = (): JSX.Element => {
     const router = useRouter()
 
     const isSelected = (url: string): boolean => {
@@ -40,7 +40,7 @@ const Sidebar = (): JSX.Element => {
     ]
 
     return (
-        <ul className="w-full h-full border-r-4 border-gray-300 pt-4 bg-white">
+        <ul className="-ml-4 h-full w-full border-r-4 border-gray-300 bg-white pt-4">
             {SidebarLinks.length > 0 &&
                 SidebarLinks.map((link, index) => {
                     let { IconName, Text, url } = link
@@ -58,4 +58,4 @@ const Sidebar = (): JSX.Element => {
     )
 }
 
-export default Sidebar
+export default LeftSideBar
