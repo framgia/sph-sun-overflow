@@ -1,0 +1,8 @@
+type Tag {
+    id: ID!
+    name: String!
+    description: String!
+    created_at: String!
+    updated_at: String
+    usersWatching: [User!]! @belongsToMany
+}

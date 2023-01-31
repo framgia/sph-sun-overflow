@@ -9,4 +9,5 @@ type User {
     created_at: String!
     updated_at: String
     role: Role! @belongsTo
+    watchedTags: [Tag!]! @belongsToMany
 }
