@@ -1,0 +1,8 @@
+union Notifiable = UserNotification | Answer | Comment | Vote
+
+type UserNotification {
+    id: ID!
+    user: User! @belongsTo
+    is_read: Boolean!
+    notifiable: Notifiable! @morphTo
+}

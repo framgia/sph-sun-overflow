@@ -1,6 +1,10 @@
 #import user/*.graphql
 #import answer/*.graphql
 #import tag/*.graphql
+#import question/*.graphql
+#import comment/*.graphql
+#import vote/*.graphql
+#import notification/*.graphql
 
 type Mutation {
     login(input: LoginInput @spread): AuthPayload!
@@ -45,3 +49,4 @@ type Mutation {
         )
         @guard(with: ["api"])
 }
+

@@ -1,12 +1,14 @@
-type Answer {
+type Question {
     id: ID!
+    title: String!
     content: String!
-    is_correct: Boolean!
+    status: Int!
+    is_public: Boolean
     created_at: String!
     updated_at: String
+    deleted_at: String
     user: User! @belongsTo
-    question : Question! @belongsTo
-    notifications: [UserNotification]! @morphMany
     comments: [Comment]! @morphMany
     votes: [Vote]! @morphMany
+    notifications: [UserNotification]! @morphMany
 }

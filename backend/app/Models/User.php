@@ -49,9 +49,19 @@ class User extends Authenticatable
         return $this->hasMany(Question::class);
     }
 
-    public function answers()
+    public function comments()
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Comment::class);
+    }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(UserNotification::class);
     }
 
     public function watchedTags()

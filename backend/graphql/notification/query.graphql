@@ -1,0 +1,4 @@
+extend type Query {
+    userNotification(id: ID! @eq): UserNotification @find
+    userNotifications: [UserNotification!]! @all
+}
