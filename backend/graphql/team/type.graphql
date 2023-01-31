@@ -1,0 +1,24 @@
+type Team {
+    id: ID!
+    name: String!
+    description: String!
+    dashboard_content: String!
+    created_at: String!
+    updated_at: String
+    teamLeader: User! @belongsTo
+    members: [Member!]! @hasMany
+}
+
+type Member {
+    id: ID!
+    user: User! @belongsTo
+    teamRole: TeamRole! @belongsTo
+    team: Team! @belongsTo
+}
+
+type TeamRole {
+    id: ID!
+    name: String!
+    description: String!
+    members: [Member!]! @hasMany
+}

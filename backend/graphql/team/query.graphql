@@ -1,0 +1,4 @@
+extend type Query {
+    teams: [Team!]! @all
+    team(id: ID @eq): Team @find
+}

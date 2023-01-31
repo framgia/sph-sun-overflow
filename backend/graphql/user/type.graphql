@@ -14,4 +14,5 @@ type User {
     answers: [Answer!]! @hasMany
     comments: [Comment!]! @hasMany
     notifications: [UserNotification!]! @hasMany
+    teams: [Member!]! @hasMany
 }
