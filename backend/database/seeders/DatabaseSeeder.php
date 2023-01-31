@@ -24,7 +24,10 @@ class DatabaseSeeder extends Seeder
             AnswerSeeder::class,
             CommentSeeder::class,
             VoteSeeder::class,
-            TagSeeder::class
+            TagSeeder::class,
+            TeamSeeder::class,
+            TeamRoleSeeder::class,
+            MemberSeeder::class,
         ]);
     }
 }
