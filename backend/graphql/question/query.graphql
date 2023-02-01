@@ -1,0 +1,4 @@
+extend type Query {
+    question(id: ID! @eq): Question @find
+    questions: [Question!] @all
+}

@@ -5,7 +5,7 @@ type Answer {
     created_at: String!
     updated_at: String
     user: User! @belongsTo
-    question : Question! @belongsTo
+    question: Question! @belongsTo
     notifications: [UserNotification]! @morphMany
     comments: [Comment]! @morphMany
     votes: [Vote]! @morphMany
