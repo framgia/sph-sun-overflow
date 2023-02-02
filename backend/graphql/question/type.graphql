@@ -2,7 +2,7 @@ type Question {
     id: ID!
     title: String!
     content: String!
-    status: Int!
+    status: Int
     is_public: Boolean
     created_at: String!
     updated_at: String
