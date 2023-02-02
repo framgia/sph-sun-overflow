@@ -1,4 +1,7 @@
 extend type Query {
     question(id: ID! @eq): Question @find
-    questions: [Question!] @all
+    questions(
+        orderBy: _ @orderBy(columns: ["created_at"])
+        filter: String
+    ): [Question!]! @paginate(builder: "App\\GraphQL\\Queries\\Questions")
 }

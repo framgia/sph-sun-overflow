@@ -8,7 +8,7 @@ type Question {
     updated_at: String
     deleted_at: String
     user: User! @belongsTo
+    answers: [Answer!]! @hasMany
     comments: [Comment]! @morphMany
     votes: [Vote]! @morphMany
-    notifications: [UserNotification]! @morphMany
 }
