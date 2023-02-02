@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { HiOutlineLogout, HiOutlineUser  } from "react-icons/hi";
+import { setUserToken } from '@/helpers/localStorageHelper';
+import { signOut } from 'next-auth/react';
 
 const UserDropdown = () => {
 	return (
@@ -50,6 +52,10 @@ const UserDropdown = () => {
 						<Menu.Item>
 							{({ active }) => (
 								<button
+									onClick={() => {
+										setUserToken('')
+										signOut()
+									}}
 									className={`block flex items-center px-4 py-2 w-full text-left text-sm text-gray-700 ${
 										active && 'bg-red-100'
 									}`}

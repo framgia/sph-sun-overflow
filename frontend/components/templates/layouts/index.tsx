@@ -10,9 +10,10 @@ type LayoutProps = {
 const Layout = ({ children } : LayoutProps) => {
   const router = useRouter();
 
+  const routeIfLoginPathCheck = router.asPath === "/login" || router.asPath === "/login/check"
 	return (
-		<ProvidersWrapper>
-      {router.pathname !== "/login" && (
+    <ProvidersWrapper>
+      {!routeIfLoginPathCheck && (
         <>
           <Navbar />
           <Sidebar />
