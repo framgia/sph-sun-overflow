@@ -1,0 +1,10 @@
+extend type Mutation {
+    createQuestion(
+        title: String!
+        content: String
+        user_id: ID!
+        question_id: ID!
+        is_public: boolean
+        status: Int
+    ): Question!
+}
