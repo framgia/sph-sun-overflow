@@ -39,7 +39,7 @@ type Mutation {
         )
     socialLogin(input: SocialLoginInput! @spread): AuthPayload!
         @field(
-            resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\SocialLogin@resolve"
+            resolver: "App\\GraphQL\\Mutations\\SocialLogin"
         )
     verifyEmail(input: VerifyEmailInput! @spread): AuthPayload!
         @field(
