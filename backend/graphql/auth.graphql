@@ -68,6 +68,7 @@ input RegisterInput {
 input SocialLoginInput {
     provider: String! @rules(apply: ["required"])
     token: String! @rules(apply: ["required"])
+    email: String! @rules(apply: ["required"])
 }
 
 input VerifyEmailInput {

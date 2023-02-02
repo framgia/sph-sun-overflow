@@ -1,4 +1,5 @@
-import { GET_AUTHENTICATED_USER } from "@/helpers/graphql/users/Queries";
+import GET_AUTHENTICATED_USER from "@/helpers/graphql/queries/get_authenticated_user";
+import { loadingScreenShow } from "@/helpers/loaderSpinnerHelper";
 import { getUserToken } from "@/helpers/localStorageHelper";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -13,12 +14,13 @@ const RouteWrapper = ({ children } : LayoutProps) => {
 
   const dataCheckIfNone = data?.me === null || data === undefined
   const errorCheck = error?.message === "Unauthenticated." || error === undefined
+  const routeIfLoginPathCheck = router.asPath === "/login" || router.asPath === "/login/check"
 
   if(loading) 
-    return "Loading ...";
-  else if(dataCheckIfNone && errorCheck && router.asPath !== "/login" && getUserToken() === "")
+    return loadingScreenShow();
+  else if(dataCheckIfNone && errorCheck && !routeIfLoginPathCheck && getUserToken() === "")
     router.push("/login")
-  else if(!dataCheckIfNone && router.asPath === "/login" && getUserToken() !== "")
+  else if(!dataCheckIfNone && routeIfLoginPathCheck && getUserToken() !== "")
     router.push("/")
   else {
     return children

@@ -4,30 +4,10 @@ import type { NextPage } from 'next'
 import { FcGoogle } from "react-icons/fc";
 import Head from 'next/head'
 import Image from 'next/image'
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { useMutation } from '@apollo/client';
-import { setUserToken } from '@/helpers/localStorageHelper';
-import { SOCIAL_LOGIN } from '@/helpers/graphql/users/Mutations';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { signIn } from 'next-auth/react';
 
-const Home: NextPage = () => {
-  const { data: session } = useSession()
-  const router = useRouter()
 
-  const [ socialLogin ] = useMutation(SOCIAL_LOGIN)
-
-  if(session) {
-    socialLogin({ variables: { token: session.accessToken } })
-    .then(({ data }) => {
-      setUserToken(data.socialLogin.access_token)
-      router.push('/')
-    })
-    .catch(err =>{
-      signOut()
-    })
-  }
-  
+const Login: NextPage = () => {
   return (
     <>
       <Head>
@@ -40,7 +20,7 @@ const Home: NextPage = () => {
           <div className="login-card">
             <Image src="/images/overflow_logo.png" className="login-overflow-logo" alt='sun-overflow' width={686} height={231} />
             <div className='login-google'>
-              <Button additionalClass="login-btn" usage="light" onClick={() => signIn('google')}>
+              <Button additionalClass="login-btn" usage="light" onClick={() => signIn('google',{ callbackUrl: 'http://localhost:3000/login/check' })}>
                 <FcGoogle className='mr-4 text-3xl'/>
                 Sign in with Google
               </Button>
@@ -52,4 +32,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Login
