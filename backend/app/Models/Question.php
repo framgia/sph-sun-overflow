@@ -35,4 +35,14 @@ class Question extends Model
     {
         return $this->morphMany(Vote::class, 'voteable');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 }

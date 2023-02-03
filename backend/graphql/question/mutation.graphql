@@ -1,10 +1,10 @@
 extend type Mutation {
     createQuestion(
-        title: String!
-        content: String
-        user_id: ID!
-        question_id: ID!
-        is_public: boolean
-        status: Int
-    ): Question!
+        title: String! @rules(apply: ["required"])
+        content: String! @rules(apply: ["required"])
+        is_public: Boolean
+        tags: [ID!]! @rules(apply: ["required"])
+        team_id: ID
+        user_id: ID! @rules(apply: ["required"])
+    ): Question! @guard(with: ["api"])
 }
