@@ -7,16 +7,15 @@ type Props = {
 
 const Comment = ({ text, author }: Props) => {
     return (
-        <div className="group flex flex-wrap gap-2 border-b-2 p-2">
+        <div className="group flex flex-wrap gap-2 border-b-2 px-2 py-4">
             <span>{text}</span>
-            <span>–</span>
-            <span>
+            <span className="ml-4">
                 <Link href="#" className="text-blue-500 hover:text-blue-400">
                     {author}
                 </Link>
             </span>
             <span className="text-primary-gray">6 mins ago</span>
-            <div className="invisible flex gap-2 group-hover:visible">
+            <div className="invisible ml-2 flex gap-2 group-hover:visible">
                 <span>
                     <Link href="#" className="text-blue-500 hover:text-blue-400">
                         Edit

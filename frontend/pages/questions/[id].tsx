@@ -24,20 +24,20 @@ const QuestionDetailPage = () => {
         created_at: '2 days ago',
         view_count: '22 times',
         votes: {
-            value: 30
+            value: 30,
         },
         tags: [
             { id: 1, name: 'Tag 1', is_tag: false },
             { id: 2, name: 'Tag 2', is_tag: true },
-            { id: 3, name: 'Tag 3', is_tag: true }
+            { id: 3, name: 'Tag 3', is_tag: true },
         ],
         is_bookmark: false,
         user: {
             id: 1,
             first_name: 'Luffy',
             last_name: 'Balasi',
-            avatar: 'image'
-        }
+            avatar: 'image',
+        },
     }
 
     return (
@@ -54,7 +54,7 @@ const QuestionDetailPage = () => {
                     is_bookmark={question.is_bookmark}
                     user={question.user}
                 />
-                <div className="mt-8 border-t-2">
+                <div className="mt-2 border-t-2">
                     <Comment
                         text="Lorem ipsum dolor, sit amet consectetur adipisicing elit..."
                         author="John Doe"
