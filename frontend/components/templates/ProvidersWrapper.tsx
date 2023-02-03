@@ -1,15 +1,11 @@
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from 'next-auth/react'
 
 type LayoutProps = {
-  children: JSX.Element
+    children: JSX.Element
 }
 
-const ProvidersWrapper = ({ children } : LayoutProps) => {
-	return (
-		  <SessionProvider>
-        {children}
-      </SessionProvider>
-	);
+const ProvidersWrapper = ({ children }: LayoutProps) => {
+    return <SessionProvider>{children}</SessionProvider>
 }
 
 export default ProvidersWrapper

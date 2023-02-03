@@ -1,11 +1,8 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const SOCIAL_LOGIN = gql`
-    mutation SocialLogin($token: String!){
-        socialLogin(input: {
-            provider: "google",
-            token: $token,
-        }) {
+    mutation SocialLogin($token: String!) {
+        socialLogin(input: { provider: "google", token: $token }) {
             access_token
             refresh_token
             expires_in
@@ -19,5 +16,5 @@ export const SOCIAL_LOGIN = gql`
                 updated_at
             }
         }
-    } 
+    }
 `

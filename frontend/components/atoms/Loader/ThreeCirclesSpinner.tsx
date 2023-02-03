@@ -1,19 +1,21 @@
-import { ThreeCircles } from "react-loader-spinner";
+import { ThreeCircles } from 'react-loader-spinner'
 
 type LoaderProp = {
-    color: string;
-};
+    color: string
+}
 
 const ThreeCirclesSpinner = ({ color }: LoaderProp): JSX.Element => {
-    return <ThreeCircles
-        height="100"
-        width="100"
-        color={color}
-        ariaLabel="puff-loading"
-        wrapperStyle={{}}
-        wrapperClass="loading-screen"
-        visible={true}
-    />
-};
-  
-export default ThreeCirclesSpinner;
+    return (
+        <ThreeCircles
+            height="100"
+            width="100"
+            color={color}
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass="loading-screen"
+            visible={true}
+        />
+    )
+}
+
+export default ThreeCirclesSpinner

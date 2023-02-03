@@ -1,14 +1,15 @@
 .login-card {
-    background-image: linear-gradient(rgba(223, 223, 223, 0.8), rgba(223, 223, 223, 0.8)), url('/images/sun_logo.png');
-    background-repeat: no-repeat;  
-    background-position: right;    
+    background-image: linear-gradient(rgba(223, 223, 223, 0.8), rgba(223, 223, 223, 0.8)),
+        url('/images/sun_logo.png');
+    background-repeat: no-repeat;
+    background-position: right;
     width: 54rem;
     height: 32rem;
     @apply shadow-lg;
 }
 
 .login-welcome {
-    @apply text-4xl mb-4 font-bold ;
+    @apply mb-4 text-4xl font-bold;
 }
 
 .login-overflow-logo {
@@ -16,7 +17,7 @@
 }
 
 .login-google {
-    @apply flex justify-center mt-16;
+    @apply mt-16 flex justify-center;
 }
 
 .login-btn {
