@@ -1,3 +1,4 @@
 extend type Query {
     tags: [Tag!]! @all
+    tagSuggest(name: String! @where(operator: "like")): [Tag] @all
 }
