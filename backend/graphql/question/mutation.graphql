@@ -4,6 +4,8 @@ extend type Mutation {
         content: String! @rules(apply: ["required"])
         status: Int
         is_public: Boolean
-        user_id: ID!
+        tags: [ID!]! @rules(apply: ["required"])
+        team_id: ID
+        user_id: ID! @rules(apply: ["required"])
     ): Question! @guard(with: ["api"])
 }
