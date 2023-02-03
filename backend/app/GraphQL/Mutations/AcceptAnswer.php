@@ -17,13 +17,17 @@ final class AcceptAnswer
         // TODO implement the resolver
         try {
             $question = Question::findOrFail($args['question_id']);
+
             $answer = Answer::findOrFail($args['answer_id']);
             $checkAccepted = $question->answers()->where('answers.is_correct', true)->exists();
+
             if($checkAccepted){
                 return "Only one answer can be accepted";
             }
+
             $answer->is_correct = true;
             $answer->save();
+
             return "Answer was accepted successfully";
 
         } catch (Exception $e) {
