@@ -2,7 +2,6 @@ extend type Mutation {
     createQuestion(
         title: String! @rules(apply: ["required"])
         content: String! @rules(apply: ["required"])
-        status: Int
         is_public: Boolean
         tags: [ID!]! @rules(apply: ["required"])
         team_id: ID

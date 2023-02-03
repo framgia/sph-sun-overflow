@@ -12,7 +12,7 @@ class CustomException extends Exception implements RendersErrorsExtensions
     */
     protected $reason;
 
-    public function __construct(string $message, string $reason = '')
+    public function __construct(string $message, string $reason = null)
     {
         parent::__construct($message);
 
@@ -49,7 +49,7 @@ class CustomException extends Exception implements RendersErrorsExtensions
     public function extensionsContent(): array
     {
         return [
-            'reason' => $this->reason? $this->reason : $this->message,
+            'reason' => $this->reason ?? $this->message,
         ];
     }
 }
