@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { errorNotify, formProcessToast } from '@/helpers/toast'
 import { ToastContainer } from 'react-toastify'
-import useUsertore from '@/helpers/store'
+import useUserStore from '@/helpers/store'
 import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
 
 export type FormValues = {
@@ -19,7 +19,7 @@ const AnswerComponent = () => {
     const { query } = useRouter()
     const { id: question_id } = query
 
-    const user_id = useUsertore.getState().user_id
+    const user_id = useUserStore.getState().user_id
 
     const [createAnswer] = useMutation(CREATE_ANSWER)
 

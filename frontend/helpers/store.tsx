@@ -4,9 +4,9 @@ interface UserState {
     addUserID: (user: number) => void
 }
 
-const useUsertore = create<UserState>()((set) => ({
+const useUserStore = create<UserState>()((set) => ({
     user_id: 0,
     addUserID: (user) => set(() => ({ user_id: user })),
 }))
 
-export default useUsertore
+export default useUserStore

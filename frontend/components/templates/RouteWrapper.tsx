@@ -1,7 +1,7 @@
 import GET_AUTHENTICATED_USER from '@/helpers/graphql/queries/get_authenticated_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { getUserToken } from '@/helpers/localStorageHelper'
-import useUsertore from '@/helpers/store'
+import useUserStore from '@/helpers/store'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 
@@ -12,7 +12,7 @@ type LayoutProps = {
 const RouteWrapper = ({ children }: LayoutProps) => {
     const { loading, error, data } = useQuery(GET_AUTHENTICATED_USER)
 
-    const addUser = useUsertore((state) => state.addUserID)
+    const addUser = useUserStore((state) => state.addUserID)
 
     const router = useRouter()
 
