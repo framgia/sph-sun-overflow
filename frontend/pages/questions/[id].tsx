@@ -1,3 +1,4 @@
+import AnswerDetail from '@/components/organisms/AnswerDetail'
 import Comment from '@/components/organisms/Comment'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
 import { useRouter } from 'next/router'
@@ -40,6 +41,30 @@ const QuestionDetailPage = () => {
         },
     }
 
+    const answer: {
+        id: number
+        content: string
+        created_at: string
+        vote_count: number
+        is_bookmark: boolean
+        is_correct: boolean
+        user: { id: number; first_name: string; last_name: string; avatar: string }
+    } = {
+        id: Number(query.id),
+        content:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore',
+        created_at: '2 days ago',
+        vote_count: 2,
+        is_bookmark: false,
+        is_correct: true,
+        user: {
+            id: 2,
+            first_name: 'John',
+            last_name: 'Doe',
+            avatar: 'image',
+        },
+    }
+
     return (
         <Fragment>
             <div className="gap-3 py-8 pl-16 pr-52">
@@ -62,6 +87,16 @@ const QuestionDetailPage = () => {
                     <Comment text="This is a comment." author="James Bow" />
                     <Comment text="This is another comment!" author="Jane Dough" />
                 </div>
+                <div className="my-4 w-full border-t-2" />
+                <AnswerDetail
+                    id={answer.id}
+                    content={answer.content}
+                    created_at={answer.created_at}
+                    vote_count={answer.vote_count}
+                    is_bookmark={answer.is_bookmark}
+                    is_correct={answer.is_correct}
+                    user={answer.user}
+                />
             </div>
         </Fragment>
     )

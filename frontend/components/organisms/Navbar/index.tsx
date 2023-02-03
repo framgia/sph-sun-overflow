@@ -5,12 +5,12 @@ import UserDropdown from '../../molecules/UserDropdown'
 
 const Navbar = () => {
     return (
-        <nav className="w-full p-3 bg-gray-100">
-            <div className="container flex flex-wrap items-center justify-between mx-auto">
+        <nav className="z-10 w-full bg-gray-100 px-1 py-2 drop-shadow-md md:px-20">
+            <div className="container mx-auto flex flex-wrap items-center justify-between">
                 <Link href="/" className="flex">
                     <span className="text-3xl font-bold tracking-tighter">
-                        <text className="text-[#FF2000]">Sun* </text>
-                        <text className="text-[#333333]">Overflow</text>
+                        <text className="text-primary-red">Sun* </text>
+                        <text className="text-primary-black">Overflow</text>
                     </span>
                 </Link>
                 <div className="flex items-center md:order-2">
