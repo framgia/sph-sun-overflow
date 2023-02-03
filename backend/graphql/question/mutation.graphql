@@ -5,6 +5,5 @@ extend type Mutation {
         is_public: Boolean
         tags: [ID!]! @rules(apply: ["required"])
         team_id: ID
-        user_id: ID! @rules(apply: ["required"])
     ): Question! @guard(with: ["api"])
 }
