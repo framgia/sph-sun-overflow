@@ -1,7 +1,7 @@
 extend type Query {
-    question(id: ID! @eq): Question @find
+    question(id: ID! @eq): Question @guard(with: ["api"]) @find 
     questions(
         orderBy: _ @orderBy(columns: ["created_at"])
         filter: String
-    ): [Question!]! @paginate(builder: "App\\GraphQL\\Queries\\Questions")
+    ): [Question!]! @guard(with: ["api"]) @paginate(builder: "App\\GraphQL\\Queries\\Questions")
 }
