@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
-import Comment from '@/components/organisms/Comment'
 
 const inter = Inter({ subsets: ['latin'] })
 

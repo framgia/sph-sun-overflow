@@ -1,27 +1,23 @@
-import Icons from '@/components/atoms/Icons';
-import Image from 'next/image';
+import Icons from '@/components/atoms/Icons'
+import Image from 'next/image'
 
 type AvatarProps = {
-  first_name: string;
-  last_name: string;
-  avatar: string;
-};
+    first_name: string
+    last_name: string
+    avatar: string
+}
 
-const Avatar = ({
-  first_name,
-  last_name,
-  avatar,
-}: AvatarProps): JSX.Element => {
-  return (
-    <div className='flex flex-row gap-1 py-2 pl-3 pr-5 gap-2 rounded-xl bg-red-300 items-center'>
-      <div className='bg-white flex rounded-full w-9 h-9 text-xs items-center justify-center'>
-        Image
-      </div>
-      <span className='text-md'>
-        {first_name} {last_name}
-      </span>
-    </div>
-  );
-};
+const Avatar = ({ first_name, last_name, avatar }: AvatarProps): JSX.Element => {
+    return (
+        <div className="flex flex-row items-center gap-1 gap-2 rounded-xl bg-red-300 py-2 pl-3 pr-5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs">
+                Image
+            </div>
+            <span className="text-md">
+                {first_name} {last_name}
+            </span>
+        </div>
+    )
+}
 
-export default Avatar;
+export default Avatar
