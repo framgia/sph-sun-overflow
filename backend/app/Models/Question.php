@@ -16,6 +16,8 @@ class Question extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['vote_count'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -44,5 +46,10 @@ class Question extends Model
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function getVoteCountAttribute()
+    {
+        return $this->votes()->sum('value');
     }
 }
