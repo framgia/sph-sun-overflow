@@ -36,6 +36,7 @@ const QuestionForm = (): JSX.Element => {
     const [createQuestion] = useMutation(CREATE_QUESTION)
 
     const onSubmit = (data: FormValues) => {
+<<<<<<< HEAD
         setIsDisableSubmit(true)
 
         const tags = data.tags.map((tag) => tag.id)
@@ -60,6 +61,11 @@ const QuestionForm = (): JSX.Element => {
         setTimeout(() => {
             setIsDisableSubmit(false)
         }, 4000)
+=======
+        if (isObjectEmpty(errors)) {
+            //Replace with graphql post request
+        }
+>>>>>>> [Overflow-14] Implement API to sidebars
     }
 
     useEffect(() => {

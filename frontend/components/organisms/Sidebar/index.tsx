@@ -1,6 +1,7 @@
-import SidebarButton from '../../molecules/SidebarButton'
-import { useRouter } from 'next/router'
+import LeftSideBar from './LeftSideBar'
+import RightSideBar from './RightSideBar'
 
+<<<<<<< HEAD
 const Sidebar = (): JSX.Element => {
     const router = useRouter()
 
@@ -59,3 +60,6 @@ const Sidebar = (): JSX.Element => {
 }
 
 export default Sidebar
+=======
+export { LeftSideBar, RightSideBar }
+>>>>>>> [Overflow-14] Implement API to sidebars

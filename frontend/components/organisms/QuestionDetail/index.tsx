@@ -14,12 +14,19 @@ type QuestionDetailProps = {
     title: string
     content: string
     created_at: string
+<<<<<<< HEAD
     views_count: number
+=======
+    view_count: number
+>>>>>>> [Overflow-14] Implement API to sidebars
     vote_count: number
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
     user: { id: number; first_name: string; last_name: string; avatar: string }
     is_bookmark: boolean
+<<<<<<< HEAD
     is_from_user: boolean
+=======
+>>>>>>> [Overflow-14] Implement API to sidebars
 }
 
 const QuestionDetail = ({

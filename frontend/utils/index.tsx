@@ -2,11 +2,10 @@ interface LooseObject {
     id: number
 }
 export function removeItemViaId<T extends LooseObject>(arr: Array<T>, value: number): Array<T> {
-    const index = arr.findIndex((item) => item.id === value)
-    if (index > -1) {
-        arr.splice(index, 1)
-    }
-    return arr
+    const arrCopy = Array.from(arr)
+    const index = arrCopy.findIndex((item) => item.id === value)
+    arrCopy.splice(index, 1)
+    return arrCopy
 }
 
 export function isObjectEmpty(obj: Object): boolean {
