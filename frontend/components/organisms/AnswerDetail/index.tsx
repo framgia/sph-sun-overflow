@@ -26,7 +26,6 @@ const Answer = ({
     is_correct,
     user,
 }: AnswerDetailProps): JSX.Element => {
-    console.log(user)
     return (
         <Fragment>
             <div className="flex w-full flex-col">
