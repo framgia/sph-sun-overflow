@@ -3,10 +3,9 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\Answer;
-use App\Models\Comment;
 use App\Models\Question;
-use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 final class CreateComment
 {
@@ -16,9 +15,7 @@ final class CreateComment
      */
     public function __invoke($_, array $args)
     {
-        try {
-            $user = User::findOrFail($args['user_id']);
-            
+        try {           
             if($args['commentable_type'] == "Answer") {
                 $commentable = Answer::findOrFail($args['commentable_id']);
             }
@@ -27,11 +24,9 @@ final class CreateComment
                 $commentable = Question::findOrFail($args['commentable_id']);
             }
             
-            $comment = Comment::create([
+            $comment = $commentable->comments()->create([
                 'content' => $args['content'],
-                'user_id' => $user->id,
-                'commentable_type' => 'App\\Models\\'.$args['commentable_type'],
-                'commentable_id' => $commentable->id,
+                'user_id' => Auth::id(),
             ]);
 
             return $comment;
