@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { UseFormSetValue } from 'react-hook-form'
 import { ComponentType } from 'react'
 import { ReactQuillProps } from 'react-quill'
+
 type RTEProps = {
     setValue: UseFormSetValue<any>
     id: string | undefined
@@ -18,15 +19,10 @@ const modules = {
             },
         ],
 
-        ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'clean'],
-        [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' },
-            'link',
-            'image',
-        ],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
+        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+        ['link', 'image'],
+        ['clean'],
     ],
 }
 const formats = [
@@ -50,7 +46,7 @@ const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
 )
 const RichTextEditor = ({ setValue, id = undefined, usage = 'default' }: RTEProps) => {
     const handleEditor = (editor: string) => {
-        setValue('description', editor)
+        setValue(usage, editor)
     }
     let style
 
@@ -58,13 +54,16 @@ const RichTextEditor = ({ setValue, id = undefined, usage = 'default' }: RTEProp
         case 'description':
             style = { height: '10rem' }
             break
+        case 'content':
+            style = { width: '50rem' }
+            break
         default:
             style = undefined
     }
 
     return (
         <ReactQuill
-            className=""
+            className="border-2 border"
             modules={modules}
             formats={formats}
             onChange={handleEditor}
