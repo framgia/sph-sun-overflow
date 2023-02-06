@@ -16,7 +16,13 @@ interface TagInputProps {
 
 const initialState = {
     tagsSelected: [] as ITag[],
-    tagSuggestions: [] as ITag[],
+    tagSuggestions: [
+        { id: 1, title: 'nextjs', description: 'desc' },
+        { id: 2, title: 'nextjs', description: 'desc' },
+        { id: 3, title: 'nextjs', description: 'desc' },
+        { id: 4, title: 'nextjs', description: 'desc' },
+        { id: 5, title: 'nextjs', description: 'desc' },
+    ] as ITag[],
     queryText: '',
 }
 
@@ -44,7 +50,7 @@ const TagsInput = ({ setValue }: TagInputProps) => {
     }, [queryText])
 
     return (
-        <div className="flex w-full flex-wrap rounded-lg border-2 border-gray-400 p-2">
+        <div className="flex w-full flex-wrap rounded-lg border-2 border-gray-400 bg-white">
             <Combobox value={tagsSelected} onChange={setTagsSelected} multiple>
                 <span className="flex flex-row ">
                     {tagsSelected.map((tag, index) => {
@@ -55,7 +61,7 @@ const TagsInput = ({ setValue }: TagInputProps) => {
 
                 <Combobox.Input
                     id="comboBoxInput"
-                    className=" m-1 w-0 grow border-none py-2  text-sm leading-5 text-gray-900 focus:ring-0"
+                    className="mx-2 w-0 grow border-none text-sm leading-5 text-gray-900 focus:ring-0"
                     onChange={(event) => setQueryText(event.target.value)}
                     hidden={disableInput}
                 />
