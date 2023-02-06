@@ -1,7 +1,6 @@
 extend type Mutation {
     createComment(
-       content: String! @rules(apply: ["required"])
-        user_id: ID! @rules(apply: ["required", "integer"])
+        content: String! @rules(apply: ["required"])
         commentable_type: String! @rules(apply: ["required"])
         commentable_id: ID! @rules(apply: ["required", "integer"])
     ): Comment! @guard(with: ["api"])
