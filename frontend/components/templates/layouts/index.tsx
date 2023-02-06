@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Navbar from '../../organisms/Navbar'
 import Sidebar from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
-
+import { ToastContainer } from 'react-toastify'
 type LayoutProps = {
     children: JSX.Element
 }
@@ -33,6 +33,16 @@ const Layout = ({ children }: LayoutProps) => {
                         <Image src="/images/sun_logo.png" alt="sun-logo" fill />
                     </div>
                 )}
+                <ToastContainer
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </main>
         </ProvidersWrapper>
     )

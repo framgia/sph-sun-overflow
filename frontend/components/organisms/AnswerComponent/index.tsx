@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { errorNotify, formProcessToast } from '@/helpers/toast'
-import { ToastContainer } from 'react-toastify'
 import useUserStore from '@/helpers/store'
 import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
 
@@ -56,16 +55,6 @@ const AnswerComponent = () => {
 
     return (
         <div className="w-full p-2">
-            <ToastContainer
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
             <div className="flex flex-col space-y-2">
                 <text className="text-lg">Your Answer</text>
                 <form className="flex flex-col">
