@@ -15,23 +15,22 @@ final class CreateComment
      */
     public function __invoke($_, array $args)
     {
-        try {           
-            if($args['commentable_type'] == "Answer") {
+        try {
+            if ($args['commentable_type'] == "Answer") {
                 $commentable = Answer::findOrFail($args['commentable_id']);
             }
 
-            if($args['commentable_type'] == "Question") {
+            if ($args['commentable_type'] == "Question") {
                 $commentable = Question::findOrFail($args['commentable_id']);
             }
-            
+
             $comment = $commentable->comments()->create([
                 'content' => $args['content'],
                 'user_id' => Auth::id(),
             ]);
 
             return $comment;
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
