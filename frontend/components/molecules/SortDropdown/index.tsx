@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import Icons from '@/components/atoms/Icons'
 
 const SortDropdown = () => {
-    const filters: string[] = ['Highest Score', 'Date posted']
+    const filters: string[] = ['Highest Score', 'Date Posted']
 
     return (
         <div className="flex w-full flex-row items-center justify-end gap-2">
-            <span className="text-sm">Sort by: </span>
+            <span className="text-sm">Sorted by: </span>
             <Menu as="div" className="relative inline-block text-left">
                 <div>
                     <Menu.Button className="flex w-44 items-center justify-between bg-gray-200 p-2 text-sm text-primary-black">
