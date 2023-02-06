@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import RichTextEditor from '../../molecules/RichTextEditor'
 import Button from '../../atoms/Button'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { errorNotify, formProcessToast } from '@/helpers/toast'
-import useUserStore from '@/helpers/store'
+import useUserStore, { useButtonStore } from '@/helpers/store'
 import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
 
 export type FormValues = {
@@ -20,6 +20,10 @@ const AnswerComponent = () => {
 
     const user_id = useUserStore.getState().user_id
 
+    const setIsDisable = useButtonStore((state) => state.setIsDisable)
+
+    const isDisableSubmit = useButtonStore((state) => state.isDisabled)
+
     const [createAnswer] = useMutation(CREATE_ANSWER)
 
     const { setValue, handleSubmit } = useForm<FormValues>({
@@ -27,12 +31,21 @@ const AnswerComponent = () => {
         reValidateMode: 'onSubmit',
     })
 
+    useEffect(() => {
+    }, [isDisableSubmit])
+
     const onSubmit = (data: FormValues) => {
+
+        setIsDisable()
+
         if (data.content !== undefined) {
             if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
                 errorNotify('No answer Input')
+                setTimeout(() => {
+                    setIsDisable()
+                }, 2000);
             } else {
-                const new_answer = createAnswer({
+                const newAnswer = createAnswer({
                     variables: {
                         content: data.content,
                         user_id,
@@ -40,17 +53,25 @@ const AnswerComponent = () => {
                     },
                 })
 
+                const resolveNewAnswer = new Promise(resolve => resolve(newAnswer));
                 formProcessToast(
-                    new_answer,
+                    resolveNewAnswer,
                     'Adding Answer...',
                     'Answer Successfully Added!',
                     'There was an Error!'
                 )
 
-                var element = document.getElementsByClassName('ql-editor')
-                element[0].innerHTML = ''
+                setTimeout(() => {
+                    setIsDisable()
+                }, 3000);
             }
-        } else errorNotify('No answer Input')
+        } else {
+            errorNotify('No answer Input')
+            setTimeout(() => {
+                setIsDisable()
+            }, 2000);
+        }
+
     }
 
     return (
@@ -65,7 +86,7 @@ const AnswerComponent = () => {
                             additionalClass=""
                             usage="primary"
                             type="submit"
-                            isDisabled={false}
+                            isDisabled={isDisableSubmit}
                         >
                             Submit Answer
                         </Button>

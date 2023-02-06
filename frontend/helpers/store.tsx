@@ -10,3 +10,14 @@ const useUserStore = create<UserState>()((set) => ({
 }))
 
 export default useUserStore
+
+
+interface ButtonState {
+    isDisabled: boolean
+    setIsDisable: () => void
+}
+
+export const useButtonStore = create<ButtonState>()((set) => ({
+    isDisabled: false,
+    setIsDisable: () => set((state) => ({ isDisabled: !state.isDisabled })),
+}))
