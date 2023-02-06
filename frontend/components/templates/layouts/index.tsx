@@ -10,8 +10,10 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
     const router = useRouter()
+    const hideRightSidebarInPages = ['/questions/[id]']
 
     const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
+    console.log(router.basePath)
     return (
         <ProvidersWrapper>
             <main>
@@ -26,7 +28,11 @@ const Layout = ({ children }: LayoutProps) => {
                             <LeftSideBar />
                         </div>
                     )}
-                    <div className="h-full w-full">{children}</div>
+                    <div className="h-full w-screen">{children}</div>
+                    {!routeIfLoginPathCheck &&
+                        !hideRightSidebarInPages.includes(router.pathname) && (
+                            <div className="h-full w-96"></div>
+                        )}
                 </div>
                 {!routeIfLoginPathCheck && (
                     <div className="fixed -right-16 -bottom-20 -z-50 aspect-square h-[90vh] opacity-10">
