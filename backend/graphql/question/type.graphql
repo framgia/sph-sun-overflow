@@ -2,6 +2,7 @@ type Question {
     id: ID!
     title: String!
     content: String!
+    slug: String!
     status: Int
     is_public: Boolean
     created_at: String!
@@ -9,6 +10,7 @@ type Question {
     updated_at: String
     deleted_at: String
     vote_count: Int
+    views_count: Int
     user: User! @belongsTo
     answers: [Answer!]! @hasMany
     comments: [Comment]! @morphMany

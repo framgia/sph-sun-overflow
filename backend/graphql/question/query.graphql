@@ -1,5 +1,5 @@
 extend type Query {
-    question(id: ID! @eq): Question @guard(with: ["api"]) @find 
+    question(slug: String! @eq): Question @guard(with: ["api"])
     questions(
         orderBy: _ @orderBy(columns: ["created_at"])
         filter: String
