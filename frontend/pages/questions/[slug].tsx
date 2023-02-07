@@ -1,3 +1,4 @@
+import CommentForm from '@/components/CommentForm'
 import AnswerDetail from '@/components/organisms/AnswerDetail'
 import Comment from '@/components/organisms/Comment'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
@@ -6,10 +7,13 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 
 const QuestionDetailPage = () => {
     const router = useRouter()
+    const [comment, setComment] = useState(false)
+    const [commentId, setCommentId] = useState(null)
+
     const query = router.query
 
     const { data, loading, error} = useQuery(GET_QUESTION, {
@@ -83,6 +87,13 @@ const QuestionDetailPage = () => {
                     />
                     <Comment text="This is a comment." author="James Bow" />
                     <Comment text="This is another comment!" author="Jane Dough" />
+                    <div
+                        className="mt-10 pl-2 border-b-2 w-full cursor-pointer hover:text-blue-600"
+                        onClick={() => setComment(!comment)}
+                    >
+                        Add comment
+                    </div>
+                    {comment && <CommentForm id={commentId} />}
                 </div>
                 <div className="my-4 w-full border-t-2" />
                 <AnswerDetail
