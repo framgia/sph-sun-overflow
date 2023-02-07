@@ -1,29 +1,29 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 const GET_QUESTION = gql`
- query getQuestion($slug : String!) {
-    question(slug : $slug) {
-        id
-        title
-        content
-        created_at
-        slug
-        vote_count
-        views_count
-        humanized_created_at
-        tags {
+    query getQuestion($slug: String!) {
+        question(slug: $slug) {
             id
-            name
-            is_watched_by_user
-        }
-        user { 
-            id
-            first_name 
-            last_name
-            avatar
+            title
+            content
+            created_at
+            slug
+            vote_count
+            views_count
+            humanized_created_at
+            tags {
+                id
+                name
+                is_watched_by_user
+            }
+            user {
+                id
+                first_name
+                last_name
+                avatar
+            }
         }
     }
- }
 `
 
-export default GET_QUESTION;
+export default GET_QUESTION

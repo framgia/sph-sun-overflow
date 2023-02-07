@@ -1,23 +1,35 @@
-import { create } from 'zustand'
-interface UserState {
+import { create, StateCreator } from 'zustand'
+interface UserSlice {
     user_id: number
-    addUserID: (user: number) => void
+    first_name: string
+    last_name: string
+    email: string
+    avatar: string
+    setUserID: (
+        user_id: number,
+        first_name: string,
+        last_name: string,
+        email: string,
+        avatar: string
+    ) => void
 }
 
-const useUserStore = create<UserState>()((set) => ({
+const createUserSlice: StateCreator<UserSlice> = (set) => ({
     user_id: 0,
-    addUserID: (user) => set(() => ({ user_id: user })),
-}))
+    first_name: '',
+    last_name: '',
+    email: '',
+    avatar: '',
+    setUserID: (user_id, first_name, last_name, email, avatar) =>
+        set(() => ({
+            user_id,
+            first_name,
+            last_name,
+            email,
+            avatar,
+        })),
+})
 
-export default useUserStore
-
-
-interface ButtonState {
-    isDisabled: boolean
-    setIsDisable: () => void
-}
-
-export const useButtonStore = create<ButtonState>()((set) => ({
-    isDisabled: false,
-    setIsDisable: () => set((state) => ({ isDisabled: !state.isDisabled })),
+export const useBoundStore = create<UserSlice>()((...a) => ({
+    ...createUserSlice(...a),
 }))

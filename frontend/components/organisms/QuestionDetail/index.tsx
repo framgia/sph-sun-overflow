@@ -10,15 +10,15 @@ import { Fragment } from 'react'
 import AnswerComponent from '../AnswerComponent'
 
 type QuestionDetailProps = {
-  id: number;
-  title: string;
-  content: string;
-  created_at: string;
-  views_count: number;
-  vote_count: number;
-  tags: { id: number; name: string; is_watched_by_user: boolean }[];
-  user: { id: number; first_name: string; last_name: string; avatar: string };
-  is_bookmark: boolean;
+    id: number
+    title: string
+    content: string
+    created_at: string
+    views_count: number
+    vote_count: number
+    tags: { id: number; name: string; is_watched_by_user: boolean }[]
+    user: { id: number; first_name: string; last_name: string; avatar: string }
+    is_bookmark: boolean
 }
 
 const QuestionDetail = ({

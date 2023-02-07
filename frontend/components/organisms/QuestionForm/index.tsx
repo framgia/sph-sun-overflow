@@ -7,6 +7,11 @@ import { isObjectEmpty } from '@/utils'
 import FormAlert from '@/components/molecules/FormAlert'
 import Button from '@/components/atoms/Button'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
+import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
+import { useMutation } from '@apollo/client'
+import { successNotify } from '@/helpers/toast'
+import { useRouter } from 'next/router'
+
 export type FormValues = {
     title: string
     description: string
@@ -25,11 +30,33 @@ const QuestionForm = (): JSX.Element => {
         resolver: yupResolver(QuestionFormSchema),
     })
 
+    const router = useRouter()
+
+    const [createQuestion] = useMutation(CREATE_QUESTION)
+
     const onSubmit = (data: FormValues) => {
-        if (isObjectEmpty(errors)) {
-            //Replace with graphql post request
-            console.log(data)
-        }
+        const tags = data.tags.map((tag) => tag.id)
+
+        const newQuestion = createQuestion({
+            variables: {
+                title: data.title,
+                content: data.description,
+                is_public: true,
+                tags,
+                team_id: 1,
+            },
+        })
+
+        successNotify('Question Added Successfully')
+
+        newQuestion.then((data: any) => {
+            const slug = data.data.createQuestion.slug
+            const id = data.data.createQuestion.id
+            router.replace({
+                pathname: `/questions/${slug}`,
+                query: { id },
+            })
+        })
     }
 
     useEffect(() => {
