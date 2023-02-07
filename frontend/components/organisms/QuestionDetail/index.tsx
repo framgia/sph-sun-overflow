@@ -1,8 +1,10 @@
+import 'react-quill/dist/quill.core.css';
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
 import Tags from '@/components/molecules/Tags'
 import Votes from '@/components/molecules/Votes'
+import { parseHTML } from '@/helpers/htmlParsing'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import AnswerComponent from '../AnswerComponent'
@@ -56,8 +58,8 @@ const QuestionDetail = ({
                             </div>
                         </div>
                         <div className="flex w-full flex-col justify-between gap-3">
-                            <div className="flex w-full flex-col gap-3">
-                                <div className="w-full">{content}</div>
+                            <div className="flex w-full flex-col gap-3 ql-snow">
+                                <div className="w-full ql-editor">{parseHTML(content)}</div>
                                 <div className="w-full">
                                     <Tags values={tags} />
                                 </div>
