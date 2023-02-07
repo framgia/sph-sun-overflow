@@ -3,7 +3,6 @@ import RichTextEditor from '../../molecules/RichTextEditor'
 import Button from '../../atoms/Button'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
-import { useRouter } from 'next/router'
 import { errorNotify, formProcessToast } from '@/helpers/toast'
 import { useBoundStore } from '@/helpers/store'
 import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
@@ -15,10 +14,8 @@ export type FormValues = {
 }
 
 const AnswerComponent = () => {
-    const { query } = useRouter()
-    const { id: question_id } = query
-
     const user_id = useBoundStore.getState().user_id
+    const question_id = 1
 
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 

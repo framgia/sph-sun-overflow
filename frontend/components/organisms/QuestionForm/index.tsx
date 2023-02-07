@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import TagsInput, { ITag } from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
 import { useForm } from 'react-hook-form'
@@ -29,12 +29,15 @@ const QuestionForm = (): JSX.Element => {
         reValidateMode: 'onSubmit',
         resolver: yupResolver(QuestionFormSchema),
     })
+    const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
     const router = useRouter()
 
     const [createQuestion] = useMutation(CREATE_QUESTION)
 
     const onSubmit = (data: FormValues) => {
+        setIsDisableSubmit(true)
+
         const tags = data.tags.map((tag) => tag.id)
 
         const newQuestion = createQuestion({
@@ -51,12 +54,12 @@ const QuestionForm = (): JSX.Element => {
 
         newQuestion.then((data: any) => {
             const slug = data.data.createQuestion.slug
-            const id = data.data.createQuestion.id
-            router.replace({
-                pathname: `/questions/${slug}`,
-                query: { id },
-            })
+            router.replace(`/questions/${slug}`)
         })
+
+        setTimeout(() => {
+            setIsDisableSubmit(false)
+        }, 4000)
     }
 
     useEffect(() => {
@@ -102,6 +105,7 @@ const QuestionForm = (): JSX.Element => {
                             type="submit"
                             onClick={undefined}
                             additionalClass="px-10 bg-white"
+                            isDisabled={isDisableSubmit}
                         >
                             Post Question
                         </Button>
