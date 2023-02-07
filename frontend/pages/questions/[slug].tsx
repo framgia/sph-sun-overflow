@@ -88,7 +88,7 @@ const QuestionDetailPage = () => {
                     <Comment text="This is a comment." author="James Bow" />
                     <Comment text="This is another comment!" author="Jane Dough" />
                     <div
-                        className="mt-10 pl-2 border-b-2 w-full cursor-pointer hover:text-blue-600"
+                        className="mt-10 pl-2 pb-2 border-b-2 w-full cursor-pointer hover:text-blue-600"
                         onClick={() => setComment(!comment)}
                     >
                         Add comment

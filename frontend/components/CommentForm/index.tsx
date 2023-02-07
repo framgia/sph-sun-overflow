@@ -34,7 +34,7 @@ const CommentForm = ({ id }: CommentFormProps): JSX.Element => {
     return (
         <div className="w-full">
             <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-                <div className="w-full self-center py-4 ">
+                <div className="w-full self-center pt-3 pb-2 ">
                     <textarea
                         className={`w-full border-2 border-gray-400 bg-white h-32`}
                         {...register('comment', {})}
