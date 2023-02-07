@@ -1,11 +1,12 @@
 extend type Mutation {
     createAnswer(
-        content: String!
-        user_id: ID! @rules(apply: ["integer"])
-        question_id: ID! @rules(apply: ["integer"])
-    ): Answer!
+        content: String! @rules(apply: ["required"])
+        user_id: ID! @rules(apply: ["integer", "required"])
+        question_id: ID! @rules(apply: ["integer", "required"])
+    ): Answer! @guard(with: ["api"])
     updateAnswer(id: ID! @rules(apply: ["integer"]), content: String): Answer!
         @update
+        @guard(with: ["api"])
     acceptAnswer(
         answer_id: ID! @rules(apply: ["integer", "required"])
         question_id: ID! @rules(apply: ["integer", "required"])

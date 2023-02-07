@@ -1,27 +1,97 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import RichTextEditor from '../../molecules/RichTextEditor'
 import Button from '../../atoms/Button'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { errorNotify, formProcessToast } from '@/helpers/toast'
+import useUserStore, { useButtonStore } from '@/helpers/store'
+import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
+
+export type FormValues = {
+    content: string
+    user_id: number
+    question_id: number
+}
 
 const AnswerComponent = () => {
-    const handleOnClick = () => {
-        console.log('clicked')
+    const { query } = useRouter()
+    const { id: question_id } = query
+
+    const user_id = useUserStore.getState().user_id
+
+    const setIsDisable = useButtonStore((state) => state.setIsDisable)
+
+    const isDisableSubmit = useButtonStore((state) => state.isDisabled)
+
+    const [createAnswer] = useMutation(CREATE_ANSWER)
+
+    const { setValue, handleSubmit } = useForm<FormValues>({
+        mode: 'onSubmit',
+        reValidateMode: 'onSubmit',
+    })
+
+    useEffect(() => {
+    }, [isDisableSubmit])
+
+    const onSubmit = (data: FormValues) => {
+
+        setIsDisable()
+
+        if (data.content !== undefined) {
+            if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
+                errorNotify('No answer Input')
+                setTimeout(() => {
+                    setIsDisable()
+                }, 2000);
+            } else {
+                const newAnswer = createAnswer({
+                    variables: {
+                        content: data.content,
+                        user_id,
+                        question_id,
+                    },
+                })
+
+                const resolveNewAnswer = new Promise(resolve => resolve(newAnswer));
+                formProcessToast(
+                    resolveNewAnswer,
+                    'Adding Answer...',
+                    'Answer Successfully Added!',
+                    'There was an Error!'
+                )
+
+                setTimeout(() => {
+                    setIsDisable()
+                }, 3000);
+            }
+        } else {
+            errorNotify('No answer Input')
+            setTimeout(() => {
+                setIsDisable()
+            }, 2000);
+        }
+
     }
 
     return (
-        <div className="w-7/12 p-2">
+        <div className="w-full p-2">
             <div className="flex flex-col space-y-2">
                 <text className="text-lg">Your Answer</text>
-                <RichTextEditor />
-                <div className="mt-2 flex flex-row-reverse">
-                    <Button
-                        usage="primary"
-                        type="submit"
-                        isDisabled={false}
-                        onClick={handleOnClick}
-                    >
-                        Submit Answer
-                    </Button>
-                </div>
+                <form className="flex flex-col">
+                    <RichTextEditor setValue={setValue} usage="content" id={undefined} />
+                    <div className="mt-4 flex flex-row-reverse">
+                        <Button
+                            onClick={handleSubmit(onSubmit)}
+                            additionalClass=""
+                            usage="primary"
+                            type="submit"
+                            isDisabled={isDisableSubmit}
+                        >
+                            Submit Answer
+                        </Button>
+                    </div>
+                </form>
             </div>
         </div>
     )

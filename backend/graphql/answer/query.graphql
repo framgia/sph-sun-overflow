@@ -1,4 +1,4 @@
 extend type Query {
-    answer(id: ID! @eq): Answer @find
-    answers: [Answer!]! @all
+    answer(id: ID! @eq): Answer @guard(with: ["api"]) @find
+    answers: [Answer!]! @guard(with: ["api"]) @all
 }

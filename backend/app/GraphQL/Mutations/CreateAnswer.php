@@ -20,21 +20,13 @@ final class CreateAnswer
             $checkUser = User::findOrFail($args['user_id']);
             $checkQuestion = Question::findOrFail($args['question_id']);
 
-            $validator = Validator::make($args, [
-                'content' => ['required'],
-                'user_id' => ['required'],
-                'question_id' => ['required']
-            ]);
-
-            if ($validator->fails()) {
-                return $validator->messages();
-            }
-
-            $newAnswer = Answer::create([
+            Answer::create([
                 'content' => $args['content'],
                 'user_id' => $checkUser->id,
                 'question_id' => $checkQuestion->id,
             ]);
+
+            $newAnswer = Answer::latest()->first();
 
             return $newAnswer;
         } catch (Exception $e) {
