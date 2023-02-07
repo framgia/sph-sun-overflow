@@ -67,4 +67,9 @@ class Question extends Model
     {
         return $this->created_at->diffForHumans();
     }
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class,'bookmarkable');
+    }
 }

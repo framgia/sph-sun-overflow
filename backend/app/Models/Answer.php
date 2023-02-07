@@ -36,4 +36,9 @@ class Answer extends Model
     {
         return $this->morphMany(UserNotification::class, 'notifiable');
     }
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class,'bookmarkable');
+    }
 }
