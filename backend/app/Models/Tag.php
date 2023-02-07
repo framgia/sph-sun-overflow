@@ -12,6 +12,8 @@ class Tag extends Model
 
     protected $guarded = [];
 
+    protected $appends = ["is_watched_by_user"];
+
     public function usersWatching()
     {
         return $this->belongsToMany(User::class);
@@ -19,5 +21,10 @@ class Tag extends Model
 
     public function questions() {
         return $this->belongsToMany(Question::class);
+    }
+
+    public function getIsWatchedByUserAttribute() 
+    {
+        return auth()->user()->watchedTags()->where('tag_id', $this->id)->exists();
     }
 }
