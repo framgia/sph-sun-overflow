@@ -13,7 +13,6 @@ const Layout = ({ children }: LayoutProps) => {
     const hideRightSidebarInPages = ['/questions/[id]']
 
     const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
-    console.log(router.basePath)
     return (
         <ProvidersWrapper>
             <main>
