@@ -1,13 +1,15 @@
 import { gql } from "@apollo/client";
 
 const GET_QUESTION = gql`
- query getQuestion($id : ID!) {
-    question(id : $id) {
+ query getQuestion($slug : String!) {
+    question(slug : $slug) {
         id
         title
         content
         created_at
+        slug
         vote_count
+        views_count
         humanized_created_at
         tags {
             id

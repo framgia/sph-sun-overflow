@@ -3,6 +3,7 @@ import Comment from '@/components/organisms/Comment'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
@@ -13,14 +14,14 @@ const QuestionDetailPage = () => {
 
     const { data, loading, error} = useQuery(GET_QUESTION, {
         variables :{
-            id: Number(query.id),
+            slug: String(query.slug),
         }
     });
 
     if(loading) 
         return loadingScreenShow();
     else if (error)
-        return `Error! ${error}`;
+        return errorNotify(`Error! ${error}`);
 
     const question: {
         id: number
@@ -28,15 +29,13 @@ const QuestionDetailPage = () => {
         content: string
         created_at: string
         vote_count: number
-        view_count: number
+        views_count: number
         tags: { id: number; name: string; is_watched_by_user: boolean }[]
         is_bookmark: boolean
         user: { id: number; first_name: string; last_name: string; avatar: string }
     } = {
         ...data.question,
         created_at : data.question.humanized_created_at,
-        view_count : 23,  // to be added in new API and Task
-        is_bookmark : false // to be added in new API and Task
     }
 
     const answer: {
@@ -72,7 +71,7 @@ const QuestionDetailPage = () => {
                     content={question.content}
                     created_at={question.created_at}
                     vote_count={question.vote_count}
-                    view_count={question.view_count}
+                    views_count={question.views_count}
                     tags={question.tags}
                     is_bookmark={question.is_bookmark}
                     user={question.user}

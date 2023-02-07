@@ -1,8 +1,10 @@
+import 'react-quill/dist/quill.core.css';
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
 import Tags from '@/components/molecules/Tags'
 import Votes from '@/components/molecules/Votes'
+import { parseHTML } from '@/helpers/htmlParsing'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import AnswerComponent from '../AnswerComponent'
@@ -12,7 +14,7 @@ type QuestionDetailProps = {
   title: string;
   content: string;
   created_at: string;
-  view_count: number;
+  views_count: number;
   vote_count: number;
   tags: { id: number; name: string; is_watched_by_user: boolean }[];
   user: { id: number; first_name: string; last_name: string; avatar: string };
@@ -24,7 +26,7 @@ const QuestionDetail = ({
     title,
     content,
     created_at,
-    view_count,
+    views_count,
     vote_count,
     tags,
     user,
@@ -45,7 +47,7 @@ const QuestionDetail = ({
                         </div>
                         <div className="flex gap-1">
                             <span>Viewed</span>
-                            <span className="text-gray-500">{view_count} times</span>
+                            <span className="text-gray-500">{views_count} times</span>
                         </div>
                     </div>
                     <div className="flex w-full flex-row">
@@ -56,8 +58,8 @@ const QuestionDetail = ({
                             </div>
                         </div>
                         <div className="flex w-full flex-col justify-between gap-3">
-                            <div className="flex w-full flex-col gap-3">
-                                <div className="w-full">{content}</div>
+                            <div className="flex w-full flex-col gap-3 ql-snow">
+                                <div className="w-full ql-editor">{parseHTML(content)}</div>
                                 <div className="w-full">
                                     <Tags values={tags} />
                                 </div>
