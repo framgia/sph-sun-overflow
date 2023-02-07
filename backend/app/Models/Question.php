@@ -16,7 +16,7 @@ class Question extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count'];
+    protected $appends = ['vote_count','humanized_created_at'];
 
     public function user()
     {
@@ -51,5 +51,10 @@ class Question extends Model
     public function getVoteCountAttribute()
     {
         return $this->votes()->sum('value');
+    }
+
+    public function getHumanizedCreatedAtAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }

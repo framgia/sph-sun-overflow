@@ -8,15 +8,15 @@ import { Fragment } from 'react'
 import AnswerComponent from '../AnswerComponent'
 
 type QuestionDetailProps = {
-    id: number
-    title: string
-    content: string
-    created_at: string
-    view_count: string
-    tags: { id: number; name: string; is_tag: boolean }[]
-    user: { id: number; first_name: string; last_name: string; avatar: string }
-    votes: { value: number }
-    is_bookmark: boolean
+  id: number;
+  title: string;
+  content: string;
+  created_at: string;
+  view_count: number;
+  vote_count: number;
+  tags: { id: number; name: string; is_watched_by_user: boolean }[];
+  user: { id: number; first_name: string; last_name: string; avatar: string };
+  is_bookmark: boolean;
 }
 
 const QuestionDetail = ({
@@ -25,9 +25,9 @@ const QuestionDetail = ({
     content,
     created_at,
     view_count,
+    vote_count,
     tags,
     user,
-    votes,
     is_bookmark,
 }: QuestionDetailProps): JSX.Element => {
     return (
@@ -45,13 +45,13 @@ const QuestionDetail = ({
                         </div>
                         <div className="flex gap-1">
                             <span>Viewed</span>
-                            <span className="text-gray-500">{view_count}</span>
+                            <span className="text-gray-500">{view_count} times</span>
                         </div>
                     </div>
                     <div className="flex w-full flex-row">
                         <div className="flex w-14 flex-col items-start">
                             <div className="flex flex-col items-center gap-2">
-                                <Votes count={votes.value} />
+                                <Votes count={vote_count} />
                                 <Bookmark is_bookmark={is_bookmark} />
                             </div>
                         </div>

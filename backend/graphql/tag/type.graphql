@@ -1,6 +1,7 @@
 type Tag {
     id: ID!
     name: String!
+    is_watched_by_user: Boolean
     description: String!
     created_at: String!
     updated_at: String

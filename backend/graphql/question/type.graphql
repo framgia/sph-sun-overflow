@@ -5,6 +5,7 @@ type Question {
     status: Int
     is_public: Boolean
     created_at: String!
+    humanized_created_at: String
     updated_at: String
     deleted_at: String
     vote_count: Int
