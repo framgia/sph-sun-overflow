@@ -4,9 +4,12 @@ type Answer {
     is_correct: Boolean!
     created_at: String!
     updated_at: String
+    humanized_created_at: String
+    vote_count: Int
     user: User! @belongsTo
     question: Question! @belongsTo
     notifications: [UserNotification]! @morphMany
     comments: [Comment]! @morphMany
     votes: [Vote]! @morphMany
+    is_created_by_user: Boolean
 }

@@ -28,9 +28,9 @@ const SortDropdown = () => {
                     leaveTo="transform opacity-0 scale-95"
                 >
                     <Menu.Items className="absolute right-0 w-44 origin-top divide-y divide-gray-100 border bg-white drop-shadow-lg">
-                        {filters.map((filter) => {
+                        {filters.map((filter, index) => {
                             return (
-                                <div className="py-2 px-4">
+                                <div key={index} className="py-2 px-4">
                                     <Menu.Item>
                                         <Link href="#">
                                             <span className="text-sm text-gray-900">{filter}</span>

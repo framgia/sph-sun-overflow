@@ -20,9 +20,9 @@ const Layout = ({ children }: LayoutProps) => {
                         <Navbar />
                     </div>
                 )}
-                <div className="flex h-screen w-full flex-row">
+                <div className="flex h-screen h-full w-full flex-row">
                     {!routeIfLoginPathCheck && (
-                        <div className="h-full w-96">
+                        <div className="w-96">
                             <LeftSideBar />
                         </div>
                     )}

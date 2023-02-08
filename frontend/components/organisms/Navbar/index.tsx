@@ -9,8 +9,8 @@ const Navbar = () => {
             <div className="container mx-auto flex flex-wrap items-center justify-between">
                 <Link href="/" className="flex">
                     <span className="text-3xl font-bold tracking-tighter">
-                        <text className="text-primary-red">Sun* </text>
-                        <text className="text-primary-black">Overflow</text>
+                        <span className="text-primary-red">Sun* </span>
+                        <span className="text-primary-black">Overflow</span>
                     </span>
                 </Link>
                 <div className="flex items-center md:order-2">

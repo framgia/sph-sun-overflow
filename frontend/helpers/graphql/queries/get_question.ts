@@ -28,10 +28,20 @@ const GET_QUESTION = gql`
                 content
                 created_at
                 updated_at
+            }
+            answers {
+                id
+                content
+                created_at
+                vote_count
+                humanized_created_at
+                is_correct
+                is_created_by_user
                 user {
                     id
                     first_name
                     last_name
+                    avatar
                 }
             }
         }
