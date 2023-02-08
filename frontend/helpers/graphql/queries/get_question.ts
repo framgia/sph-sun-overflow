@@ -11,6 +11,7 @@ const GET_QUESTION = gql`
             vote_count
             views_count
             humanized_created_at
+            is_from_user
             tags {
                 id
                 name

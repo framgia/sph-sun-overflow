@@ -11,6 +11,7 @@ type Question {
     deleted_at: String
     vote_count: Int
     views_count: Int
+    is_from_user: Boolean
     user: User! @belongsTo
     answers: [Answer!]! @hasMany
     comments: [Comment]! @morphMany

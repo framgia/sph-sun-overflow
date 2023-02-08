@@ -1,4 +1,4 @@
-import 'react-quill/dist/quill.core.css';
+import 'react-quill/dist/quill.core.css'
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
@@ -19,6 +19,7 @@ type QuestionDetailProps = {
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
     user: { id: number; first_name: string; last_name: string; avatar: string }
     is_bookmark: boolean
+    is_from_user: boolean
 }
 
 const QuestionDetail = ({
@@ -31,14 +32,17 @@ const QuestionDetail = ({
     tags,
     user,
     is_bookmark,
+    is_from_user,
 }: QuestionDetailProps): JSX.Element => {
     return (
         <Fragment>
             <div className="flex w-full flex-col">
                 <div className="relative flex w-full flex-col gap-3">
-                    <Link href="#" className="absolute top-0 right-0 cursor-pointer">
-                        <Icons name="square_edit" />
-                    </Link>
+                    {is_from_user && (
+                        <Link href="#" className="absolute top-0 right-0 cursor-pointer">
+                            <Icons name="square_edit" />
+                        </Link>
+                    )}
                     <div className="w-full text-2xl font-bold">{title}</div>
                     <div className="flex w-full flex-row gap-3 text-xs font-semibold">
                         <div className="flex gap-1">
@@ -58,8 +62,8 @@ const QuestionDetail = ({
                             </div>
                         </div>
                         <div className="flex w-full flex-col justify-between gap-3">
-                            <div className="flex w-full flex-col gap-3 ql-snow">
-                                <div className="w-full ql-editor">{parseHTML(content)}</div>
+                            <div className="ql-snow flex w-full flex-col gap-3">
+                                <div className="ql-editor w-full">{parseHTML(content)}</div>
                                 <div className="w-full">
                                     <Tags values={tags} />
                                 </div>
