@@ -26,25 +26,13 @@ const AnswerComponent = () => {
         reValidateMode: 'onSubmit',
     })
 
-<<<<<<< HEAD
     const onSubmit = (data: FormValues) => {
         setIsDisableSubmit(true)
-=======
-    useEffect(() => {}, [isDisableSubmit])
-
-    const onSubmit = (data: FormValues) => {
-        setIsDisable()
-
->>>>>>> [Overflow-14] Implement API to sidebars
         if (data.content !== undefined) {
             if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
                 errorNotify('No answer Input')
                 setTimeout(() => {
-<<<<<<< HEAD
                     setIsDisableSubmit(false)
-=======
-                    setIsDisable()
->>>>>>> [Overflow-14] Implement API to sidebars
                 }, 2000)
             } else {
                 const newAnswer = createAnswer({
@@ -64,21 +52,13 @@ const AnswerComponent = () => {
                 )
 
                 setTimeout(() => {
-<<<<<<< HEAD
                     setIsDisableSubmit(false)
-=======
-                    setIsDisable()
->>>>>>> [Overflow-14] Implement API to sidebars
                 }, 3000)
             }
         } else {
             errorNotify('No answer Input')
             setTimeout(() => {
-<<<<<<< HEAD
                 setIsDisableSubmit(false)
-=======
-                setIsDisable()
->>>>>>> [Overflow-14] Implement API to sidebars
             }, 2000)
         }
     }

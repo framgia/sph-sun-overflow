@@ -18,23 +18,10 @@ const modules = {
                 color: ['red', 'blue', 'yellow', 'green', 'orange', 'pink', 'black'],
             },
         ],
-<<<<<<< HEAD
         ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
         [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
         ['link', 'image'],
         ['clean'],
-=======
-
-        ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'clean'],
-        [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' },
-            'link',
-            'image',
-        ],
->>>>>>> [Overflow-14] Implement API to sidebars
     ],
 }
 const formats = [

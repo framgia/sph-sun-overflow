@@ -18,20 +18,12 @@ const QuestionDetailPage = () => {
 
     const { data, loading, error } = useQuery(GET_QUESTION, {
         variables: {
-<<<<<<< HEAD:frontend/pages/questions/[slug].tsx
             slug: String(query.slug),
-=======
-            id: Number(query.id),
->>>>>>> [Overflow-14] Implement API to sidebars:frontend/pages/questions/[id].tsx
         },
     })
 
     if (loading) return loadingScreenShow()
-<<<<<<< HEAD:frontend/pages/questions/[slug].tsx
     else if (error) return errorNotify(`Error! ${error}`)
-=======
-    else if (error) return `Error! ${error}`
->>>>>>> [Overflow-14] Implement API to sidebars:frontend/pages/questions/[id].tsx
 
     const question: {
         id: number
@@ -47,11 +39,6 @@ const QuestionDetailPage = () => {
     } = {
         ...data.question,
         created_at: data.question.humanized_created_at,
-<<<<<<< HEAD:frontend/pages/questions/[slug].tsx
-=======
-        view_count: 23, // to be added in new API and Task
-        is_bookmark: false, // to be added in new API and Task
->>>>>>> [Overflow-14] Implement API to sidebars:frontend/pages/questions/[id].tsx
     }
 
     const answer: {
