@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form'
 import { isObjectEmpty } from '@/utils'
 import CommentFormSchema from './schema'
 import { useEffect } from 'react'
-import FormAlert from '../molecules/FormAlert'
-import Button from '../atoms/Button'
+import FormAlert from '../../molecules/FormAlert'
+import Button from '../../atoms/Button'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 export type FormValues = {
@@ -36,7 +36,7 @@ const CommentForm = ({ id }: CommentFormProps): JSX.Element => {
             <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
                 <div className="w-full self-center pt-3 pb-2 ">
                     <textarea
-                        className={`w-full border-2 border-gray-400 bg-white h-32`}
+                        className={`h-32 w-full border-2 border-gray-400 bg-white`}
                         {...register('comment', {})}
                     />
                 </div>

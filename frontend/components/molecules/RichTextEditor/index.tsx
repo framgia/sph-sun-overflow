@@ -12,7 +12,7 @@ type RTEProps = {
 
 const modules = {
     toolbar: [
-        [{ 'header': '1' }, { 'header': '2' }],
+        [{ header: '1' }, { header: '2' }],
         [{ size: [] }],
         [
             {

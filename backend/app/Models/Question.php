@@ -17,7 +17,7 @@ class Question extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count','humanized_created_at'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user'];
 
     protected static function boot() 
     {
@@ -71,5 +71,13 @@ class Question extends Model
     public function bookmarks()
     {
         return $this->morphMany(Bookmark::class,'bookmarkable');
+    }
+
+    public function getIsFromUserAttribute() 
+    {
+        if(auth()->user())
+            return $this->user_id === auth()->user()->id;
+        else 
+            return false;
     }
 }

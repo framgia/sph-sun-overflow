@@ -1,4 +1,4 @@
-import CommentForm from '@/components/CommentForm'
+import CommentForm from '@/components/organisms/CommentForm'
 import AnswerDetail from '@/components/organisms/AnswerDetail'
 import Comment from '@/components/organisms/Comment'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
@@ -34,6 +34,7 @@ const QuestionDetailPage = () => {
         views_count: number
         tags: { id: number; name: string; is_watched_by_user: boolean }[]
         is_bookmark: boolean
+        is_from_user: boolean
         user: { id: number; first_name: string; last_name: string; avatar: string }
     } = {
         ...data.question,
@@ -72,6 +73,7 @@ const QuestionDetailPage = () => {
                     title={question.title}
                     content={question.content}
                     created_at={question.created_at}
+                    is_from_user={question.is_from_user}
                     vote_count={question.vote_count}
                     views_count={question.views_count}
                     tags={question.tags}
@@ -86,7 +88,7 @@ const QuestionDetailPage = () => {
                     <Comment text="This is a comment." author="James Bow" />
                     <Comment text="This is another comment!" author="Jane Dough" />
                     <div
-                        className="mt-10 pl-2 pb-2 border-b-2 w-full cursor-pointer hover:text-blue-600"
+                        className="mt-10 w-full cursor-pointer border-b-2 pl-2 pb-2 hover:text-blue-600"
                         onClick={() => setComment(!comment)}
                     >
                         Add comment
