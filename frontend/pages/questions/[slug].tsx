@@ -87,6 +87,7 @@ const QuestionDetailPage = () => {
                         tags={question.tags}
                         is_bookmark={question.is_bookmark}
                         user={question.user}
+                        is_from_user={question.is_from_user}
                     />
                     <div className="flex flex-col">
                         {question.comments.length > 0 && (
