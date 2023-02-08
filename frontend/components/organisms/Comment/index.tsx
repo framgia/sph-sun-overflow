@@ -19,7 +19,7 @@ const Comment = ({ text, author, time, userId }: Props) => {
     const currentUserId = useBoundStore.getState().user_id
 
     return (
-        <div className="group flex flex-wrap gap-2 border-t-2 px-2 py-4">
+        <div className="group flex flex-wrap gap-2 px-2 py-4">
             <span className="mr-4">{text}</span>
             <span>
                 <Link href="#" className="text-blue-500 hover:text-blue-400">
