@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             TeamRoleSeeder::class,
             MemberSeeder::class,
+            BookmarkSeeder::class
         ]);
     }
 }
