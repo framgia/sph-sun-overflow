@@ -21,8 +21,6 @@ jobs:
         run: cd backend && composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Composer Generate Key
         run: cd backend && php artisan key:generate
-      - name: Directory Permissions
-        run: cd backend && chmod -R 777 storage bootstrap/cache
       - name: Run PSR2 Code Checker
         run: cd backend && ./vendor/bin/phpcs --colors --report=full --exclude=PSR1.Methods.CamelCapsMethodName --standard=PSR2 ./app ./config ./database ./routes ./tests
       - name: Execute tests (Unit and Feature tests) via PHPUnits
