@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import RichTextEditor from '../../molecules/RichTextEditor'
 import Button from '../../atoms/Button'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
-import { useRouter } from 'next/router'
 import { errorNotify, formProcessToast } from '@/helpers/toast'
-import useUserStore, { useButtonStore } from '@/helpers/store'
+import { useBoundStore } from '@/helpers/store'
 import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
 
 export type FormValues = {
@@ -15,14 +14,10 @@ export type FormValues = {
 }
 
 const AnswerComponent = () => {
-    const { query } = useRouter()
-    const { id: question_id } = query
+    const user_id = useBoundStore.getState().user_id
+    const question_id = 1
 
-    const user_id = useUserStore.getState().user_id
-
-    const setIsDisable = useButtonStore((state) => state.setIsDisable)
-
-    const isDisableSubmit = useButtonStore((state) => state.isDisabled)
+    const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
     const [createAnswer] = useMutation(CREATE_ANSWER)
 
@@ -31,19 +26,14 @@ const AnswerComponent = () => {
         reValidateMode: 'onSubmit',
     })
 
-    useEffect(() => {
-    }, [isDisableSubmit])
-
     const onSubmit = (data: FormValues) => {
-
-        setIsDisable()
-
+        setIsDisableSubmit(true)
         if (data.content !== undefined) {
             if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
                 errorNotify('No answer Input')
                 setTimeout(() => {
-                    setIsDisable()
-                }, 2000);
+                    setIsDisableSubmit(false)
+                }, 2000)
             } else {
                 const newAnswer = createAnswer({
                     variables: {
@@ -53,7 +43,7 @@ const AnswerComponent = () => {
                     },
                 })
 
-                const resolveNewAnswer = new Promise(resolve => resolve(newAnswer));
+                const resolveNewAnswer = new Promise((resolve) => resolve(newAnswer))
                 formProcessToast(
                     resolveNewAnswer,
                     'Adding Answer...',
@@ -62,16 +52,15 @@ const AnswerComponent = () => {
                 )
 
                 setTimeout(() => {
-                    setIsDisable()
-                }, 3000);
+                    setIsDisableSubmit(false)
+                }, 3000)
             }
         } else {
             errorNotify('No answer Input')
             setTimeout(() => {
-                setIsDisable()
-            }, 2000);
+                setIsDisableSubmit(false)
+            }, 2000)
         }
-
     }
 
     return (

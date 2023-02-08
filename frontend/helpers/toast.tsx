@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useButtonStore } from './store'
 
 export function successNotify(message: string, position: any = 'top-right') {
     return toast.success(message, {
@@ -41,7 +40,7 @@ export function formProcessToast(
                 var element = document.getElementsByClassName('ql-editor')
                 element[0].innerHTML = ''
                 return successMessage
-            }
+            },
         },
         error: errorMessage,
     })

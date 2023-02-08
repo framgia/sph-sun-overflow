@@ -4,7 +4,7 @@ const QuestionFormSchema = yup.object().shape({
         .string()
         .required('Title is required')
         .min(5, 'Title is too short')
-        .max(20, 'Title is too long'),
+        .max(50, 'Title is too long'),
     description: yup
         .string()
         .required('Description is required')

@@ -16,16 +16,14 @@ const QuestionDetailPage = () => {
 
     const query = router.query
 
-    const { data, loading, error} = useQuery(GET_QUESTION, {
-        variables :{
+    const { data, loading, error } = useQuery(GET_QUESTION, {
+        variables: {
             slug: String(query.slug),
-        }
-    });
+        },
+    })
 
-    if(loading) 
-        return loadingScreenShow();
-    else if (error)
-        return errorNotify(`Error! ${error}`);
+    if (loading) return loadingScreenShow()
+    else if (error) return errorNotify(`Error! ${error}`)
 
     const question: {
         id: number
@@ -39,7 +37,7 @@ const QuestionDetailPage = () => {
         user: { id: number; first_name: string; last_name: string; avatar: string }
     } = {
         ...data.question,
-        created_at : data.question.humanized_created_at,
+        created_at: data.question.humanized_created_at,
     }
 
     const answer: {

@@ -40,7 +40,7 @@ const Sidebar = (): JSX.Element => {
     ]
 
     return (
-        <ul className="w-full h-full border-r-4 border-gray-300 pt-4 bg-white">
+        <ul className="h-full w-full border-r-4 border-gray-300 bg-white pt-4">
             {SidebarLinks.length > 0 &&
                 SidebarLinks.map((link, index) => {
                     let { IconName, Text, url } = link

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import TagsInput, { ITag } from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
 import { useForm } from 'react-hook-form'
@@ -7,6 +7,11 @@ import { isObjectEmpty } from '@/utils'
 import FormAlert from '@/components/molecules/FormAlert'
 import Button from '@/components/atoms/Button'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
+import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
+import { useMutation } from '@apollo/client'
+import { successNotify } from '@/helpers/toast'
+import { useRouter } from 'next/router'
+
 export type FormValues = {
     title: string
     description: string
@@ -24,12 +29,37 @@ const QuestionForm = (): JSX.Element => {
         reValidateMode: 'onSubmit',
         resolver: yupResolver(QuestionFormSchema),
     })
+    const [isDisableSubmit, setIsDisableSubmit] = useState(false)
+
+    const router = useRouter()
+
+    const [createQuestion] = useMutation(CREATE_QUESTION)
 
     const onSubmit = (data: FormValues) => {
-        if (isObjectEmpty(errors)) {
-            //Replace with graphql post request
-            console.log(data)
-        }
+        setIsDisableSubmit(true)
+
+        const tags = data.tags.map((tag) => tag.id)
+
+        const newQuestion = createQuestion({
+            variables: {
+                title: data.title,
+                content: data.description,
+                is_public: true,
+                tags,
+                team_id: 1,
+            },
+        })
+
+        successNotify('Question Added Successfully')
+
+        newQuestion.then((data: any) => {
+            const slug = data.data.createQuestion.slug
+            router.replace(`/questions/${slug}`)
+        })
+
+        setTimeout(() => {
+            setIsDisableSubmit(false)
+        }, 4000)
     }
 
     useEffect(() => {
@@ -75,6 +105,7 @@ const QuestionForm = (): JSX.Element => {
                             type="submit"
                             onClick={undefined}
                             additionalClass="px-10 bg-white"
+                            isDisabled={isDisableSubmit}
                         >
                             Post Question
                         </Button>
