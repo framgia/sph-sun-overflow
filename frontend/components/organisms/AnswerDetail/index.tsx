@@ -9,22 +9,26 @@ import SortDropdown from '@/components/molecules/SortDropdown'
 
 type AnswerDetailProps = {
     id: number
+    question_id: number
     content: string
     created_at: string
     vote_count: number
     is_bookmark: boolean
     is_correct: boolean
     user: { id: number; first_name: string; last_name: string; avatar: string }
+    is_from_user: boolean
 }
 
 const Answer = ({
     id,
+    question_id,
+    is_from_user,
     content,
     created_at,
     vote_count,
     is_bookmark,
     is_correct,
-    user,
+    user
 }: AnswerDetailProps): JSX.Element => {
     return (
         <Fragment>
@@ -38,7 +42,12 @@ const Answer = ({
                         <div className="flex w-14 flex-col items-start gap-2">
                             <Votes count={vote_count} />
                             <Bookmark is_bookmark={is_bookmark} />
-                            <AcceptAnswer is_correct={is_correct} />
+                            <AcceptAnswer
+                                is_correct={is_correct}
+                                answer_id={id}
+                                question_id={question_id}
+                                is_from_user={is_from_user}
+                            />
                         </div>
                         <div className="flex w-full flex-col justify-between">
                             <div className="mt-2 w-full pr-2 text-justify">{content}</div>

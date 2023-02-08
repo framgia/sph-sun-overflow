@@ -7,7 +7,6 @@ import Votes from '@/components/molecules/Votes'
 import { parseHTML } from '@/helpers/htmlParsing'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import AnswerComponent from '../AnswerComponent'
 
 type QuestionDetailProps = {
     id: number
@@ -102,9 +101,6 @@ const QuestionDetail = ({
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="mt-20">
-                <AnswerComponent />
             </div>
         </Fragment>
     )

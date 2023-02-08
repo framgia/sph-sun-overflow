@@ -1,7 +1,7 @@
 import { HiPencilAlt, HiBookmark, HiEye, HiChevronDown } from 'react-icons/hi'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdCheckmark } from 'react-icons/io'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
-
+import { HiCheck } from 'react-icons/hi'
 type IconsProps = {
     name: string
 }
@@ -36,14 +36,10 @@ const Icons = ({ name }: IconsProps): JSX.Element => {
             )
         case 'pill_eye':
             return <HiEye size="13" />
-        case 'accepted':
-            return (
-                <IoMdCheckmark
-                    style={{ height: '25', width: '25' }}
-                    color="#59BC7E"
-                    className="cursor-pointer"
-                />
-            )
+        case 'check_fill':
+            return <HiCheck size="25" className="fill-green-500" />
+        case 'check_outline':
+            return <HiCheck size="25" className="fill-white stroke-black stroke-1" />
         case 'edit':
             return <MdOutlineModeEditOutline size="16" color="red" />
         case 'dropdown':

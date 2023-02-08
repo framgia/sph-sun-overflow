@@ -8,6 +8,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
+import AnswerForm from '@/components/organisms/AnswerForm'
 
 const QuestionDetailPage = () => {
     const router = useRouter()
@@ -50,13 +51,13 @@ const QuestionDetailPage = () => {
         is_correct: boolean
         user: { id: number; first_name: string; last_name: string; avatar: string }
     } = {
-        id: Number(query.id),
+        id: 149,
         content:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore',
         created_at: '2 days ago',
         vote_count: 2,
         is_bookmark: false,
-        is_correct: true,
+        is_correct: false,
         user: {
             id: 2,
             first_name: 'John',
@@ -98,13 +99,18 @@ const QuestionDetailPage = () => {
                 <div className="my-4 w-full border-t-2" />
                 <AnswerDetail
                     id={answer.id}
+                    question_id={question.id}
                     content={answer.content}
                     created_at={answer.created_at}
                     vote_count={answer.vote_count}
                     is_bookmark={answer.is_bookmark}
                     is_correct={answer.is_correct}
                     user={answer.user}
+                    is_from_user={question.is_from_user}
                 />
+                <div>
+                    <AnswerForm question_id={question.id} />
+                </div>
             </div>
         </Fragment>
     )

@@ -10,12 +10,13 @@ import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
 export type FormValues = {
     content: string
     user_id: number
+}
+type AnswerFormProps = {
     question_id: number
 }
 
-const AnswerComponent = () => {
+const AnswerForm = ({ question_id }: AnswerFormProps): JSX.Element => {
     const user_id = useBoundStore.getState().user_id
-    const question_id = 1
 
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
@@ -86,4 +87,4 @@ const AnswerComponent = () => {
     )
 }
 
-export default AnswerComponent
+export default AnswerForm
