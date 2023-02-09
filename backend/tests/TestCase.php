@@ -29,6 +29,7 @@ abstract class TestCase extends BaseTestCase
                     if ($this->schemaGrammar === null) {
                         $this->useDefaultSchemaGrammar();
                     }
+
                     return new class($this) extends SQLiteBuilder
                     {
                         protected function createBlueprint($table, Closure $callback = null)
