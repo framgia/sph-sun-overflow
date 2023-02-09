@@ -1,3 +1,4 @@
+import 'react-quill/dist/quill.core.css'
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
@@ -5,6 +6,7 @@ import Votes from '@/components/molecules/Votes'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import AcceptAnswer from '@/components/molecules/AcceptAnswer'
+import { parseHTML } from '@/helpers/htmlParsing'
 
 type AnswerDetailProps = {
     id: number
@@ -36,8 +38,10 @@ const Answer = ({
                         <Bookmark is_bookmark={is_bookmark} />
                         <AcceptAnswer is_correct={is_correct} />
                     </div>
-                    <div className="flex w-full flex-col justify-between">
-                        <div className="mt-2 w-full pr-2 text-justify">{content}</div>
+                    <div className="ql-snow flex w-full flex-col justify-between">
+                        <div className="ql-editor mt-2 w-full pr-2 text-justify">
+                            {parseHTML(content)}
+                        </div>
                         <div className="flex w-full flex-row justify-between">
                             <div className="flex justify-start">
                                 <div className="mt-2 flex items-start">

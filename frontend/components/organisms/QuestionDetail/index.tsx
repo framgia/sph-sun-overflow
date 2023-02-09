@@ -15,6 +15,7 @@ type QuestionDetailProps = {
     title: string
     content: string
     created_at: string
+    humanized_created_at: string
     views_count: number
     vote_count: number
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
@@ -28,6 +29,7 @@ const QuestionDetail = ({
     title,
     content,
     created_at,
+    humanized_created_at,
     views_count,
     vote_count,
     tags,
@@ -48,7 +50,7 @@ const QuestionDetail = ({
                     <div className="flex w-full flex-row gap-3 text-xs font-semibold">
                         <div className="flex gap-1">
                             <span>Asked</span>
-                            <span className="text-gray-500">{created_at}</span>
+                            <span className="text-gray-500">{humanized_created_at}</span>
                         </div>
                         <div className="flex gap-1">
                             <span>Viewed</span>

@@ -46,7 +46,7 @@ const QuestionDetailPage = () => {
 
     const query = router.query
 
-    const { data, loading, error } = useQuery(GET_QUESTION, {
+    const { data, loading, error, refetch } = useQuery(GET_QUESTION, {
         variables: {
             slug: String(query.slug),
         },
@@ -55,22 +55,37 @@ const QuestionDetailPage = () => {
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)
 
-    const question: Question = {
-        ...data.question,
-        created_at: data.question.humanized_created_at,
-    }
-
-    const answers: {
+    const question: {
         id: number
+        title: string
         content: string
         created_at: string
-        vote_count: number
         humanized_created_at: string
+        vote_count: number
+        views_count: number
+        tags: { id: number; name: string; is_watched_by_user: boolean }[]
         is_bookmark: boolean
-        is_correct: boolean
-        is_created_by_user: boolean
+        is_from_user: boolean
         user: { id: number; first_name: string; last_name: string; avatar: string }
-    }[] = data.question.answers
+        comments: {
+            id: number
+            content: string
+            user: { id: number; first_name: string; last_name: string; avatar: string }
+            created_at: string
+            updated_at: string
+        }[]
+        answers: {
+            id: number
+            content: string
+            created_at: string
+            vote_count: number
+            humanized_created_at: string
+            is_bookmark: boolean
+            is_correct: boolean
+            is_created_by_user: boolean
+            user: { id: number; first_name: string; last_name: string; avatar: string }
+        }[]
+    } = data.question
 
     return (
         <Fragment>
@@ -81,7 +96,7 @@ const QuestionDetailPage = () => {
                         title={question.title}
                         content={question.content}
                         created_at={question.created_at}
-                        is_from_user={question.is_from_user}
+                        humanized_created_at={question.humanized_created_at}
                         vote_count={question.vote_count}
                         views_count={question.views_count}
                         tags={question.tags}
@@ -117,12 +132,13 @@ const QuestionDetailPage = () => {
                 <div className="flex w-full flex-col gap-3 pt-3">
                     <div className="flex w-full flex-row justify-between">
                         <div className="w-full text-2xl font-bold">
-                            {answers.length} {answers.length > 1 ? 'Answers' : 'Answer'}
+                            {question.answers.length}{' '}
+                            {question.answers.length > 1 ? 'Answers' : 'Answer'}
                         </div>
                         <SortDropdown />
                     </div>
                     <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray">
-                        {answers.map((answer) => (
+                        {question.answers.map((answer) => (
                             <AnswerDetail
                                 key={answer.id}
                                 id={answer.id}
