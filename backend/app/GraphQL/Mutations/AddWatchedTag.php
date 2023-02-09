@@ -1,6 +1,8 @@
 <?php
 
 namespace App\GraphQL\Mutations;
+
+use App\Exceptions\CustomException;
 use App\Models\User;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +26,7 @@ final class AddWatchedTag
                 $user->watchedTags()->attach($args['tag_id']);
                 return "Successfully added the tag";
             }else{
-                return "Failed adding tag to WatchList";
+                throw new CustomException("Failed adding tag to WatchList");
             }
         }catch(Exception $e){
             return $e->getMessage();

@@ -15,10 +15,10 @@ const SidebarButton = ({ IconName, Text, isSelected, url }: SidebarButtonProps):
             : ' text-gray-600 bg-white-700'
 
     return (
-        <li className="-mr-1 first:mt-2">
+        <li className="-mr-1 first:mt-16">
             <Link
                 href={url}
-                className={`flex items-center space-x-2 p-2 pl-8 text-2xl font-normal
+                className={`flex items-center space-x-2 p-2  pl-8 text-2xl font-normal
                    ${isActive()}
                    hover:rounded-none hover:border-0 hover:text-[#ff2000]
                    active:rounded-lg active:border-r-4 active:border-red-400 active:text-black

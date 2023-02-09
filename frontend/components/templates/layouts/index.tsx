@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Navbar from '../../organisms/Navbar'
-import Sidebar from '../../organisms/Sidebar'
+import { LeftSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
 import { ToastContainer } from 'react-toastify'
 type LayoutProps = {
@@ -23,7 +23,7 @@ const Layout = ({ children }: LayoutProps) => {
                 <div className="flex h-screen w-full flex-row">
                     {!routeIfLoginPathCheck && (
                         <div className="h-full w-96">
-                            <Sidebar />
+                            <LeftSideBar />
                         </div>
                     )}
                     <div className="h-full w-full">{children}</div>

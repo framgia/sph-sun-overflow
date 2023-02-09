@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 import { UseFormSetValue } from 'react-hook-form'
 import { ComponentType } from 'react'
 import { ReactQuillProps } from 'react-quill'
-
 type RTEProps = {
     setValue: UseFormSetValue<any>
     id: string | undefined
@@ -64,7 +63,7 @@ const RichTextEditor = ({ setValue, id = undefined, usage = 'default' }: RTEProp
 
     return (
         <ReactQuill
-            className="border-2 border"
+            className=""
             modules={modules}
             formats={formats}
             onChange={handleEditor}
