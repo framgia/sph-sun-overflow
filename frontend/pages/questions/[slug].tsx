@@ -9,6 +9,34 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 
+export type User = {
+    id: number
+    first_name: string
+    last_name: string
+    avatar?: string
+}
+
+export type Comment = {
+    id: number
+    content: string
+    user: User
+    created_at: string
+    updated_at: string
+}
+export type Question = {
+    id: number
+    title: string
+    content: string
+    created_at: string
+    vote_count: number
+    views_count: number
+    tags: { id: number; name: string; is_watched_by_user: boolean }[]
+    is_bookmark: boolean
+    is_from_user: boolean
+    user: User
+    comments: Comment[]
+}
+
 const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
@@ -25,18 +53,7 @@ const QuestionDetailPage = () => {
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)
 
-    const question: {
-        id: number
-        title: string
-        content: string
-        created_at: string
-        vote_count: number
-        views_count: number
-        tags: { id: number; name: string; is_watched_by_user: boolean }[]
-        is_bookmark: boolean
-        is_from_user: boolean
-        user: { id: number; first_name: string; last_name: string; avatar: string }
-    } = {
+    const question: Question = {
         ...data.question,
         created_at: data.question.humanized_created_at,
     }
@@ -80,21 +97,26 @@ const QuestionDetailPage = () => {
                     is_bookmark={question.is_bookmark}
                     user={question.user}
                 />
-                <div className="mt-2 border-t-2">
-                    <Comment
-                        text="Lorem ipsum dolor, sit amet consectetur adipisicing elit..."
-                        author="John Doe"
-                    />
-                    <Comment text="This is a comment." author="James Bow" />
-                    <Comment text="This is another comment!" author="Jane Dough" />
-                    <div
-                        className="mt-10 w-full cursor-pointer border-b-2 pl-2 pb-2 hover:text-blue-600"
-                        onClick={() => setComment(!comment)}
-                    >
-                        Add comment
+                {question.comments.length > 0 && (
+                    <div className="mt-2">
+                        {question.comments.map((comment) => (
+                            <Comment
+                                key={comment.id}
+                                text={comment.content}
+                                author={`${comment.user.first_name} ${comment.user.last_name}`}
+                                time={comment.updated_at}
+                                userId={comment.user.id}
+                            />
+                        ))}
                     </div>
-                    {comment && <CommentForm id={commentId} />}
+                )}
+                <div
+                    className="mt-10 w-full cursor-pointer border-b-2 pl-2 pb-2 hover:text-blue-600"
+                    onClick={() => setComment(!comment)}
+                >
+                    Add comment
                 </div>
+                {comment && <CommentForm id={commentId} />}
                 <div className="my-4 w-full border-t-2" />
                 <AnswerDetail
                     id={answer.id}
