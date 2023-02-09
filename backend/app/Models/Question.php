@@ -17,9 +17,9 @@ class Question extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user' ,'user_vote'];
 
-    protected static function boot() 
+    protected static function boot()
     {
         parent::boot();
 
@@ -63,6 +63,11 @@ class Question extends Model
         return $this->votes()->sum('value');
     }
 
+    public function getUserVoteAttribute()
+    {
+        return $this->votes()->where('user_id', auth()->id())->first()->value ?? 0;
+    }
+
     public function getHumanizedCreatedAtAttribute()
     {
         return $this->created_at->diffForHumans();
@@ -73,11 +78,11 @@ class Question extends Model
         return $this->morphMany(Bookmark::class,'bookmarkable');
     }
 
-    public function getIsFromUserAttribute() 
+    public function getIsFromUserAttribute()
     {
         if(auth()->user())
             return $this->user_id === auth()->user()->id;
-        else 
+        else
             return false;
     }
 }

@@ -6,6 +6,7 @@ type Answer {
     updated_at: String
     humanized_created_at: String
     vote_count: Int
+    user_vote: Int
     user: User! @belongsTo
     question: Question! @belongsTo
     notifications: [UserNotification]! @morphMany
