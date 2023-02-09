@@ -1,6 +1,5 @@
 extend type Mutation {
     toggleBookmark(
-        user_id: ID! @rules(apply: ["required", "integer"])
         bookmarkable_id: ID! @rules(apply: ["required", "integer"])
         bookmarkable_type: String! @rules(apply: ["required"])
     ): String @guard(with: ["api"])
