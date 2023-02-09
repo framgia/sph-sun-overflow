@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations;
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -23,6 +24,10 @@ final class UpsertVote
                 $voteable = Question::findOrFail($args['voteable_id']);
             }
 
+            if($args['value'] === 0){
+                $voteable->votes()->where('user_id', Auth::id())->delete();
+                return "Vote has been removed";
+            }
             if($args['value'] !== 1 and $args['value'] !== -1){
                 return "Please enter a valid value";
             }
