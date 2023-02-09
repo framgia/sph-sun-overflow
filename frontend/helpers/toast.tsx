@@ -37,8 +37,8 @@ export function formProcessToast(
         pending: loadingMessage,
         success: {
             render() {
-                var element = document.getElementsByClassName('ql-editor')
-                element[0].innerHTML = ''
+                const qlEditor = document.getElementsByClassName('ql-editor')
+                qlEditor[1].innerHTML = ''
                 return successMessage
             },
         },
