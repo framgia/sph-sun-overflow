@@ -46,7 +46,6 @@ final class UpsertVote
             if(Str::contains($message, "No query results for model")){
                 return "Invalid voteable_id";
             }else{
-                return $message;
                 return "An error has occurred";
             }
         }
