@@ -1,4 +1,7 @@
 extend type Query {
-    userNotification(id: ID! @eq): UserNotification @find
-    userNotifications: [UserNotification!]! @all
+    userNotification(id: ID! @eq): UserNotification @guard(with: ["api"]) @find
+    userNotifications(
+        user_id: ID! @where(operator: "=")
+        orderBy: _ @orderBy(columns: ["created_at"])
+    ): [UserNotification!]! @guard(with: ["api"]) @all
 }

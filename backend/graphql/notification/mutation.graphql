@@ -1,0 +1,5 @@
+extend type Mutation {
+    updateUserNotification(id: ID!, is_read: Boolean!): UserNotification!
+        @guard(with: ["api"])
+        @update
+}

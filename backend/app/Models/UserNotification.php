@@ -20,4 +20,9 @@ class UserNotification extends Model
     {
         return $this->morphTo();
     }
+
+    public function getHumanizedCreatedAtAttribute()
+    {
+        return $this->created_at->diffForHumans();
+    }
 }
