@@ -12,6 +12,8 @@ class Answer extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['vote_count','humanized_created_at','is_created_by_user'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -40,5 +42,20 @@ class Answer extends Model
     public function bookmarks()
     {
         return $this->morphMany(Bookmark::class,'bookmarkable');
+    }
+
+    public function getVoteCountAttribute()
+    {
+        return $this->votes()->sum('value');
+    }
+
+    public function getHumanizedCreatedAtAttribute()
+    {
+        return $this->created_at->diffForHumans();
+    }
+
+    public function getIsCreatedByUserAttribute()
+    {
+        return auth()->user()->answers()->where('id', $this->id)->exists();
     }
 }

@@ -64,15 +64,15 @@ const AnswerComponent = () => {
     }
 
     return (
-        <div className="w-full p-2">
+        <div className="w-full py-3">
             <div className="flex flex-col space-y-2">
-                <text className="text-lg">Your Answer</text>
+                <span className="text-lg">Your Answer</span>
                 <form className="flex flex-col">
                     <RichTextEditor setValue={setValue} usage="content" id={undefined} />
                     <div className="mt-4 flex flex-row-reverse">
                         <Button
                             onClick={handleSubmit(onSubmit)}
-                            additionalClass=""
+                            additionalClass="bg-white"
                             usage="primary"
                             type="submit"
                             isDisabled={isDisableSubmit}

@@ -32,6 +32,22 @@ const GET_QUESTION = gql`
                     id
                     first_name
                     last_name
+                    avatar
+                }
+            }
+            answers {
+                id
+                content
+                created_at
+                vote_count
+                humanized_created_at
+                is_correct
+                is_created_by_user
+                user {
+                    id
+                    first_name
+                    last_name
+                    avatar
                 }
             }
         }
