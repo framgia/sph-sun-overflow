@@ -10,12 +10,15 @@ import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
 export type FormValues = {
     content: string
     user_id: number
-    question_id: number
 }
 
-const AnswerComponent = () => {
+type AnswerComponentProps = {
+    question_id: number
+    refetch: () => void
+}
+
+const AnswerComponent = ({ question_id, refetch }: AnswerComponentProps): JSX.Element => {
     const user_id = useBoundStore.getState().user_id
-    const question_id = 1
 
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
@@ -50,6 +53,8 @@ const AnswerComponent = () => {
                     'Answer Successfully Added!',
                     'There was an Error!'
                 )
+
+                refetch()
 
                 setTimeout(() => {
                     setIsDisableSubmit(false)

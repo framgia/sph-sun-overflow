@@ -151,7 +151,7 @@ const QuestionDetailPage = () => {
                                 is_created_by_user={answer.is_created_by_user}
                             />
                         ))}
-                        <AnswerComponent />
+                        <AnswerComponent question_id={question.id} refetch={refetch} />
                     </div>
                 </div>
             </div>
