@@ -29,14 +29,20 @@ final class UpsertVote
             }
 
             $current_value = $voteable->votes()->where('user_id',Auth::id())->first()->value ?? 0;
+
             if($current_value == $args['value']){
+
                 $voteable->votes()->where('user_id', Auth::id())->delete();
+
                 return "Vote Removed";
+
             }else{
+
                 $voteable->votes()->updateOrCreate(
                     ['user_id'=> Auth::id()],
                     ['value'=>$args['value']]
                 );
+
                 return "Voted Successfully";
             }
 
