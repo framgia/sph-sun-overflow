@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -19,17 +18,17 @@ class RoleSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Admin',
-                'description' => 'This is the Admin'
+                'description' => 'This is the Admin',
             ],
             [
                 'id' => 2,
                 'name' => 'Team Leader',
-                'description' => 'This is the Team Leader'
+                'description' => 'This is the Team Leader',
             ],
             [
                 'id' => 3,
                 'name' => 'User',
-                'description' => 'This is the User'
+                'description' => 'This is the User',
             ],
         ], ['id'], ['name', 'description']);
     }

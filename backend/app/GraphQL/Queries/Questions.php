@@ -16,17 +16,16 @@ final class Questions
         $query = Question::query();
 
         try {
-            if($args['filter'] == 'answered'){
+            if ($args['filter'] == 'answered') {
                 $query->has('answers');
             }
-    
-            if($args['filter'] == 'unanswered'){
+
+            if ($args['filter'] == 'unanswered') {
                 $query->doesntHave('answers');
             }
 
             return $query;
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }

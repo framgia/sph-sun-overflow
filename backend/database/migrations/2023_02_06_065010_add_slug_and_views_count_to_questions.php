@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->string("slug");
-            $table->integer("views_count")->default(0);
+            $table->string('slug');
+            $table->integer('views_count')->default(0);
         });
     }
 

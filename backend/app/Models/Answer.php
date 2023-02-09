@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Events\PostedAnswer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +11,7 @@ class Answer extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count','humanized_created_at','is_created_by_user', 'user_vote'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_created_by_user', 'user_vote'];
 
     public function user()
     {
@@ -41,7 +40,7 @@ class Answer extends Model
 
     public function bookmarks()
     {
-        return $this->morphMany(Bookmark::class,'bookmarkable');
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
     }
 
     public function getVoteCountAttribute()

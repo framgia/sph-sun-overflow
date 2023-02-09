@@ -2,9 +2,9 @@
 
 namespace App\GraphQL\Mutations;
 
-use Joselfonseca\LighthouseGraphQLPassport\GraphQL\Mutations\BaseAuthResolver;
-use Joselfonseca\LighthouseGraphQLPassport\Exceptions\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
+use Joselfonseca\LighthouseGraphQLPassport\Exceptions\AuthenticationException;
+use Joselfonseca\LighthouseGraphQLPassport\GraphQL\Mutations\BaseAuthResolver;
 
 final class SocialLogin extends BaseAuthResolver
 {
@@ -14,10 +14,11 @@ final class SocialLogin extends BaseAuthResolver
      */
     public function __invoke($_, array $args)
     {
-        $emailProvider = substr($args["email"], strpos($args["email"], "@") + 1);
+        $emailProvider = substr($args['email'], strpos($args['email'], '@') + 1);
 
-        if($emailProvider !== "sun-asterisk.com") 
+        if ($emailProvider !== 'sun-asterisk.com') {
             throw new AuthenticationException(__('Authentication exception'), __('Email does not belong to Sun*'));
+        }
 
         $credentials = $this->buildCredentials($args, 'social_grant');
         $response = $this->makeRequest($credentials);

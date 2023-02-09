@@ -3,12 +3,11 @@
 namespace Tests;
 
 use Closure;
-use Tests\CreatesApplication;
-use Illuminate\Support\Fluent;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\SQLiteConnection;
 use Illuminate\Database\Schema\SQLiteBuilder;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Fluent;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -30,6 +29,7 @@ abstract class TestCase extends BaseTestCase
                     if ($this->schemaGrammar === null) {
                         $this->useDefaultSchemaGrammar();
                     }
+
                     return new class($this) extends SQLiteBuilder
                     {
                         protected function createBlueprint($table, Closure $callback = null)

@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\TeamRole;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TeamRoleSeeder extends Seeder

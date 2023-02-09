@@ -8,8 +8,8 @@ use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 class CustomException extends Exception implements RendersErrorsExtensions
 {
     /**
-    * @var @string
-    */
+     * @var @string
+     */
     protected $reason;
 
     public function __construct(string $message, string $reason = null)
@@ -33,6 +33,7 @@ class CustomException extends Exception implements RendersErrorsExtensions
      * Value "graphql" is reserved for errors produced by query parsing or validation, do not use it.
      *
      * @api
+     *
      * @return string
      */
     public function getCategory(): string

@@ -20,12 +20,12 @@ class AnswerObserver
 
     public function updated(Answer $answer)
     {
-        if($answer->is_correct) {
-        UserNotification::create([
-            'user_id' => $answer->user_id,
-            'notifiable_type' => 'App\Models\Answer',
-            'notifiable_id' => $answer->id,
-        ]);
-       }
+        if ($answer->is_correct) {
+            UserNotification::create([
+                'user_id' => $answer->user_id,
+                'notifiable_type' => 'App\Models\Answer',
+                'notifiable_id' => $answer->id,
+            ]);
+        }
     }
 }

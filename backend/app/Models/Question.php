@@ -12,12 +12,14 @@ class Question extends Model
     use HasFactory, SoftDeletes;
 
     const OPEN = 0;
+
     const CLOSED = 1;
+
     const DUPLICATE = 2;
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user' ,'user_vote'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user', 'user_vote'];
 
     protected static function boot()
     {
@@ -75,14 +77,15 @@ class Question extends Model
 
     public function bookmarks()
     {
-        return $this->morphMany(Bookmark::class,'bookmarkable');
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
     }
 
     public function getIsFromUserAttribute()
     {
-        if(auth()->user())
+        if (auth()->user()) {
             return $this->user_id === auth()->user()->id;
-        else
+        } else {
             return false;
+        }
     }
 }

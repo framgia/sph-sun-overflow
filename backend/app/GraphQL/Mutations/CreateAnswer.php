@@ -6,7 +6,6 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Validator;
 
 final class CreateAnswer
 {
