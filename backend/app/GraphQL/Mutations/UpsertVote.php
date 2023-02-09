@@ -24,26 +24,29 @@ final class UpsertVote
                 $voteable = Question::findOrFail($args['voteable_id']);
             }
 
-            if($args['value'] === 0){
-                $voteable->votes()->where('user_id', Auth::id())->delete();
-                return "Vote has been removed";
-            }
             if($args['value'] !== 1 and $args['value'] !== -1){
                 return "Please enter a valid value";
             }
 
-            $voteable->votes()->updateOrCreate(
-                ['user_id'=> Auth::id()],
-                ['value'=>$args['value']]
-            );
+            $current_value = $voteable->votes()->where('user_id',Auth::id())->first()->value ?? 0;
+            if($current_value == $args['value']){
+                $voteable->votes()->where('user_id', Auth::id())->delete();
+                return "Vote Removed";
+            }else{
+                $voteable->votes()->updateOrCreate(
+                    ['user_id'=> Auth::id()],
+                    ['value'=>$args['value']]
+                );
+                return "Voted Successfully";
+            }
 
-            return "Voted Successfully";
 
         } catch(Exception $e) {
             $message = $e->getMessage();
             if(Str::contains($message, "No query results for model")){
                 return "Invalid voteable_id";
             }else{
+                return $message;
                 return "An error has occurred";
             }
         }
