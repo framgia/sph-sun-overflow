@@ -1,0 +1,30 @@
+name: Laravel
+
+on:
+  push:
+    branches: ['develop']
+  pull_request:
+    branches: ['develop']
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1.1'
+      - uses: actions/checkout@v3
+      - name: Load Environment Variables
+        run: cd backend && php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Dependencies
+        run: cd backend && composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Composer Generate Key
+        run: cd backend && php artisan key:generate
+      - name: Run PSR2 Code Checker
+        run: cd backend && ./vendor/bin/phpcs --colors --report=full --exclude=PSR1.Methods.CamelCapsMethodName --standard=PSR2 ./app ./config ./database ./routes ./tests
+      - name: Execute tests (Unit and Feature tests) via PHPUnits
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: cd backend && touch database/database.sqlite && php artisan optimize:clear && php artisan test --coverage-clover ./report.xml --coverage-html=coverage

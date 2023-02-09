@@ -27,7 +27,7 @@ class VoteFactory extends Factory
         return [
             'user_id' => $userId,
             'value' => fake()->randomElement([-1, 1]),
-            'voteable_id' => ($voteableType == "Question") ?  $questionId : $answerId,
+            'voteable_id' => ($voteableType == 'Question') ? $questionId : $answerId,
             'voteable_type' => $voteableType,
 
         ];

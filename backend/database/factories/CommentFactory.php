@@ -27,7 +27,7 @@ class CommentFactory extends Factory
         return [
             'content' => fake()->paragraph(),
             'user_id' => $userId,
-            'commentable_id' => ($commentableType == "Question") ?  $questionId : $answerId,
+            'commentable_id' => ($commentableType == 'Question') ? $questionId : $answerId,
             'commentable_type' => $commentableType,
 
         ];

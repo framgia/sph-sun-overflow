@@ -12,9 +12,9 @@ final class Question
      */
     public function __invoke($_, array $args)
     {
-        $question = ModelsQuestion::where('slug', $args["slug"])->first();
+        $question = ModelsQuestion::where('slug', $args['slug'])->first();
 
-        $question->update(["views_count" => $question->views_count + 1 ]);
+        $question->update(['views_count' => $question->views_count + 1]);
 
         return $question->fresh();
     }

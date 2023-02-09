@@ -16,11 +16,11 @@ final class CreateComment
     public function __invoke($_, array $args)
     {
         try {
-            if ($args['commentable_type'] == "Answer") {
+            if ($args['commentable_type'] == 'Answer') {
                 $commentable = Answer::findOrFail($args['commentable_id']);
             }
 
-            if ($args['commentable_type'] == "Question") {
+            if ($args['commentable_type'] == 'Question') {
                 $commentable = Question::findOrFail($args['commentable_id']);
             }
 

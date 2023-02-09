@@ -5,7 +5,6 @@ namespace App\Models\GraphQLPassportSocialite;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Joselfonseca\LighthouseGraphQLPassport\Models\SocialProvider;
 use Laravel\Socialite\Facades\Socialite;
@@ -21,8 +20,7 @@ trait HasSocialLogin
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return mixed
      */
     public static function byOAuthToken(Request $request)
@@ -31,7 +29,9 @@ trait HasSocialLogin
 
         try {
             $user = static::whereHas('socialProviders', function ($query) use ($request, $userData) {
-                $query->where('provider', Str::lower($request->get('provider')))->where('provider_id', $userData->getId());
+                $query
+                    ->where('provider', Str::lower($request->get('provider')))
+                    ->where('provider_id', $userData->getId());
             })->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $user = static::where('email', $userData->getEmail())->first();

@@ -26,7 +26,7 @@ class BookmarkFactory extends Factory
 
         return [
             'user_id' => $userId,
-            'bookmarkable_id' => ($bookmarkableType == "App\Models\Question") ?  $questionId : $answerId,
+            'bookmarkable_id' => ($bookmarkableType == "App\Models\Question") ? $questionId : $answerId,
             'bookmarkable_type' => $bookmarkableType,
         ];
     }
