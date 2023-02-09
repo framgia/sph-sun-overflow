@@ -23,6 +23,17 @@ const GET_QUESTION = gql`
                 last_name
                 avatar
             }
+            comments {
+                id
+                content
+                created_at
+                updated_at
+                user {
+                    id
+                    first_name
+                    last_name
+                }
+            }
         }
     }
 `
