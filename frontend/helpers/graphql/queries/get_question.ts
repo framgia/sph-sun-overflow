@@ -44,6 +44,7 @@ const GET_QUESTION = gql`
                 vote_count
                 humanized_created_at
                 is_correct
+                is_bookmarked
                 is_created_by_user
                 user {
                     id

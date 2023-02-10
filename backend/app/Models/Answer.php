@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Answer extends Model
 {
@@ -65,5 +66,10 @@ class Answer extends Model
         } else {
             return false;
         }
+    }
+
+    public function getIsBookmarkedAttribute()
+    {
+        return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
 }
