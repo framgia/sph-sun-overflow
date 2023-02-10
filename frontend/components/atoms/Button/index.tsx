@@ -20,7 +20,7 @@ const getButtonClasses = (usage: string): string => {
         case 'date_filter':
             return 'items-center py-1 px-4 rounded-l-md border-y border-l border-border-black bg-white hover:bg-light-gray'
         case 'answered_filter':
-            return 'items-center py-1 px-4 border border-border-black bg-white hover:bg-light-gray'
+            return 'items-center py-1 px-4 rounded-r-md border border-border-black bg-white hover:bg-light-gray'
         case 'paginate':
             return 'w-12 h-7 flex flex-row justify-center items-center px-3 border outline-1 border-primary-red bg-white rounded-full text-primary-red hover:text-white hover:bg-primary-red active:outline active:outline-primary-red active:bg-primary-red active:text-white'
         default:
