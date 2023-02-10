@@ -32,7 +32,7 @@ export type AnswerType = {
     created_at: string
     vote_count: number
     humanized_created_at: string
-    is_bookmark: boolean
+    is_bookmarked: boolean
     is_correct: boolean
     is_created_by_user: boolean
     user: UserType
@@ -48,7 +48,7 @@ export type QuestionType = {
     views_count: number
     humanized_created_at: string
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
-    is_bookmark: boolean
+    is_bookmarked: boolean
     is_from_user: boolean
     is_answered: boolean
     user: UserType
@@ -89,9 +89,9 @@ const QuestionDetailPage = () => {
                         vote_count={question.vote_count}
                         views_count={question.views_count}
                         tags={question.tags}
-                        is_bookmark={question.is_bookmark}
-                        is_from_user={question.is_from_user}
+                        is_bookmarked={question.is_bookmarked}
                         user={question.user}
+                        is_from_user={question.is_from_user}
                     />
                     <div className="flex flex-col">
                         <div className="flex flex-col divide-y divide-primary-gray">
@@ -133,7 +133,7 @@ const QuestionDetailPage = () => {
                                 content={answer.content}
                                 created_at={answer.created_at}
                                 vote_count={answer.vote_count}
-                                is_bookmark={answer.is_bookmark}
+                                is_bookmarked={answer.is_bookmarked}
                                 is_correct={answer.is_correct}
                                 user={answer.user}
                                 is_created_by_user={answer.is_created_by_user}

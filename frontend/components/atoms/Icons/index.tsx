@@ -31,7 +31,7 @@ const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
                 <HiBookmark
                     viewBox="3 1 13 17"
                     style={{ height: '30', width: '20' }}
-                    className="cursor-pointer fill-white stroke-black stroke-[0.07rem]"
+                    className="cursor-pointer fill-white stroke-black stroke-[0.07rem] hover:fill-green-500 hover:stroke-green-500"
                 />
             )
         case 'bookmark_fill':
@@ -39,7 +39,7 @@ const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
                 <HiBookmark
                     viewBox="3 1 13 17"
                     style={{ height: '30', width: '20' }}
-                    className="cursor-pointer fill-green-600"
+                    className="cursor-pointer fill-green-500 hover:fill-red-500"
                 />
             )
         case 'pill_eye':

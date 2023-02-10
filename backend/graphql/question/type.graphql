@@ -12,6 +12,7 @@ type Question {
     vote_count: Int
     views_count: Int
     user_vote: Int
+    is_bookmarked: Boolean
     is_from_user: Boolean
     user: User! @belongsTo
     answers: [Answer!]! @hasMany

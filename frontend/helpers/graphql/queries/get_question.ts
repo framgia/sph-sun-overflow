@@ -10,6 +10,7 @@ const GET_QUESTION = gql`
             slug
             vote_count
             views_count
+            is_bookmarked
             humanized_created_at
             is_from_user
             is_answered
