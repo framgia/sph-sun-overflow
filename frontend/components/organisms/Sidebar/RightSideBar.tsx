@@ -24,7 +24,7 @@ const RightSideBar = ({ usage }: TRightSidebarProps) => {
 const Type1 = () => {
     const { data, loading } = useQuery(LOAD_SIDEBAR_1)
     return (
-        <div className=" self-end w-1/5  pt-4  hidden  lg:flex flex-col mr-6 ">
+        <div className=" mr-6 hidden  w-1/5  flex-col  self-end pt-4 lg:flex ">
             <WatchedTags data={data} loading={loading} />
             <TeamSidebar data={data} loading={loading} />
         </div>
@@ -38,7 +38,7 @@ const Type2 = () => {
         },
     })
     return (
-        <div className=" self-end w-1/5  pt-4  hidden  lg:flex flex-col mr-6">
+        <div className=" mr-6 hidden  w-1/5  flex-col  self-end pt-4 lg:flex">
             <TeamMemberSidebar data={data} loading={loading} />
         </div>
     )
@@ -48,7 +48,7 @@ const Type3 = () => {
         variables: { userId: 1 },
     })
     return (
-        <div className=" self-end w-1/5 pt-4  hidden lg:flex flex-col mr-6">
+        <div className=" mr-6 hidden w-1/5  flex-col self-end pt-4 lg:flex">
             <WatchedTags data={data} loading={loading} />
         </div>
     )
