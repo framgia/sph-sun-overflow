@@ -7,8 +7,7 @@ import Votes from '@/components/molecules/Votes'
 import { parseHTML } from '@/helpers/htmlParsing'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import AnswerComponent from '../AnswerComponent'
-import { User } from '@/pages/questions/[slug]'
+import { UserType } from '../../../pages/questions/[slug]'
 
 type QuestionDetailProps = {
     id: number
@@ -19,7 +18,7 @@ type QuestionDetailProps = {
     views_count: number
     vote_count: number
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
-    user: User
+    user: UserType
     is_bookmark: boolean
     is_from_user: boolean
 }

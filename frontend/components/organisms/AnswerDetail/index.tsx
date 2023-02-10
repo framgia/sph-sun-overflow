@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import AcceptAnswer from '@/components/molecules/AcceptAnswer'
 import { parseHTML } from '@/helpers/htmlParsing'
+import { UserType, CommentType } from '../../../pages/questions/[slug]'
+import Comment from '@/components/organisms/Comment'
 
 type AnswerDetailProps = {
     id: number
@@ -15,8 +17,9 @@ type AnswerDetailProps = {
     vote_count: number
     is_bookmark: boolean
     is_correct: boolean
-    user: { id: number; first_name: string; last_name: string; avatar: string }
+    user: UserType
     is_created_by_user: boolean
+    comments: CommentType[]
 }
 
 const Answer = ({
@@ -28,10 +31,11 @@ const Answer = ({
     is_correct,
     user,
     is_created_by_user,
+    comments,
 }: AnswerDetailProps): JSX.Element => {
     return (
         <Fragment>
-            <div className="flex w-full flex-col py-3">
+            <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray py-3">
                 <div className="flex w-full flex-row">
                     <div className="flex w-14 flex-col items-start gap-2">
                         <Votes count={vote_count} />
@@ -68,14 +72,32 @@ const Answer = ({
                                 <Avatar
                                     first_name={user.first_name}
                                     last_name={user.last_name}
-                                    avatar={user.avatar}
+                                    avatar={user.avatar ?? ''}
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </Fragment>
+                <div className="flex flex-col">
+                    <div className="flex flex-col divide-y divide-primary-gray">
+                        {comments.map((comment) => (
+                            <Comment
+                                key={comment.id}
+                                text={comment.content}
+                                author={`${comment.user.first_name} ${comment.user.last_name}`}
+                                time={comment.updated_at}
+                                userId={comment.user.id}
+                            />
+                        ))}
+                    </div>
+                    <div className="flex flex-col gap-3 divide-y-2 pt-5">
+                        <div className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400">
+                            Add comment
+                        </div>
+                    </div>
+                </div>
+            </div >
+        </Fragment >
     )
 }
 
