@@ -1,0 +1,9 @@
+union Bookmarkable = Bookmark | Answer | Question
+
+type Bookmark {
+    id: ID!
+    created_at: String!
+    updated_at: String!
+    user: User! @belongsTo
+    bookmarkable: Bookmarkable! @morphTo
+}
