@@ -35,13 +35,7 @@ export function formProcessToast(
 ) {
     return toast.promise(promise, {
         pending: loadingMessage,
-        success: {
-            render() {
-                const qlEditor = document.getElementsByClassName('ql-editor')
-                qlEditor[1].innerHTML = ''
-                return successMessage
-            },
-        },
+        success: successMessage,
         error: errorMessage,
     })
 }

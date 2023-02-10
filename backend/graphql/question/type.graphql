@@ -19,4 +19,5 @@ type Question {
     votes: [Vote]! @morphMany
     team: Team @belongsTo
     tags: [Tag!]! @belongsToMany
+    is_answered: Boolean
 }

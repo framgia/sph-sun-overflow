@@ -6,3 +6,7 @@
     height: 90vh;
     @apply flex items-center justify-center;
 }
+
+.error-form-element {
+    border: 2px solid red !important;
+}

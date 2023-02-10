@@ -19,7 +19,7 @@ class Question extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user', 'user_vote'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user', 'user_vote', 'is_answered'];
 
     protected static function boot()
     {
@@ -87,5 +87,9 @@ class Question extends Model
         } else {
             return false;
         }
+    }
+    public function getIsAnsweredAttribute()
+    {
+        return $this->answers()->where('is_correct', 1)->exists();
     }
 }

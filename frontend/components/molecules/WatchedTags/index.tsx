@@ -94,18 +94,18 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     }
 
     return (
-        <div className="p-1 m-3 mb-0 drop-shadow-md z-10" ref={detectorRef}>
-            <div className="flex justify-between p-4 bg-[#E8E8E8] w-full rounded-tr-xl rounded-tl-xl drop-shadow-md">
+        <div className="z-10 m-3 mb-0 p-1 drop-shadow-md" ref={detectorRef}>
+            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
                 <span className="align-left text-xl font-medium">Watched Tags</span>
                 <div className="">
-                    <HiPencil className="text-2xl cursor-pointer" onClick={toggleVisible} />
+                    <HiPencil className="cursor-pointer text-2xl" onClick={toggleVisible} />
                 </div>
             </div>
-            <div className="bg-white rounded-br-xl rounded-bl-xl">
+            <div className="rounded-br-xl rounded-bl-xl bg-white">
                 {loading && <div className="animate-spin"></div>}
-                <div className={`tags flex flex-wrap p-4 rounded-br-xl rounded-bl-xl bg-white `}>
+                <div className={`tags flex flex-wrap rounded-br-xl rounded-bl-xl bg-white p-4 `}>
                     {loading && (
-                        <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
+                        <svg className="... mr-3 h-5 w-5 animate-spin" viewBox="0 0 24 24"></svg>
                     )}
                     {!loading &&
                         watchedTags.length > 0 &&
@@ -113,13 +113,13 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                             return (
                                 <div
                                     key={index}
-                                    className="py-0.5 px-1 mx-0.5 my-1 flex items-center max-w-20 overflow-hidden text-overflow-ellipsis bg-red-400 rounded-2xl"
+                                    className="max-w-20 text-overflow-ellipsis mx-0.5 my-1 flex items-center overflow-hidden rounded-2xl bg-red-400 py-0.5 px-1"
                                 >
                                     <Link className="label px-1 text-sm" href={`/tags/${tag.id}`}>
                                         {tag.name}
                                     </Link>
                                     <HiX
-                                        className="rounded-xl bg hover:bg-black hover:text-white cursor-pointer"
+                                        className="bg cursor-pointer rounded-xl hover:bg-black hover:text-white"
                                         onClick={() => {
                                             removeWatchedTag(tag.id)
                                         }}
@@ -128,7 +128,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                             )
                         })}
                     {!loading && watchedTags.length == 0 && (
-                        <div className="text-center bg-white w-full text-xl font-medium">
+                        <div className="w-full bg-white text-center text-xl font-medium">
                             No Watched Tags
                         </div>
                     )}

@@ -41,13 +41,13 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps) => {
         }
     }, [data])
     return (
-        <div className="p-1 mx-3 mt-1 drop-shadow-md rounded-br-md rounded-bl-md">
-            <div className="flex justify-between p-4 bg-[#E8E8E8] w-full rounded-tr-xl rounded-tl-xl drop-shadow-md">
+        <div className="mx-3 mt-1 rounded-br-md rounded-bl-md p-1 drop-shadow-md">
+            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
                 <span className="text-xl font-medium">My Teams</span>
             </div>
             <div className="tags flex flex-wrap rounded-br-md rounded-bl-md bg-white">
                 {teams.length == 0 && (
-                    <div className="text-center text-xl font-medium w-full rounded-br-md rounded-bl-md p-4">
+                    <div className="w-full rounded-br-md rounded-bl-md p-4 text-center text-xl font-medium">
                         Not in Any Teams Yet
                     </div>
                 )}
@@ -77,16 +77,16 @@ const TeamTab = ({ team }: TeamTabProps) => {
         extractImageUrls()
         return (
             <Link
-                className="flex w-full h-20 justify-between hover:bg-[#E8E8E8] bg-white px-2 items-center border-b-2 border-b-secondary-gray last:rounded-br-md last:rounded-bl-md last:border-b-0"
+                className="flex h-20 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-[#E8E8E8]"
                 href={`/teams/${team.id}`}
             >
-                <div className="flex flex-col align-middle overflow-hidden ml-2">
-                    <div className="text-xl overflow-hidden text-ellipsis w-24 ">{team.name}</div>
+                <div className="ml-2 flex flex-col overflow-hidden align-middle">
+                    <div className="w-24 overflow-hidden text-ellipsis text-xl ">{team.name}</div>
                     <div className="text-md hidden md:text-xs lg:flex">
                         {team.members.length} members
                     </div>
                 </div>
-                <div className="align-middle hidden xl:flex items-center h-full">
+                <div className="hidden h-full items-center align-middle xl:flex">
                     <StackedUsers images={extractImageUrls()} />
                 </div>
             </Link>
