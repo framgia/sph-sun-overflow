@@ -10,7 +10,7 @@ type Props = {
     answer_count: number
     view_count: number
     created_at: string
-    tags: { id: number; name: string; is_tag: boolean }[]
+    tags: { id: number; name: string; is_watched_by_user: boolean }[]
     user: { id: number; first_name: string; last_name: string; avatar: string }
 }
 
@@ -38,7 +38,7 @@ const QuestionList = ({
                     {view_count} {view_count > 1 ? 'Views' : 'View'}
                 </div>
             </div>
-            <div className="flex w-full flex-col gap-3">
+            <div className="flex w-full flex-col gap-4">
                 <div className="w-full">
                     <Link href="#" className="text-lg text-blue-600 hover:text-blue-400">
                         {title}
@@ -46,14 +46,16 @@ const QuestionList = ({
                 </div>
                 <div className="flex w-full flex-col gap-1">
                     <div className="w-full">{content}</div>
-                    <div className="w-full">
-                        <Tags values={tags} />
-                    </div>
-                    <div className="flex flex-row justify-end">
-                        <Author
-                            author={`${user.first_name} ${user.last_name}`}
-                            moment={created_at}
-                        />
+                    <div className="flex flex-col gap-2">
+                        <div className="w-full">
+                            <Tags values={tags} />
+                        </div>
+                        <div className="flex flex-row justify-end">
+                            <Author
+                                author={`${user.first_name} ${user.last_name}`}
+                                moment={created_at}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

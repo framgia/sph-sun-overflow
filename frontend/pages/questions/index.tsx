@@ -15,7 +15,7 @@ const QuestionsPage = (): JSX.Element => {
         answer_count: number
         view_count: number
         created_at: string
-        tags: { id: number; name: string; is_tag: boolean }[]
+        tags: { id: number; name: string; is_watched_by_user: boolean }[]
         user: { id: number; first_name: string; last_name: string; avatar: string }
     }[] = [
         {
@@ -27,9 +27,9 @@ const QuestionsPage = (): JSX.Element => {
             answer_count: 4,
             view_count: 25,
             tags: [
-                { id: 1, name: 'Tag 1', is_tag: false },
-                { id: 2, name: 'Tag 2', is_tag: true },
-                { id: 3, name: 'Tag 3', is_tag: true },
+                { id: 1, name: 'Tag 1', is_watched_by_user: false },
+                { id: 2, name: 'Tag 2', is_watched_by_user: true },
+                { id: 3, name: 'Tag 3', is_watched_by_user: true },
             ],
             user: {
                 id: 1,
@@ -47,9 +47,9 @@ const QuestionsPage = (): JSX.Element => {
             answer_count: 4,
             view_count: 25,
             tags: [
-                { id: 1, name: 'Tag 1', is_tag: true },
-                { id: 2, name: 'Tag 2', is_tag: false },
-                { id: 3, name: 'Tag 3', is_tag: false },
+                { id: 1, name: 'Tag 1', is_watched_by_user: true },
+                { id: 2, name: 'Tag 2', is_watched_by_user: false },
+                { id: 3, name: 'Tag 3', is_watched_by_user: false },
             ],
             user: {
                 id: 1,
@@ -75,30 +75,32 @@ const QuestionsPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col gap-4 py-8 px-10">
+        <div className="flex h-full w-full flex-col gap-4 px-10 pt-8 pb-5">
             <div className="flex flex-row items-center justify-between px-5">
                 <Button usage="ask_question" isDisabled={false} onClick={onClickAskQuestion}>
                     Ask a Question
                 </Button>
                 <Filters onClickDate={onClickDateFilter} onClickAnswered={onClickAnsweredFilter} />
             </div>
-            <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
-                {questionList.map(function (question) {
-                    return (
-                        <QuestionList
-                            key={question.id}
-                            id={question.id}
-                            title={question.title}
-                            content={question.content}
-                            created_at={question.created_at}
-                            vote_count={question.vote_count}
-                            answer_count={question.answer_count}
-                            view_count={question.view_count}
-                            tags={question.tags}
-                            user={question.user}
-                        />
-                    )
-                })}
+            <div className="flex h-full flex-col justify-between">
+                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
+                    {questionList.map(function (question) {
+                        return (
+                            <QuestionList
+                                key={question.id}
+                                id={question.id}
+                                title={question.title}
+                                content={question.content}
+                                created_at={question.created_at}
+                                vote_count={question.vote_count}
+                                answer_count={question.answer_count}
+                                view_count={question.view_count}
+                                tags={question.tags}
+                                user={question.user}
+                            />
+                        )
+                    })}
+                </div>
                 <Paginate current={5} />
             </div>
         </div>

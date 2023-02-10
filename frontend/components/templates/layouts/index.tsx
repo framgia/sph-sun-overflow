@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Navbar from '../../organisms/Navbar'
-import { LeftSideBar } from '../../organisms/Sidebar'
+import { LeftSideBar, RightSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
 import { ToastContainer } from 'react-toastify'
 type LayoutProps = {
@@ -10,27 +10,27 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
     const router = useRouter()
-    const hideRightSidebarInPages = ['/questions/[id]']
+    const hideRightSidebarInPages = ['/questions/[slug]', '/questions/add']
 
     const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
     return (
         <ProvidersWrapper>
-            <main>
+            <main className="relative">
                 {!routeIfLoginPathCheck && (
-                    <div className="relative z-50 w-full drop-shadow-md">
+                    <div className="absolute z-50 w-full drop-shadow-md">
                         <Navbar />
                     </div>
                 )}
-                <div className="flex h-screen h-full w-full flex-row">
+                <div className="flex w-full flex-row">
                     {!routeIfLoginPathCheck && (
-                        <div className="w-96">
+                        <div className="flex min-h-screen w-96">
                             <LeftSideBar />
                         </div>
                     )}
-                    <div className="h-full w-screen">{children}</div>
+                    <div className="flex w-full pt-14">{children}</div>
                     {!routeIfLoginPathCheck &&
                         !hideRightSidebarInPages.includes(router.pathname) && (
-                            <div className="h-full w-96"></div>
+                            <div className="w-96">Right side</div>
                         )}
                 </div>
                 {!routeIfLoginPathCheck && (
