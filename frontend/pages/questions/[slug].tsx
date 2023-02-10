@@ -11,32 +11,48 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 
-export type User = {
+export type UserType = {
     id: number
     first_name: string
     last_name: string
     avatar?: string
 }
 
-export type Comment = {
+export type CommentType = {
     id: number
     content: string
-    user: User
+    user: UserType
     created_at: string
     updated_at: string
 }
-export type Question = {
+
+export type AnswerType = {
+    id: number
+    content: string
+    created_at: string
+    vote_count: number
+    humanized_created_at: string
+    is_bookmark: boolean
+    is_correct: boolean
+    is_created_by_user: boolean
+    user: UserType
+    comments: CommentType[]
+}
+
+export type QuestionType = {
     id: number
     title: string
     content: string
     created_at: string
     vote_count: number
     views_count: number
+    humanized_created_at: string
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
     is_bookmark: boolean
     is_from_user: boolean
-    user: User
-    comments: Comment[]
+    user: UserType
+    answers: AnswerType[]
+    comments: CommentType[]
 }
 
 const QuestionDetailPage = () => {
@@ -55,37 +71,9 @@ const QuestionDetailPage = () => {
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)
 
-    const question: {
-        id: number
-        title: string
-        content: string
-        created_at: string
-        humanized_created_at: string
-        vote_count: number
-        views_count: number
-        tags: { id: number; name: string; is_watched_by_user: boolean }[]
-        is_bookmark: boolean
-        is_from_user: boolean
-        user: { id: number; first_name: string; last_name: string; avatar: string }
-        comments: {
-            id: number
-            content: string
-            user: { id: number; first_name: string; last_name: string; avatar: string }
-            created_at: string
-            updated_at: string
-        }[]
-        answers: {
-            id: number
-            content: string
-            created_at: string
-            vote_count: number
-            humanized_created_at: string
-            is_bookmark: boolean
-            is_correct: boolean
-            is_created_by_user: boolean
-            user: { id: number; first_name: string; last_name: string; avatar: string }
-        }[]
-    } = data.question
+    const question: QuestionType = {
+        ...data.question,
+    }
 
     return (
         <Fragment>
@@ -101,26 +89,24 @@ const QuestionDetailPage = () => {
                         views_count={question.views_count}
                         tags={question.tags}
                         is_bookmark={question.is_bookmark}
-                        user={question.user}
                         is_from_user={question.is_from_user}
+                        user={question.user}
                     />
                     <div className="flex flex-col">
-                        {question.comments.length > 0 && (
-                            <div className="mt-2">
-                                {question.comments.map((comment) => (
-                                    <Comment
-                                        key={comment.id}
-                                        text={comment.content}
-                                        author={`${comment.user.first_name} ${comment.user.last_name}`}
-                                        time={comment.updated_at}
-                                        userId={comment.user.id}
-                                    />
-                                ))}
-                            </div>
-                        )}
+                        <div className="flex flex-col divide-y divide-primary-gray">
+                            {question.comments.map((comment) => (
+                                <Comment
+                                    key={comment.id}
+                                    text={comment.content}
+                                    author={`${comment.user.first_name} ${comment.user.last_name}`}
+                                    time={comment.updated_at}
+                                    userId={comment.user.id}
+                                />
+                            ))}
+                        </div>
                         <div className="flex flex-col gap-3 divide-y-2 pt-5">
                             <div
-                                className="w-full cursor-pointer px-2 hover:text-blue-600"
+                                className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"
                                 onClick={() => setComment(!comment)}
                             >
                                 Add comment
@@ -149,6 +135,7 @@ const QuestionDetailPage = () => {
                                 is_correct={answer.is_correct}
                                 user={answer.user}
                                 is_created_by_user={answer.is_created_by_user}
+                                comments={answer.comments}
                             />
                         ))}
                         <AnswerComponent question_id={question.id} refetch={refetch} />

@@ -60,6 +60,10 @@ class Answer extends Model
 
     public function getIsCreatedByUserAttribute()
     {
-        return auth()->user()->answers()->where('id', $this->id)->exists();
+        if (auth()->user()) {
+            return auth()->user()->answers()->where('id', $this->id)->exists();
+        } else {
+            return false;
+        }
     }
 }
