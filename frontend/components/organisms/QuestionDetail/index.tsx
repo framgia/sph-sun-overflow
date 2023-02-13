@@ -10,7 +10,7 @@ import { Fragment } from 'react'
 import { UserType } from '../../../pages/questions/[slug]'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { useMutation } from '@apollo/client'
-import { errorNotify } from '../../../helpers/toast';
+import { errorNotify } from '../../../helpers/toast'
 
 type QuestionDetailProps = {
     id: number
@@ -47,7 +47,7 @@ const QuestionDetail = ({
 
     const voteHandler = (value: number) => {
         if (is_from_user) {
-            errorNotify('You can\'t vote for your own post!')
+            errorNotify("You can't vote for your own post!")
             return
         }
         upsertVote({ variables: { value: value, voteable_id: id, voteable_type: 'Question' } })
@@ -71,7 +71,9 @@ const QuestionDetail = ({
                         </div>
                         <div className="flex gap-1">
                             <span>Viewed</span>
-                            <span className="text-gray-500">{views_count} times</span>
+                            <span className="text-gray-500">
+                                {views_count} {views_count > 1 ? 'times' : 'time'}
+                            </span>
                         </div>
                     </div>
                     <div className="flex w-full flex-row">

@@ -14,10 +14,10 @@ type Props = {
     author: string
     time: string
     userId: number
-    refetch: () => void
+    refetchHandler: () => void
 }
 
-const Comment = ({ id, text, author, time, userId, refetch }: Props) => {
+const Comment = ({ id, text, author, time, userId, refetchHandler }: Props) => {
     const [comment, setComment] = useState(false)
     dayjs.extend(relativeTime)
 
@@ -50,7 +50,12 @@ const Comment = ({ id, text, author, time, userId, refetch }: Props) => {
                 </div>
             )}
             {comment && (
-                <CommentForm id={id} content={text} refetch={refetch} setComment={setComment}>
+                <CommentForm
+                    id={id}
+                    content={text}
+                    refetchHandler={refetchHandler}
+                    setComment={setComment}
+                >
                     Update Comment
                 </CommentForm>
             )}

@@ -18,7 +18,7 @@ type CommentFormProps = {
     id?: number | null
     commentableId?: number
     commentableType?: string
-    refetch: () => void
+    refetchHandler: () => void
     children?: string
     content?: string
     setComment: React.Dispatch<React.SetStateAction<boolean>>
@@ -30,7 +30,7 @@ const CommentForm = ({
     commentableType,
     children = 'Submit Comment',
     content,
-    refetch,
+    refetchHandler,
     setComment,
 }: CommentFormProps): JSX.Element => {
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
@@ -55,7 +55,7 @@ const CommentForm = ({
 
         if (data.comment !== undefined) {
             if (data.comment.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
-                setCommentError('No answer Input')
+                setCommentError('No comment Input')
                 setIsDisableSubmit(false)
                 return
             }
@@ -74,7 +74,7 @@ const CommentForm = ({
                         setIsDisableSubmit(false)
                         reset({ comment: '' })
                         setComment(false)
-                        refetch()
+                        refetchHandler()
                     })
                     .catch(() => {
                         errorNotify('There was an Error!')
@@ -98,7 +98,7 @@ const CommentForm = ({
                     setIsDisableSubmit(false)
                     reset({ comment: '' })
                     setComment(false)
-                    refetch()
+                    refetchHandler()
                 })
                 .catch(() => {
                     errorNotify('There was an Error!')
@@ -107,7 +107,7 @@ const CommentForm = ({
 
             return
         }
-        setCommentError('No answer Input')
+        setCommentError('No comment Input')
         setIsDisableSubmit(false)
     }
 
@@ -131,7 +131,9 @@ const CommentForm = ({
                         <Button
                             usage="primary"
                             type="submit"
-                            additionalClass="px-10 bg-white"
+                            additionalClass={`px-10 ${
+                                isDisableSubmit ? 'bg-light-red hover:bg-light-red' : 'bg-white'
+                            }`}
                             isDisabled={isDisableSubmit}
                         >
                             {children}

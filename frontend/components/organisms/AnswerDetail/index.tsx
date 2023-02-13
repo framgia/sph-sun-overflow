@@ -28,7 +28,6 @@ type AnswerDetailProps = {
     question_id: number
     is_from_user: boolean
     is_answered: boolean
-    refetch: () => void
     refetchHandler: () => void
 }
 
@@ -46,7 +45,6 @@ const Answer = ({
     is_from_user,
     is_answered,
     user_vote,
-    refetch,
     refetchHandler,
 }: AnswerDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
@@ -82,7 +80,7 @@ const Answer = ({
                             question_id={question_id}
                             is_from_user={is_from_user}
                             is_answered={is_answered}
-                            refetch={refetch}
+                            refetchHandler={refetchHandler}
                         />
                     </div>
                     <div className="ql-snow flex w-full flex-col justify-between">
@@ -131,7 +129,7 @@ const Answer = ({
                                 author={`${comment.user.first_name} ${comment.user.last_name}`}
                                 time={comment.updated_at}
                                 userId={comment.user.id}
-                                refetch={refetch}
+                                refetchHandler={refetchHandler}
                             />
                         ))}
                     </div>
@@ -146,7 +144,7 @@ const Answer = ({
                             <CommentForm
                                 commentableId={id}
                                 commentableType="Answer"
-                                refetch={refetch}
+                                refetchHandler={refetchHandler}
                                 setComment={setComment}
                             />
                         )}

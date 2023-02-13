@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import Icons from '@/components/atoms/Icons'
 import { useMutation } from '@apollo/client'
 import ACCEPT_ANSWER from '@/helpers/graphql/mutations/accept_answer'
@@ -10,7 +10,7 @@ type AcceptAnswerProps = {
     question_id: number
     is_from_user: boolean
     is_answered: boolean
-    refetch: () => void
+    refetchHandler: () => void
 }
 
 const AcceptAnswer = ({
@@ -19,9 +19,11 @@ const AcceptAnswer = ({
     question_id,
     is_from_user,
     is_answered,
-    refetch,
+    refetchHandler,
 }: AcceptAnswerProps): JSX.Element => {
     const [acceptAnswer] = useMutation(ACCEPT_ANSWER)
+
+    const [isCorrectAnswer, setIsCorrectAnswer] = useState(is_correct)
 
     const handleClick = () => {
         const newAcceptAnswer = acceptAnswer({
@@ -33,10 +35,11 @@ const AcceptAnswer = ({
 
         newAcceptAnswer.then((data: any) => {
             const message = data.data.acceptAnswer
+            setIsCorrectAnswer(!isCorrectAnswer)
             successNotify(`${message}`)
         })
 
-        refetch()
+        refetchHandler()
     }
 
     return (
@@ -44,16 +47,20 @@ const AcceptAnswer = ({
             {is_from_user ? (
                 is_answered === false ? (
                     <div className="flex cursor-pointer justify-center" onClick={handleClick}>
-                        {is_correct ? <Icons name="check_fill" /> : <Icons name="check_outline" />}
+                        {isCorrectAnswer ? (
+                            <Icons name="check_fill" />
+                        ) : (
+                            <Icons name="check_outline" />
+                        )}
                     </div>
                 ) : (
                     <div className="flex cursor-auto justify-center">
-                        {is_correct ? <Icons name="check_fill" /> : ''}
+                        {isCorrectAnswer ? <Icons name="check_fill" /> : ''}
                     </div>
                 )
             ) : (
                 <div className="flex cursor-auto justify-center">
-                    {is_correct ? <Icons name="check_fill" /> : ''}
+                    {isCorrectAnswer ? <Icons name="check_fill" /> : ''}
                 </div>
             )}
         </Fragment>

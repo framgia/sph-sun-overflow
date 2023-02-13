@@ -111,7 +111,7 @@ const QuestionDetailPage = () => {
                                     author={`${comment.user.first_name} ${comment.user.last_name}`}
                                     time={comment.updated_at}
                                     userId={comment.user.id}
-                                    refetch={refetch}
+                                    refetchHandler={refetchHandler}
                                 />
                             ))}
                         </div>
@@ -126,7 +126,7 @@ const QuestionDetailPage = () => {
                                 <CommentForm
                                     commentableId={question.id}
                                     commentableType="Question"
-                                    refetch={refetch}
+                                    refetchHandler={refetchHandler}
                                     setComment={setComment}
                                 />
                             )}
@@ -156,13 +156,15 @@ const QuestionDetailPage = () => {
                                 is_created_by_user={answer.is_created_by_user}
                                 comments={answer.comments}
                                 is_from_user={answer.is_from_user}
-                                refetch={refetch}
                                 is_answered={question.is_answered}
                                 user_vote={answer.user_vote}
                                 refetchHandler={refetchHandler}
                             />
                         ))}
-                        <AnswerComponent question_id={question.id} refetch={refetch} />
+                        <AnswerComponent
+                            question_id={question.id}
+                            refetchHandler={refetchHandler}
+                        />
                     </div>
                 </div>
             </div>
