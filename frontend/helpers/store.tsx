@@ -1,4 +1,5 @@
 import { create, StateCreator } from 'zustand'
+
 interface UserSlice {
     user_id: number
     first_name: string

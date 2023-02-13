@@ -2,14 +2,26 @@ import Icons from '@/components/atoms/Icons'
 
 type VotesProps = {
     count: number
+    user_vote: number
+    voteHandler: (value: number) => void
 }
 
-const Votes = ({ count }: VotesProps): JSX.Element => {
+const Votes = ({ count, user_vote, voteHandler }: VotesProps): JSX.Element => {
     return (
         <div className="flex flex-col items-center">
-            <Icons name="vote_up" />
+            <div onClick={() => voteHandler(1)}>
+                <Icons
+                    name="vote_up"
+                    additionalClass={user_vote === 1 ? ' text-primary-red' : ''}
+                />
+            </div>
             <span className="text-lg">{count}</span>
-            <Icons name="vote_down" />
+            <div onClick={() => voteHandler(-1)}>
+                <Icons
+                    name="vote_down"
+                    additionalClass={user_vote === -1 ? ' text-primary-red' : ''}
+                />
+            </div>
         </div>
     )
 }

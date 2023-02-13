@@ -9,6 +9,9 @@ import AcceptAnswer from '@/components/molecules/AcceptAnswer'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { UserType, CommentType } from '../../../pages/questions/[slug]'
 import Comment from '@/components/organisms/Comment'
+import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
+import { useMutation } from '@apollo/client'
+import { errorNotify } from '../../../helpers/toast';
 
 type AnswerDetailProps = {
     id: number
@@ -19,11 +22,13 @@ type AnswerDetailProps = {
     is_correct: boolean
     user: UserType
     is_created_by_user: boolean
+    user_vote: number
     comments: CommentType[]
     question_id: number
     is_from_user: boolean
     is_answered: boolean
     refetch: () => void
+    refetchHandler: () => void
 }
 
 const Answer = ({
@@ -39,14 +44,31 @@ const Answer = ({
     question_id,
     is_from_user,
     is_answered,
+    user_vote,
     refetch,
+    refetchHandler,
 }: AnswerDetailProps): JSX.Element => {
+    const [upsertVote] = useMutation(UPSERT_VOTE)
+
+    const voteHandler = (value: number) => {
+        if (is_from_user) {
+            errorNotify('You can\'t vote for your own post!')
+            return
+        }
+        upsertVote({ variables: { value: value, voteable_id: id, voteable_type: 'Answer' } })
+        refetchHandler()
+    }
+
     return (
         <Fragment>
             <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray py-3">
                 <div className="flex w-full flex-row">
                     <div className="flex w-14 flex-col items-start gap-2">
-                        <Votes count={vote_count} />
+                        <Votes
+                            count={vote_count ?? 0}
+                            user_vote={user_vote}
+                            voteHandler={voteHandler}
+                        />
                         <Bookmark
                             is_bookmarked={is_bookmarked}
                             bookmarkable_id={id}

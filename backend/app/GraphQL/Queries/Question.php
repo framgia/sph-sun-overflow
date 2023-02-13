@@ -14,7 +14,9 @@ final class Question
     {
         $question = ModelsQuestion::where('slug', $args['slug'])->first();
 
-        $question->update(['views_count' => $question->views_count + 1]);
+        if ($args['shouldAddViewCount']) {
+            $question->update(['views_count' => $question->views_count + 1]);
+        }
 
         return $question->fresh();
     }
