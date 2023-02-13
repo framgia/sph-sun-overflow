@@ -3,17 +3,22 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { useBoundStore } from '../../../helpers/store'
+import CommentForm from '../CommentForm'
+import { useState } from 'react'
 
 dayjs().format()
 
 type Props = {
+    id: number
     text: string
     author: string
     time: string
     userId: number
+    refetch: () => void
 }
 
-const Comment = ({ text, author, time, userId }: Props) => {
+const Comment = ({ id, text, author, time, userId, refetch }: Props) => {
+    const [comment, setComment] = useState(false)
     dayjs.extend(relativeTime)
 
     const currentUserId = useBoundStore.getState().user_id
@@ -30,9 +35,12 @@ const Comment = ({ text, author, time, userId }: Props) => {
             {currentUserId === userId && (
                 <div className="invisible ml-2 flex gap-2 group-hover:visible">
                     <span>
-                        <Link href="#" className="text-blue-500 hover:text-blue-400">
+                        <div
+                            onClick={() => setComment(!comment)}
+                            className="cursor-pointer text-blue-500 hover:text-blue-400"
+                        >
                             Edit
-                        </Link>
+                        </div>
                     </span>
                     <span>
                         <Link href="#" className="text-primary-red hover:text-secondary-red">
@@ -40,6 +48,11 @@ const Comment = ({ text, author, time, userId }: Props) => {
                         </Link>
                     </span>
                 </div>
+            )}
+            {comment && (
+                <CommentForm id={id} content={text} refetch={refetch} setComment={setComment}>
+                    Update Comment
+                </CommentForm>
             )}
         </div>
     )

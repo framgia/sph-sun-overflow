@@ -62,7 +62,6 @@ export type QuestionType = {
 const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
-    const [commentId, setCommentId] = useState(null)
 
     const query = router.query
 
@@ -107,10 +106,12 @@ const QuestionDetailPage = () => {
                             {question.comments.map((comment) => (
                                 <Comment
                                     key={comment.id}
+                                    id={comment.id}
                                     text={comment.content}
                                     author={`${comment.user.first_name} ${comment.user.last_name}`}
                                     time={comment.updated_at}
                                     userId={comment.user.id}
+                                    refetch={refetch}
                                 />
                             ))}
                         </div>
@@ -121,7 +122,14 @@ const QuestionDetailPage = () => {
                             >
                                 Add comment
                             </div>
-                            {comment && <CommentForm id={commentId} />}
+                            {comment && (
+                                <CommentForm
+                                    commentableId={question.id}
+                                    commentableType="Question"
+                                    refetch={refetch}
+                                    setComment={setComment}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

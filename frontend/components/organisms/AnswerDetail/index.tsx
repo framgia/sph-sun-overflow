@@ -4,14 +4,15 @@ import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
 import Votes from '@/components/molecules/Votes'
 import Link from 'next/link'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import AcceptAnswer from '@/components/molecules/AcceptAnswer'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { UserType, CommentType } from '../../../pages/questions/[slug]'
 import Comment from '@/components/organisms/Comment'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { useMutation } from '@apollo/client'
-import { errorNotify } from '../../../helpers/toast';
+import { errorNotify } from '../../../helpers/toast'
+import CommentForm from '../CommentForm'
 
 type AnswerDetailProps = {
     id: number
@@ -49,10 +50,11 @@ const Answer = ({
     refetchHandler,
 }: AnswerDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
+    const [comment, setComment] = useState(false)
 
     const voteHandler = (value: number) => {
         if (is_from_user) {
-            errorNotify('You can\'t vote for your own post!')
+            errorNotify("You can't vote for your own post!")
             return
         }
         upsertVote({ variables: { value: value, voteable_id: id, voteable_type: 'Answer' } })
@@ -124,17 +126,30 @@ const Answer = ({
                         {comments.map((comment) => (
                             <Comment
                                 key={comment.id}
+                                id={comment.id}
                                 text={comment.content}
                                 author={`${comment.user.first_name} ${comment.user.last_name}`}
                                 time={comment.updated_at}
                                 userId={comment.user.id}
+                                refetch={refetch}
                             />
                         ))}
                     </div>
-                    <div className="flex flex-col gap-3 divide-y-2 pt-5">
-                        <div className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400">
+                    <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
+                        <div
+                            className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"
+                            onClick={() => setComment(!comment)}
+                        >
                             Add comment
                         </div>
+                        {comment && (
+                            <CommentForm
+                                commentableId={id}
+                                commentableType="Answer"
+                                refetch={refetch}
+                                setComment={setComment}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
