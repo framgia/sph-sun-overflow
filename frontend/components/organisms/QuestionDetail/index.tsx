@@ -19,7 +19,7 @@ type QuestionDetailProps = {
     vote_count: number
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
     user: UserType
-    is_bookmark: boolean
+    is_bookmarked: boolean
     is_from_user: boolean
 }
 
@@ -33,7 +33,7 @@ const QuestionDetail = ({
     vote_count,
     tags,
     user,
-    is_bookmark,
+    is_bookmarked,
     is_from_user,
 }: QuestionDetailProps): JSX.Element => {
     return (
@@ -60,7 +60,11 @@ const QuestionDetail = ({
                         <div className="flex w-14 flex-col items-start">
                             <div className="flex flex-col items-center gap-2">
                                 <Votes count={vote_count} />
-                                <Bookmark is_bookmark={is_bookmark} />
+                                <Bookmark
+                                    is_bookmarked={is_bookmarked}
+                                    bookmarkable_id={id}
+                                    bookmarkable_type={'Question'}
+                                />
                             </div>
                         </div>
                         <div className="flex w-full flex-col justify-between gap-3">

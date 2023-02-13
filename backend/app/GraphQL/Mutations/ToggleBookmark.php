@@ -28,10 +28,10 @@ final class ToggleBookmark
             }
 
             if ($bookmarkable->bookmarks()->whereUserId($user_id)->delete()) {
-                return 'Successfully Removed';
+                return 'Bookmark Removed';
             } else {
                 $bookmarkable->bookmarks()->create(
-                    ['user_id' => Auth::id()],
+                    ['user_id' => $user_id],
                 );
 
                 return 'Bookmarked Successfully';

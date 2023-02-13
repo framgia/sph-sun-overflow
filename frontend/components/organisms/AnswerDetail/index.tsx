@@ -15,7 +15,7 @@ type AnswerDetailProps = {
     content: string
     created_at: string
     vote_count: number
-    is_bookmark: boolean
+    is_bookmarked: boolean
     is_correct: boolean
     user: UserType
     is_created_by_user: boolean
@@ -31,7 +31,7 @@ const Answer = ({
     content,
     created_at,
     vote_count,
-    is_bookmark,
+    is_bookmarked,
     is_correct,
     user,
     is_created_by_user,
@@ -47,7 +47,11 @@ const Answer = ({
                 <div className="flex w-full flex-row">
                     <div className="flex w-14 flex-col items-start gap-2">
                         <Votes count={vote_count} />
-                        <Bookmark is_bookmark={is_bookmark} />
+                        <Bookmark
+                            is_bookmarked={is_bookmarked}
+                            bookmarkable_id={id}
+                            bookmarkable_type={'Answer'}
+                        />
                         <AcceptAnswer
                             is_correct={is_correct}
                             answer_id={id}
@@ -111,8 +115,8 @@ const Answer = ({
                         </div>
                     </div>
                 </div>
-            </div >
-        </Fragment >
+            </div>
+        </Fragment>
     )
 }
 

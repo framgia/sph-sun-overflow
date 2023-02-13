@@ -10,6 +10,7 @@ const GET_QUESTION = gql`
             slug
             vote_count
             views_count
+            is_bookmarked
             humanized_created_at
             is_from_user
             is_answered
@@ -43,6 +44,7 @@ const GET_QUESTION = gql`
                 vote_count
                 humanized_created_at
                 is_correct
+                is_bookmarked
                 is_created_by_user
                 user {
                     id
