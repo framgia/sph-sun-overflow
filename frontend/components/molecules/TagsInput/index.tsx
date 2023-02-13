@@ -5,9 +5,11 @@ import { HiCheck } from 'react-icons/hi2'
 import { removeItemViaId } from '@/utils'
 import Tag from '../../atoms/Tag'
 import { UseFormSetValue } from 'react-hook-form'
+import { useQuery } from '@apollo/client'
+import { GET_TAG_SUGGESTIONS } from '@/helpers/graphql/queries/sidebar'
 export type ITag = {
     id: number
-    title: string
+    name: string
     description: string
 }
 interface TagInputProps {
@@ -16,13 +18,7 @@ interface TagInputProps {
 
 const initialState = {
     tagsSelected: [] as ITag[],
-    tagSuggestions: [
-        { id: 1, title: 'nextjs', description: 'desc' },
-        { id: 2, title: 'nextjs', description: 'desc' },
-        { id: 3, title: 'nextjs', description: 'desc' },
-        { id: 4, title: 'nextjs', description: 'desc' },
-        { id: 5, title: 'nextjs', description: 'desc' },
-    ] as ITag[],
+    tagSuggestions: [],
     queryText: '',
 }
 
@@ -32,7 +28,9 @@ const TagsInput = ({ setValue }: TagInputProps) => {
     ;[tagsSelected, setTagsSelected] = useState<ITag[]>(initialState.tagsSelected)
     const [tagSuggestions, setTagSuggestions] = useState<ITag[] | []>(initialState.tagSuggestions)
     const [queryText, setQueryText] = useState<string>(initialState.queryText)
-
+    const { data: tagData, loading: tagLoading } = useQuery(GET_TAG_SUGGESTIONS, {
+        variables: { queryString: `%${queryText}%` },
+    })
     const deleteTag = (id: number): void => {
         let TempTagList = removeItemViaId(tagsSelected, id)
         setTagsSelected([...TempTagList])
@@ -45,17 +43,18 @@ const TagsInput = ({ setValue }: TagInputProps) => {
     }, [tagsSelected])
 
     useEffect(() => {
-        //API for fetching tagSuggestions
-        //setTagSuggestions()
-    }, [queryText])
+        if (!tagLoading) {
+            setTagSuggestions(tagData.tagSuggest)
+        }
+    }, [tagData])
 
     return (
         <div className="flex w-full flex-wrap rounded-lg border-2 border-gray-400 bg-white">
             <Combobox value={tagsSelected} onChange={setTagsSelected} multiple>
                 <span className="flex flex-row ">
                     {tagsSelected.map((tag, index) => {
-                        let { title, id } = tag
-                        return <Tag key={index} title={title} tagId={id} deleteTag={deleteTag} />
+                        let { name, id } = tag
+                        return <Tag key={index} name={name} tagId={id} deleteTag={deleteTag} />
                     })}
                 </span>
 
@@ -97,7 +96,7 @@ const TagsInput = ({ setValue }: TagInputProps) => {
                                                         selected ? 'font-medium' : 'font-normal'
                                                     }`}
                                                 >
-                                                    {tag.title}
+                                                    {tag.name}
                                                 </span>
                                                 <span className={`block truncate pl-3`}>
                                                     {tag.description}
