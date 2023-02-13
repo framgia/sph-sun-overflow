@@ -107,18 +107,18 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
                             </span>
                         </Menu.Item>
                     </div>
-                    <div className={notifications.length ? `max-h-80 overflow-y-auto` : `hidden`}>
-                        {renderNotifications(notifications)}
-                    </div>
-                    <div>
-                        <Menu.Item as="div">
-                            {notifications.length == 0 && (
-                                <span className="block p-4 text-center text-sm text-gray-700">
-                                    No new notifications
-                                </span>
-                            )}
-                        </Menu.Item>
-                    </div>
+                    {notifications.length > 0 && (
+                        <div className="max-h-80 overflow-y-auto">
+                            {renderNotifications(notifications)}
+                        </div>
+                    )}
+                    {notifications.length == 0 && (
+                        <div>
+                            <span className="block p-4 text-center text-sm text-gray-700">
+                                No new notifications
+                            </span>
+                        </div>
+                    )}
                 </Menu.Items>
             </Transition>
         </Menu>
