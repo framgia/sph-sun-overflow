@@ -20,11 +20,19 @@ const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
         case 'vote_up':
             return (
-                <IoMdArrowDropup viewBox="120 260 260 100" size="20" className="cursor-pointer" />
+                <IoMdArrowDropup
+                    viewBox="120 260 260 100"
+                    size="20"
+                    className={`cursor-pointer ${additionalClass}`}
+                />
             )
         case 'vote_down':
             return (
-                <IoMdArrowDropdown viewBox="120 140 260 100" size="20" className="cursor-pointer" />
+                <IoMdArrowDropdown
+                    viewBox="120 140 260 100"
+                    size="20"
+                    className={`cursor-pointer ${additionalClass}`}
+                />
             )
         case 'bookmark_outline':
             return (

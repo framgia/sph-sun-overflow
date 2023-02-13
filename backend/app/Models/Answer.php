@@ -12,7 +12,7 @@ class Answer extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count', 'humanized_created_at', 'is_created_by_user', 'user_vote'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_created_by_user', 'user_vote', 'is_from_user'];
 
     public function user()
     {
@@ -57,6 +57,15 @@ class Answer extends Model
     public function getHumanizedCreatedAtAttribute()
     {
         return $this->created_at->diffForHumans();
+    }
+
+    public function getIsFromUserAttribute()
+    {
+        if (auth()->user()) {
+            return $this->user_id === auth()->user()->id;
+        } else {
+            return false;
+        }
     }
 
     public function getIsCreatedByUserAttribute()

@@ -8,6 +8,9 @@ import { parseHTML } from '@/helpers/htmlParsing'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { UserType } from '../../../pages/questions/[slug]'
+import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
+import { useMutation } from '@apollo/client'
+import { errorNotify } from '../../../helpers/toast';
 
 type QuestionDetailProps = {
     id: number
@@ -16,11 +19,13 @@ type QuestionDetailProps = {
     created_at: string
     humanized_created_at: string
     views_count: number
-    vote_count: number
+    vote_count?: number
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
     user: UserType
     is_bookmarked: boolean
     is_from_user: boolean
+    user_vote: number
+    refetchHandler: () => void
 }
 
 const QuestionDetail = ({
@@ -35,7 +40,20 @@ const QuestionDetail = ({
     user,
     is_bookmarked,
     is_from_user,
+    user_vote,
+    refetchHandler,
 }: QuestionDetailProps): JSX.Element => {
+    const [upsertVote] = useMutation(UPSERT_VOTE)
+
+    const voteHandler = (value: number) => {
+        if (is_from_user) {
+            errorNotify('You can\'t vote for your own post!')
+            return
+        }
+        upsertVote({ variables: { value: value, voteable_id: id, voteable_type: 'Question' } })
+        refetchHandler()
+    }
+
     return (
         <Fragment>
             <div className="flex w-full flex-col">
@@ -59,7 +77,11 @@ const QuestionDetail = ({
                     <div className="flex w-full flex-row">
                         <div className="flex w-14 flex-col items-start">
                             <div className="flex flex-col items-center gap-2">
-                                <Votes count={vote_count} />
+                                <Votes
+                                    count={vote_count ?? 0}
+                                    user_vote={user_vote}
+                                    voteHandler={voteHandler}
+                                />
                                 <Bookmark
                                     is_bookmarked={is_bookmarked}
                                     bookmarkable_id={id}
