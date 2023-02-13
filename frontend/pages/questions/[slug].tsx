@@ -50,6 +50,7 @@ export type QuestionType = {
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
     is_bookmark: boolean
     is_from_user: boolean
+    is_answered: boolean
     user: UserType
     answers: AnswerType[]
     comments: CommentType[]
@@ -128,14 +129,18 @@ const QuestionDetailPage = () => {
                             <AnswerDetail
                                 key={answer.id}
                                 id={answer.id}
+                                question_id={question.id}
                                 content={answer.content}
-                                created_at={answer.humanized_created_at}
+                                created_at={answer.created_at}
                                 vote_count={answer.vote_count}
                                 is_bookmark={answer.is_bookmark}
                                 is_correct={answer.is_correct}
                                 user={answer.user}
                                 is_created_by_user={answer.is_created_by_user}
                                 comments={answer.comments}
+                                is_from_user={question.is_from_user}
+                                refetch={refetch}
+                                is_answered={question.is_answered}
                             />
                         ))}
                         <AnswerComponent question_id={question.id} refetch={refetch} />

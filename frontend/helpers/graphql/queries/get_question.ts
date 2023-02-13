@@ -12,6 +12,7 @@ const GET_QUESTION = gql`
             views_count
             humanized_created_at
             is_from_user
+            is_answered
             tags {
                 id
                 name

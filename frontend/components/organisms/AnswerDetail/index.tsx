@@ -20,6 +20,10 @@ type AnswerDetailProps = {
     user: UserType
     is_created_by_user: boolean
     comments: CommentType[]
+    question_id: number
+    is_from_user: boolean
+    is_answered: boolean
+    refetch: () => void
 }
 
 const Answer = ({
@@ -32,6 +36,10 @@ const Answer = ({
     user,
     is_created_by_user,
     comments,
+    question_id,
+    is_from_user,
+    is_answered,
+    refetch,
 }: AnswerDetailProps): JSX.Element => {
     return (
         <Fragment>
@@ -40,7 +48,14 @@ const Answer = ({
                     <div className="flex w-14 flex-col items-start gap-2">
                         <Votes count={vote_count} />
                         <Bookmark is_bookmark={is_bookmark} />
-                        <AcceptAnswer is_correct={is_correct} />
+                        <AcceptAnswer
+                            is_correct={is_correct}
+                            answer_id={id}
+                            question_id={question_id}
+                            is_from_user={is_from_user}
+                            is_answered={is_answered}
+                            refetch={refetch}
+                        />
                     </div>
                     <div className="ql-snow flex w-full flex-col justify-between">
                         <div className="ql-editor mt-2 w-full pr-2 text-justify">

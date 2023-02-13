@@ -10,13 +10,13 @@ const StackedUsers = ({ images }: StackedUsersProps) => {
         images = images.slice(0, 4)
     }
     return (
-        <div className="hidden lg:flex flex-row -space-x-7">
+        <div className="hidden flex-row -space-x-7 lg:flex">
             {images.length &&
                 images.map((imageUrl, index) => {
                     return (
                         <img
                             key={index}
-                            className="w-[40px] h-[40px] rounded-full"
+                            className="h-[40px] w-[40px] rounded-full"
                             src={imageUrl}
                             alt="user photo"
                         />

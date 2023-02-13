@@ -47,13 +47,13 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
     }, [data])
     return (
         <div className="p-1 drop-shadow-md">
-            <div className="flex justify-between p-4 bg-[#E8E8E8] w-full rounded-tr-xl rounded-tl-xl drop-shadow-md">
+            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
                 <span className="text-xl font-medium">Members</span>
-                <div className="text-lg cursor-pointer text-[#3B8CD7]">Manage</div>
+                <div className="cursor-pointer text-lg text-[#3B8CD7]">Manage</div>
             </div>
-            <div className="bg-white tags flex flex-wrap rounded-br-md rounded-bl-md">
+            <div className="tags flex flex-wrap rounded-br-md rounded-bl-md bg-white">
                 {members.length == 0 && (
-                    <div className="text-center text-xl font-medium w-full py-4">
+                    <div className="w-full py-4 text-center text-xl font-medium">
                         No Other Members
                     </div>
                 )}
@@ -69,11 +69,11 @@ const UserTab = ({ user }: UserTabProps) => {
     if (!isObjectEmpty(user)) {
         return (
             <Link
-                className="flex w-full h-20 hover:bg-[#E8E8E8] items-center overflow-hidden text-overflow-ellipsis border-b-2 border-b-secondary-gray last:rounded-md last:border-b-0"
+                className="text-overflow-ellipsis flex h-20 w-full items-center overflow-hidden border-b-2 border-b-secondary-gray last:rounded-md last:border-b-0 hover:bg-[#E8E8E8]"
                 href={`/user/${user.id}`}
             >
                 <img
-                    className="w-[40px] h-[40px] rounded-full mx-4 text-sm bg-gray-800 rounded-full md:mr-0 active:ring-2 active:ring-red-500"
+                    className="mx-4 h-[40px] w-[40px] rounded-full rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500 md:mr-0"
                     src={
                         user.avatar ? user.avatar : 'https://www.w3schools.com/howto/img_avatar.png'
                     }
@@ -81,11 +81,11 @@ const UserTab = ({ user }: UserTabProps) => {
                     width={15}
                     height={15}
                 />
-                <div className="flex flex-col align-middle ml-2 overflow-hidden text-overflow-ellipsis">
+                <div className="text-overflow-ellipsis ml-2 flex flex-col overflow-hidden align-middle">
                     <div className="text-md ">
                         {user.first_name} {user.last_name}
                     </div>
-                    <div className="text-sm hidden lg:flex">{user.role}</div>
+                    <div className="hidden text-sm lg:flex">{user.role}</div>
                     <div className="text-sm">{user.reputation} Score</div>
                 </div>
             </Link>

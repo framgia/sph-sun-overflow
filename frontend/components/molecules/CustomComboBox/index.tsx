@@ -40,13 +40,13 @@ const CustomCombobox = ({
     }
 
     return (
-        <div className="flex flex-wrap w-full p-4">
+        <div className="flex w-full flex-wrap p-4">
             <Combobox value={selected} onChange={setSelected}>
                 <div className="flex w-full py-2">
                     <Combobox.Input
                         id="comboBoxInput"
                         placeholder={placeholder}
-                        className={`text-sm leading-5 text-gray-900 focus:ring-0 w-0 grow ${extraInputClasses}`}
+                        className={`w-0 grow text-sm leading-5 text-gray-900 focus:ring-0 ${extraInputClasses}`}
                         onChange={(event) => setQueryText(event.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
                         displayValue={(suggestion) => {
@@ -71,7 +71,7 @@ const CustomCombobox = ({
                         leaveTo="opacity-0"
                         afterLeave={() => setQueryText('')}
                     >
-                        <Combobox.Options className="absolute mt-1 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                             {suggestionProps.length === 0 && queryText !== '' ? (
                                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                     Nothing found.
