@@ -37,8 +37,10 @@ const AnswerComponent = ({ question_id, refetch }: AnswerComponentProps): JSX.El
         if (data.content !== undefined) {
             const pattern = /<img[^>]+>/
             const check_image = pattern.test(data.content)
-            if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 &&
-                check_image === false) {
+            if (
+                data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 &&
+                check_image === false
+            ) {
                 errorElement.classList.add('error-form-element')
                 setAddAnswerError('No answer Input')
                 setTimeout(() => {
@@ -51,13 +53,17 @@ const AnswerComponent = ({ question_id, refetch }: AnswerComponentProps): JSX.El
                         user_id,
                         question_id,
                     },
-                }).then(() => {
-                    const qlEditor = document.querySelector('.quill .ql-editor') as HTMLDivElement
-                    qlEditor.innerHTML = ''
-                    successNotify('Answer Successfully Added!')
-                }).catch(() => {
-                    errorNotify('There was an Error!')
-                });
+                })
+                    .then(() => {
+                        const qlEditor = document.querySelector(
+                            '.quill .ql-editor'
+                        ) as HTMLDivElement
+                        qlEditor.innerHTML = ''
+                        successNotify('Answer Successfully Added!')
+                    })
+                    .catch(() => {
+                        errorNotify('There was an Error!')
+                    })
 
                 setAddAnswerError('')
                 errorElement.classList.remove('error-form-element')

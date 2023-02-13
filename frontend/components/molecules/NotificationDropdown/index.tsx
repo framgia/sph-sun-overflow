@@ -107,14 +107,12 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
                             </span>
                         </Menu.Item>
                     </div>
-                    <div>{renderNotifications(notifications)}</div>
+                    <div className={notifications.length ? `max-h-80 overflow-y-auto` : `hidden`}>
+                        {renderNotifications(notifications)}
+                    </div>
                     <div>
-                        <Menu.Item>
-                            {notifications?.length > 0 ? (
-                                <Link className="block px-4 py-2 text-sm text-gray-700" href="#">
-                                    View All
-                                </Link>
-                            ) : (
+                        <Menu.Item as="div">
+                            {notifications.length == 0 && (
                                 <span className="block p-4 text-center text-sm text-gray-700">
                                     No new notifications
                                 </span>
@@ -163,8 +161,8 @@ const renderNotifications = (notifications: NotificationProps[]) => {
                         alt="user photo"
                     />
                 </div>
-                <div className="line-clamp-3 w-full pl-3">
-                    <div className="mb-1 text-sm text-gray-600">
+                <div className="w-full pl-3">
+                    <div className="mb-1 text-sm text-gray-600 line-clamp-3">
                         <span className="font-semibold text-gray-900">{setName(n.notifiable)}</span>
                         {setDetails(n.notifiable)}
                     </div>
