@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateSocialProviderUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class UpdateSocialProviderUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            if (! Schema::hasColumn('users', 'avatar')) {
+            if (!Schema::hasColumn('users', 'avatar')) {
                 $table->string('avatar')->nullable();
             }
         });
@@ -42,4 +42,4 @@ class UpdateSocialProviderUsersTable extends Migration
         });
         Schema::dropIfExists('social_providers');
     }
-}
+};

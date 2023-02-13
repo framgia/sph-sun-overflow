@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { HiBell } from 'react-icons/hi'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { parseHTML } from '@/helpers/htmlParsing'
 import UPDATE_NOTIFICATION from '@/helpers/graphql/mutations/update_notification'
 
 type User = {
@@ -210,13 +211,15 @@ const setDetails = (notifiable: any): string => {
             }
             break
         case 'Comment':
+            let commentContent: any = parseHTML(notifiable.commentable.content)
             details = `commented on your ${notifiable.commentable.__typename}: "${
-                notifiable.commentable.title ?? notifiable.commentable.content
+                notifiable.commentable.title ?? commentContent.props.children
             }".`
             break
         case 'Vote':
+            let voteContent: any = parseHTML(notifiable.voteable.content)
             details = `voted on your ${notifiable.voteable.__typename}: "${
-                notifiable.voteable.title ?? notifiable.voteable.content
+                notifiable.voteable.title ?? voteContent.props.children
             }".`
             break
     }

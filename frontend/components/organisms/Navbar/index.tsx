@@ -7,7 +7,7 @@ import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
 import { useQuery } from '@apollo/client'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 
-const Navbar = () => {
+const Navbar = (): JSX.Element => {
     const user: UserProps = {
         id: useBoundStore.getState().user_id,
         first_name: useBoundStore.getState().first_name,
@@ -24,7 +24,7 @@ const Navbar = () => {
     if (loading) {
         return loadingScreenShow()
     } else if (error) {
-        return `Error! ${error}`
+        throw `Error! ${error}`
     }
 
     return (
