@@ -14,10 +14,10 @@ export type FormValues = {
 
 type AnswerComponentProps = {
     question_id: number
-    refetch: () => void
+    refetchHandler: () => void
 }
 
-const AnswerComponent = ({ question_id, refetch }: AnswerComponentProps): JSX.Element => {
+const AnswerComponent = ({ question_id, refetchHandler }: AnswerComponentProps): JSX.Element => {
     const user_id = useBoundStore.getState().user_id
     const [addAnswerError, setAddAnswerError] = useState('')
 
@@ -68,7 +68,7 @@ const AnswerComponent = ({ question_id, refetch }: AnswerComponentProps): JSX.El
                 setAddAnswerError('')
                 errorElement.classList.remove('error-form-element')
 
-                refetch()
+                refetchHandler()
 
                 setTimeout(() => {
                     setIsDisableSubmit(false)
@@ -95,7 +95,9 @@ const AnswerComponent = ({ question_id, refetch }: AnswerComponentProps): JSX.El
                     <div className="mt-4 flex flex-row-reverse">
                         <Button
                             onClick={handleSubmit(onSubmit)}
-                            additionalClass="bg-white"
+                            additionalClass={
+                                isDisableSubmit ? 'bg-light-red hover:bg-light-red' : 'bg-white'
+                            }
                             usage="primary"
                             type="submit"
                             isDisabled={isDisableSubmit}

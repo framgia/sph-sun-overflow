@@ -4,9 +4,9 @@ type Props = {
     usage?: string
     type?: 'button' | 'submit' | 'reset'
     additionalClass?: string
-    isDisabled: boolean
+    isDisabled?: boolean
     children: JSX.Element | string
-    onClick: React.MouseEventHandler
+    onClick?: React.MouseEventHandler
 }
 
 const getButtonClasses = (usage: string): string => {

@@ -104,7 +104,9 @@ const QuestionForm = (): JSX.Element => {
                             usage="primary"
                             type="submit"
                             onClick={undefined}
-                            additionalClass="px-10 bg-white"
+                            additionalClass={`px-10 ${
+                                isDisableSubmit ? 'bg-light-red hover:bg-light-red' : 'bg-white'
+                            }`}
                             isDisabled={isDisableSubmit}
                         >
                             Post Question

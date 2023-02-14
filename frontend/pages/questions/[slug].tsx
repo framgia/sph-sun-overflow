@@ -62,7 +62,6 @@ export type QuestionType = {
 const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
-    const [commentId, setCommentId] = useState(null)
 
     const query = router.query
 
@@ -107,21 +106,30 @@ const QuestionDetailPage = () => {
                             {question.comments.map((comment) => (
                                 <Comment
                                     key={comment.id}
+                                    id={comment.id}
                                     text={comment.content}
                                     author={`${comment.user.first_name} ${comment.user.last_name}`}
                                     time={comment.updated_at}
                                     userId={comment.user.id}
+                                    refetchHandler={refetchHandler}
                                 />
                             ))}
                         </div>
-                        <div className="flex flex-col gap-3 divide-y-2 pt-5">
+                        <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
                             <div
-                                className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"
+                                className="w-auto cursor-pointer px-2 text-blue-500 hover:text-blue-400"
                                 onClick={() => setComment(!comment)}
                             >
                                 Add comment
                             </div>
-                            {comment && <CommentForm id={commentId} />}
+                            {comment && (
+                                <CommentForm
+                                    commentableId={question.id}
+                                    commentableType="Question"
+                                    refetchHandler={refetchHandler}
+                                    setComment={setComment}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
@@ -148,13 +156,15 @@ const QuestionDetailPage = () => {
                                 is_created_by_user={answer.is_created_by_user}
                                 comments={answer.comments}
                                 is_from_user={answer.is_from_user}
-                                refetch={refetch}
                                 is_answered={question.is_answered}
                                 user_vote={answer.user_vote}
                                 refetchHandler={refetchHandler}
                             />
                         ))}
-                        <AnswerComponent question_id={question.id} refetch={refetch} />
+                        <AnswerComponent
+                            question_id={question.id}
+                            refetchHandler={refetchHandler}
+                        />
                     </div>
                 </div>
             </div>
