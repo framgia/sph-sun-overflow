@@ -24,7 +24,7 @@ const Navbar = (): JSX.Element => {
     })
 
     if (loading) {
-        return loadingScreenShow()
+        return <></>;
     } else if (error) {
         errorNotify(error.toString())
     }
