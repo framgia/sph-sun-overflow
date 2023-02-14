@@ -5,6 +5,7 @@ import SOCIAL_LOGIN from '@/helpers/graphql/mutations/social_login'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
 
 const LoginCheck: NextPage = () => {
     const { data: session, status } = useSession()
@@ -24,13 +25,13 @@ const LoginCheck: NextPage = () => {
         if (loading) return loadingScreenShow()
         else if (error) {
             if (error?.message === 'Authentication exception')
-                alert('You are not authorized to login')
+                errorNotify('You are not authorized to login')
 
             signOut()
             router.push('/login')
         } else if (data) {
             setUserToken(data.socialLogin.access_token)
-            router.push('/questions')
+            window.location.href = '/questions';
         }
     } else {
         router.push('/login')
