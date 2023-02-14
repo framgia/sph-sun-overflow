@@ -5,4 +5,7 @@ type UserNotification {
     user: User! @belongsTo
     is_read: Boolean!
     notifiable: Notifiable! @morphTo
+    created_at: String!
+    updated_at: String
+    humanized_created_at: String!
 }

@@ -1,20 +1,30 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { HiOutlineLogout, HiOutlineUser } from 'react-icons/hi'
 import { setUserToken } from '@/helpers/localStorageHelper'
 import { signOut } from 'next-auth/react'
 
-const UserDropdown = () => {
+export type UserProps = {
+    id: number
+    first_name: string
+    last_name: string
+    avatar: string
+}
+
+const UserDropdown = ({ id, first_name, last_name, avatar }: UserProps): JSX.Element => {
     return (
         <Menu as="div" className="relative ml-1 inline-block text-left">
             <div>
                 <Menu.Button className="flex rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500 sm:mx-3 md:mr-0">
                     <span className="sr-only">Open user menu</span>
                     <img
-                        className="h-[40px] w-[40px] rounded-full"
-                        src="https://www.w3schools.com/howto/img_avatar.png"
-                        alt="user photo"
+                        width={40}
+                        height={40}
+                        className="rounded-full"
+                        src={avatar}
+                        alt={first_name}
                     />
                 </Menu.Button>
             </div>
@@ -31,7 +41,7 @@ const UserDropdown = () => {
                     <div className="py-1 ">
                         <Menu.Item>
                             <span className="block px-4 py-2 text-sm font-bold text-gray-900">
-                                John Doe
+                                {`${first_name} ${last_name}`}
                             </span>
                         </Menu.Item>
                     </div>
@@ -42,7 +52,7 @@ const UserDropdown = () => {
                                     className={`block flex items-center px-4 py-2 text-sm text-gray-700  ${
                                         active && 'bg-red-100'
                                     }`}
-                                    href="#"
+                                    href={`/users/${id}`}
                                 >
                                     <HiOutlineUser className="mr-2" />
                                     Profile

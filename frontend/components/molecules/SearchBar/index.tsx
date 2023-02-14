@@ -3,7 +3,7 @@ import { HiSearch } from 'react-icons/hi'
 const SearchBar = () => {
     return (
         <div className="my-1 flex sm:mx-3">
-            <form method="GET">
+            <form method="GET" action="/questions">
                 <div className="relative w-48 lg:w-80">
                     <input
                         type="text"

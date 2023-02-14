@@ -1,9 +1,32 @@
 import Link from 'next/link'
 import SearchBar from '../../molecules/SearchBar'
 import NotificationDropdown from '../../molecules/NotificationDropdown'
-import UserDropdown from '../../molecules/UserDropdown'
+import UserDropdown, { UserProps } from '../../molecules/UserDropdown'
+import { useBoundStore } from '@/helpers/store'
+import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
+import { useQuery } from '@apollo/client'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 
-const Navbar = () => {
+const Navbar = (): JSX.Element => {
+    const user: UserProps = {
+        id: useBoundStore.getState().user_id,
+        first_name: useBoundStore.getState().first_name,
+        last_name: useBoundStore.getState().last_name,
+        avatar: useBoundStore.getState().avatar,
+    }
+
+    const { data, loading, error } = useQuery(GET_NOTIFICATIONS, {
+        variables: {
+            user_id: user.id,
+        },
+    })
+
+    if (loading) {
+        return loadingScreenShow()
+    } else if (error) {
+        throw `Error! ${error}`
+    }
+
     return (
         <nav className="z-10 w-full bg-gray-100 px-1 py-2 drop-shadow-md md:px-20">
             <div className="container mx-auto flex flex-wrap items-center justify-between">
@@ -15,8 +38,13 @@ const Navbar = () => {
                 </Link>
                 <div className="flex items-center md:order-2">
                     <SearchBar />
-                    <NotificationDropdown />
-                    <UserDropdown />
+                    <NotificationDropdown notifications={data.userNotifications} />
+                    <UserDropdown
+                        id={user.id}
+                        first_name={user.first_name}
+                        last_name={user.last_name}
+                        avatar={user.avatar}
+                    />
                 </div>
             </div>
         </nav>
