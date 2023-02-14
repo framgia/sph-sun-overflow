@@ -1,4 +1,4 @@
-import 'react-quill/dist/quill.core.css'
+import 'react-quill/dist/quill.snow.css'
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'

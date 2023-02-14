@@ -8,6 +8,7 @@ import { parseHTML } from '@/helpers/htmlParsing'
 import UPDATE_NOTIFICATION from '@/helpers/graphql/mutations/update_notification'
 
 type User = {
+    id: number
     first_name: string
     last_name: string
     avatar: string

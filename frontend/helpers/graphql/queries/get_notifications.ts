@@ -13,8 +13,10 @@ const GET_NOTIFICATIONS = gql`
                     content
                     is_correct
                     user {
+                        id
                         first_name
                         last_name
+                        avatar
                     }
                     question {
                         id
@@ -24,14 +26,17 @@ const GET_NOTIFICATIONS = gql`
                             id
                             first_name
                             last_name
+                            avatar
                         }
                     }
                 }
                 ... on Comment {
                     id
                     user {
+                        id
                         first_name
                         last_name
+                        avatar
                     }
                     commentable {
                         __typename
@@ -53,8 +58,10 @@ const GET_NOTIFICATIONS = gql`
                 ... on Vote {
                     id
                     user {
+                        id
                         first_name
                         last_name
+                        avatar
                     }
                     voteable {
                         __typename

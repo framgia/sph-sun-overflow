@@ -4,11 +4,8 @@ import { useRouter } from 'next/router'
 const LeftSideBar = (): JSX.Element => {
     const router = useRouter()
 
-    const isSelected = (url: string): boolean => {
-        if (router.asPath === url) {
-            return true
-        }
-        return false
+    const handleClick = (url: string) => {
+        if (router.asPath === url) router.reload()
     }
 
     const SidebarLinks = [
@@ -49,8 +46,9 @@ const LeftSideBar = (): JSX.Element => {
                             key={index}
                             IconName={IconName}
                             Text={Text}
-                            isSelected={isSelected(url)}
+                            isSelected={router.asPath === url}
                             url={url}
+                            onClick={() => handleClick(url)}
                         />
                     )
                 })}

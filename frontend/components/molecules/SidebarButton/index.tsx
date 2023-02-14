@@ -3,12 +3,13 @@ type SidebarButtonProps = {
     Text: string
     isSelected: boolean
     url: string
+    onClick: () => void
 }
 
 import Link from 'next/link'
 import SidebarIcon from '@/components/atoms/SidebarIcon'
 
-const SidebarButton = ({ IconName, Text, isSelected, url }: SidebarButtonProps): any => {
+const SidebarButton = ({ IconName, Text, isSelected, url, onClick }: SidebarButtonProps): any => {
     const isActive = (): string =>
         isSelected
             ? ' bg-red-100 text-black border-r-4 border-r-[#FF2000] '
@@ -18,6 +19,7 @@ const SidebarButton = ({ IconName, Text, isSelected, url }: SidebarButtonProps):
         <li className="-mr-1 first:mt-16">
             <Link
                 href={url}
+                onClick={onClick}
                 className={`flex items-center space-x-2 p-2  pl-8 text-2xl font-normal
                    ${isActive()}
                    hover:rounded-none hover:border-0 hover:text-[#ff2000]
