@@ -1,4 +1,4 @@
-import 'react-quill/dist/quill.core.css'
+import 'react-quill/dist/quill.snow.css'
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
@@ -26,7 +26,8 @@ type AnswerDetailProps = {
     user_vote: number
     comments: CommentType[]
     question_id: number
-    is_from_user: boolean
+    question_is_from_user: boolean
+    answer_is_from_user: boolean
     is_answered: boolean
     refetchHandler: () => void
 }
@@ -42,7 +43,8 @@ const Answer = ({
     is_created_by_user,
     comments,
     question_id,
-    is_from_user,
+    question_is_from_user,
+    answer_is_from_user,
     is_answered,
     user_vote,
     refetchHandler,
@@ -51,7 +53,7 @@ const Answer = ({
     const [comment, setComment] = useState(false)
 
     const voteHandler = (value: number) => {
-        if (is_from_user) {
+        if (answer_is_from_user) {
             errorNotify("You can't vote for your own post!")
             return
         }
@@ -78,7 +80,7 @@ const Answer = ({
                             is_correct={is_correct}
                             answer_id={id}
                             question_id={question_id}
-                            is_from_user={is_from_user}
+                            is_from_user={question_is_from_user}
                             is_answered={is_answered}
                             refetchHandler={refetchHandler}
                         />

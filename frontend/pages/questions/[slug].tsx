@@ -26,6 +26,8 @@ export type CommentType = {
     updated_at: string
 }
 
+export type TagType = { id: number; name: string; is_watched_by_user: boolean }
+
 export type AnswerType = {
     id: number
     content: string
@@ -44,12 +46,13 @@ export type AnswerType = {
 export type QuestionType = {
     id: number
     title: string
+    slug: string
     content: string
     created_at: string
     vote_count: number
     views_count: number
     humanized_created_at: string
-    tags: { id: number; name: string; is_watched_by_user: boolean }[]
+    tags: TagType[]
     is_bookmarked: boolean
     is_from_user: boolean
     is_answered: boolean
@@ -155,7 +158,8 @@ const QuestionDetailPage = () => {
                                 user={answer.user}
                                 is_created_by_user={answer.is_created_by_user}
                                 comments={answer.comments}
-                                is_from_user={answer.is_from_user}
+                                question_is_from_user={question.is_from_user}
+                                answer_is_from_user={answer.is_from_user}
                                 is_answered={question.is_answered}
                                 user_vote={answer.user_vote}
                                 refetchHandler={refetchHandler}

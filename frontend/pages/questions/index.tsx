@@ -3,62 +3,43 @@ import Filters from '@/components/molecules/Filters'
 import Paginate from '@/components/organisms/Paginate'
 import QuestionList from '@/components/organisms/QuestionList'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
+import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
+import { useQuery } from '@apollo/client'
+import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
+import { errorNotify } from '../../helpers/toast'
+import { QuestionType } from './[slug]'
 
-const QuestionsPage = (): JSX.Element => {
+export interface PaginatorInfo {
+    currentPage: number
+    lastPage: number
+    hasMorePages: boolean
+}
+
+const QuestionsPage = () => {
+    const [dateAscending, setDateAscending] = useState(true)
+    const [isAnswered, setIsAnswered] = useState(false)
     const router = useRouter()
-    const questionList: {
-        id: number
-        title: string
-        content: string
-        vote_count: number
-        answer_count: number
-        view_count: number
-        created_at: string
-        tags: { id: number; name: string; is_watched_by_user: boolean }[]
-        user: { id: number; first_name: string; last_name: string; avatar: string }
-    }[] = [
-        {
-            id: 1,
-            title: 'This is a simple question title',
-            content: 'This is the description of a simple question',
-            created_at: '2 days ago',
-            vote_count: 20,
-            answer_count: 4,
-            view_count: 25,
-            tags: [
-                { id: 1, name: 'Tag 1', is_watched_by_user: false },
-                { id: 2, name: 'Tag 2', is_watched_by_user: true },
-                { id: 3, name: 'Tag 3', is_watched_by_user: true },
-            ],
-            user: {
-                id: 1,
-                first_name: 'Luffy',
-                last_name: 'Balasi',
-                avatar: 'image',
-            },
+
+    const { data, loading, error, refetch } = useQuery(GET_QUESTIONS, {
+        variables: {
+            first: 10,
+            page: 1,
+            filter: 'answered',
+            orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
         },
-        {
-            id: 2,
-            title: 'This is a simple question title 2nd',
-            content: 'This is the description of a simple question 2nd',
-            created_at: '2 days ago',
-            vote_count: 20,
-            answer_count: 4,
-            view_count: 25,
-            tags: [
-                { id: 1, name: 'Tag 1', is_watched_by_user: true },
-                { id: 2, name: 'Tag 2', is_watched_by_user: false },
-                { id: 3, name: 'Tag 3', is_watched_by_user: false },
-            ],
-            user: {
-                id: 1,
-                first_name: 'Luffy',
-                last_name: 'Balasi',
-                avatar: 'image',
-            },
-        },
-    ]
+    })
+
+    if (loading) return loadingScreenShow()
+    if (error) return errorNotify(`Error! ${error}`)
+
+    const { data: questions, paginatorInfo } = data.questions
+    const questionList: QuestionType[] = questions
+    const pageInfo: PaginatorInfo = paginatorInfo
+
+    const onPageChange = (first: number, page: number) => {
+        refetch({ first, page })
+    }
 
     const onClickAskQuestion = (event: React.MouseEvent) => {
         event.preventDefault()
@@ -68,10 +49,19 @@ const QuestionsPage = (): JSX.Element => {
 
     const onClickDateFilter = (event: React.MouseEvent) => {
         event.preventDefault()
+
+        refetch({
+            first: 10,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: !dateAscending ? 'ASC' : 'DESC' }],
+        })
+        setDateAscending((prevState) => !prevState)
     }
 
     const onClickAnsweredFilter = (event: React.MouseEvent) => {
         event.preventDefault()
+        refetch({ first: 10, page: 1, filter: isAnswered ? 'answered' : 'unanswered' })
+        setIsAnswered((prevState) => !prevState)
     }
 
     return (
@@ -80,7 +70,12 @@ const QuestionsPage = (): JSX.Element => {
                 <Button usage="ask_question" isDisabled={false} onClick={onClickAskQuestion}>
                     Ask a Question
                 </Button>
-                <Filters onClickDate={onClickDateFilter} onClickAnswered={onClickAnsweredFilter} />
+                <Filters
+                    dateAscending={dateAscending}
+                    isAnswered={isAnswered}
+                    onClickDate={onClickDateFilter}
+                    onClickAnswered={onClickAnsweredFilter}
+                />
             </div>
             <div className="flex h-full flex-col justify-between">
                 <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
@@ -90,18 +85,20 @@ const QuestionsPage = (): JSX.Element => {
                                 key={question.id}
                                 id={question.id}
                                 title={question.title}
+                                slug={question.slug}
                                 content={question.content}
                                 created_at={question.created_at}
+                                humanized_created_at={question.humanized_created_at}
                                 vote_count={question.vote_count}
-                                answer_count={question.answer_count}
-                                view_count={question.view_count}
+                                answer_count={question.answers.length}
+                                view_count={question.views_count}
                                 tags={question.tags}
                                 user={question.user}
                             />
                         )
                     })}
                 </div>
-                <Paginate current={5} />
+                <Paginate {...pageInfo} onPageChange={onPageChange} />
             </div>
         </div>
     )
