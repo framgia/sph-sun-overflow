@@ -61,7 +61,7 @@ const Answer = ({
 
     return (
         <Fragment>
-            <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray py-3">
+            <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray">
                 <div className="flex w-full flex-row">
                     <div className="flex w-14 flex-col items-start gap-2">
                         <Votes
@@ -133,6 +133,7 @@ const Answer = ({
                             />
                         ))}
                     </div>
+
                     <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
                         <div
                             className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"

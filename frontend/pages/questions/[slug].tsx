@@ -115,9 +115,9 @@ const QuestionDetailPage = () => {
                                 />
                             ))}
                         </div>
-                        <div className="flex flex-col gap-3 divide-y-2 pt-5">
+                        <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
                             <div
-                                className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"
+                                className="w-auto cursor-pointer px-2 text-blue-500 hover:text-blue-400"
                                 onClick={() => setComment(!comment)}
                             >
                                 Add comment
@@ -133,7 +133,7 @@ const QuestionDetailPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex w-full flex-col gap-3 pt-3">
+                <div className="flex w-full flex-col gap-6 pt-3">
                     <div className="flex w-full flex-row justify-between">
                         <div className="w-full text-2xl font-bold">
                             {question.answers.length}{' '}
