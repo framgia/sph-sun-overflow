@@ -4,7 +4,7 @@
 
 .loading-screen {
     height: 90vh;
-    @apply flex items-center justify-center;
+    @apply flex items-center justify-center w-full;
 }
 
 .error-form-element {
