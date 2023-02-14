@@ -61,7 +61,7 @@ const Answer = ({
 
     return (
         <Fragment>
-            <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray">
+            <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray pt-3">
                 <div className="flex w-full flex-row">
                     <div className="flex w-14 flex-col items-start gap-2">
                         <Votes

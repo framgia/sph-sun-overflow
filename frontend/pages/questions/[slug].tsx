@@ -133,7 +133,7 @@ const QuestionDetailPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex w-full flex-col gap-6 pt-3">
+                <div className="flex w-full flex-col gap-3 pt-3">
                     <div className="flex w-full flex-row justify-between">
                         <div className="w-full text-2xl font-bold">
                             {question.answers.length}{' '}
