@@ -23,37 +23,31 @@ const Layout = ({ children }: LayoutProps) => {
                 )}
                 <div className="flex w-full flex-row">
                     {!routeIfLoginPathCheck && (
-                        <div className="relative w-1/5">
+                        <div className="relative w-1/5 ">
                             <div className="fixed h-screen w-1/5">
                                 <LeftSideBar />
                             </div>
                         </div>
                     )}
                     <div
-                        className={`flex min-h-screen ${
-                            hideRightSidebarInPages.includes(router.pathname)
-                                ? 'w-4/5 pt-14'
-                                : routeIfLoginPathCheck
+                        className={`flex min-h-screen ${hideRightSidebarInPages.includes(router.pathname)
+                            ? 'w-4/5 pt-14'
+                            : routeIfLoginPathCheck
                                 ? 'w-full'
                                 : 'w-3/5 pt-14'
-                        }`}
+                            }`}
                     >
                         {children}
                     </div>
                     {!routeIfLoginPathCheck &&
                         !hideRightSidebarInPages.includes(router.pathname) && (
-                            <div className="relative w-1/5 pt-20">
+                            <div className="relative mr-6 w-1/5 pt-20">
                                 <div className="fixed w-1/5">
                                     <RightSideBar usage={router.pathname.split('/')[1]} />
                                 </div>
                             </div>
                         )}
                 </div>
-                {!routeIfLoginPathCheck && (
-                    <div className="fixed -right-16 -bottom-20 -z-50 aspect-square h-[90vh] opacity-10">
-                        <Image src="/images/sun_logo.png" alt="sun-logo" fill />
-                    </div>
-                )}
                 <ToastContainer
                     autoClose={5000}
                     hideProgressBar={false}
