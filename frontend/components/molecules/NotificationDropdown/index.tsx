@@ -183,8 +183,9 @@ const setLink = (notifiable: any): string => {
             link = `/questions/${notifiable.question.slug}`
             break
         case 'Comment':
-            link = `/questions/${notifiable.commentable.slug ?? notifiable.commentable.question.slug
-                }`
+            link = `/questions/${
+                notifiable.commentable.slug ?? notifiable.commentable.question.slug
+            }`
             break
         case 'Vote':
             link = `/questions/${notifiable.voteable.slug ?? notifiable.voteable.question.slug}`
@@ -213,13 +214,15 @@ const setDetails = (notifiable: any): string => {
             break
         case 'Comment':
             let commentContent: any = parseHTML(notifiable.commentable.content)
-            details = `commented on your ${notifiable.commentable.__typename}: "${notifiable.commentable.title ?? commentContent.props.children
-                }".`
+            details = `commented on your ${notifiable.commentable.__typename}: "${
+                notifiable.commentable.title ?? commentContent.props.children
+            }".`
             break
         case 'Vote':
             let voteContent: any = parseHTML(notifiable.voteable.content)
-            details = `voted on your ${notifiable.voteable.__typename}: "${notifiable.voteable.title ?? voteContent.props.children
-                }".`
+            details = `voted on your ${notifiable.voteable.__typename}: "${
+                notifiable.voteable.title ?? voteContent.props.children
+            }".`
             break
         default:
             details = ''

@@ -5,7 +5,7 @@ const LeftSideBar = (): JSX.Element => {
     const router = useRouter()
 
     const handleClick = (url: string) => {
-        if (router.asPath === url) router.reload()
+        if (router.asPath === `/${url}`) router.reload()
     }
 
     const SidebarLinks = [

@@ -10,6 +10,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
+import { FilterType } from './index'
 
 export type UserType = {
     id: number
@@ -65,6 +66,7 @@ export type QuestionType = {
 const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
+    const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
 
     const query = router.query
 
@@ -84,6 +86,25 @@ const QuestionDetailPage = () => {
     const refetchHandler = () => {
         refetch({ shouldAddViewCount: false })
     }
+
+    const answerFilters: FilterType[] = [
+        {
+            id: 1,
+            name: 'Highest Score',
+            onClick: () => {
+                console.log('Highest Score!')
+                setSelectedAnswerFilter('Highest Score')
+            },
+        },
+        {
+            id: 2,
+            name: 'Date Posted',
+            onClick: () => {
+                console.log('Date Posted!')
+                setSelectedAnswerFilter('Date Posted')
+            },
+        },
+    ]
 
     return (
         <Fragment>
@@ -137,12 +158,20 @@ const QuestionDetailPage = () => {
                     </div>
                 </div>
                 <div className="flex w-full flex-col gap-3 pt-3">
-                    <div className="flex w-full flex-row justify-between">
+                    <div className="flex w-full flex-row items-center justify-between">
                         <div className="w-full text-2xl font-bold">
                             {question.answers.length}{' '}
                             {question.answers.length > 1 ? 'Answers' : 'Answer'}
                         </div>
-                        <SortDropdown />
+                        <div className="flex items-center">
+                            <span className="w-[9rem] pr-2 text-end text-sm">Sorted by:</span>
+                            <div className="w-44">
+                                <SortDropdown
+                                    filters={answerFilters}
+                                    selectedFilter={selectedAnswerFilter}
+                                />
+                            </div>
+                        </div>
                     </div>
                     <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray">
                         {question.answers.map((answer) => (
