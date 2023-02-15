@@ -7,6 +7,7 @@ import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
 import { useLazyQuery } from '@apollo/client'
 import { errorNotify } from '@/helpers/toast'
 import { useEffect } from 'react'
+import Image from 'next/image'
 
 const Navbar = (): JSX.Element => {
     const user: UserProps = {
@@ -34,6 +35,12 @@ const Navbar = (): JSX.Element => {
         <nav className="z-10 w-full bg-gray-100 px-1 py-2 drop-shadow-md md:px-20">
             <div className="container mx-auto flex flex-wrap items-center justify-between">
                 <Link href="/questions" className="flex">
+                    <Image
+                        src="/images/logo.png"
+                        alt="sun-logo"
+                        fill
+                        className="mt-1 ml-4 h-14 !w-16 p-2"
+                    />
                     <span className="text-3xl font-bold tracking-tighter">
                         <span className="text-primary-red">Sun* </span>
                         <span className="text-primary-black">Overflow</span>
