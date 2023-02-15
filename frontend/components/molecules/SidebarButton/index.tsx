@@ -16,7 +16,7 @@ const SidebarButton = ({ IconName, Text, isSelected, url, onClick }: SidebarButt
             : ' text-gray-600 bg-white-700'
 
     return (
-        <li className="-mr-1 first:mt-16">
+        <li className="sidebar-list -mr-1">
             <Link
                 href={url}
                 onClick={onClick}

@@ -67,7 +67,12 @@ const QuestionsPage = () => {
     return (
         <div className="flex h-full w-full flex-col gap-4 px-10 pt-8 pb-5">
             <div className="flex flex-row items-center justify-between px-5">
-                <Button usage="ask_question" isDisabled={false} onClick={onClickAskQuestion}>
+                <Button
+                    usage="ask_question"
+                    additionalClass="ask-btn"
+                    isDisabled={false}
+                    onClick={onClickAskQuestion}
+                >
                     Ask a Question
                 </Button>
                 <Filters

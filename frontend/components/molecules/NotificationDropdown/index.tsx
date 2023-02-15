@@ -223,6 +223,8 @@ const setDetails = (notifiable: any): string => {
                 notifiable.voteable.title ?? voteContent.props.children
             }".`
             break
+        default:
+            details = ''
     }
     return details
 }

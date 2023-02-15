@@ -29,7 +29,7 @@ const RouteWrapper = ({ children }: LayoutProps) => {
             data?.me.avatar
         )
 
-    if (loading) return <div className='pt-14'>{loadingScreenShow()}</div>
+    if (loading) return <div className="pt-14">{loadingScreenShow()}</div>
     else if (dataCheckIfNone && errorCheck && !routeIfLoginPathCheck && getUserToken() === '')
         router.push('/login')
     else if (!dataCheckIfNone && routeIfLoginPathCheck && getUserToken() !== '') router.push('/')
