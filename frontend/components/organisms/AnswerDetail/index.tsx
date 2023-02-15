@@ -75,6 +75,7 @@ const Answer = ({
                             is_bookmarked={is_bookmarked}
                             bookmarkable_id={id}
                             bookmarkable_type={'Answer'}
+                            refetchHandler={refetchHandler}
                         />
                         <AcceptAnswer
                             is_correct={is_correct}
