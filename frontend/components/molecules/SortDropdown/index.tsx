@@ -2,17 +2,20 @@ import Link from 'next/link'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import Icons from '@/components/atoms/Icons'
+import { FilterType } from '../../../pages/questions/index'
 
-const SortDropdown = () => {
-    const filters: string[] = ['Highest Score', 'Date Posted']
+type AppProps = {
+    selectedFilter: string
+    filters: FilterType[]
+}
 
+const SortDropdown = ({ selectedFilter, filters }: AppProps) => {
     return (
-        <div className="flex w-full flex-row items-center justify-end gap-2">
-            <span className="text-sm">Sorted by: </span>
-            <Menu as="div" className="relative inline-block text-left">
+        <div className="flex items-center">
+            <Menu as="div" className="relative inline-block w-full text-left">
                 <div>
-                    <Menu.Button className="flex w-44 items-center justify-between bg-gray-200 p-2 text-sm text-primary-black">
-                        <span className="pl-2 ">{filters[0]}</span>
+                    <Menu.Button className="flex w-full items-center justify-between bg-gray-200 p-2 text-sm text-primary-black">
+                        <span className="pl-2 ">{selectedFilter}</span>
                         <div className="items-end">
                             <Icons name={'dropdown'} />
                         </div>
@@ -28,13 +31,20 @@ const SortDropdown = () => {
                     leaveTo="transform opacity-0 scale-95"
                 >
                     <Menu.Items className="absolute right-0 w-44 origin-top divide-y divide-gray-100 border bg-white drop-shadow-lg">
-                        {filters.map((filter, index) => {
+                        {filters.map((filter) => {
                             return (
-                                <div key={index} className="py-2 px-4">
+                                <div key={filter.id} className="cursor-pointer">
                                     <Menu.Item>
-                                        <Link href="#">
-                                            <span className="text-sm text-gray-900">{filter}</span>
-                                        </Link>
+                                        {({ active }) => (
+                                            <div
+                                                className={`${
+                                                    active ? 'bg-light-gray' : ''
+                                                } w-full py-2 px-4 text-sm text-gray-900`}
+                                                onClick={filter.onClick}
+                                            >
+                                                {filter.name}
+                                            </div>
+                                        )}
                                     </Menu.Item>
                                 </div>
                             )

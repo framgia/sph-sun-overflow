@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client'
 import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
 import { errorNotify } from '../../helpers/toast'
 import { QuestionType } from './[slug]'
+import SortDropdown from '@/components/molecules/SortDropdown'
 
 export interface PaginatorInfo {
     currentPage: number
@@ -16,9 +17,15 @@ export interface PaginatorInfo {
     hasMorePages: boolean
 }
 
+export type FilterType = {
+    id: number
+    name: string
+    onClick: () => void
+}
+
 const QuestionsPage = () => {
-    const [dateAscending, setDateAscending] = useState(true)
-    const [isAnswered, setIsAnswered] = useState(false)
+    const [selectedDateFilter, setSelectedDateFilter] = useState('Newest first')
+    const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Answered')
     const router = useRouter()
 
     const { data, loading, error, refetch } = useQuery(GET_QUESTIONS, {
@@ -26,7 +33,7 @@ const QuestionsPage = () => {
             first: 10,
             page: 1,
             filter: 'answered',
-            orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         },
     })
 
@@ -47,22 +54,51 @@ const QuestionsPage = () => {
         router.push('/questions/add')
     }
 
-    const onClickDateFilter = (event: React.MouseEvent) => {
-        event.preventDefault()
+    const dateFilters: FilterType[] = [
+        {
+            id: 1,
+            name: 'Newest first',
+            onClick: () => {
+                refetch({
+                    first: 10,
+                    page: 1,
+                    orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+                })
+                setSelectedDateFilter('Newest first')
+            },
+        },
+        {
+            id: 2,
+            name: 'Oldest first',
+            onClick: () => {
+                refetch({
+                    first: 10,
+                    page: 1,
+                    orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
+                })
+                setSelectedDateFilter('Oldest first')
+            },
+        },
+    ]
 
-        refetch({
-            first: 10,
-            page: 1,
-            orderBy: [{ column: 'CREATED_AT', order: !dateAscending ? 'ASC' : 'DESC' }],
-        })
-        setDateAscending((prevState) => !prevState)
-    }
-
-    const onClickAnsweredFilter = (event: React.MouseEvent) => {
-        event.preventDefault()
-        refetch({ first: 10, page: 1, filter: isAnswered ? 'answered' : 'unanswered' })
-        setIsAnswered((prevState) => !prevState)
-    }
+    const answerFilters: FilterType[] = [
+        {
+            id: 1,
+            name: 'Answered',
+            onClick: () => {
+                refetch({ first: 10, page: 1, filter: 'answered' })
+                setSelectedAnswerFilter('Answered')
+            },
+        },
+        {
+            id: 2,
+            name: 'Unanswered',
+            onClick: () => {
+                refetch({ first: 10, page: 1, filter: 'unanswered' })
+                setSelectedAnswerFilter('Unanswered')
+            },
+        },
+    ]
 
     return (
         <div className="flex h-full w-full flex-col gap-4 px-10 pt-8 pb-5">
@@ -75,12 +111,17 @@ const QuestionsPage = () => {
                 >
                     Ask a Question
                 </Button>
-                <Filters
-                    dateAscending={dateAscending}
-                    isAnswered={isAnswered}
-                    onClickDate={onClickDateFilter}
-                    onClickAnswered={onClickAnsweredFilter}
-                />
+                <div className="flex gap-2">
+                    <div className="w-32">
+                        <SortDropdown filters={dateFilters} selectedFilter={selectedDateFilter} />
+                    </div>
+                    <div className="w-32">
+                        <SortDropdown
+                            filters={answerFilters}
+                            selectedFilter={selectedAnswerFilter}
+                        />
+                    </div>
+                </div>
             </div>
             <div className="flex h-full flex-col justify-between">
                 <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
