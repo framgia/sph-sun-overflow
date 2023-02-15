@@ -88,6 +88,7 @@ const QuestionDetail = ({
                                     is_bookmarked={is_bookmarked}
                                     bookmarkable_id={id}
                                     bookmarkable_type={'Question'}
+                                    refetchHandler={refetchHandler}
                                 />
                             </div>
                         </div>

@@ -8,18 +8,20 @@ type BookmarkProps = {
     is_bookmarked: boolean
     bookmarkable_id: number
     bookmarkable_type: string
+    refetchHandler: () => void
 }
 
 const Bookmark = ({
     is_bookmarked,
     bookmarkable_id,
     bookmarkable_type,
+    refetchHandler,
 }: BookmarkProps): JSX.Element => {
     const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK)
 
     const [isBookmarked, setIsBookmarked] = useState(is_bookmarked)
 
-    const handleClick = (bookmarkable_id: number, bookmarkable_type: string) => {
+    const handleClick = () => {
         toggleBookmark({
             variables: {
                 bookmarkable_id,
@@ -29,13 +31,15 @@ const Bookmark = ({
             setIsBookmarked(!isBookmarked)
             successNotify(data.data.toggleBookmark)
         })
+
+        refetchHandler()
     }
 
     return (
         <button
             type="button"
             className="flex cursor-pointer justify-center"
-            onClick={() => handleClick(bookmarkable_id, bookmarkable_type)}
+            onClick={() => handleClick()}
         >
             <Icons name={isBookmarked ? 'bookmark_fill' : 'bookmark_outline'} />
         </button>
