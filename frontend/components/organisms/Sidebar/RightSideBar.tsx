@@ -7,12 +7,11 @@ import { useRouter } from 'next/router'
 type TRightSidebarProps = {
     usage: string
 }
-
 const RightSideBar = ({ usage }: TRightSidebarProps) => {
     if (usage === 'teams') {
         return <Type2 />
     }
-    if (usage === 'profile') {
+    if (usage === 'users') {
         return <Type3 />
     }
     return <Type1 />
