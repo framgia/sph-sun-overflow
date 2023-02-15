@@ -27,7 +27,11 @@ class Question extends Model
         parent::boot();
 
         static::creating(function ($question) {
-            $question->slug = Str::slug($question->title);
+            $slug = Str::slug($question->title);
+
+            $duplicateCount = Question::where('title', $question->title)->count();
+
+            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$duplicateCount";
         });
     }
 
@@ -89,6 +93,7 @@ class Question extends Model
             return false;
         }
     }
+
     public function getIsAnsweredAttribute()
     {
         return $this->answers()->where('is_correct', 1)->exists();

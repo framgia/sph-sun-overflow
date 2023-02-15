@@ -21,7 +21,7 @@ class QuestionFactory extends Factory
 
         return [
             'title' => fake()->sentence(),
-            'content' => fake()->paragraph(),
+            'content' => '<div><h1>Test</h1><div>',
             'user_id' => fake()->randomElement($userIds),
         ];
     }

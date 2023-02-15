@@ -31,7 +31,7 @@ const LoginCheck: NextPage = () => {
             router.push('/login')
         } else if (data) {
             setUserToken(data.socialLogin.access_token)
-            window.location.href = '/questions';
+            window.location.href = '/questions'
         }
     } else {
         router.push('/login')

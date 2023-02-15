@@ -4,10 +4,9 @@ import NotificationDropdown from '../../molecules/NotificationDropdown'
 import UserDropdown, { UserProps } from '../../molecules/UserDropdown'
 import { useBoundStore } from '@/helpers/store'
 import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
-import { useQuery } from '@apollo/client'
-import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { getUserToken } from '@/helpers/localStorageHelper'
+import { useLazyQuery } from '@apollo/client'
 import { errorNotify } from '@/helpers/toast'
+import { useEffect } from 'react'
 
 const Navbar = (): JSX.Element => {
     const user: UserProps = {
@@ -17,15 +16,17 @@ const Navbar = (): JSX.Element => {
         avatar: useBoundStore.getState().avatar,
     }
 
-    const { data, loading, error } = useQuery(GET_NOTIFICATIONS, {
-        variables: {
-            user_id: user.id,
-        },
-    })
+    const [getNotifications, { data, loading, error }] = useLazyQuery(GET_NOTIFICATIONS)
 
-    if (loading) {
-        return <></>;
-    } else if (error) {
+    useEffect(() => {
+        getNotifications({
+            variables: {
+                user_id: user.id,
+            },
+        })
+    }, [user.id])
+
+    if (error) {
         errorNotify(error.toString())
     }
 
@@ -40,7 +41,9 @@ const Navbar = (): JSX.Element => {
                 </Link>
                 <div className="flex items-center md:order-2">
                     <SearchBar />
-                    <NotificationDropdown notifications={data.userNotifications} />
+                    {!loading && data && (
+                        <NotificationDropdown notifications={data.userNotifications} />
+                    )}
                     <UserDropdown
                         id={user.id}
                         first_name={user.first_name}
