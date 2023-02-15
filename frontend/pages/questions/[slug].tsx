@@ -87,7 +87,7 @@ const QuestionDetailPage = () => {
 
     return (
         <Fragment>
-            <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray py-8 pr-52 pl-16">
+            <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray pt-[90px] pb-8 pr-52 pl-16">
                 <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
                     <QuestionDetail
                         id={question.id}

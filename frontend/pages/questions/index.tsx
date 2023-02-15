@@ -103,7 +103,7 @@ const QuestionsPage = () => {
                         )
                     })}
                 </div>
-                <Paginate {...pageInfo} onPageChange={onPageChange} />
+                {pageInfo.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
             </div>
         </div>
     )

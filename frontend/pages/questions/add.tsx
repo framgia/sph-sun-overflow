@@ -3,7 +3,7 @@ import QuestionForm from '@/components/organisms/QuestionForm'
 import Link from 'next/link'
 const QuestionFormPage = () => {
     return (
-        <div className="flex flex-col content-center justify-center ">
+        <div className="flex w-full flex-col content-center justify-center ">
             <div className="flex shrink pb-6">
                 <div className="ml-10 pt-10 text-xl text-primary-gray">
                     <Link href="/questions">{'< Go Back'}</Link>

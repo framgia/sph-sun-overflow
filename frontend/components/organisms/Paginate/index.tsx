@@ -14,8 +14,8 @@ const Paginate = ({ currentPage, lastPage, hasMorePages, onPageChange }: Props):
         return {
             isDisabled: shouldApply,
             additionalClass: shouldApply
-                ? 'bg-light-red'
-                : 'hover:text-white hover:bg-primary-red active:outline active:outline-primary-red active:bg-primary-red active:text-white',
+                ? 'bg-light-red hover:bg-light-red'
+                : 'bg-white hover:text-white active:outline active:outline-primary-red hover:bg-primary-red',
         }
     }
 

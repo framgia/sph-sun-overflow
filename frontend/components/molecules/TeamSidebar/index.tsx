@@ -47,8 +47,8 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps) => {
             </div>
             <div className="tags flex flex-wrap rounded-br-md rounded-bl-md bg-white">
                 {teams.length == 0 && (
-                    <div className="w-full rounded-br-md rounded-bl-md p-4 text-center text-xl font-medium">
-                        Not in Any Teams Yet
+                    <div className="text-md w-full rounded-br-md rounded-bl-md p-4 text-center font-medium">
+                        Not in any teams yet
                     </div>
                 )}
                 {teams.length > 0 &&
