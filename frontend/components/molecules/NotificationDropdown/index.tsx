@@ -159,7 +159,9 @@ const RenderNotifications = (notifications: NotificationProps[]) => {
             >
                 <div className="flex-shrink-0">
                     <Image
-                        className="h-9 w-9 rounded-full"
+                        width={36}
+                        height={36}
+                        className="rounded-full"
                         src={n.notifiable.user.avatar}
                         alt="user photo"
                     />
