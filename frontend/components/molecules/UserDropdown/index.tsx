@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { HiOutlineLogout, HiOutlineUser } from 'react-icons/hi'
 import { setUserToken } from '@/helpers/localStorageHelper'
 import { signOut } from 'next-auth/react'
+import Avatar from 'react-avatar'
 
 export type UserProps = {
     id: number
@@ -19,12 +19,14 @@ const UserDropdown = ({ id, first_name, last_name, avatar }: UserProps): JSX.Ele
             <div>
                 <Menu.Button className="flex rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500 sm:mx-3 md:mr-0">
                     <span className="sr-only">Open user menu</span>
-                    <img
-                        width={40}
-                        height={40}
-                        className="rounded-full"
-                        src={avatar}
+                    <Avatar
+                        round={true}
+                        name={`${first_name} ${last_name}`}
+                        size="40"
                         alt={first_name}
+                        src={avatar}
+                        maxInitials={1}
+                        textSizeRatio={2}
                     />
                 </Menu.Button>
             </div>
