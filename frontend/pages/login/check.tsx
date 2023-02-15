@@ -11,7 +11,7 @@ const LoginCheck: NextPage = () => {
     const { data: session, status } = useSession()
     const router = useRouter()
 
-    const [socialLogin, { data, loading, error }] = useMutation(SOCIAL_LOGIN)
+    const [socialLogin, { loading }] = useMutation(SOCIAL_LOGIN)
 
     if (status === 'loading') return loadingScreenShow()
     else if (status === 'authenticated') {
@@ -21,18 +21,18 @@ const LoginCheck: NextPage = () => {
                 email: session.user?.email,
             },
         })
+            .then(({ data }) => {
+                setUserToken(data.socialLogin.access_token)
+                window.location.href = '/questions'
+            })
+            .catch((error) => {
+                if (error?.message === 'Authentication exception')
+                    errorNotify('You are not authorized to login', 'top-center')
+
+                signOut()
+            })
 
         if (loading) return loadingScreenShow()
-        else if (error) {
-            if (error?.message === 'Authentication exception')
-                errorNotify('You are not authorized to login')
-
-            signOut()
-            router.push('/login')
-        } else if (data) {
-            setUserToken(data.socialLogin.access_token)
-            window.location.href = '/questions'
-        }
     } else {
         router.push('/login')
     }
