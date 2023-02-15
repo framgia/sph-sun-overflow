@@ -12,27 +12,27 @@ const LeftSideBar = (): JSX.Element => {
         {
             IconName: 'Questions',
             Text: 'Questions',
-            url: '/questions',
+            url: 'questions',
         },
         {
             IconName: 'Roles',
             Text: 'Roles',
-            url: '/roles',
+            url: 'roles',
         },
         {
             IconName: 'Users',
             Text: 'Users',
-            url: '/users',
+            url: 'users',
         },
         {
             IconName: 'Tags',
             Text: 'Tags',
-            url: '/tags',
+            url: 'tags',
         },
         {
             IconName: 'Teams',
             Text: 'Teams',
-            url: '/teams',
+            url: 'teams',
         },
     ]
 
@@ -46,8 +46,8 @@ const LeftSideBar = (): JSX.Element => {
                             key={index}
                             IconName={IconName}
                             Text={Text}
-                            isSelected={router.asPath === url}
-                            url={url}
+                            isSelected={router.pathname.split('/')[1] === url}
+                            url={`/${url}`}
                             onClick={() => handleClick(url)}
                         />
                     )

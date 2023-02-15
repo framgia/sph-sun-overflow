@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { isObjectEmpty } from '@/utils'
+import Image from 'next/image'
 
 interface IUser {
     id: number
@@ -72,7 +73,7 @@ const UserTab = ({ user }: UserTabProps) => {
                 className="text-overflow-ellipsis flex h-20 w-full items-center overflow-hidden border-b-2 border-b-secondary-gray last:rounded-md last:border-b-0 hover:bg-[#E8E8E8]"
                 href={`/user/${user.id}`}
             >
-                <img
+                <Image
                     className="mx-4 h-[40px] w-[40px] rounded-full rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500 md:mr-0"
                     src={
                         user.avatar ? user.avatar : 'https://www.w3schools.com/howto/img_avatar.png'

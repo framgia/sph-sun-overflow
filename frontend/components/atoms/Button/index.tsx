@@ -20,9 +20,9 @@ const getButtonClasses = (usage: string): string => {
         case 'date_filter':
             return 'items-center py-1 px-4 rounded-l-md border-y border-l border-border-black bg-white hover:bg-light-gray'
         case 'answered_filter':
-            return 'items-center py-1 px-4 rounded-r-md border border-border-black bg-white hover:bg-light-red'
+            return 'items-center py-1 px-4 rounded-r-md border border-border-black hover:bg-light-red'
         case 'paginate':
-            return 'w-12 h-7 flex flex-row justify-center items-center px-3 border outline-1 border-primary-red bg-white rounded-full text-primary-red'
+            return 'w-12 h-7 flex flex-row justify-center items-center px-3 border border-primary-red rounded-full text-primary-red'
         default:
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
     }

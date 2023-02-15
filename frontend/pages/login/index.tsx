@@ -12,7 +12,7 @@ const Login: NextPage = () => {
                 <title>Login Page</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="grid h-screen place-items-center">
+            <div className="grid w-full place-items-center">
                 <div>
                     <p className="login-welcome">Welcome !</p>
                     <div className="login-card">
@@ -33,8 +33,10 @@ const Login: NextPage = () => {
                                     })
                                 }
                             >
-                                <FcGoogle className="mr-4 text-3xl" />
-                                Sign in with Google
+                                <>
+                                    <FcGoogle className="mr-4 text-3xl" />
+                                    Sign in with Google
+                                </>
                             </Button>
                         </div>
                     </div>

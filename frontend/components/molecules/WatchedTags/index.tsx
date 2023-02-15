@@ -72,7 +72,6 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     const handleClickOutside = (event: MouseEvent) => {
         if (detectorRef.current && !detectorRef.current.contains(event.target)) {
             setViewAdd(false)
-            console.log('outside')
             setQueryText('')
         }
     }
@@ -113,9 +112,12 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                             return (
                                 <div
                                     key={index}
-                                    className="max-w-20 text-overflow-ellipsis mx-0.5 my-1 flex items-center overflow-hidden rounded-2xl bg-red-400 py-0.5 px-1"
+                                    className="max-w-20 text-overflow-ellipsis mx-0.5 my-1 flex items-center overflow-hidden rounded-2xl bg-red-300 py-0.5 px-1"
                                 >
-                                    <Link className="label px-1 text-sm" href={`/tags/${tag.id}`}>
+                                    <Link
+                                        className="label px-2 py-1 text-xs"
+                                        href={`/tags/${tag.id}`}
+                                    >
                                         {tag.name}
                                     </Link>
                                     <HiX
@@ -128,8 +130,8 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                             )
                         })}
                     {!loading && watchedTags.length == 0 && (
-                        <div className="w-full bg-white text-center text-xl font-medium">
-                            No Watched Tags
+                        <div className="text-md w-full bg-white text-center font-medium">
+                            No watched tags
                         </div>
                     )}
                 </div>

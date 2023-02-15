@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { parseHTML } from '@/helpers/htmlParsing'
 import UPDATE_NOTIFICATION from '@/helpers/graphql/mutations/update_notification'
+import Image from 'next/image'
 
 type User = {
     id: number
@@ -111,7 +112,7 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
                     </div>
                     {notifications.length > 0 && (
                         <div className="max-h-80 overflow-y-auto">
-                            {renderNotifications(notifications)}
+                            {RenderNotifications(notifications)}
                         </div>
                     )}
                     {notifications.length == 0 && (
@@ -127,7 +128,7 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
     )
 }
 
-const renderNotifications = (notifications: NotificationProps[]) => {
+const RenderNotifications = (notifications: NotificationProps[]) => {
     const router = useRouter()
     const [updateUserNotification] = useMutation(UPDATE_NOTIFICATION)
 
@@ -157,7 +158,7 @@ const renderNotifications = (notifications: NotificationProps[]) => {
                 }}
             >
                 <div className="flex-shrink-0">
-                    <img
+                    <Image
                         className="h-9 w-9 rounded-full"
                         src={n.notifiable.user.avatar}
                         alt="user photo"

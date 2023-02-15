@@ -24,7 +24,7 @@ const Filters = ({
             </Button>
             <Button
                 usage="answered_filter"
-                additionalClass={isAnswered ? 'bg-red-300' : ''}
+                additionalClass={isAnswered ? 'bg-red-300' : 'bg-white'}
                 onClick={onClickAnswered}
                 isDisabled={false}
             >
