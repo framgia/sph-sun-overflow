@@ -3,13 +3,17 @@ enum ORDER {
     DESC
 }
 extend type Query {
-    allTags: [Tag!]! @all
+    allTags: [Tag!]! @guard(with: ["api"]) @all
     tags(
         name: String! = "%%" @where(operator: "like")
         column: COLUMNS = CREATED_AT
         order: ORDER = ASC
-    ): [Tag!]! @paginate(builder: "App\\GraphQL\\Queries\\Tags")
-    tagSuggest(name: String! @where(operator: "like")): [Tag] @all
+    ): [Tag!]!
+        @guard(with: ["api"])
+        @paginate(builder: "App\\GraphQL\\Queries\\Tags")
+    tagSuggest(name: String! @where(operator: "like")): [Tag]
+        @guard(with: ["api"])
+        @all
 }
 
 enum COLUMNS {
