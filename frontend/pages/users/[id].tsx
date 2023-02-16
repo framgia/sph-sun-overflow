@@ -28,7 +28,7 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex h-3/5 flex-col">
+            <div className="mt-3 flex h-3/5 flex-col">
                 <ul className="h-1/10 ml-10 flex flex-row border-b-2 border-gray-300">
                     <li className="">
                         <div className="-mb-[1px] border-b-2 border-b-primary-red bg-red-100 px-6 font-semibold">
