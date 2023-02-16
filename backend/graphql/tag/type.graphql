@@ -6,4 +6,6 @@ type Tag {
     created_at: String!
     updated_at: String
     usersWatching: [User!]! @belongsToMany
+    count_tagged_questions: Int!
+    count_watching_users: Int!
 }

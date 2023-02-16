@@ -1,4 +1,25 @@
+enum ORDER {
+    ASC
+    DESC
+}
 extend type Query {
-    tags: [Tag!]! @all
+    allTags: [Tag!]! @all
+    tags(
+        name: String! = "%%" @where(operator: "like")
+        column: COLUMNS = CREATED_AT
+        order: ORDER = ASC
+    ): [Tag!]! @paginate(builder: "App\\GraphQL\\Queries\\Tags")
     tagSuggest(name: String! @where(operator: "like")): [Tag] @all
+}
+
+enum COLUMNS {
+    CREATED_AT @enum(value: "created_at")
+    NAME @enum(value: "name")
+    POPULARITY @enum(value: "questions_count")
+    WATCH_COUNT @enum(value: "watching_count")
+}
+
+enum ORDER {
+    ASC
+    DESC
 }

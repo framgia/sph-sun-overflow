@@ -12,7 +12,7 @@ class Tag extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['is_watched_by_user'];
+    protected $appends = ['is_watched_by_user','count_tagged_questions', 'count_watching_users'];
 
     public function usersWatching()
     {
@@ -27,5 +27,14 @@ class Tag extends Model
     public function getIsWatchedByUserAttribute()
     {
         return auth()->user()->watchedTags()->where('tag_id', $this->id)->exists();
+    }
+    public function getCountTaggedQuestionsAttribute()
+    {
+        return $this->belongsToMany(Question::class)->count();
+
+    }
+    public function getCountWatchingUsersAttribute()
+    {
+        return $this->belongsToMany(User::class)->count();
     }
 }
