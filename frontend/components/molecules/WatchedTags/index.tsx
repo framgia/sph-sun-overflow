@@ -112,7 +112,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                             return (
                                 <div
                                     key={index}
-                                    className="max-w-20 text-overflow-ellipsis mx-0.5 my-1 flex items-center overflow-hidden rounded-2xl bg-red-300 py-0.5 px-1"
+                                    className="text-overflow-ellipsis mx-0.5 my-1 flex items-center overflow-hidden rounded-full bg-red-300 px-1"
                                 >
                                     <Link
                                         className="label px-2 py-1 text-xs"
@@ -135,7 +135,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                         </div>
                     )}
                 </div>
-                <div className={`${isVisible} w-full p-1 `}>
+                <div className={`${isVisible} w-full p-1`}>
                     <CustomCombobox
                         setValue={handleSubmit}
                         hasBtn={true}

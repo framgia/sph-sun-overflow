@@ -14,7 +14,7 @@ const SearchBar = () => {
                     />
                     <button
                         type="submit"
-                        className="absolute inset-y-0 right-0 mr-2 flex items-center"
+                        className="absolute inset-y-0 right-0 flex items-center rounded-r-full rounded-r-full pl-1 pr-2"
                     >
                         <HiSearch size={20} className="mr-1 text-gray-400" />
                     </button>
