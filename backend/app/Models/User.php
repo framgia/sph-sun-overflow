@@ -8,8 +8,8 @@ use App\Models\GraphQLPassportSocialite\HasSocialLogin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Str;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -46,7 +46,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($user) {
-            $user->slug = Str::slug($user->first_name . ' ' . $user->last_name);
+            $user->slug = Str::slug($user->first_name.' '.$user->last_name);
         });
     }
 

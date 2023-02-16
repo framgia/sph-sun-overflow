@@ -4,7 +4,7 @@ const GET_QUESTIONS = gql`
     query Questions(
         $first: Int!
         $page: Int!
-        $filter: String
+        $filter: filter
         $orderBy: [QueryQuestionsOrderByOrderByClause!]
     ) {
         questions(first: $first, page: $page, filter: $filter, orderBy: $orderBy) {

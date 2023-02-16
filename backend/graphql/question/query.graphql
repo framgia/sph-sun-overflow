@@ -1,9 +1,14 @@
+input filter {
+    answered: Boolean
+    tag: ID
+}
+
 extend type Query {
     question(slug: String! @eq, shouldAddViewCount: Boolean = true): Question
         @guard(with: ["api"])
     questions(
         orderBy: _ @orderBy(columns: ["created_at"])
-        filter: String = null
+        filter: filter @spread
     ): [Question!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Questions")

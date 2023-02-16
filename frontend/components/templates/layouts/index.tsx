@@ -30,12 +30,13 @@ const Layout = ({ children }: LayoutProps) => {
                         </div>
                     )}
                     <div
-                        className={`flex min-h-screen ${hideRightSidebarInPages.includes(router.pathname)
-                            ? 'w-4/5 pt-14'
-                            : routeIfLoginPathCheck
+                        className={`flex min-h-screen ${
+                            hideRightSidebarInPages.includes(router.pathname)
+                                ? 'w-4/5 pt-14'
+                                : routeIfLoginPathCheck
                                 ? 'w-full'
                                 : 'w-3/5 pt-14'
-                            }`}
+                        }`}
                     >
                         {children}
                     </div>
