@@ -6,13 +6,20 @@ type User {
     email: String!
     google_id: String
     reputation: Int!
+    slug: String!
+    about_me: String
     created_at: String!
     updated_at: String
+    question_count: Int
+    answer_count: Int
+    top_questions: [Question]
+    top_answers: [Answer]
     role: Role! @belongsTo
     watchedTags: [Tag!]! @belongsToMany
     questions: [Question!]! @hasMany
     answers: [Answer!]! @hasMany
     comments: [Comment!]! @hasMany
+    bookmarks: [Bookmark!]! @hasMany(type: PAGINATOR, defaultCount: 5)
     notifications: [UserNotification!]! @hasMany
     teams: [Member!]! @hasMany
 }

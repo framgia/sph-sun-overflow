@@ -4,6 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -40,6 +41,12 @@ final class UpsertVote
                     ['user_id' => Auth::id()],
                     ['value' => $args['value']]
                 );
+
+                $user = User::find($voteable->user_id);
+                $user->reputation += $args['value'];
+                if ($user->reputation >= 0) {
+                    $user->save();
+                }
 
                 return 'Voted Successfully';
             }
