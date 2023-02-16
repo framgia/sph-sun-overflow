@@ -2,23 +2,26 @@ import Button from '@/components/atoms/Button'
 import ProfileImage from '@/components/atoms/ProfileImage'
 import ProfileStats from '@/components/atoms/ProfileStats'
 import AboutMe from '@/components/molecules/AboutMe'
-import { Fragment } from 'react'
 
 const ProfilePage = () => {
     return (
         <div className="flex h-full flex-col">
-            <div className="mt-10 flex h-2/5 w-full flex-row">
+            <div className="mt-10 flex h-auto w-full flex-row">
                 <div className="flex w-1/3 flex-col">
                     <ProfileImage />
-                    <div className="mt-6 self-center">
-                        <Button type="button" usage="follow">
-                            Follow
-                        </Button>
-                    </div>
                 </div>
                 <div className="mr-10 flex w-2/3 flex-col">
                     <AboutMe />
-                    <div className="mt-14 flex w-full flex-row self-end px-8">
+                </div>
+            </div>
+            <div className="my-4 flex w-full flex-row">
+                <div className="flex w-1/3 justify-center">
+                    <Button type="button" usage="follow" additionalClass="my-auto drop-shadow-xl">
+                        Follow
+                    </Button>
+                </div>
+                <div className="flex w-2/3">
+                    <div className="flex w-full flex-row self-end ">
                         <ProfileStats value={10} text="Reputation" />
                         <ProfileStats value={10} text="Questions" />
                         <ProfileStats value={10} text="Answers" />

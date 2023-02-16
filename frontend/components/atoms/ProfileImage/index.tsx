@@ -8,7 +8,7 @@ const ProfileImage = () => {
                     <Image src="/images/sun_logo.png" alt="sun-logo" fill className="relative " />
                 </div>
             </div>
-            <div className="mt-6 flex px-6 text-center text-3xl font-semibold line-clamp-3">
+            <div className="mt-6 flex px-6 text-center text-2xl font-semibold line-clamp-3">
                 First Name Last Name
             </div>
         </Fragment>
