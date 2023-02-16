@@ -1,4 +1,4 @@
-import { HiPencilAlt, HiBookmark, HiEye, HiChevronDown } from 'react-icons/hi'
+import { HiPencilAlt, HiBookmark, HiEye, HiChevronDown, HiSearch } from 'react-icons/hi'
 import { HiCheck } from 'react-icons/hi2'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdCheckmark } from 'react-icons/io'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
@@ -76,6 +76,8 @@ const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
             return <HiChevronRight />
         case 'chevron_right_double':
             return <HiChevronDoubleRight />
+        case 'search_input_icon':
+            return <HiSearch size="26" />
         default:
             return <></>
     }

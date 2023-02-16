@@ -7,8 +7,8 @@ type TagProps = {
 
 const Tag = ({ name, tagId, deleteTag }: TagProps) => {
     return (
-        <span className="mx-1 mt-1 flex cursor-pointer flex-wrap items-center justify-between rounded-lg bg-[#fba39b] pl-2 pr-2 text-sm font-medium">
-            <span className="break-words pr-2">{name}</span>
+        <span className="mx-1 mt-1 flex cursor-pointer flex-wrap items-center justify-between rounded-lg bg-[#fba39b] px-2 text-sm font-medium">
+            <span className="break-words">{name}</span>
             <HiX
                 className="bg rounded-xl hover:bg-black hover:text-white"
                 onClick={() => deleteTag(tagId)}
