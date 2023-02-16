@@ -32,7 +32,7 @@ const QuestionsPage = () => {
         variables: {
             first: 10,
             page: 1,
-            filter: 'answered',
+            filter: { answered: true, tag: null },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         },
     })
@@ -86,7 +86,7 @@ const QuestionsPage = () => {
             id: 1,
             name: 'Answered',
             onClick: () => {
-                refetch({ first: 10, page: 1, filter: 'answered' })
+                refetch({ first: 10, page: 1, filter: { answered: true, tag: null } })
                 setSelectedAnswerFilter('Answered')
             },
         },
@@ -94,7 +94,7 @@ const QuestionsPage = () => {
             id: 2,
             name: 'Unanswered',
             onClick: () => {
-                refetch({ first: 10, page: 1, filter: 'unanswered' })
+                refetch({ first: 10, page: 1, filter: { answered: false, tag: null } })
                 setSelectedAnswerFilter('Unanswered')
             },
         },

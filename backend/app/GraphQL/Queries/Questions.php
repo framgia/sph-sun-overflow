@@ -16,12 +16,22 @@ final class Questions
         $query = Question::query();
 
         try {
-            if ($args['filter'] == 'answered') {
-                $query->has('answers');
-            }
-
-            if ($args['filter'] == 'unanswered') {
-                $query->doesntHave('answers');
+            if ($args['answered'] == 1) {
+                if ($args['tag'] != null) {
+                    $query->has('answers')->whereHas('tags', function ($tags) use ($args) {
+                        $tags->where('tag_id', $args['tag']);
+                    });
+                } else {
+                    $query->has('answers');
+                }
+            } else {
+                if ($args['tag'] != null) {
+                    $query->doesntHave('answers')->whereHas('tags', function ($tags) use ($args) {
+                        $tags->where('tag_id', $args['tag']);
+                    });
+                } else {
+                    $query->doesntHave('answers');
+                }
             }
 
             return $query;
