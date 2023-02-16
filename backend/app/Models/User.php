@@ -22,6 +22,8 @@ class User extends Authenticatable
      */
     protected $guarded = [];
 
+    protected $appends = ['question_count', 'answer_count', 'top_questions', 'top_answers'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -98,5 +100,33 @@ class User extends Authenticatable
     public function answers()
     {
         return $this->hasMany(Answer::class);
+    }
+
+    public function getQuestionCountAttribute()
+    {
+        return $this->questions()->count();
+    }
+
+    public function getAnswerCountAttribute()
+    {
+        return $this->answers()->count();
+    }
+
+    public function getTopQuestionsAttribute()
+    {
+        return $this->questions->where('vote_count', '>', 0)->sortByDesc(function ($question) {
+            return $question->votes->sum('value');
+        })->take(5)->map(function ($q) {
+            return $q->fresh();
+        });
+    }
+
+    public function getTopAnswersAttribute()
+    {
+        return $this->answers->where('vote_count', '>', 0)->sortByDesc(function ($answer) {
+            return $answer->votes->sum('value');
+        })->take(5)->map(function ($a) {
+            return $a->fresh();
+        });
     }
 }

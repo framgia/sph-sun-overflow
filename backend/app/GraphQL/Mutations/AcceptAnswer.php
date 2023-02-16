@@ -4,6 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\User;
 use Exception;
 
 final class AcceptAnswer
@@ -27,6 +28,10 @@ final class AcceptAnswer
 
             $answer->is_correct = true;
             $answer->save();
+
+            $user = User::find($answer->user_id);
+            $user->reputation += 1;
+            $user->save();
 
             return 'Answer was accepted successfully';
         } catch (Exception $e) {
