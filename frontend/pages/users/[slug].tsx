@@ -22,10 +22,6 @@ export type ProfileType = {
 }
 
 const ProfilePage = () => {
-    useEffect(() => {
-        refetch()
-    })
-
     const user_id = useBoundStore.getState().user_id
 
     const router = useRouter()
@@ -33,9 +29,13 @@ const ProfilePage = () => {
 
     const { data, loading, error, refetch } = useQuery(GET_USER, {
         variables: {
-            ID: query.id,
+            slug: query.slug,
         },
     })
+
+    useEffect(() => {
+        refetch()
+    }, [router, refetch])
 
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)

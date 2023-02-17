@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 const GET_USER = gql`
-    query getUser($ID: ID!) {
-        user(id: $ID) {
+    query getUser($slug: String!) {
+        user(slug: $slug) {
             id
             first_name
             last_name
@@ -12,6 +12,7 @@ const GET_USER = gql`
             reputation
             question_count
             about_me
+            slug
         }
     }
 `

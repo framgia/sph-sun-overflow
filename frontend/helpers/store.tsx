@@ -6,12 +6,14 @@ interface UserSlice {
     last_name: string
     email: string
     avatar: string
+    slug: string
     setUserID: (
         user_id: number,
         first_name: string,
         last_name: string,
         email: string,
-        avatar: string
+        avatar: string,
+        slug: string
     ) => void
 }
 
@@ -21,13 +23,15 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
     last_name: '',
     email: '',
     avatar: '',
-    setUserID: (user_id, first_name, last_name, email, avatar) =>
+    slug: '',
+    setUserID: (user_id, first_name, last_name, email, avatar, slug) =>
         set(() => ({
             user_id,
             first_name,
             last_name,
             email,
             avatar,
+            slug,
         })),
 })
 

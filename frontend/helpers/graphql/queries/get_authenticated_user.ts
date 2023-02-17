@@ -8,6 +8,7 @@ const GET_AUTHENTICATED_USER = gql`
             last_name
             email
             avatar
+            slug
         }
     }
 `

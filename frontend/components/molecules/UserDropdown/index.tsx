@@ -11,9 +11,10 @@ export type UserProps = {
     first_name: string
     last_name: string
     avatar: string
+    slug: string
 }
 
-const UserDropdown = ({ id, first_name, last_name, avatar }: UserProps): JSX.Element => {
+const UserDropdown = ({ id, first_name, last_name, avatar, slug }: UserProps): JSX.Element => {
     return (
         <Menu as="div" className="relative ml-1 inline-block text-left">
             <div>
@@ -54,7 +55,7 @@ const UserDropdown = ({ id, first_name, last_name, avatar }: UserProps): JSX.Ele
                                     className={`block flex items-center px-4 py-2 text-sm text-gray-700  ${
                                         active && 'bg-red-100'
                                     }`}
-                                    href={`/users/${id}`}
+                                    href={`/users/${slug}`}
                                 >
                                     <HiOutlineUser className="mr-2" />
                                     Profile

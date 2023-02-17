@@ -1,5 +1,5 @@
 extend type Query {
-    user(id: ID @eq): User @guard(with: ["api"]) @find
+    user(slug: String! @eq): User @guard(with: ["api"]) @find
     users: [User!]! @guard(with: ["api"]) @all
     me: User @guard(with: ["api"]) @auth
 }

@@ -15,6 +15,7 @@ const Navbar = (): JSX.Element => {
         first_name: useBoundStore.getState().first_name,
         last_name: useBoundStore.getState().last_name,
         avatar: useBoundStore.getState().avatar,
+        slug: useBoundStore.getState().slug,
     }
 
     const [getNotifications, { data, loading, error }] = useLazyQuery(GET_NOTIFICATIONS)
@@ -56,6 +57,7 @@ const Navbar = (): JSX.Element => {
                         first_name={user.first_name}
                         last_name={user.last_name}
                         avatar={user.avatar}
+                        slug={user.slug}
                     />
                 </div>
             </div>
