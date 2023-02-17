@@ -1,5 +1,6 @@
 input filter {
     answered: Boolean
+    keyword: String
     tag: ID
 }
 

@@ -14,24 +14,23 @@ final class Questions
     public function __invoke($_, array $args)
     {
         $query = Question::query();
-
         try {
             if ($args['answered'] == 1) {
-                if ($args['tag'] != null) {
-                    $query->has('answers')->whereHas('tags', function ($tags) use ($args) {
-                        $tags->where('tag_id', $args['tag']);
-                    });
-                } else {
-                    $query->has('answers');
-                }
+                $query->has('answers');
             } else {
-                if ($args['tag'] != null) {
-                    $query->doesntHave('answers')->whereHas('tags', function ($tags) use ($args) {
-                        $tags->where('tag_id', $args['tag']);
-                    });
-                } else {
-                    $query->doesntHave('answers');
-                }
+                $query->doesntHave('answers');
+            }
+
+            if ($args['tag'] != null) {
+                $query->whereHas('tags', function ($tags) use ($args) {
+                    $tags->where('tag_id', $args['tag']);
+                });
+            }
+
+            if (isset($args['keyword'])) {
+                $keywordLikeness = '%'.$args['keyword'].'%';
+
+                $query->where('title', 'like', $keywordLikeness)->orWhere('content', 'like', $keywordLikeness);
             }
 
             return $query;
