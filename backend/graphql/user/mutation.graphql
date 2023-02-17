@@ -8,10 +8,11 @@ extend type Mutation {
     deleteUser(id: ID!): User @delete
     updateUser(
         id: ID!
-        first_name: String
-        last_name: String
-        email: String
-    ): User @update
+        first_name: String!
+        about_me: String!
+        last_name: String!
+        avatar: String!
+    ): User @guard(with: ["api"]) @field(resolver: "UpdateUser")
     addWatchedTag(tag_id: ID!): String!
         @guard(with: ["api"])
         @field(resolver: "AddWatchedTag")
