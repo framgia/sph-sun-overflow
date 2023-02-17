@@ -25,6 +25,8 @@ const getButtonClasses = (usage: string): string => {
             return 'w-12 h-7 flex flex-row justify-center items-center px-3 border border-primary-red rounded-full text-primary-red'
         case 'follow':
             return 'items-center rounded-3xl border-2 text-center px-12 py-2 text-xl font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
+        case 'icon':
+            return 'absolute inset-y-0 right-0 mr-2 flex items-center'
         default:
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
     }

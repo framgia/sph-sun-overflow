@@ -1,13 +1,36 @@
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { HiSearch } from 'react-icons/hi'
 
 const SearchBar = () => {
+    const router = useRouter()
+    const [searchKey, setSearchKey] = useState('')
+    const pathIsSearchResult = router.asPath.includes('/questions?search=')
+
+    const handleSubmit = (e): void => {
+        e.preventDefault()
+
+        router.push(
+            {
+                pathname: `/questions`,
+                query: {
+                    searchKey,
+                },
+            },
+            `/questions?search=${searchKey}`,
+            { shallow: true }
+        )
+    }
     return (
         <div className="my-1 flex sm:mx-3">
-            <form method="GET" action="/questions">
+            <form onSubmit={handleSubmit}>
                 <div className="relative w-48 lg:w-80">
                     <input
                         type="text"
                         name="search"
+                        disabled={pathIsSearchResult}
+                        value={searchKey}
+                        onChange={(e) => setSearchKey(e.target.value)}
                         className="form-input h-9 w-48 rounded-full border border-gray-300 px-4 text-gray-900 focus:border-red-500 focus:ring-red-500 lg:w-80"
                         placeholder="Search..."
                         required
