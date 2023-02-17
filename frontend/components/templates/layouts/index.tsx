@@ -1,9 +1,9 @@
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Navbar from '../../organisms/Navbar'
 import { LeftSideBar, RightSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
 import { ToastContainer } from 'react-toastify'
+
 type LayoutProps = {
     children: JSX.Element
 }
@@ -42,7 +42,7 @@ const Layout = ({ children }: LayoutProps) => {
                     </div>
                     {!routeIfLoginPathCheck &&
                         !hideRightSidebarInPages.includes(router.pathname) && (
-                            <div className="relative mr-6 w-1/5 pt-20">
+                            <div className="relative mr-14 w-1/5 pt-20">
                                 <div className="fixed w-1/5">
                                     <RightSideBar usage={router.pathname.split('/')[1]} />
                                 </div>

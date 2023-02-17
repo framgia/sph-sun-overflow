@@ -48,7 +48,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($user) {
-            $user->slug = Str::slug($user->first_name.' '.$user->last_name);
+            $user->slug = Str::slug($user->first_name . ' ' . $user->last_name);
         });
     }
 
