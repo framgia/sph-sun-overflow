@@ -132,11 +132,21 @@ class User extends Authenticatable
 
     public function following()
     {
-        return $this->belongsToMany(User::class, 'user_relations', 'follower_id', 'following_id')->withTimestamps();
+        return $this->hasMany(UserRelation::class, 'follower_id');
     }
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'user_relations', 'following_id', 'follower_id')->withTimestamps();
+        return $this->hasMany(UserRelation::class, 'following_id');
+    }
+
+    public function getFollowingIdsAttribute()
+    {
+        return $this->following()->pluck('following_id')->toArray();
+    }
+
+    public function getFollowerIdsAttribute()
+    {
+        return $this->followers()->pluck('follower_id')->toArray();
     }
 }
