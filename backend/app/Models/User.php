@@ -129,4 +129,14 @@ class User extends Authenticatable
             return $a->fresh();
         });
     }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'user_relations', 'follower_id', 'following_id')->withTimestamps();
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'user_relations', 'following_id', 'follower_id')->withTimestamps();
+    }
 }
