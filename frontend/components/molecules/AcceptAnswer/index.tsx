@@ -24,7 +24,8 @@ const AcceptAnswer = ({
     const [acceptAnswer] = useMutation(ACCEPT_ANSWER)
 
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(is_correct)
-
+    const [isHovered, setIsHovered] = useState(false)
+    const hoverStyle = isHovered ? 'bg-blue-100' : ''
     const handleClick = () => {
         const newAcceptAnswer = acceptAnswer({
             variables: {
@@ -46,12 +47,18 @@ const AcceptAnswer = ({
         <Fragment>
             {is_from_user ? (
                 is_answered === false ? (
-                    <div className="flex cursor-pointer justify-center" onClick={handleClick}>
-                        {isCorrectAnswer ? (
+                    <div
+                        className={`flex cursor-pointer justify-center`}
+                        onClick={handleClick}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        <Icons name={isCorrectAnswer ? 'check_fill' : 'check_outline'} />
+                        {/* {isCorrectAnswer ? (
                             <Icons name="check_fill" />
                         ) : (
                             <Icons name="check_outline" />
-                        )}
+                        )} */}
                     </div>
                 ) : (
                     <div
