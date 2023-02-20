@@ -8,6 +8,22 @@ const GET_NOTIFICATIONS = gql`
             humanized_created_at
             notifiable {
                 __typename
+                ...on UserRelation {
+                    id
+                    following {
+                        id
+                        first_name
+                        last_name
+                        avatar
+                    }
+                    follower {
+                        id
+                        first_name
+                        last_name
+                        avatar
+                        slug
+                    }
+                }
                 ... on Answer {
                     id
                     content

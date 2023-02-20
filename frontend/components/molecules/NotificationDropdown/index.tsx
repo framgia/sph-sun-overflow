@@ -6,22 +6,29 @@ import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { parseHTML } from '@/helpers/htmlParsing'
 import UPDATE_NOTIFICATION from '@/helpers/graphql/mutations/update_notification'
-import Image from 'next/image'
+import Avatar from 'react-avatar'
 
 type User = {
     id: number
     first_name: string
     last_name: string
     avatar: string
+    slug?: string
     __typename: string
+}
+
+type UserRelation = {
+    id: number
+    following: User
+    follower: User
 }
 
 type Morphable = {
     id: number
-    content: string | null
-    title: string | null
-    slug: string | null
-    question: null | {
+    content?: string
+    title?: string
+    slug?: string
+    question?: {
         id: number
         slug: string
     }
@@ -63,7 +70,7 @@ export type NotificationProps = {
     id: number
     is_read: boolean
     humanized_created_at: string
-    notifiable: Answer | Comment | Vote
+    notifiable: Answer | Comment | Vote | UserRelation
     __typename: string
 }
 
@@ -157,13 +164,7 @@ const RenderNotifications = (notifications: NotificationProps[]) => {
                     }
                 }}
             >
-                <div className="flex-shrink-0">
-                    <img
-                        className="h-9 w-9 rounded-full"
-                        src={n.notifiable.user.avatar}
-                        alt="user photo"
-                    />
-                </div>
+                <div className="flex-shrink-0">{setAvatar(n.notifiable)}</div>
                 <div className="w-full pl-3">
                     <div className="mb-1 text-sm text-gray-600 line-clamp-3">
                         <span className="font-semibold text-gray-900">{setName(n.notifiable)}</span>
@@ -174,6 +175,27 @@ const RenderNotifications = (notifications: NotificationProps[]) => {
             </Link>
         </Menu.Item>
     ))
+}
+
+const setAvatar = (notifiable: any): JSX.Element => {
+    let avatar = ''
+
+    if (notifiable.__typename == 'UserRelation') {
+        avatar = notifiable.follower.avatar
+    } else {
+        avatar = notifiable.user.avatar
+    }
+
+    return (
+        <Avatar
+            round={true}
+            name={setName(notifiable)}
+            size="40"
+            alt={setName(notifiable)}
+            src={avatar}
+            maxInitials={1}
+        />
+    )
 }
 
 const setLink = (notifiable: any): string => {
@@ -190,14 +212,21 @@ const setLink = (notifiable: any): string => {
         case 'Vote':
             link = `/questions/${notifiable.voteable.slug ?? notifiable.voteable.question.slug}`
             break
+        case 'UserRelation':
+            link = `/users/${notifiable.follower.slug}`
+            break
     }
     return link
 }
 
 const setName = (notifiable: any): string => {
-    let name = `${notifiable.user.first_name} ${notifiable.user.last_name} `
+    let name = ''
     if (notifiable.__typename == 'Answer' && notifiable.is_correct) {
         name = `${notifiable.question.user.first_name} ${notifiable.question.user.last_name} `
+    } else if (notifiable.__typename == 'UserRelation') {
+        name = `${notifiable.follower.first_name} ${notifiable.follower.last_name} `
+    } else {
+        name = `${notifiable.user.first_name} ${notifiable.user.last_name} `
     }
     return name
 }
@@ -223,6 +252,9 @@ const setDetails = (notifiable: any): string => {
             details = `voted on your ${notifiable.voteable.__typename}: "${
                 notifiable.voteable.title ?? voteContent.props.children
             }".`
+            break
+        case 'UserRelation':
+            details = 'followed you.'
             break
         default:
             details = ''
