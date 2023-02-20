@@ -34,11 +34,6 @@ type FilterListsType = {
     POPULAR: FilterType
 }
 
-type Props = {
-    refetch: ({ first, page, orderBy, filter }: RefetchType) => void
-    triggers: TriggerType[]
-}
-
 const FilterTexts: FilterTextsType = {
     DATE: { 1: 'Newest first', 2: 'Oldest first' },
     ANSWER: { 1: 'Answered', 2: 'Unanswered' },
@@ -46,7 +41,11 @@ const FilterTexts: FilterTextsType = {
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
 }
 
-const DropdownFilters = ({ refetch, triggers }: Props): JSX.Element => {
+type Props = {
+    refetch: ({ first, page, orderBy, filter }: RefetchType) => void
+    triggers: TriggerType[]
+}
+const DropdownFilters = ({ refetch, triggers }: Props) => {
     const [selectedDateFilter, setSelectedDateFilter] = useState(FilterTexts.DATE[1])
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState(FilterTexts.ANSWER[1])
     const [selectedWatchedFilter, setSelectedWatchedFilter] = useState(FilterTexts.WATCHED[1])
@@ -151,11 +150,12 @@ const DropdownFilters = ({ refetch, triggers }: Props): JSX.Element => {
         <div className="flex flex-row gap-2">
             {triggers.map((trigger, index) => {
                 return (
-                    <SortDropdown
-                        key={index}
-                        filters={FilterLists[trigger].filters}
-                        selectedFilter={FilterLists[trigger].state}
-                    />
+                    <div key={index} className="min-w-[8rem]">
+                        <SortDropdown
+                            filters={FilterLists[trigger].filters}
+                            selectedFilter={FilterLists[trigger].state}
+                        />
+                    </div>
                 )
             })}
         </div>

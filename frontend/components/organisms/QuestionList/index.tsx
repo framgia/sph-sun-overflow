@@ -58,7 +58,7 @@ const QuestionList = ({
                     <div className="ql-editor question-parsed-content w-full">
                         {parseHTML(content)}
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="mt-[-0.8rem] flex flex-col gap-2">
                         <div className="w-full">
                             <Tags values={tags} />
                         </div>
