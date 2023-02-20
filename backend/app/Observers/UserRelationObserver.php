@@ -23,6 +23,6 @@ class UserRelationObserver
         UserNotification::where([
             'notifiable_type' => 'App\Models\UserRelation',
             'notifiable_id' => $userRelation->id,
-        ])->first()->delete();
+        ])->delete();
     }
 }
