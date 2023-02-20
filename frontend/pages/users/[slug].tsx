@@ -2,6 +2,7 @@ import Button from '@/components/atoms/Button'
 import ProfileImage from '@/components/atoms/ProfileImage'
 import ProfileStats from '@/components/atoms/ProfileStats'
 import AboutMe from '@/components/molecules/AboutMe'
+import Activity from '@/components/molecules/Activity'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { useBoundStore } from '@/helpers/store'
@@ -43,6 +44,82 @@ const ProfilePage = () => {
     const profile: ProfileType = {
         ...data.user,
     }
+
+    const topQuestions = [
+        {
+            id: 1,
+            votes: 0,
+            is_answered: true,
+            question: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 2,
+            votes: 78,
+            is_answered: true,
+            question: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 3,
+            votes: 100,
+            is_answered: true,
+            question: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 4,
+            votes: 23,
+            is_answered: true,
+            question: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 5,
+            votes: 10,
+            is_answered: false,
+            question: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+    ]
+
+    const topAnswers = [
+        {
+            id: 1,
+            votes: 5,
+            is_answered: true,
+            answer: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 2,
+            votes: 78,
+            is_answered: false,
+            answer: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 3,
+            votes: 100,
+            is_answered: true,
+            answer: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 4,
+            votes: 23,
+            is_answered: false,
+            answer: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+        {
+            id: 5,
+            votes: 10,
+            is_answered: false,
+            answer: 'Material Design not styling lorem',
+            created_at: 'Dec. 20, 2023',
+        },
+    ]
 
     return (
         <div className="flex h-full flex-col">
@@ -87,6 +164,36 @@ const ProfilePage = () => {
                     </li>
                     <div className="-mb-[1px] border-b-2 border-b-gray-300 px-6">Bookmarks</div>
                 </ul>
+            </div>
+            <div className="ml-24 flex w-[125%]">
+                <div className="mb-6 mr-10">
+                    <p className="mt-6 mb-10 text-2xl">Top Questions</p>
+                    <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
+                        {topQuestions.map((question) => (
+                            <Activity
+                                id={question.id}
+                                votes={question.votes}
+                                data={question.question}
+                                is_answered={question.is_answered}
+                                created_at={question.created_at}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <div className="mb-6 ml-14">
+                    <p className="mt-6 mb-10 text-2xl">Top Answers</p>
+                    <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
+                        {topAnswers.map((answer) => (
+                            <Activity
+                                id={answer.id}
+                                votes={answer.votes}
+                                data={answer.answer}
+                                is_answered={answer.is_answered}
+                                created_at={answer.created_at}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     )
