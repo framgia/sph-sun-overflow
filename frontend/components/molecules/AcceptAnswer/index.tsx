@@ -34,7 +34,7 @@ const AcceptAnswer = ({
         })
 
         newAcceptAnswer.then((data: any) => {
-            const message = data.data.acceptAnswer
+            const message = data.data.toggleAcceptAnswer
             setIsCorrectAnswer(!isCorrectAnswer)
             successNotify(`${message}`)
         })
@@ -54,12 +54,15 @@ const AcceptAnswer = ({
                         )}
                     </div>
                 ) : (
-                    <div className="flex cursor-auto justify-center">
+                    <div
+                        className="flex cursor-pointer justify-center"
+                        onClick={isCorrectAnswer ? handleClick : undefined}
+                    >
                         {isCorrectAnswer ? <Icons name="check_fill" /> : ''}
                     </div>
                 )
             ) : (
-                <div className="flex cursor-auto justify-center">
+                <div className="flex cursor-auto justify-center ">
                     {isCorrectAnswer ? <Icons name="check_fill" /> : ''}
                 </div>
             )}
