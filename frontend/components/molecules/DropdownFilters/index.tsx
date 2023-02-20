@@ -1,13 +1,8 @@
-import { useState } from 'react'
-import { number } from 'yup'
+import { useState, useEffect } from 'react'
 import SortDropdown from '../SortDropdown'
-
-type RefetchType = {
-    first: number
-    page: number
-    orderBy?: { column: string; order: string }[]
-    filter?: string
-}
+import { ApolloQueryResult } from '@apollo/client'
+import { RefetchType } from '../../../pages/questions/index'
+import { useRouter } from 'next/router'
 
 type TriggerType = 'DATE' | 'ANSWER' | 'WATCHED' | 'POPULAR'
 
@@ -34,6 +29,11 @@ type FilterListsType = {
     POPULAR: FilterType
 }
 
+type Props = {
+    refetch: ({ first, page, orderBy, filter }: RefetchType) => Promise<ApolloQueryResult<any>>
+    triggers: TriggerType[]
+}
+
 const FilterTexts: FilterTextsType = {
     DATE: { 1: 'Newest first', 2: 'Oldest first' },
     ANSWER: { 1: 'Answered', 2: 'Unanswered' },
@@ -41,15 +41,25 @@ const FilterTexts: FilterTextsType = {
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
 }
 
-type Props = {
-    refetch: ({ first, page, orderBy, filter }: RefetchType) => void
-    triggers: TriggerType[]
-}
-const DropdownFilters = ({ refetch, triggers }: Props) => {
+const DropdownFilters = ({ refetch, triggers }: Props): JSX.Element => {
+    const router = useRouter()
+    const { search } = router.query
+    const [searchKey, setSearchKey] = useState('')
     const [selectedDateFilter, setSelectedDateFilter] = useState(FilterTexts.DATE[1])
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState(FilterTexts.ANSWER[1])
     const [selectedWatchedFilter, setSelectedWatchedFilter] = useState(FilterTexts.WATCHED[1])
     const [selectedPopularFilter, setSelectedPopularFilter] = useState(FilterTexts.POPULAR[1])
+
+    useEffect(() => {
+        setSearchKey(search as string)
+    }, [search])
+
+    useEffect(() => {
+        setSelectedDateFilter(FilterTexts.DATE[1])
+        setSelectedAnswerFilter(FilterTexts.ANSWER[1])
+        setSelectedWatchedFilter(FilterTexts.WATCHED[1])
+        setSelectedPopularFilter(FilterTexts.POPULAR[1])
+    }, [router])
 
     const FilterLists: FilterListsType = {
         DATE: {
@@ -88,7 +98,11 @@ const DropdownFilters = ({ refetch, triggers }: Props) => {
                     id: 1,
                     name: FilterTexts.ANSWER[1],
                     onClick: () => {
-                        refetch({ first: 10, page: 1, filter: 'answered' })
+                        refetch({
+                            first: 10,
+                            page: 1,
+                            filter: { keyword: searchKey, answered: true },
+                        })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[1])
                     },
                 },
@@ -96,7 +110,11 @@ const DropdownFilters = ({ refetch, triggers }: Props) => {
                     id: 2,
                     name: FilterTexts.ANSWER[2],
                     onClick: () => {
-                        refetch({ first: 10, page: 1, filter: 'unanswered' })
+                        refetch({
+                            first: 10,
+                            page: 1,
+                            filter: { keyword: searchKey, answered: false },
+                        })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[2])
                     },
                 },

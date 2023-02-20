@@ -15,22 +15,27 @@ final class Questions
     {
         $query = Question::query();
         try {
-            if ($args['answered'] == 1) {
-                $query->has('answers');
-            } else {
-                $query->doesntHave('answers');
-            }
-
-            if ($args['tag'] != null) {
-                $query->whereHas('tags', function ($tags) use ($args) {
-                    $tags->where('tag_id', $args['tag']);
-                });
-            }
-
             if (isset($args['keyword'])) {
                 $keywordLikeness = '%'.$args['keyword'].'%';
 
-                $query->where('title', 'like', $keywordLikeness)->orWhere('content', 'like', $keywordLikeness);
+                $query->where(function ($keywordQuery) use ($keywordLikeness) {
+                    $keywordQuery->where('title', 'like', $keywordLikeness)
+                        ->orWhere('content', 'like', $keywordLikeness);
+                });
+            }
+
+            if (isset($args['answered'])) {
+                if ($args['answered']) {
+                    $query->has('answers');
+                } else {
+                    $query->doesntHave('answers');
+                }
+            }
+
+            if (isset($args['tag']) && $args['tag']) {
+                $query->whereHas('tags', function ($tags) use ($args) {
+                    $tags->where('tag_id', $args['tag']);
+                });
             }
 
             return $query;
