@@ -22,8 +22,7 @@ final class ToggleAcceptAnswer
             $answer = Answer::findOrFail($args['answer_id']);
             $checkAccepted = $question->answers()->where('answers.is_correct', true)->exists();
 
-            if($answer->is_correct == true){
-
+            if ($answer->is_correct == true) {
                 $answer->is_correct = false;
                 $answer->save();
 
@@ -32,7 +31,6 @@ final class ToggleAcceptAnswer
                 $user->save();
 
                 return 'Answer was unaccepted successfully';
-
             }
 
             if ($checkAccepted) {
@@ -47,7 +45,6 @@ final class ToggleAcceptAnswer
             $user->save();
 
             return 'Answer was accepted successfully';
-
         } catch (Exception $e) {
             return $e->getMessage();
         }
