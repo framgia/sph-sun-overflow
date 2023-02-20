@@ -26,7 +26,8 @@ const RouteWrapper = ({ children }: LayoutProps) => {
             data?.me.first_name,
             data?.me.last_name,
             data?.me.email,
-            data?.me.avatar
+            data?.me.avatar,
+            data?.me.slug
         )
 
     if (loading) return <div className="pt-14">{loadingScreenShow()}</div>

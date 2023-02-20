@@ -48,7 +48,12 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($user) {
-            $user->slug = Str::slug($user->first_name.' '.$user->last_name);
+            $slug = Str::slug($user->first_name . ' ' . $user->last_name);
+
+            $duplicateCount = User::where('first_name', $user->first_name)
+                ->where('last_name', $user->last_name)->count();
+
+            $user->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$duplicateCount";
         });
     }
 
