@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Tag extends Model
 {
@@ -13,6 +14,15 @@ class Tag extends Model
     protected $guarded = [];
 
     protected $appends = ['is_watched_by_user', 'count_tagged_questions', 'count_watching_users'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($tag) {
+            $tag->slug = Str::slug($tag->title);
+        });
+    }
 
     public function usersWatching()
     {
@@ -26,7 +36,11 @@ class Tag extends Model
 
     public function getIsWatchedByUserAttribute()
     {
-        return auth()->user()->watchedTags()->where('tag_id', $this->id)->exists();
+        if (auth()->user()) {
+            return auth()->user()->watchedTags()->where('tag_id', $this->id)->exists();
+        }
+
+        return null;
     }
 
     public function getCountTaggedQuestionsAttribute()
