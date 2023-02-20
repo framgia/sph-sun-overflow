@@ -10,7 +10,11 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
     const router = useRouter()
-    const hideRightSidebarInPages: string[] = ['/questions/[slug]', '/questions/add']
+    const hideRightSidebarInPages: string[] = [
+        '/questions/[slug]',
+        '/questions/add',
+        '/users/[slug]',
+    ]
 
     const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
     return (

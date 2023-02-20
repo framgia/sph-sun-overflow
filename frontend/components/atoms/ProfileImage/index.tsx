@@ -10,8 +10,8 @@ interface ProfileImageProps {
 const ProfileImage = ({ first_name, last_name, avatar }: ProfileImageProps) => {
     return (
         <Fragment>
-            <div className="relative flex place-content-center">
-                <div className="relative aspect-square w-3/5">
+            <div className="relative flex place-content-center ">
+                <div className="relative aspect-square">
                     <Avatar
                         round={true}
                         name={`${first_name} ${last_name}`}
@@ -23,7 +23,7 @@ const ProfileImage = ({ first_name, last_name, avatar }: ProfileImageProps) => {
                     />
                 </div>
             </div>
-            <div className="mt-6 ml-6 flex px-6 text-center text-2xl font-semibold line-clamp-3">
+            <div className="mt-6 flex px-6 text-center text-2xl font-semibold line-clamp-3">
                 {first_name} {last_name}
             </div>
         </Fragment>

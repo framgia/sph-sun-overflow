@@ -5,7 +5,7 @@ import { LOAD_SIDEBAR_1, LOAD_SIDEBAR_2, LOAD_SIDEBAR_3 } from '@/helpers/graphq
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 type TRightSidebarProps = {
-    usage: string
+    usage: null | 'teams' | 'users'
 }
 const RightSideBar = ({ usage }: TRightSidebarProps) => {
     if (usage === 'teams') {
