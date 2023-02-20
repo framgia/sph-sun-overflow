@@ -11,6 +11,8 @@ class UserRelation extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['humanized_created_at'];
+
     public function following()
     {
         return $this->belongsTo(User::class, 'following_id');
@@ -19,5 +21,10 @@ class UserRelation extends Model
     public function follower()
     {
         return $this->belongsTo(User::class, 'follower_id');
+    }
+
+    public function getHumanizedCreatedAtAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }
