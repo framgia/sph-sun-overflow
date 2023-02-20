@@ -10,7 +10,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
-import { FilterType } from './index'
+import { FilterType } from '../index'
 
 export type UserType = {
     id: number
@@ -114,6 +114,7 @@ const QuestionDetailPage = () => {
                         id={question.id}
                         title={question.title}
                         content={question.content}
+                        slug={question.slug}
                         created_at={question.created_at}
                         humanized_created_at={question.humanized_created_at}
                         vote_count={question.vote_count}

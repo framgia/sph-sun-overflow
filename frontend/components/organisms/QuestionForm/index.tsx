@@ -19,6 +19,15 @@ export type FormValues = {
 }
 
 const QuestionForm = (): JSX.Element => {
+    const router = useRouter()
+    let buttonText = 'Post Question'
+    let formTitle = 'Post a Question'
+
+    if (router.query.slug) {
+        buttonText = 'Save Question'
+        formTitle = 'Edit Question'
+    }
+
     const {
         register,
         handleSubmit,
@@ -30,8 +39,6 @@ const QuestionForm = (): JSX.Element => {
         resolver: yupResolver(QuestionFormSchema),
     })
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
-
-    const router = useRouter()
 
     const [createQuestion] = useMutation(CREATE_QUESTION)
 
@@ -71,6 +78,7 @@ const QuestionForm = (): JSX.Element => {
 
     return (
         <div className="w-full">
+            <text className="mb-2 text-3xl">{formTitle}</text>
             <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
                 <div className="QuestionTitle w-full self-center py-4">
                     <label htmlFor="titleInput" className="mb-2 text-2xl font-bold">
@@ -109,7 +117,7 @@ const QuestionForm = (): JSX.Element => {
                             }`}
                             isDisabled={isDisableSubmit}
                         >
-                            Post Question
+                            {buttonText}
                         </Button>
                     </div>
                 </div>
