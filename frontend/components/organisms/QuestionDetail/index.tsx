@@ -16,6 +16,7 @@ type QuestionDetailProps = {
     id: number
     title: string
     content: string
+    slug: string
     created_at: string
     humanized_created_at: string
     views_count: number
@@ -32,6 +33,7 @@ const QuestionDetail = ({
     id,
     title,
     content,
+    slug,
     created_at,
     humanized_created_at,
     views_count,
@@ -59,7 +61,10 @@ const QuestionDetail = ({
             <div className="flex w-full flex-col">
                 <div className="relative flex w-full flex-col gap-3">
                     {is_from_user && (
-                        <Link href="#" className="absolute top-0 right-0 cursor-pointer">
+                        <Link
+                            href={`${slug}/edit`}
+                            className="absolute top-0 right-0 cursor-pointer"
+                        >
                             <Icons name="square_edit" />
                         </Link>
                     )}
