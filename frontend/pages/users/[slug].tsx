@@ -70,7 +70,7 @@ const ProfilePage = () => {
                 </div>
             </div>
             <div className="my-4 flex w-full flex-row ">
-                <div className=" mr-20 ml-6 flex w-1/6 justify-center bg-blue-100 px-6">
+                <div className=" mr-20 ml-6 flex w-1/6 justify-center">
                     <Button type="button" usage="follow" additionalClass="my-auto drop-shadow-xl">
                         Follow
                     </Button>
