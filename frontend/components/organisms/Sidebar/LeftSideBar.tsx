@@ -4,10 +4,6 @@ import { useRouter } from 'next/router'
 const LeftSideBar = (): JSX.Element => {
     const router = useRouter()
 
-    const handleClick = (url: string) => {
-        if (router.asPath === `/${url}`) router.reload()
-    }
-
     const SidebarLinks = [
         {
             IconName: 'Questions',
@@ -48,7 +44,6 @@ const LeftSideBar = (): JSX.Element => {
                             Text={Text}
                             isSelected={router.pathname.split('/')[1] === url}
                             url={`/${url}`}
-                            onClick={() => handleClick(url)}
                         />
                     )
                 })}

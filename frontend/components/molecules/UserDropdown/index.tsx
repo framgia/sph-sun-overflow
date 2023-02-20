@@ -52,7 +52,7 @@ const UserDropdown = ({ id, first_name, last_name, avatar, slug }: UserProps): J
                         <Menu.Item>
                             {({ active }) => (
                                 <Link
-                                    className={`block flex items-center px-4 py-2 text-sm text-gray-700  ${
+                                    className={`flex items-center px-4 py-2 text-sm text-gray-700  ${
                                         active && 'bg-red-100'
                                     }`}
                                     href={`/users/${slug}`}
@@ -69,7 +69,7 @@ const UserDropdown = ({ id, first_name, last_name, avatar, slug }: UserProps): J
                                         setUserToken('')
                                         signOut()
                                     }}
-                                    className={`block flex w-full items-center px-4 py-2 text-left text-sm text-gray-700 ${
+                                    className={`flex w-full items-center px-4 py-2 text-left text-sm text-gray-700 ${
                                         active && 'bg-red-100'
                                     }`}
                                 >

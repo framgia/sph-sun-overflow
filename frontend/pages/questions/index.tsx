@@ -9,12 +9,13 @@ import { useQuery } from '@apollo/client'
 import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
 import { errorNotify } from '../../helpers/toast'
 import { QuestionType } from './[slug]'
-import SortDropdown from '@/components/molecules/SortDropdown'
 import { HiSearch } from 'react-icons/hi'
+import DropdownFilters from '@/components/molecules/DropdownFilters'
 
 export interface PaginatorInfo {
     currentPage: number
     lastPage: number
+    total: number
     hasMorePages: boolean
 }
 
@@ -24,21 +25,36 @@ export type FilterType = {
     onClick: () => void
 }
 
-const QuestionsPage = () => {
-    const [selectedDateFilter, setSelectedDateFilter] = useState('Newest first')
-    const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Answered')
-    const router = useRouter()
-    const pathIsSearchResult = router.asPath.includes('/questions?search=')
-    const [searchKey, setSearchKey] = useState(router.query.search)
+export type RefetchType = {
+    first: number
+    page: number
+    filter?: { keyword?: string; answered?: boolean; tag?: null }
+    orderBy?: { column: string; order: string }[]
+}
 
-    const { data, loading, error, refetch } = useQuery(GET_QUESTIONS, {
+const QuestionsPage = () => {
+    const router = useRouter()
+    const [searchKey, setSearchKey] = useState('')
+
+    const pathIsSearchResult = router.asPath.includes('/questions?search=')
+
+    const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
             first: 10,
             page: 1,
-            filter: { answered: true, tag: null },
+            filter: { keyword: searchKey, answered: true, tag: null },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         },
     })
+
+    useEffect(() => {
+        setSearchKey(router.query.search as string)
+        refetch({
+            page: 1,
+            filter: { keyword: router.query.search as string, answered: true, tag: null },
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        })
+    }, [router, searchKey, refetch])
 
     if (loading) return loadingScreenShow()
     if (error) return errorNotify(`Error! ${error}`)
@@ -57,61 +73,10 @@ const QuestionsPage = () => {
         router.push('/questions/add')
     }
 
-    const dateFilters: FilterType[] = [
-        {
-            id: 1,
-            name: 'Newest first',
-            onClick: () => {
-                refetch({
-                    first: 10,
-                    page: 1,
-                    orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-                })
-                setSelectedDateFilter('Newest first')
-            },
-        },
-        {
-            id: 2,
-            name: 'Oldest first',
-            onClick: () => {
-                refetch({
-                    first: 10,
-                    page: 1,
-                    orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
-                })
-                setSelectedDateFilter('Oldest first')
-            },
-        },
-    ]
-
-    const answerFilters: FilterType[] = [
-        {
-            id: 1,
-            name: 'Answered',
-            onClick: () => {
-                refetch({ first: 10, page: 1, filter: { answered: true, tag: null } })
-                setSelectedAnswerFilter('Answered')
-            },
-        },
-        {
-            id: 2,
-            name: 'Unanswered',
-            onClick: () => {
-                refetch({ first: 10, page: 1, filter: { answered: false, tag: null } })
-                setSelectedAnswerFilter('Unanswered')
-            },
-        },
-    ]
-
     const renderSortAndFilter = (): JSX.Element => {
         return (
             <div className="flex gap-2">
-                <div className="w-32">
-                    <SortDropdown filters={dateFilters} selectedFilter={selectedDateFilter} />
-                </div>
-                <div className="w-32">
-                    <SortDropdown filters={answerFilters} selectedFilter={selectedAnswerFilter} />
-                </div>
+                <DropdownFilters triggers={['DATE', 'ANSWER']} refetch={refetch} />
             </div>
         )
     }
@@ -132,50 +97,18 @@ const QuestionsPage = () => {
         )
     }
 
-    const handleSearchSubmit = (e): void => {
-        e.preventDefault()
-
-        router.push(
-            {
-                pathname: `/questions`,
-                query: {
-                    searchKey,
-                },
-            },
-            `/questions?search=${searchKey}`,
-            { shallow: true }
-        )
-    }
-
     const renderSearchResultHeader = (): JSX.Element => {
         return (
             <div>
                 <div className="w-full border-b-2">
-                    <div className=" pb-5 text-3xl font-semibold">Search Results</div>
+                    <div className=" pb-3 text-3xl font-semibold">Search Results</div>
+                    <div className="text-md mt-1 mb-2 pl-6 text-gray-800">
+                        {pageInfo.total} result for {`"${searchKey}"`}
+                    </div>
                 </div>
-                <div className="mt-2 flex flex-row items-center justify-between px-2">
-                    <form onSubmit={handleSearchSubmit}>
-                        <div className="relative w-48 lg:w-80">
-                            <input
-                                type="text"
-                                name="search"
-                                value={searchKey}
-                                onChange={(e) => setSearchKey(e.target.value)}
-                                className="form-input h-11 w-48 rounded-md border border-gray-300 px-4 text-gray-900 focus:border-red-500 focus:ring-red-500 lg:w-80"
-                                placeholder="Search"
-                                required
-                            />
-                            <Button type="submit" usage="icon">
-                                <HiSearch
-                                    size={20}
-                                    className="mr-1 text-gray-400 hover:text-red-500"
-                                />
-                            </Button>
-                        </div>
-                    </form>
+                <div className="mt-2 flex flex-row items-center justify-end px-2">
                     {renderSortAndFilter()}
                 </div>
-                <div className="text-md mt-1 pl-3 text-gray-800">500 result for {searchKey}</div>
             </div>
         )
     }

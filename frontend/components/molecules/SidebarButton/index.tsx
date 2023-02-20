@@ -6,10 +6,9 @@ type SidebarButtonProps = {
     Text: string
     isSelected: boolean
     url: string
-    onClick: () => void
 }
 
-const SidebarButton = ({ IconName, Text, isSelected, url, onClick }: SidebarButtonProps): any => {
+const SidebarButton = ({ IconName, Text, isSelected, url }: SidebarButtonProps): any => {
     const isActive = (): string =>
         isSelected
             ? ' bg-red-100 text-black border-r-4 border-r-[#FF2000] '
@@ -18,7 +17,6 @@ const SidebarButton = ({ IconName, Text, isSelected, url, onClick }: SidebarButt
         <li className="sidebar-list -mr-1">
             <Link
                 href={url}
-                onClick={onClick}
                 className={`flex items-center space-x-2 p-2  pl-8 text-2xl font-normal ${isActive()} hover:text-[#ff2000] active:border-r-4 active:border-red-400 active:text-black`}
             >
                 <SidebarIcon name={IconName} />

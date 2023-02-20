@@ -12,6 +12,7 @@ const GET_QUESTIONS = gql`
                 currentPage
                 lastPage
                 hasMorePages
+                total
             }
             data {
                 id
