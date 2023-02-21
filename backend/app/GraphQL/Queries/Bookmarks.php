@@ -4,7 +4,7 @@ namespace App\GraphQL\Queries;
 
 use App\Models\Bookmark;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 final class Bookmarks
 {
@@ -14,11 +14,7 @@ final class Bookmarks
      */
     public function __invoke($_, array $args)
     {
-        // $query = Bookmark::find($args['user_id']);
-        $query = Bookmark::query();
-        $user_id = Auth::id();
-
-        $query->where('user_id', $user_id);
+        $query = User::find($args['user_id'])->bookmarks();
 
         try {
             if ($args['filter'] == 'Question') {

@@ -2,6 +2,7 @@ extend type Query {
     bookmark(id: ID! @eq): Bookmark @find
     bookmarks(
         orderBy: _ @orderBy(columns: ["created_at"])
+        user_id: ID! @rules(apply: ["required"])
         filter: String = null
     ): [Bookmark!]!
         @guard(with: ["api"])
