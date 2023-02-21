@@ -35,7 +35,7 @@ trait HasSocialLogin
             })->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $user = static::where('email', $userData->getEmail())->first();
-            if (!$user) {
+            if (! $user) {
                 $user = static::create([
                     'first_name' => $userData->offsetGet('given_name'),
                     'last_name' => $userData->offsetGet('family_name'),
