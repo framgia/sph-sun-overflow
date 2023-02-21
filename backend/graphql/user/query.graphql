@@ -1,5 +1,16 @@
+input userFilter {
+    keyword: String
+    role_id: ID
+}
+
+input userSort {
+    reputation: String
+}
+
 extend type Query {
     user(slug: String! @eq): User @guard(with: ["api"]) @find
-    users: [User!]! @guard(with: ["api"]) @all
+    users(filter: userFilter @spread, sort: userSort @spread): [User!]!
+        @guard(with: ["api"])
+        @paginate(builder: "App\\GraphQL\\Queries\\Users")
     me: User @guard(with: ["api"]) @auth
 }
