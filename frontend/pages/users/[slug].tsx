@@ -172,7 +172,7 @@ const ProfilePage = () => {
                     <div className="-mb-[1px] border-b-2 border-b-gray-300 px-6">Bookmarks</div>
                 </ul>
             </div>
-            <div className="ml-24 flex w-[125%]">
+            <div className="ml-24 flex w-[90%]">
                 <div className="mb-6 mr-10">
                     <p className="mt-6 mb-10 text-2xl">Top Questions</p>
                     <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
