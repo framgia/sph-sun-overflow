@@ -5,5 +5,5 @@ type Follow {
     created_at: String!
     updated_at: String!
     user: User! @belongsTo
-    bookmarkable: Bookmarkable! @morphTo
+    Followable: Followable! @morphTo
 }
