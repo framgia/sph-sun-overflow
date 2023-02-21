@@ -48,11 +48,6 @@ const AcceptAnswer = ({
                 is_answered === false ? (
                     <div className={`flex cursor-pointer justify-center`} onClick={handleClick}>
                         <Icons name={isCorrectAnswer ? 'check_fill' : 'check_outline'} />
-                        {/* {isCorrectAnswer ? (
-                            <Icons name="check_fill" />
-                        ) : (
-                            <Icons name="check_outline" />
-                        )} */}
                     </div>
                 ) : (
                     <div
