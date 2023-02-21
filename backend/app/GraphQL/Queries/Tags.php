@@ -12,14 +12,20 @@ final class Tags
      */
     public function __invoke($_, array $args)
     {
-        if ($args['column'] === 'questions_count') {
-            return Tag::withCount('questions')->orderBy('questions_count', $args['order']);
+        $query = Tag::query();
+
+        if (! isset($args['sort'])) {
+            return $query;
         }
 
-        if ($args['column'] === 'watching_count') {
-            return Tag::withCount('usersWatching')->orderBy('users_watching_count', $args['order']);
+        $sorts = $args['sort'];
+
+        $query->withCount(['questions', 'usersWatching']);
+
+        foreach ($sorts as $sort) {
+            $query->orderby($sort['column'], $sort['order']);
         }
 
-        return Tag::query()->orderby($args['column'], $args['order']);
+        return $query;
     }
 }
