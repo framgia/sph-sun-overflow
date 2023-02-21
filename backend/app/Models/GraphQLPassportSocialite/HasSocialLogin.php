@@ -35,15 +35,17 @@ trait HasSocialLogin
             })->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $user = static::where('email', $userData->getEmail())->first();
-            if (! $user) {
+            if (!$user) {
                 $user = static::create([
                     'first_name' => $userData->offsetGet('given_name'),
                     'last_name' => $userData->offsetGet('family_name'),
                     'email' => $userData->getEmail(),
                     'avatar' => $userData->getAvatar(),
+                    'role_id' => 3,
                     'google_id' => $userData->id,
                 ]);
             }
+
             SocialProvider::create([
                 'user_id' => $user->id,
                 'provider' => $request->get('provider'),
