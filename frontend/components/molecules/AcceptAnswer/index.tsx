@@ -24,7 +24,7 @@ const AcceptAnswer = ({
     const [acceptAnswer] = useMutation(ACCEPT_ANSWER)
 
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(is_correct)
-
+    const [isHovered, setIsHovered] = useState(false)
     const handleClick = () => {
         const newAcceptAnswer = acceptAnswer({
             variables: {
@@ -34,7 +34,7 @@ const AcceptAnswer = ({
         })
 
         newAcceptAnswer.then((data: any) => {
-            const message = data.data.acceptAnswer
+            const message = data.data.toggleAcceptAnswer
             setIsCorrectAnswer(!isCorrectAnswer)
             successNotify(`${message}`)
         })
@@ -46,20 +46,23 @@ const AcceptAnswer = ({
         <Fragment>
             {is_from_user ? (
                 is_answered === false ? (
-                    <div className="flex cursor-pointer justify-center" onClick={handleClick}>
-                        {isCorrectAnswer ? (
-                            <Icons name="check_fill" />
-                        ) : (
-                            <Icons name="check_outline" />
-                        )}
+                    <div className={`flex cursor-pointer justify-center`} onClick={handleClick}>
+                        <Icons name={isCorrectAnswer ? 'check_fill' : 'check_outline'} />
                     </div>
                 ) : (
-                    <div className="flex cursor-auto justify-center">
-                        {isCorrectAnswer ? <Icons name="check_fill" /> : ''}
+                    <div
+                        className="flex cursor-pointer justify-center"
+                        onClick={isCorrectAnswer ? handleClick : undefined}
+                        onMouseOver={() => setIsHovered(true)}
+                        onMouseOut={() => setIsHovered(false)}
+                    >
+                        <Icons
+                            name={isCorrectAnswer ? (isHovered ? 'cross_fill' : 'check_fill') : ''}
+                        />
                     </div>
                 )
             ) : (
-                <div className="flex cursor-auto justify-center">
+                <div className="flex cursor-auto justify-center ">
                     {isCorrectAnswer ? <Icons name="check_fill" /> : ''}
                 </div>
             )}

@@ -7,7 +7,7 @@ use App\Models\Question;
 use App\Models\User;
 use Exception;
 
-final class AcceptAnswer
+final class ToggleAcceptAnswer
 {
     /**
      * @param  null  $_
@@ -21,6 +21,17 @@ final class AcceptAnswer
 
             $answer = Answer::findOrFail($args['answer_id']);
             $checkAccepted = $question->answers()->where('answers.is_correct', true)->exists();
+
+            if ($answer->is_correct == true) {
+                $answer->is_correct = false;
+                $answer->save();
+
+                $user = User::find($answer->user_id);
+                $user->reputation -= 1;
+                $user->save();
+
+                return 'Answer was unaccepted successfully';
+            }
 
             if ($checkAccepted) {
                 return 'Only one answer can be accepted';

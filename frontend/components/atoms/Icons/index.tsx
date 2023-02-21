@@ -1,4 +1,4 @@
-import { HiPencilAlt, HiBookmark, HiEye, HiChevronDown, HiSearch } from 'react-icons/hi'
+import { HiPencilAlt, HiBookmark, HiEye, HiChevronDown, HiSearch, HiX } from 'react-icons/hi'
 import { HiCheck } from 'react-icons/hi2'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdCheckmark } from 'react-icons/io'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
@@ -56,6 +56,9 @@ const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
             return <HiCheck size="25" className="fill-green-500" />
         case 'check_outline':
             return <HiCheck size="25" className="fill-white stroke-black stroke-1" />
+
+        case 'cross_fill':
+            return <HiX size="25" className="fill-red-500" />
         case 'edit':
             return <MdOutlineModeEditOutline size="16" color="red" />
         case 'dropdown':
