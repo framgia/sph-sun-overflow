@@ -11,9 +11,6 @@ const RightSideBar = ({ usage }: TRightSidebarProps) => {
     if (usage === 'teams') {
         return <Type2 />
     }
-    if (usage === 'users') {
-        return <Type3 />
-    }
     return <Type1 />
 }
 
