@@ -3,6 +3,7 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\Tag;
+use Error;
 
 final class Tags
 {
@@ -12,14 +13,16 @@ final class Tags
      */
     public function __invoke($_, array $args)
     {
-        if ($args['column'] === 'questions_count') {
-            return Tag::withCount('questions')->orderBy('questions_count', $args['order']);
+        $filters = $args['filter'];
+
+        $query = Tag::query()->withCount(['questions','usersWatching']);
+
+        foreach($filters as $filter){
+
+            $query->orderby($filter['column'], $filter['order']);
+
         }
 
-        if ($args['column'] === 'watching_count') {
-            return Tag::withCount('usersWatching')->orderBy('users_watching_count', $args['order']);
-        }
-
-        return Tag::query()->orderby($args['column'], $args['order']);
+        return $query;
     }
 }

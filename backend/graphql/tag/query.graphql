@@ -6,21 +6,25 @@ extend type Query {
     allTags: [Tag!]! @guard(with: ["api"]) @all
     tags(
         name: String! = "%%" @where(operator: "like")
-        column: COLUMNS = CREATED_AT
-        order: ORDER = ASC
-    ): [Tag!]!
+        filter: [Filter]
+    ): [Tag!]
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Tags")
-    tagSuggest(name: String! @where(operator: "like")): [Tag]
+    tagSuggest(name: String! = "%%" @where(operator: "like")): [Tag]
         @guard(with: ["api"])
         @all
+}
+
+input Filter {
+    column: COLUMNS
+    order: ORDER
 }
 
 enum COLUMNS {
     CREATED_AT @enum(value: "created_at")
     NAME @enum(value: "name")
     POPULARITY @enum(value: "questions_count")
-    WATCH_COUNT @enum(value: "watching_count")
+    WATCH_COUNT @enum(value: "users_watching_count")
 }
 
 enum ORDER {
