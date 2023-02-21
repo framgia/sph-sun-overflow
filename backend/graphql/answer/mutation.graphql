@@ -4,9 +4,13 @@ extend type Mutation {
         user_id: ID! @rules(apply: ["integer", "required"])
         question_id: ID! @rules(apply: ["integer", "required"])
     ): Answer! @guard(with: ["api"])
-    updateAnswer(id: ID! @rules(apply: ["integer"]), content: String): Answer!
-        @update
+    updateAnswer(id: ID! @rules(apply: ["integer"]), content: String!): Answer!
         @guard(with: ["api"])
+        @field(resolver: "UpdateAnswer")
+    acceptAnswer(
+        answer_id: ID! @rules(apply: ["integer", "required"])
+        question_id: ID! @rules(apply: ["integer", "required"])
+    ): String! @guard(with: ["api"]) @field(resolver: "AcceptAnswer")
     toggleAcceptAnswer(
         answer_id: ID! @rules(apply: ["integer", "required"])
         question_id: ID! @rules(apply: ["integer", "required"])

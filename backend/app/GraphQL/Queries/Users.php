@@ -17,7 +17,7 @@ final class Users
 
         try {
             if (isset($args['keyword'])) {
-                $keywordLikeness = '%' . $args['keyword'] . '%';
+                $keywordLikeness = '%'.$args['keyword'].'%';
 
                 $query->where(function ($queryLikeness) use ($keywordLikeness) {
                     $queryLikeness
