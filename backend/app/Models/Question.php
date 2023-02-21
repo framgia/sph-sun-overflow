@@ -31,7 +31,18 @@ class Question extends Model
 
             $duplicateCount = Question::where('title', $question->title)->count();
 
-            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$duplicateCount";
+            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-".time();
+        });
+
+        static::updating(function ($question) {
+            $slug = Str::slug($question->title);
+
+            $questionFirst = Question::where('title', $question->title)->first();
+            $duplicateCount = Question::where('title', $question->title)->count();
+
+            if ($questionFirst?->id !== $question->id) {
+                $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-".time();
+            }
         });
     }
 
