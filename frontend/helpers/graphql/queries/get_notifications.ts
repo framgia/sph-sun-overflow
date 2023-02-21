@@ -8,7 +8,7 @@ const GET_NOTIFICATIONS = gql`
             humanized_created_at
             notifiable {
                 __typename
-                ...on UserRelation {
+                ... on UserRelation {
                     id
                     following {
                         id

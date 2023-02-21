@@ -1,6 +1,6 @@
 import CommentForm from '@/components/organisms/CommentForm'
 import SortDropdown from '@/components/molecules/SortDropdown'
-import AnswerComponent from '@/components/organisms/AnswerComponent'
+import AnswerForm from '@/components/organisms/AnswerForm'
 import AnswerDetail from '@/components/organisms/AnswerDetail'
 import Comment from '@/components/organisms/Comment'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
@@ -63,10 +63,17 @@ export type QuestionType = {
     comments: CommentType[]
 }
 
+export type AnswerEditType = {
+    id: number | null
+    content: string | null
+}
+
 const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
+
+    const [answer, setAnswer] = useState<AnswerEditType>({ id: null, content: null })
 
     const query = router.query
 
@@ -179,6 +186,7 @@ const QuestionDetailPage = () => {
                             <AnswerDetail
                                 key={answer.id}
                                 id={answer.id}
+                                onEdit={setAnswer}
                                 question_id={question.id}
                                 content={answer.content}
                                 created_at={answer.created_at}
@@ -195,7 +203,10 @@ const QuestionDetailPage = () => {
                                 refetchHandler={refetchHandler}
                             />
                         ))}
-                        <AnswerComponent
+                        <AnswerForm
+                            slug={String(query.slug)}
+                            onEdit={setAnswer}
+                            answer={answer}
                             question_id={question.id}
                             refetchHandler={refetchHandler}
                         />

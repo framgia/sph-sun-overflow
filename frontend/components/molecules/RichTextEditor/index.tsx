@@ -7,6 +7,7 @@ type RTEProps = {
     setValue: UseFormSetValue<any>
     id: string | undefined
     usage: string | undefined
+    value: string
 }
 
 const modules = {
@@ -44,7 +45,7 @@ const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
     (): Promise<any> => import('react-quill'),
     { ssr: false }
 )
-const RichTextEditor = ({ setValue, id = undefined, usage = 'default' }: RTEProps) => {
+const RichTextEditor = ({ setValue, id = undefined, usage = 'default', value = '' }: RTEProps) => {
     const handleEditor = (editor: string) => {
         setValue(usage, editor)
     }
@@ -64,6 +65,7 @@ const RichTextEditor = ({ setValue, id = undefined, usage = 'default' }: RTEProp
     return (
         <ReactQuill
             className=""
+            value={value}
             modules={modules}
             formats={formats}
             onChange={handleEditor}
