@@ -21,9 +21,9 @@ const Pill = ({ name, is_tag }: PillProps): JSX.Element => {
     return (
         <Popover>
             <Float placement="bottom-start" offset={5} arrow>
-                <Popover.Button type="button">
+                <Popover.Button type="button" className="!outline-none">
                     <div
-                        className="flex min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal"
+                        className="flex min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none"
                         ref={setReferenceElement}
                     >
                         {is_tag ? <Icons name="pill_eye" /> : ''}
