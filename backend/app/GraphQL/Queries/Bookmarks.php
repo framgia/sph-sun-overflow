@@ -2,7 +2,7 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Bookmark;
+use App\Models\User;
 use Exception;
 
 final class Bookmarks
@@ -13,7 +13,7 @@ final class Bookmarks
      */
     public function __invoke($_, array $args)
     {
-        $query = Bookmark::query();
+        $query = User::find($args['user_id'])->bookmarks();
 
         try {
             if ($args['filter'] == 'Question') {
