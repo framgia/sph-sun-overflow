@@ -3,7 +3,6 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\Tag;
-use Error;
 
 final class Tags
 {
@@ -13,21 +12,18 @@ final class Tags
      */
     public function __invoke($_, array $args)
     {
-
         $query = Tag::query();
 
-        if (!isset($args['sort'])){
+        if (! isset($args['sort'])) {
             return $query;
         }
 
         $sorts = $args['sort'];
 
-        $query->withCount(['questions','usersWatching']);
+        $query->withCount(['questions', 'usersWatching']);
 
-        foreach($sorts as $sort){
-
+        foreach ($sorts as $sort) {
             $query->orderby($sort['column'], $sort['order']);
-
         }
 
         return $query;
