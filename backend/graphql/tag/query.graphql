@@ -6,7 +6,7 @@ extend type Query {
     allTags: [Tag!]! @guard(with: ["api"]) @all
     tags(
         name: String! = "%%" @where(operator: "like")
-        filter: [Filter]
+        sort: [tagSort]
     ): [Tag!]
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Tags")
@@ -15,9 +15,9 @@ extend type Query {
         @all
 }
 
-input Filter {
+input tagSort {
     column: COLUMNS
-    order: ORDER
+    order: ORDER = ASC
 }
 
 enum COLUMNS {

@@ -13,13 +13,20 @@ final class Tags
      */
     public function __invoke($_, array $args)
     {
-        $filters = $args['filter'];
 
-        $query = Tag::query()->withCount(['questions','usersWatching']);
+        $query = Tag::query();
 
-        foreach($filters as $filter){
+        if (!isset($args['sort'])){
+            return $query;
+        }
 
-            $query->orderby($filter['column'], $filter['order']);
+        $sorts = $args['sort'];
+
+        $query->withCount(['questions','usersWatching']);
+
+        foreach($sorts as $sort){
+
+            $query->orderby($sort['column'], $sort['order']);
 
         }
 
