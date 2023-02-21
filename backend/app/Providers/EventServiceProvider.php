@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Answer;
 use App\Models\Comment;
+use App\Models\UserRelation;
 use App\Models\Vote;
 use App\Observers\AnswerObserver;
 use App\Observers\CommentObserver;
+use App\Observers\UserRelationObserver;
 use App\Observers\VoteObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -30,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
         Answer::class => [AnswerObserver::class],
         Comment::class => [CommentObserver::class],
         Vote::class => [VoteObserver::class],
+        UserRelation::class => [UserRelationObserver::class],
     ];
 
     /**

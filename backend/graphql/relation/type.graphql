@@ -1,0 +1,9 @@
+type UserRelation {
+    id: ID!
+    following: User! @belongsTo
+    follower: User! @belongsTo
+    created_at: String!
+    updated_at: String
+    humanized_created_at: String!
+    notifications: [UserNotification]! @morphMany
+}

@@ -1,4 +1,4 @@
-union Notifiable = UserNotification | Answer | Comment | Vote
+union Notifiable = UserNotification | Answer | Comment | Vote | UserRelation
 
 type UserNotification {
     id: ID!
