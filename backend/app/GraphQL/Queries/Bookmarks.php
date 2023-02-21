@@ -2,9 +2,8 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Bookmark;
-use Exception;
 use App\Models\User;
+use Exception;
 
 final class Bookmarks
 {
