@@ -18,11 +18,9 @@ class FollowFactory extends Factory
     public function definition()
     {
         $userId = DB::table('users')->pluck('id')->random();
-        $follow_userID = DB::table('users')->pluck('id')->random();
 
         return [
             'user_id' => $userId,
-            'follow_userID' => $follow_userID,
         ];
     }
 }

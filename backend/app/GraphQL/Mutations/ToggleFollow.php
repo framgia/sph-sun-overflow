@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -16,22 +15,28 @@ final class ToggleFollow
     public function __invoke($_, array $args)
     {
         try {
-            $user_id = Auth::id();
-            $followable = User::findOrFail($args['follow_userID']);
+            $authUser = Auth::user();
 
-            if ($followable->followable()->whereUserId($user_id)->delete()) {
-                return 'Unfollowed User';
+            if ($authUser->id == $args['user_id']) {
+                return 'Invalid. User Cant Follow Themselves';
+            }
+
+            $following = $authUser->following()->where('following_id', $args['user_id'])->first();
+            if ($following) {
+                $following->delete();
+
+                return 'Unfollow User';
             } else {
-                $followable->followable()->create(
-                    ['user_id' => $user_id],
+                $authUser->following()->create(
+                    ['following_id' => $args['user_id']],
                 );
 
-                return 'Followed User!';
+                return 'Follow User';
             }
         } catch (Exception $e) {
             return $message = $e->getMessage();
             if (Str::contains($message, 'No query results for model')) {
-                return 'Invalid follow_userID';
+                return 'Invalid follow_id';
             } else {
                 return 'An error has occurred';
             }

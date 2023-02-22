@@ -1,5 +1,4 @@
 extend type Mutation {
-    toggleFollow(
-        follow_userID: ID! @rules(apply: ["required", "integer"])
-    ): String @guard(with: ["api"])
+    toggleFollow(user_id: ID! @rules(apply: ["required"])): String
+        @guard(with: ["api"])
 }
