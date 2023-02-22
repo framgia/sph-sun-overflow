@@ -28,8 +28,10 @@ export type FilterType = {
 export type RefetchType = {
     first: number
     page: number
+    name?: string
     filter?: { keyword?: string; answered?: boolean; tag?: null }
     orderBy?: { column: string; order: string }[]
+    sort?: { column: string; order: string }[]
 }
 
 const QuestionsPage = () => {

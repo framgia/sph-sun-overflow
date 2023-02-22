@@ -6,10 +6,17 @@ type Props = {
     currentPage: number
     lastPage: number
     hasMorePages: boolean
+    perPage?: number
     onPageChange: (first: number, page: number) => void
 }
 
-const Paginate = ({ currentPage, lastPage, hasMorePages, onPageChange }: Props): JSX.Element => {
+const Paginate = ({
+    currentPage,
+    lastPage,
+    hasMorePages,
+    perPage = 10,
+    onPageChange,
+}: Props): JSX.Element => {
     const getDisabledStyle = (shouldApply: boolean) => {
         return {
             isDisabled: shouldApply,
@@ -21,22 +28,22 @@ const Paginate = ({ currentPage, lastPage, hasMorePages, onPageChange }: Props):
 
     const onClickStart = (event: React.MouseEvent) => {
         event.preventDefault()
-        onPageChange(10, 1)
+        onPageChange(perPage, 1)
     }
 
     const onClickPrevious = (event: React.MouseEvent) => {
         event.preventDefault()
-        onPageChange(10, currentPage - 1)
+        onPageChange(perPage, currentPage - 1)
     }
 
     const onClickNext = (event: React.MouseEvent) => {
         event.preventDefault()
-        onPageChange(10, currentPage + 1)
+        onPageChange(perPage, currentPage + 1)
     }
 
     const onClickEnd = (event: React.MouseEvent) => {
         event.preventDefault()
-        onPageChange(10, lastPage)
+        onPageChange(perPage, lastPage)
     }
 
     return (
