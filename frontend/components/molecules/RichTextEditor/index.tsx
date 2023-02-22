@@ -1,13 +1,13 @@
 import 'react-quill/dist/quill.snow.css'
 import dynamic from 'next/dynamic'
-import { UseFormSetValue } from 'react-hook-form'
+import { ControllerRenderProps, UseFormSetValue } from 'react-hook-form'
 import { ComponentType } from 'react'
-import { ReactQuillProps } from 'react-quill'
+import { ReactQuillProps, Value } from 'react-quill'
 type RTEProps = {
-    setValue: UseFormSetValue<any>
+    value: Value
+    onChange: ControllerRenderProps['onChange']
     id: string | undefined
     usage: string | undefined
-    value: string
 }
 
 const modules = {
@@ -45,10 +45,7 @@ const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
     (): Promise<any> => import('react-quill'),
     { ssr: false }
 )
-const RichTextEditor = ({ setValue, id = undefined, usage = 'default', value = '' }: RTEProps) => {
-    const handleEditor = (editor: string) => {
-        setValue(usage, editor)
-    }
+const RichTextEditor = ({ value, onChange, id = undefined, usage = 'default' }: RTEProps) => {
     let style
 
     switch (usage) {
@@ -65,10 +62,10 @@ const RichTextEditor = ({ setValue, id = undefined, usage = 'default', value = '
     return (
         <ReactQuill
             className=""
-            value={value}
             modules={modules}
             formats={formats}
-            onChange={handleEditor}
+            onChange={onChange}
+            value={value}
             id={id}
             style={style}
         />

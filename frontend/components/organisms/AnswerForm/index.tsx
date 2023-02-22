@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import RichTextEditor from '../../molecules/RichTextEditor'
 import Button from '../../atoms/Button'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useBoundStore } from '@/helpers/store'
@@ -40,10 +40,16 @@ const AnswerForm = ({
     const [createAnswer] = useMutation(CREATE_ANSWER)
     const [updateAnswer] = useMutation(UPDATE_ANSWER)
 
-    const { setValue, handleSubmit } = useForm<FormValues>({
+    const { setValue, handleSubmit, control } = useForm<FormValues>({
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
     })
+
+    useEffect(() => {
+        if (answer.content) {
+            setValue('content', answer.content)
+        }
+    }, [answer.content])
 
     const onSubmit = (data: FormValues) => {
         setIsDisableSubmit(true)
@@ -128,7 +134,6 @@ const AnswerForm = ({
                     const qlEditor = document.querySelector('.quill .ql-editor') as HTMLDivElement
                     qlEditor.innerHTML = ''
                     const check = data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0
-                    console.log(check)
                     if (check) errorNotify('Answer Not Updated!')
                     else successNotify('Answer Successfully Updated!')
                 })
@@ -158,11 +163,18 @@ const AnswerForm = ({
                         {answer.id === null ? 'Your Answer' : 'Edit Your Answer'}
                     </span>
                     <form className="flex flex-col">
-                        <RichTextEditor
-                            setValue={setValue}
-                            usage="content"
-                            id={undefined}
-                            value={answer.id === null ? '' : answer.content ?? ''}
+                        <Controller
+                            control={control}
+                            name="content"
+                            defaultValue={answer.id === null ? '' : answer.content ?? ''}
+                            render={({ field: { onChange, value } }) => (
+                                <RichTextEditor
+                                    onChange={onChange}
+                                    value={value}
+                                    usage="content"
+                                    id={undefined}
+                                />
+                            )}
                         />
                         {addAnswerError.length > 0 && (
                             <div className="px-3 text-sm text-primary-red">{addAnswerError}</div>

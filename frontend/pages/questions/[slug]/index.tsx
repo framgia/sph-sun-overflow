@@ -9,7 +9,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { FilterType } from '../index'
 
 export type UserType = {
@@ -98,6 +98,7 @@ const QuestionDetailPage = () => {
             shouldAddViewCount: true,
             answerSort: [{ column: 'VOTES', order: 'DESC' }],
         },
+        fetchPolicy: 'network-only',
     })
 
     if (loading) return loadingScreenShow()

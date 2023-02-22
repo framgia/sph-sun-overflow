@@ -7,13 +7,15 @@ import Tag from '../../atoms/Tag'
 import { UseFormSetValue } from 'react-hook-form'
 import { useQuery } from '@apollo/client'
 import { GET_TAG_SUGGESTIONS } from '@/helpers/graphql/queries/sidebar'
+import { FormValues } from '@/components/organisms/QuestionForm'
 export type ITag = {
     id: number
     name: string
     description: string
 }
 interface TagInputProps {
-    setValue: UseFormSetValue<any>
+    setValue: UseFormSetValue<FormValues>
+    value: ITag[]
 }
 
 const initialState = {
@@ -22,21 +24,43 @@ const initialState = {
     queryText: '',
 }
 
-const TagsInput = ({ setValue }: TagInputProps) => {
+const filterSuggest = (oldList: ITag[], newList: ITag[]) => {
+    let tempSuggestions = [] as ITag[]
+    newList.map((tag) => {
+        if (!oldList.some((tag2) => tag2.id === tag.id)) {
+            tempSuggestions.push(tag)
+        }
+    })
+    return tempSuggestions
+}
+
+const TagsInput = ({ setValue, value }: TagInputProps) => {
     let tagsSelected: ITag[]
     let setTagsSelected: (value: ITag[]) => void
-    ;[tagsSelected, setTagsSelected] = useState<ITag[]>(initialState.tagsSelected)
-    const [tagSuggestions, setTagSuggestions] = useState<ITag[] | []>(initialState.tagSuggestions)
+    ;[tagsSelected, setTagsSelected] = useState<ITag[]>(value)
+    const [tagSuggestions, setTagSuggestions] = useState<ITag[] | []>(value)
     const [queryText, setQueryText] = useState<string>(initialState.queryText)
+    let dataLoaded = false
+
     const { data: tagData, loading: tagLoading } = useQuery(GET_TAG_SUGGESTIONS, {
         variables: { queryString: `%${queryText}%` },
     })
+
     const deleteTag = (id: number): void => {
-        let TempTagList = removeItemViaId(tagsSelected, id)
-        setTagsSelected([...TempTagList])
+        let tempArr = removeItemViaId(tagsSelected, id)
+        setTagsSelected([...tempArr])
     }
 
     const disableInput: boolean = tagsSelected.length < 5 ? false : true
+    const filteredTags =
+        queryText === ''
+            ? tagSuggestions
+            : tagSuggestions.filter((tag) =>
+                  tag.name
+                      .toLowerCase()
+                      .replace(/\s+/g, '')
+                      .includes(queryText.toLowerCase().replace(/\s+/g, ''))
+              )
 
     useEffect(() => {
         setValue('tags', tagsSelected)
@@ -44,13 +68,21 @@ const TagsInput = ({ setValue }: TagInputProps) => {
 
     useEffect(() => {
         if (!tagLoading) {
-            setTagSuggestions(tagData.tagSuggest)
+            setTagSuggestions([
+                ...tagSuggestions,
+                ...filterSuggest(tagSuggestions, tagData.tagSuggest),
+            ])
         }
     }, [tagData])
 
     return (
         <div className="flex w-full flex-wrap rounded-lg border-2 border-gray-400 bg-white">
-            <Combobox value={tagsSelected} onChange={setTagsSelected} multiple>
+            <Combobox
+                value={tagsSelected}
+                onChange={setTagsSelected}
+                multiple
+                disabled={disableInput}
+            >
                 <span className="flex flex-row ">
                     {tagsSelected.map((tag, index) => {
                         let { name, id } = tag
@@ -62,7 +94,6 @@ const TagsInput = ({ setValue }: TagInputProps) => {
                     id="comboBoxInput"
                     className="mx-2 w-0 grow border-none text-sm leading-5 text-gray-900 focus:ring-0"
                     onChange={(event) => setQueryText(event.target.value)}
-                    hidden={disableInput}
                 />
                 <div className="relative mt-1 w-full">
                     <Transition
@@ -74,12 +105,12 @@ const TagsInput = ({ setValue }: TagInputProps) => {
                         afterLeave={() => setQueryText('')}
                     >
                         <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                            {tagSuggestions.length === 0 && queryText !== '' ? (
+                            {filteredTags.length === 0 && queryText !== '' ? (
                                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                     Nothing found.
                                 </div>
                             ) : (
-                                tagSuggestions.map((tag) => (
+                                filteredTags.map((tag) => (
                                     <Combobox.Option
                                         key={tag.id}
                                         className={({ active }) =>
