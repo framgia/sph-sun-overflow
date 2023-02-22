@@ -4,9 +4,27 @@ input filter {
     tag: ID
 }
 
+enum ORDERBY {
+    ASC
+    DESC
+}
+
+enum COLUMNS {
+    CREATED_AT @enum(value: "created_at")
+    VOTES @enum(value: "votes_sum_value")
+}
+
+input answerSort {
+    column: COLUMNS
+    order: ORDERBY = ASC
+}
+
 extend type Query {
-    question(slug: String! @eq, shouldAddViewCount: Boolean = true): Question
-        @guard(with: ["api"])
+    question(
+        slug: String! @eq
+        shouldAddViewCount: Boolean = true
+        answerSort: [answerSort]
+    ): Question @guard(with: ["api"])
     questions(
         orderBy: _ @orderBy(columns: ["created_at"])
         filter: filter @spread
