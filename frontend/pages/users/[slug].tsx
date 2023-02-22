@@ -14,6 +14,7 @@ import { RightSideBar } from '@/components/organisms/Sidebar'
 import { TagType, UserType } from '../questions/[slug]'
 import { PaginatorInfo } from '../questions'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
+import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
 
 export type ProfileType = {
     id: number
@@ -35,9 +36,8 @@ export type BookmarkableType = {
     created_at: string
     humanized_created_at?: string
     vote_count: number
-    answer_count?: number
+    answers?: { id: number; content: string }[]
     views_count?: number
-    is_correct?: boolean
     tags?: TagType[]
     user: UserType
     question?: BookmarkQuestionType
@@ -51,15 +51,15 @@ type BookmarkQuestionType = {
     created_at: string
     humanized_created_at: string
     vote_count: number
-    answer_count: number
+    answers: { id: number; content: string }[]
     views_count: number
     tags: TagType[]
     user: UserType
 }
 
 export type BookmarkType = {
-    id: number
-    bookmarkable: BookmarkableType
+    id?: number
+    bookmarkable?: BookmarkableType
     user?: UserType
 }
 
@@ -83,13 +83,27 @@ const ProfilePage = () => {
         },
     })
 
+    const profileIsNull = (): boolean => {
+        if (data === null) {
+            return true
+        }
+
+        return false
+    }
+
+    const bookmarkQuery = useQuery(GET_BOOKMARKS, {
+        variables: {
+            user_id: Number(data?.user.id),
+            first: 2,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        },
+        skip: profileIsNull(),
+    })
+
     useEffect(() => {
         refetch()
     }, [router, refetch])
-
-    useEffect(() => {
-        console.log(data)
-    }, [data])
 
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)
@@ -174,88 +188,18 @@ const ProfilePage = () => {
         },
     ]
 
-    const bookmarks: BookmarkType[] = [
-        {
-            id: 1,
-            user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-            bookmarkable: {
-                __typename: 'Question',
-                id: 1,
-                title: 'Testing title',
-                slug: 'testing-title',
-                content: 'Testing content',
-                vote_count: 2,
-                answer_count: 1,
-                views_count: 2,
-                created_at: '2 days ago',
-                humanized_created_at: '2 days ago',
-                tags: [
-                    { id: 1, name: 'Javascript', is_watched_by_user: true },
-                    { id: 2, name: 'PHP', is_watched_by_user: false },
-                ],
-                user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-            },
-        },
-        {
-            id: 2,
-            user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-            bookmarkable: {
-                __typename: 'Answer',
-                id: 1,
-                content: 'Testing content 2',
-                vote_count: 2,
-                created_at: '2 days ago',
-                user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-                question: {
-                    id: 1,
-                    title: 'Testing title',
-                    slug: 'testing-title',
-                    content: 'Testing content',
-                    vote_count: 2,
-                    answer_count: 1,
-                    views_count: 2,
-                    created_at: '2 days ago',
-                    humanized_created_at: '2 days ago',
-                    tags: [
-                        { id: 1, name: 'Javascript', is_watched_by_user: true },
-                        { id: 2, name: 'PHP', is_watched_by_user: false },
-                    ],
-                    user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-                },
-            },
-        },
-        {
-            id: 3,
-            user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-            bookmarkable: {
-                __typename: 'Question',
-                id: 1,
-                title: 'Testing title 3',
-                slug: 'testing-title-3',
-                content: 'Testing content-3',
-                vote_count: 2,
-                answer_count: 1,
-                views_count: 2,
-                created_at: '2 days ago',
-                humanized_created_at: '2 days ago',
-                tags: [
-                    { id: 1, name: 'Javascript', is_watched_by_user: true },
-                    { id: 2, name: 'PHP', is_watched_by_user: false },
-                ],
-                user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
-            },
-        },
-    ]
-
-    const pageInfo: PaginatorInfo = {
-        currentPage: 1,
-        total: 2,
-        lastPage: 2,
-        hasMorePages: true,
+    const onClickBookmarkTab = () => {
+        setIsActiveTab('Bookmarks')
+        bookmarkQuery.refetch({
+            user_id: Number(profile.id),
+            first: 5,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        })
     }
 
-    const onPageChange = () => {
-        console.log('Paginate clicked!')
+    const bookmarkOnPageChange = (first: number, page: number) => {
+        bookmarkQuery.refetch({ first, page })
     }
 
     return (
@@ -309,7 +253,7 @@ const ProfilePage = () => {
                         className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
                             isActiveTab === 'Bookmarks'
                         )}`}
-                        onClick={() => setIsActiveTab('Bookmarks')}
+                        onClick={onClickBookmarkTab}
                     >
                         Bookmarks
                     </div>
@@ -348,13 +292,18 @@ const ProfilePage = () => {
                         </div>
                     </div>
                 )}
-                {isActiveTab === 'Bookmarks' && (
-                    <BookmarkTabContent
-                        bookmarks={bookmarks}
-                        pageInfo={pageInfo}
-                        onPageChange={onPageChange}
-                    />
-                )}
+                {isActiveTab === 'Bookmarks' &&
+                    (bookmarkQuery.loading ? (
+                        loadingScreenShow()
+                    ) : bookmarkQuery.error ? (
+                        errorNotify(`Error! ${bookmarkQuery.error}`)
+                    ) : (
+                        <BookmarkTabContent
+                            bookmarks={bookmarkQuery.data.bookmarks.data}
+                            pageInfo={bookmarkQuery.data.bookmarks.paginatorInfo}
+                            onPageChange={bookmarkOnPageChange}
+                        />
+                    ))}
             </div>
         </div>
     )

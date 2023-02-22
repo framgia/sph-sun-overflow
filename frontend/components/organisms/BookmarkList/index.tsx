@@ -1,10 +1,10 @@
 import { QuestionType, TagType, UserType } from '@/pages/questions/[slug]'
-import { BookmarkType } from '@/pages/users/[id]'
+import { BookmarkType } from '@/pages/users/[slug]'
 import AnswerBookmark from '../AnswerBookmark'
 import QuestionList from '../QuestionList'
 
 const BookmarkList = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
-    switch (bookmarkable.__typename) {
+    switch (bookmarkable?.__typename) {
         case 'Question':
             return (
                 <QuestionList
@@ -16,7 +16,7 @@ const BookmarkList = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                     created_at={bookmarkable.created_at}
                     humanized_created_at={bookmarkable.humanized_created_at}
                     vote_count={bookmarkable.vote_count}
-                    answer_count={bookmarkable.answer_count}
+                    answer_count={bookmarkable.answers?.length}
                     view_count={bookmarkable.views_count}
                     tags={bookmarkable.tags}
                     user={bookmarkable.user}
@@ -25,7 +25,11 @@ const BookmarkList = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
         case 'Answer':
             return <AnswerBookmark id={id} bookmarkable={bookmarkable} />
         default:
-            return <div>No bookmarks to show...</div>
+            return (
+                <div className="mt-10 text-center text-lg font-bold text-primary-gray">
+                    No bookmark to show
+                </div>
+            )
     }
 }
 

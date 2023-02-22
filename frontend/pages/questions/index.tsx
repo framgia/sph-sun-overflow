@@ -13,6 +13,7 @@ import { HiSearch } from 'react-icons/hi'
 import DropdownFilters from '@/components/molecules/DropdownFilters'
 
 export interface PaginatorInfo {
+    perPage: number
     currentPage: number
     lastPage: number
     total: number

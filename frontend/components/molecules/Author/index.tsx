@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 type Props = {
-    author: string
+    author?: string
     moment?: string
 }
 
