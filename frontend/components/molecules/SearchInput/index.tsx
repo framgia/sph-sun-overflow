@@ -3,9 +3,11 @@ import Icons from '@/components/atoms/Icons'
 type Props = {
     placeholder?: string
     usage?: 'Default' | 'Users'
+    value?: string
+    onChange: (value: string) => void
 }
 
-const SearchInput = ({ placeholder, usage = 'Default' }: Props): JSX.Element => {
+const SearchInput = ({ placeholder, value, usage = 'Default', onChange }: Props): JSX.Element => {
     const divStyle = {
         Default: 'relative flex w-80 flex-row',
         Users: 'relative flex w-80 flex-row',
@@ -26,6 +28,8 @@ const SearchInput = ({ placeholder, usage = 'Default' }: Props): JSX.Element => 
                 name="search"
                 className={`${inputStyle[usage]} pr-10`}
                 placeholder={placeholder}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
             />
             <button type="submit" className={buttonStyle[usage]}>
                 <Icons name="search_input_icon" />
