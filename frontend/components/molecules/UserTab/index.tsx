@@ -31,11 +31,11 @@ const UserTab = ({ user, usage }: UserTabProps) => {
     }
     const nameStyle = {
         TeamMembers: 'text-md',
-        UserList: 'text-2xl font-semibold',
+        UserList: 'text-xl font-semibold truncate',
     }
     const roleStyle = {
         TeamMembers: 'hidden text-sm lg:flex',
-        UserList: 'text-xl text-primary-gray ',
+        UserList: 'text-xl text-primary-gray truncate',
     }
     if (!isObjectEmpty(user)) {
         return (
@@ -51,7 +51,7 @@ const UserTab = ({ user, usage }: UserTabProps) => {
                     src={user.avatar}
                     maxInitials={1}
                     textSizeRatio={2}
-                    className={`rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500 md:mr-0`}
+                    className={`flex-0 aspect-square bg-gray-800 text-sm active:ring-2 active:ring-red-500 md:mr-0`}
                 />
                 <div className="text-overflow-ellipsis ml-2 flex flex-col overflow-hidden align-middle">
                     <div className={nameStyle[usage]}>

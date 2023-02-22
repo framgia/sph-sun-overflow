@@ -7,10 +7,11 @@ import GET_ROLES from '@/helpers/graphql/queries/get_roles'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FilterType } from '../questions'
 import { IUser } from '@/components/molecules/UserTab'
 import { PaginatorInfo } from '../questions'
+import { useRouter } from 'next/router'
 
 type Role = {
     id: number
@@ -25,6 +26,7 @@ type RefetchType = {
 }
 
 const UsersPage = () => {
+    const router = useRouter()
     const initialRole: { id: number | null; label: string } = { id: null, label: 'Sort by Role' }
     const initialScore: { sort: string | null; label: string } = {
         sort: null,
@@ -32,6 +34,7 @@ const UsersPage = () => {
     }
     const [isSearchResult, setIsSearchResult] = useState(false)
     const [searchKey, setSearchKey] = useState('')
+    const [term, setTerm] = useState('')
     const [selectedRole, setSelectedRole] = useState<{ id: number | null; label: string }>(
         initialRole
     )
@@ -44,16 +47,27 @@ const UsersPage = () => {
         variables: {
             first: 12,
             page: 1,
-            filter: { keyword: searchKey, role_id: null },
+            filter: { keyword: '', role_id: null },
             sort: { reputation: null },
         },
     })
+
+    useEffect(() => {
+        setSearchKey('')
+        setIsSearchResult(false)
+        userQuery.refetch({
+            first: 12,
+            page: 1,
+            filter: { keyword: '', role_id: null },
+            sort: { reputation: null },
+        })
+    }, [router, userQuery.refetch])
 
     if (rolesQuery.loading || userQuery.loading) return loadingScreenShow()
     if (rolesQuery.error) return errorNotify(`Error! ${rolesQuery.error}`)
     if (userQuery.error) return errorNotify(`Error! ${userQuery.error}`)
 
-    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setSelectedRole(initialRole)
         setSelectedScore(initialScore)
 
@@ -63,7 +77,7 @@ const UsersPage = () => {
             search: { value: string }
         }
 
-        userQuery.refetch({
+        await userQuery.refetch({
             first: 12,
             page: 1,
             filter: { keyword: target.search.value, role_id: null },
@@ -71,6 +85,7 @@ const UsersPage = () => {
         })
 
         setSearchKey(target.search.value)
+        setTerm(target.search.value)
         target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
     }
 
@@ -135,14 +150,18 @@ const UsersPage = () => {
 
     const renderSearchResultHeader = (): JSX.Element => {
         return (
-            <div className="w-80 border-b-2 pt-2">
-                <div className="text-md mt-1 mb-2 pl-5 text-gray-800">
+            <div className="w-80 pt-2">
+                <div className="text-md mt-1 mb-2 truncate pl-5 text-gray-800">
                     {`${pageInfo.total} search ${
                         pageInfo.total > 1 ? `results` : `result`
-                    } for "${searchKey}"`}
+                    } for "${term}"`}
                 </div>
             </div>
         )
+    }
+
+    const onChange = (value: string) => {
+        setSearchKey(value)
     }
 
     return (
@@ -154,22 +173,27 @@ const UsersPage = () => {
             <div className="mt-3 flex w-full flex-row pl-16 pr-2">
                 <div className="mr-auto">
                     <form onSubmit={handleSearchSubmit}>
-                        <SearchInput usage="Users" placeholder="Sort by name" />
+                        <SearchInput
+                            usage="Users"
+                            placeholder="Search"
+                            value={searchKey}
+                            onChange={onChange}
+                        />
                     </form>
-                    {isSearchResult && renderSearchResultHeader()}
                 </div>
                 <div className="flex flex-row justify-end gap-1">
                     <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
                     <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                 </div>
             </div>
-            <div className="mt-3 w-full">
-                <div className=" mr-4 ml-20 grid  grid-cols-3 ">
+            <div className="pl-16 pr-2">{isSearchResult && renderSearchResultHeader()}</div>
+            <div className="mt-3 flex h-full w-full flex-col">
+                <div className="mr-4 ml-20 grid grid-cols-3 ">
                     {userList.map((user: IUser) => (
                         <UserTab user={user} usage="UserList" key={user.id} />
                     ))}
                 </div>
-                <div className="mt-10">
+                <div className="mt-auto ">
                     {pageInfo.lastPage > 1 && (
                         <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
