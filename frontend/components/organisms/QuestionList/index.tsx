@@ -6,17 +6,17 @@ import { UserType, TagType } from '../../../pages/questions/[slug]'
 import { parseHTML } from '../../../helpers/htmlParsing'
 
 type Props = {
-    id: number
-    title: string
-    slug: string
-    content: string
-    vote_count: number
-    answer_count: number
-    view_count: number
-    created_at: string
-    humanized_created_at: string
-    tags: TagType[]
-    user: UserType
+    id?: number
+    title?: string
+    slug?: string
+    content?: string
+    vote_count?: number
+    answer_count?: number
+    view_count?: number
+    created_at?: string
+    humanized_created_at?: string
+    tags?: TagType[]
+    user?: UserType
 }
 
 const QuestionList = ({
@@ -64,7 +64,7 @@ const QuestionList = ({
                         </div>
                         <div className="flex flex-row justify-end">
                             <Author
-                                author={`${user.first_name} ${user.last_name}`}
+                                author={`${user?.first_name} ${user?.last_name}`}
                                 moment={humanized_created_at}
                             />
                         </div>

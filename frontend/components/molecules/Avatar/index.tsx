@@ -2,9 +2,9 @@ import Icons from '@/components/atoms/Icons'
 import Image from 'next/image'
 
 type AvatarProps = {
-    first_name: string
-    last_name: string
-    avatar: string
+    first_name?: string
+    last_name?: string
+    avatar?: string
 }
 
 const Avatar = ({ first_name, last_name, avatar }: AvatarProps): JSX.Element => {

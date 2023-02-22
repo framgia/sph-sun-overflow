@@ -13,9 +13,9 @@ import { Fragment, useState } from 'react'
 import { FilterType } from '../index'
 
 export type UserType = {
-    id: number
-    first_name: string
-    last_name: string
+    id?: number
+    first_name?: string
+    last_name?: string
     avatar?: string
 }
 

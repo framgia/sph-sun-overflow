@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.7.3",
+        "@headlessui-float/react": "^0.10.1",
         "@headlessui/react": "^1.7.10",
         "@hookform/resolvers": "^2.9.10",
         "@next/font": "13.1.1",
