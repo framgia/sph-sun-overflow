@@ -1,15 +1,63 @@
-import Link from 'next/link'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import Icons from '@/components/atoms/Icons'
 import { FilterType } from '../../../pages/questions/index'
 
 type AppProps = {
+    grouped?: boolean
     selectedFilter: string
-    filters: FilterType[]
+    filters: FilterType[] | FilterType[][]
 }
 
-const SortDropdown = ({ selectedFilter, filters }: AppProps) => {
+const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps) => {
+    const renderFilters = () => {
+        return filters.map((filter) => {
+            const newFilter = filter as FilterType
+            return (
+                <div key={newFilter.id} className="cursor-pointer">
+                    <Menu.Item>
+                        {({ active }) => (
+                            <div
+                                className={`${
+                                    active ? 'bg-light-gray' : ''
+                                } w-full py-2 px-4 text-sm text-gray-900`}
+                                onClick={newFilter.onClick}
+                            >
+                                {newFilter.name}
+                            </div>
+                        )}
+                    </Menu.Item>
+                </div>
+            )
+        })
+    }
+
+    const renderGroupedFilters = () => {
+        return filters.map((filter, index) => {
+            const newFilters = filter as FilterType[]
+            return (
+                <div key={index} className="cursor-pointer">
+                    {newFilters.map((newFilter) => {
+                        return (
+                            <Menu.Item key={newFilter.id}>
+                                {({ active }) => (
+                                    <div
+                                        className={`${
+                                            active ? 'bg-light-gray' : ''
+                                        } w-full py-2 px-4 text-sm text-gray-900`}
+                                        onClick={newFilter.onClick}
+                                    >
+                                        {newFilter.name}
+                                    </div>
+                                )}
+                            </Menu.Item>
+                        )
+                    })}
+                </div>
+            )
+        })
+    }
+
     return (
         <div className="flex items-center">
             <Menu as="div" className="relative inline-block w-full text-left">
@@ -31,24 +79,7 @@ const SortDropdown = ({ selectedFilter, filters }: AppProps) => {
                     leaveTo="transform opacity-0 scale-95"
                 >
                     <Menu.Items className="absolute right-0 w-44 origin-top divide-y divide-gray-100 border bg-white drop-shadow-lg">
-                        {filters.map((filter) => {
-                            return (
-                                <div key={filter.id} className="cursor-pointer">
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <div
-                                                className={`${
-                                                    active ? 'bg-light-gray' : ''
-                                                } w-full py-2 px-4 text-sm text-gray-900`}
-                                                onClick={filter.onClick}
-                                            >
-                                                {filter.name}
-                                            </div>
-                                        )}
-                                    </Menu.Item>
-                                </div>
-                            )
-                        })}
+                        {grouped ? renderGroupedFilters() : renderFilters()}
                     </Menu.Items>
                 </Transition>
             </Menu>

@@ -27,7 +27,15 @@ export type CommentType = {
     updated_at: string
 }
 
-export type TagType = { id: number; name: string; is_watched_by_user: boolean }
+export type TagType = {
+    id: number
+    slug: string
+    name: string
+    description: string
+    is_watched_by_user: boolean
+    count_tagged_questions: number
+    count_watching_users: number
+}
 
 export type AnswerType = {
     id: number

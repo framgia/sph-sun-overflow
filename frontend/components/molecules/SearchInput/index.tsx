@@ -2,7 +2,7 @@ import Icons from '@/components/atoms/Icons'
 
 type Props = {
     placeholder?: string
-    usage: 'Default' | 'Users'
+    usage?: 'Default' | 'Users'
 }
 
 const SearchInput = ({ placeholder, usage = 'Default' }: Props): JSX.Element => {
@@ -24,9 +24,8 @@ const SearchInput = ({ placeholder, usage = 'Default' }: Props): JSX.Element => 
             <input
                 type="text"
                 name="search"
-                className={inputStyle[usage]}
+                className={`${inputStyle[usage]} pr-10`}
                 placeholder={placeholder}
-                required
             />
             <button type="submit" className={buttonStyle[usage]}>
                 <Icons name="search_input_icon" />
