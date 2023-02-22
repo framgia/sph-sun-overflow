@@ -7,15 +7,17 @@ import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import AcceptAnswer from '@/components/molecules/AcceptAnswer'
 import { parseHTML } from '@/helpers/htmlParsing'
-import { UserType, CommentType } from '../../../pages/questions/[slug]'
+import { UserType, CommentType, AnswerEditType } from '../../../pages/questions/[slug]'
 import Comment from '@/components/organisms/Comment'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { useMutation } from '@apollo/client'
 import { errorNotify } from '../../../helpers/toast'
 import CommentForm from '../CommentForm'
+import React from 'react'
 
 type AnswerDetailProps = {
     id: number
+    onEdit: React.Dispatch<React.SetStateAction<AnswerEditType>>
     content: string
     created_at: string
     vote_count: number
@@ -34,6 +36,7 @@ type AnswerDetailProps = {
 
 const Answer = ({
     id,
+    onEdit,
     content,
     created_at,
     vote_count,
@@ -95,8 +98,9 @@ const Answer = ({
                                 <div className="mt-2 flex items-start">
                                     {is_created_by_user && (
                                         <Link
-                                            href="#"
+                                            href="#answer-form"
                                             className="flex gap-1 decoration-red-500 underline-offset-2 hover:underline"
+                                            onClick={() => onEdit({ id, content })}
                                         >
                                             <Icons name={'edit'} />
                                             <span className="text-xs text-primary-red">
