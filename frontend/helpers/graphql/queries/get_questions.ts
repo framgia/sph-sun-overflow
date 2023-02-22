@@ -9,6 +9,7 @@ const GET_QUESTIONS = gql`
     ) {
         questions(first: $first, page: $page, filter: $filter, orderBy: $orderBy) {
             paginatorInfo {
+                perPage
                 currentPage
                 lastPage
                 hasMorePages
