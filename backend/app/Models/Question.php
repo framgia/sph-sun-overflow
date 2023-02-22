@@ -20,6 +20,8 @@ class Question extends Model
 
     protected $guarded = [];
 
+    protected $with = ['answers'];
+
     protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user', 'user_vote', 'is_answered'];
 
     protected static function boot()

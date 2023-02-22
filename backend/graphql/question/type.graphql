@@ -15,7 +15,7 @@ type Question {
     is_bookmarked: Boolean
     is_from_user: Boolean
     user: User! @belongsTo
-    answers: [Answer!]! @hasMany
+    answers: [Answer!]!
     comments: [Comment]! @morphMany
     votes: [Vote]! @morphMany
     team: Team @belongsTo
