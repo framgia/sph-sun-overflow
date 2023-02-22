@@ -6,4 +6,12 @@ extend type Mutation {
         tags: [ID!]! @rules(apply: ["required"])
         team_id: ID
     ): Question! @guard(with: ["api"])
+    updateQuestion(
+        id: ID! @rules(apply: ["required", "integer"])
+        title: String! @rules(apply: ["required"])
+        content: String! @rules(apply: ["required"])
+        is_public: Boolean
+        tags: [ID!]! @rules(apply: ["required"])
+        team_id: ID
+    ): Question! @guard(with: ["api"])
 }
