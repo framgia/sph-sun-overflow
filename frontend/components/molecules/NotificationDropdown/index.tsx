@@ -194,6 +194,7 @@ const setAvatar = (notifiable: any): JSX.Element => {
             alt={setName(notifiable)}
             src={avatar}
             maxInitials={1}
+            textSizeRatio={2}
         />
     )
 }

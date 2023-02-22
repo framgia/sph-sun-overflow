@@ -2,117 +2,149 @@ import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
 import UserTab from '@/components/molecules/UserTab'
 import Paginate from '@/components/organisms/Paginate'
-const initialUserList = [
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 10000,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 10000,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 10000,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 0,
-        role: 'Team Lead',
-    },
-    {
-        id: 1,
-        first_name: 'Ian',
-        last_name: 'Urriza',
-        avatar: '/../../public/images/sun_logo.png',
-        reputation: 10000,
-        role: 'Team Lead',
-    },
-]
+import GET_USERS from '@/helpers/graphql/queries/get_users'
+import GET_ROLES from '@/helpers/graphql/queries/get_roles'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
+import { useState } from 'react'
+import { FilterType } from '../questions'
+import { IUser } from '@/components/molecules/UserTab'
+import { PaginatorInfo } from '../questions'
 
-const roleFilters = [
-    { id: 1, name: 'Admin', onClick: function () {} },
-    { id: 2, name: 'Team Leader', onClick: function () {} },
-    { id: 3, name: 'Member', onClick: function () {} },
-]
+type Role = {
+    id: number
+    name: string
+}
 
-const scoreSort = [
-    { id: 1, name: 'Most Score', onClick: function () {} },
-    { id: 2, name: 'Least Score', onClick: function () {} },
-]
+type RefetchType = {
+    first: number
+    page: number
+    filter?: { keyword?: string; role_id?: number | null }
+    sort?: { reputation?: string | null }
+}
 
 const UsersPage = () => {
+    const initialRole: { id: number | null; label: string } = { id: null, label: 'Sort by Role' }
+    const initialScore: { sort: string | null; label: string } = {
+        sort: null,
+        label: 'Sort by Score',
+    }
+    const [isSearchResult, setIsSearchResult] = useState(false)
+    const [searchKey, setSearchKey] = useState('')
+    const [selectedRole, setSelectedRole] = useState<{ id: number | null; label: string }>(
+        initialRole
+    )
+    const [selectedScore, setSelectedScore] = useState<{ sort: string | null; label: string }>(
+        initialScore
+    )
+
+    const rolesQuery = useQuery(GET_ROLES)
+    const userQuery = useQuery<any, RefetchType>(GET_USERS, {
+        variables: {
+            first: 12,
+            page: 1,
+            filter: { keyword: searchKey, role_id: null },
+            sort: { reputation: null },
+        },
+    })
+
+    if (rolesQuery.loading || userQuery.loading) return loadingScreenShow()
+    if (rolesQuery.error) return errorNotify(`Error! ${rolesQuery.error}`)
+    if (userQuery.error) return errorNotify(`Error! ${userQuery.error}`)
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        setSelectedRole(initialRole)
+        setSelectedScore(initialScore)
+
+        e.preventDefault()
+
+        const target = e.target as typeof e.target & {
+            search: { value: string }
+        }
+
+        userQuery.refetch({
+            first: 12,
+            page: 1,
+            filter: { keyword: target.search.value, role_id: null },
+            sort: { reputation: null },
+        })
+
+        setSearchKey(target.search.value)
+        target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
+    }
+
+    const roleFilters: FilterType[] = rolesQuery.data.roles.map((role: Role) => ({
+        ...role,
+        onClick: () => {
+            userQuery.refetch({
+                first: 12,
+                page: 1,
+                filter: { keyword: searchKey, role_id: role.id },
+                sort: { reputation: selectedScore.sort },
+            })
+            setSelectedRole({ id: role.id, label: role.name })
+        },
+    }))
+
+    const scoreSort = [
+        {
+            id: 1,
+            name: 'Most Score',
+            onClick: () => {
+                {
+                    userQuery.refetch({
+                        first: 12,
+                        page: 1,
+                        filter: {
+                            keyword: searchKey,
+                            role_id: selectedRole.id,
+                        },
+                        sort: { reputation: 'DESC' },
+                    })
+                    setSelectedScore({ sort: 'DESC', label: 'Most Score' })
+                }
+            },
+        },
+        {
+            id: 2,
+            name: 'Least Score',
+            onClick: () => {
+                {
+                    userQuery.refetch({
+                        first: 12,
+                        page: 1,
+                        filter: {
+                            keyword: searchKey,
+                            role_id: selectedRole.id,
+                        },
+                        sort: { reputation: 'ASC' },
+                    })
+                    setSelectedScore({ sort: 'ASC', label: 'Least Score' })
+                }
+            },
+        },
+    ]
+
+    const userList: IUser[] = userQuery.data.users.data
+    const pageInfo: PaginatorInfo = userQuery.data.users.paginatorInfo
+
+    const onPageChange = (first: number, page: number) => {
+        userQuery.refetch({ first, page })
+    }
+
+    const renderSearchResultHeader = (): JSX.Element => {
+        return (
+            <div className="w-80 border-b-2 pt-2">
+                <div className="text-md mt-1 mb-2 pl-5 text-gray-800">
+                    {`${pageInfo.total} search ${
+                        pageInfo.total > 1 ? `results` : `result`
+                    } for "${searchKey}"`}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="ml-6 mr-6 flex h-full w-full flex-col ">
             <div className="mt-10 w-full  pl-14">
@@ -121,25 +153,30 @@ const UsersPage = () => {
             </div>
             <div className="mt-3 flex w-full flex-row pl-16 pr-2">
                 <div className="mr-auto">
-                    <SearchInput usage="Users" placeholder="Search by name" />
+                    <form onSubmit={handleSearchSubmit}>
+                        <SearchInput usage="Users" placeholder="Sort by name" />
+                    </form>
+                    {isSearchResult && renderSearchResultHeader()}
                 </div>
                 <div className="flex flex-row justify-end gap-1">
-                    <SortDropdown filters={roleFilters} selectedFilter="Sort by Role" />
-                    <SortDropdown filters={scoreSort} selectedFilter="Sort by Score" />
+                    <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
+                    <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                 </div>
             </div>
             <div className="mt-3 w-full">
                 <div className=" mr-4 ml-20 grid  grid-cols-3 ">
-                    {initialUserList.map((user) => (
-                        <UserTab user={user} usage="UserList" />
+                    {userList.map((user: IUser) => (
+                        <UserTab user={user} usage="UserList" key={user.id} />
                     ))}
                 </div>
-
-                <div className="mt-10 ">
-                    <Paginate />
+                <div className="mt-10">
+                    {pageInfo.lastPage > 1 && (
+                        <Paginate {...pageInfo} onPageChange={onPageChange} />
+                    )}
                 </div>
             </div>
         </div>
     )
 }
+
 export default UsersPage
