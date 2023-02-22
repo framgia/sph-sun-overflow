@@ -9,8 +9,11 @@ import { useBoundStore } from '@/helpers/store'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import { RightSideBar } from '@/components/organisms/Sidebar'
+import { TagType, UserType } from '../questions/[slug]'
+import { PaginatorInfo } from '../questions'
+import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 
 export type ProfileType = {
     id: number
@@ -23,8 +26,54 @@ export type ProfileType = {
     about_me: string
 }
 
+export type BookmarkableType = {
+    __typename: string
+    id: number
+    title?: string
+    slug?: string
+    content: string
+    created_at: string
+    humanized_created_at?: string
+    vote_count: number
+    answer_count?: number
+    views_count?: number
+    is_correct?: boolean
+    tags?: TagType[]
+    user: UserType
+    question?: BookmarkQuestionType
+}
+
+type BookmarkQuestionType = {
+    id: number
+    title: string
+    slug: string
+    content: string
+    created_at: string
+    humanized_created_at: string
+    vote_count: number
+    answer_count: number
+    views_count: number
+    tags: TagType[]
+    user: UserType
+}
+
+export type BookmarkType = {
+    id: number
+    bookmarkable: BookmarkableType
+    user?: UserType
+}
+
+const getActiveTabClass = (status: boolean): string => {
+    if (status) {
+        return '-mb-[1px] hover:text-primary-red px-6 font-semibold border-b-2 border-primary-red bg-red-100'
+    }
+
+    return '-mb-[1px] hover:text-primary-red px-6 active:border-red-400'
+}
+
 const ProfilePage = () => {
     const user_id = useBoundStore.getState().user_id
+    const [isActiveTab, setIsActiveTab] = useState('Activity')
 
     const router = useRouter()
     const query = router.query
@@ -125,6 +174,90 @@ const ProfilePage = () => {
         },
     ]
 
+    const bookmarks: BookmarkType[] = [
+        {
+            id: 1,
+            user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+            bookmarkable: {
+                __typename: 'Question',
+                id: 1,
+                title: 'Testing title',
+                slug: 'testing-title',
+                content: 'Testing content',
+                vote_count: 2,
+                answer_count: 1,
+                views_count: 2,
+                created_at: '2 days ago',
+                humanized_created_at: '2 days ago',
+                tags: [
+                    { id: 1, name: 'Javascript', is_watched_by_user: true },
+                    { id: 2, name: 'PHP', is_watched_by_user: false },
+                ],
+                user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+            },
+        },
+        {
+            id: 2,
+            user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+            bookmarkable: {
+                __typename: 'Answer',
+                id: 1,
+                content: 'Testing content 2',
+                vote_count: 2,
+                created_at: '2 days ago',
+                user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+                question: {
+                    id: 1,
+                    title: 'Testing title',
+                    slug: 'testing-title',
+                    content: 'Testing content',
+                    vote_count: 2,
+                    answer_count: 1,
+                    views_count: 2,
+                    created_at: '2 days ago',
+                    humanized_created_at: '2 days ago',
+                    tags: [
+                        { id: 1, name: 'Javascript', is_watched_by_user: true },
+                        { id: 2, name: 'PHP', is_watched_by_user: false },
+                    ],
+                    user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+                },
+            },
+        },
+        {
+            id: 3,
+            user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+            bookmarkable: {
+                __typename: 'Question',
+                id: 1,
+                title: 'Testing title 3',
+                slug: 'testing-title-3',
+                content: 'Testing content-3',
+                vote_count: 2,
+                answer_count: 1,
+                views_count: 2,
+                created_at: '2 days ago',
+                humanized_created_at: '2 days ago',
+                tags: [
+                    { id: 1, name: 'Javascript', is_watched_by_user: true },
+                    { id: 2, name: 'PHP', is_watched_by_user: false },
+                ],
+                user: { id: 21, first_name: 'Firstname', last_name: 'Lastname', avatar: '' },
+            },
+        },
+    ]
+
+    const pageInfo: PaginatorInfo = {
+        currentPage: 1,
+        total: 2,
+        lastPage: 2,
+        hasMorePages: true,
+    }
+
+    const onPageChange = () => {
+        console.log('Paginate clicked!')
+    }
+
     return (
         <div className="mx-8 mt-10 flex h-full w-full flex-col">
             <div className="flex h-auto w-full flex-row ">
@@ -163,44 +296,65 @@ const ProfilePage = () => {
                 </div>
             </div>
             <div className="mt-3 flex h-3/5 flex-col">
-                <ul className="h-1/10 ml-10 flex w-[95%] flex-row border-b-2 border-gray-300">
-                    <li className="">
-                        <div className="-mb-[1px] border-b-2 border-b-primary-red bg-red-100 px-6 font-semibold">
-                            Activity
+                <div className="flex h-7 w-full flex-row justify-start border-b-2 border-gray-300">
+                    <div
+                        className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
+                            isActiveTab === 'Activity'
+                        )}`}
+                        onClick={() => setIsActiveTab('Activity')}
+                    >
+                        Activity
+                    </div>
+                    <div
+                        className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
+                            isActiveTab === 'Bookmarks'
+                        )}`}
+                        onClick={() => setIsActiveTab('Bookmarks')}
+                    >
+                        Bookmarks
+                    </div>
+                </div>
+                {isActiveTab === 'Activity' && (
+                    <div className="flex w-full flex-row justify-center gap-20 px-3">
+                        <div className="mb-6">
+                            <p className="mt-6 mb-10 text-2xl">Top Questions</p>
+                            <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
+                                {topQuestions.map((question, index) => (
+                                    <Activity
+                                        key={index}
+                                        id={question.id}
+                                        votes={question.votes}
+                                        data={question.question}
+                                        is_answered={question.is_answered}
+                                        created_at={question.created_at}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </li>
-                    <div className="-mb-[1px] border-b-2 border-b-gray-300 px-6">Bookmarks</div>
-                </ul>
-            </div>
-            <div className="ml-24 flex w-[90%]">
-                <div className="mb-6 mr-10">
-                    <p className="mt-6 mb-10 text-2xl">Top Questions</p>
-                    <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
-                        {topQuestions.map((question) => (
-                            <Activity
-                                id={question.id}
-                                votes={question.votes}
-                                data={question.question}
-                                is_answered={question.is_answered}
-                                created_at={question.created_at}
-                            />
-                        ))}
+                        <div className="mb-6">
+                            <p className="mt-6 mb-10 text-2xl">Top Answers</p>
+                            <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
+                                {topAnswers.map((answer, index) => (
+                                    <Activity
+                                        key={index}
+                                        id={answer.id}
+                                        votes={answer.votes}
+                                        data={answer.answer}
+                                        is_answered={answer.is_answered}
+                                        created_at={answer.created_at}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="mb-6 ml-14">
-                    <p className="mt-6 mb-10 text-2xl">Top Answers</p>
-                    <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
-                        {topAnswers.map((answer) => (
-                            <Activity
-                                id={answer.id}
-                                votes={answer.votes}
-                                data={answer.answer}
-                                is_answered={answer.is_answered}
-                                created_at={answer.created_at}
-                            />
-                        ))}
-                    </div>
-                </div>
+                )}
+                {isActiveTab === 'Bookmarks' && (
+                    <BookmarkTabContent
+                        bookmarks={bookmarks}
+                        pageInfo={pageInfo}
+                        onPageChange={onPageChange}
+                    />
+                )}
             </div>
         </div>
     )

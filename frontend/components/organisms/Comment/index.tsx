@@ -13,7 +13,7 @@ type Props = {
     text: string
     author: string
     time: string
-    userId: number
+    userId?: number
     refetchHandler: () => void
 }
 

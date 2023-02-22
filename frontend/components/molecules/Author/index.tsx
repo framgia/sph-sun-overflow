@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 type Props = {
     author: string
-    moment: string
+    moment?: string
 }
 
 const Author = ({ author, moment }: Props): JSX.Element => {
