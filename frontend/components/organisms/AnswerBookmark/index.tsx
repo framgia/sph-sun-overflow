@@ -39,7 +39,7 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                         </Link>
                         <Author
                             author={`${bookmarkable?.user.first_name} ${bookmarkable?.user.last_name}`}
-                            moment={bookmarkable?.created_at}
+                            moment={bookmarkable?.humanized_created_at}
                         />
                     </div>
                 </div>

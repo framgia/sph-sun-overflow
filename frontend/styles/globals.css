@@ -17,3 +17,8 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px #fff7f5 inset !important;
 }
+
+.line-clamp-1 img,
+.line-clamp-4 img {
+    display: none !important;
+}

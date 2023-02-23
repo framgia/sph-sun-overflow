@@ -57,6 +57,7 @@ const GET_BOOKMARKS = gql`
                         id
                         content
                         created_at
+                        humanized_created_at
                         vote_count
                         user {
                             id

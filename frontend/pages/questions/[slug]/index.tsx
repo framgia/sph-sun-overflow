@@ -51,6 +51,7 @@ export type AnswerType = {
     user: UserType
     is_from_user: boolean
     comments: CommentType[]
+    question: { slug: string }
 }
 
 export type QuestionType = {
