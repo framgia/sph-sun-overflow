@@ -1,39 +1,65 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import TagsInput, { ITag } from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { isObjectEmpty } from '@/utils'
 import FormAlert from '@/components/molecules/FormAlert'
 import Button from '@/components/atoms/Button'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
+import UPDATE_QUESTION from '@/helpers/graphql/mutations/update_question'
 import { useMutation } from '@apollo/client'
-import { successNotify } from '@/helpers/toast'
+import { errorNotify, successNotify } from '@/helpers/toast'
 import { useRouter } from 'next/router'
-
+import isEqual from 'lodash/isEqual'
 export type FormValues = {
     title: string
     description: string
     tags: ITag[]
 }
+type QuestionSkeleton = {
+    id: Number | undefined
+    content: String
+    title: String
+    tags: ITag[]
+    slug: String
+}
+interface Props {
+    initialState?: QuestionSkeleton
+}
 
-const QuestionForm = (): JSX.Element => {
+const QuestionForm = ({ initialState }: Props): JSX.Element => {
+    let id: Number | undefined
+    let title: String | undefined
+    let content: String | undefined
+    let tags: ITag[] | undefined
+    if (initialState) {
+        ;({ id, content, title, tags } = initialState)
+    }
     const router = useRouter()
     let buttonText = 'Post Question'
     let formTitle = 'Post a Question'
-
+    let successMessage = 'Question Added Successfully'
+    let errorMessage = 'Question Not Updated'
     if (router.query.slug) {
-        buttonText = 'Save Question'
+        buttonText = 'Save Edits'
         formTitle = 'Edit Question'
+        successMessage = 'Question Updated Successfully'
     }
 
     const {
         register,
         handleSubmit,
+        control,
         setValue,
         formState: { errors },
     } = useForm<FormValues>({
+        defaultValues: {
+            title: title ? String(title) : '',
+            description: content ? String(content) : '',
+            tags: tags ? tags : [],
+        },
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
         resolver: yupResolver(QuestionFormSchema),
@@ -41,26 +67,67 @@ const QuestionForm = (): JSX.Element => {
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
     const [createQuestion] = useMutation(CREATE_QUESTION)
+    const [updateQuestion] = useMutation(UPDATE_QUESTION)
+
+    const validateChanges = (data: FormValues) => {
+        if (data.title != initialState?.title) {
+            return false
+        }
+        if (data.description !== initialState?.content) {
+            return false
+        }
+        if (
+            !isEqual(
+                data.tags.map((tag) => Number(tag.id)),
+                initialState.tags.map((tag) => Number(tag.id))
+            )
+        ) {
+            return false
+        }
+        return true
+    }
 
     const onSubmit = (data: FormValues) => {
         setIsDisableSubmit(true)
-
         const tags = data.tags.map((tag) => tag.id)
 
-        const newQuestion = createQuestion({
-            variables: {
-                title: data.title,
-                content: data.description,
-                is_public: true,
-                tags,
-                team_id: 1,
-            },
-        })
+        if (initialState?.slug && validateChanges(data)) {
+            router.replace(`/questions/${initialState.slug}`)
+            errorNotify(errorMessage)
+            return
+        }
 
-        successNotify('Question Added Successfully')
+        let newQuestion
+        if (id) {
+            newQuestion = updateQuestion({
+                variables: {
+                    id: id,
+                    title: data.title,
+                    content: data.description,
+                    tags,
+                },
+            })
+        } else {
+            newQuestion = createQuestion({
+                variables: {
+                    title: data.title,
+                    content: data.description,
+                    is_public: true,
+                    tags,
+                    team_id: 1,
+                },
+            })
+        }
+
+        successNotify(successMessage)
 
         newQuestion.then((data: any) => {
-            const slug = data.data.createQuestion.slug
+            let slug
+            if (id) {
+                slug = data.data.updateQuestion.slug
+            } else {
+                slug = data.data.createQuestion.slug
+            }
             router.replace(`/questions/${slug}`)
         })
 
@@ -69,16 +136,9 @@ const QuestionForm = (): JSX.Element => {
         }, 4000)
     }
 
-    useEffect(() => {
-        register('description', {})
-        setValue('description', '')
-        register('tags', {})
-        setValue('tags', [])
-    }, [register])
-
     return (
         <div className="w-full">
-            <text className="mb-2 text-3xl">{formTitle}</text>
+            <div className="mb-2 text-3xl">{formTitle}</div>
             <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
                 <div className="QuestionTitle w-full self-center py-4">
                     <label htmlFor="titleInput" className="mb-2 text-2xl font-bold">
@@ -95,14 +155,31 @@ const QuestionForm = (): JSX.Element => {
                     <label htmlFor="descriptionInput" className="mb-2 text-2xl font-bold">
                         Description
                     </label>
-                    <RichTextEditor setValue={setValue} usage="description" id="descriptionInput" />
+                    <Controller
+                        control={control}
+                        name="description"
+                        render={({ field: { onChange, value } }) => (
+                            <RichTextEditor
+                                onChange={onChange}
+                                value={value}
+                                usage="description"
+                                id="descriptionInput"
+                            />
+                        )}
+                    />
                 </div>
                 <div className="Tags w-full self-center py-4">
                     <label htmlFor="tagsInput" className="text-2xl font-bold">
                         Tags (max. 5)
                     </label>
                     <div className="w-1/2">
-                        <TagsInput setValue={setValue} />
+                        <Controller
+                            control={control}
+                            name="tags"
+                            render={({ field: { value } }) => (
+                                <TagsInput setValue={setValue} value={value} />
+                            )}
+                        />
                     </div>
                 </div>
                 {!isObjectEmpty(errors) && <FormAlert errors={errors} />}
