@@ -1,9 +1,0 @@
-union Followable = Follow | User
-
-type Follow {
-    id: ID!
-    created_at: String!
-    updated_at: String!
-    user: User! @belongsTo
-    Followable: Followable! @morphTo
-}

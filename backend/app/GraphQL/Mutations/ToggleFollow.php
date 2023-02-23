@@ -2,6 +2,8 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Models\User;
+use App\Models\UserRelation;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -15,28 +17,31 @@ final class ToggleFollow
     public function __invoke($_, array $args)
     {
         try {
-            $authUser = Auth::user();
+            $user = User::findOrFail($args['user_id']);
 
-            if ($authUser->id == $args['user_id']) {
+            if (Auth::id() == $user->id) {
                 return 'Invalid. User Cant Follow Themselves';
             }
 
-            $following = $authUser->following()->where('following_id', $args['user_id'])->first();
-            if ($following) {
-                $following->delete();
+            if (! in_array($user->id, Auth::user()->followingIds)) {
+                UserRelation::create([
+                    'follower_id' => Auth::id(),
+                    'following_id' => $user->id,
+                ]);
 
-                return 'Unfollow User';
+                return "You are now following {$user->first_name} {$user->last_name}";
             } else {
-                $authUser->following()->create(
-                    ['following_id' => $args['user_id']],
-                );
+                UserRelation::where([
+                    'follower_id' => Auth::id(),
+                    'following_id' => $user->id,
+                ])->delete();
 
-                return 'Follow User';
+                return "You unfollowed {$user->first_name} {$user->last_name}";
             }
         } catch (Exception $e) {
-            return $message = $e->getMessage();
+            $message = $e->getMessage();
             if (Str::contains($message, 'No query results for model')) {
-                return 'Invalid follow_id';
+                return 'User does not exist';
             } else {
                 return 'An error has occurred';
             }
