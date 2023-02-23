@@ -3,6 +3,7 @@ import Navbar from '../../organisms/Navbar'
 import { LeftSideBar, RightSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
 import { ToastContainer } from 'react-toastify'
+import { getUserToken } from '@/helpers/localStorageHelper'
 
 type LayoutProps = {
     children: JSX.Element
@@ -16,7 +17,6 @@ const Layout = ({ children }: LayoutProps) => {
         '/users/[slug]',
         '/questions/[slug]/edit',
     ]
-
     const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
     return (
         <ProvidersWrapper>

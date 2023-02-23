@@ -13,6 +13,9 @@ const GET_USER = gql`
             question_count
             about_me
             slug
+            is_following
+            follower_count
+            following_count
             top_questions {
                 id
                 slug
