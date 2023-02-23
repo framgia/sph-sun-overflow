@@ -3,13 +3,14 @@ import Link from 'next/link'
 type Props = {
     author?: string
     moment?: string
+    slug?: string
 }
 
-const Author = ({ author, moment }: Props): JSX.Element => {
+const Author = ({ author, moment, slug = '' }: Props): JSX.Element => {
     return (
         <span className="flex flex-row gap-2">
             <span className="ml-4">
-                <Link href="#" className="text-blue-600 hover:text-blue-400">
+                <Link href={`/users/${slug}`} className="text-blue-600 hover:text-blue-400">
                     {author}
                 </Link>
             </span>

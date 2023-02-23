@@ -66,6 +66,7 @@ const QuestionList = ({
                             <Author
                                 author={`${user?.first_name} ${user?.last_name}`}
                                 moment={humanized_created_at}
+                                slug={user.slug}
                             />
                         </div>
                     </div>

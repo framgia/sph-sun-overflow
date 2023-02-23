@@ -30,7 +30,7 @@ export type RefetchType = {
     first: number
     page: number
     name?: string
-    filter?: { keyword?: string; answered?: boolean; tag?: null }
+    filter?: { keyword?: string; answered?: boolean; tag?: string }
     orderBy?: { column: string; order: string }[]
     sort?: { column: string; order: string }[]
 }
@@ -45,7 +45,7 @@ const QuestionsPage = () => {
         variables: {
             first: 10,
             page: 1,
-            filter: { keyword: searchKey, answered: true, tag: null },
+            filter: { keyword: searchKey, answered: true, tag: '' },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         },
     })
@@ -54,7 +54,7 @@ const QuestionsPage = () => {
         setSearchKey(router.query.search as string)
         refetch({
             page: 1,
-            filter: { keyword: router.query.search as string, answered: true, tag: null },
+            filter: { keyword: router.query.search as string, answered: true, tag: '' },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         })
     }, [router, searchKey, refetch])
@@ -79,7 +79,11 @@ const QuestionsPage = () => {
     const renderSortAndFilter = (): JSX.Element => {
         return (
             <div className="flex gap-2">
-                <DropdownFilters triggers={['DATE', 'ANSWER']} refetch={refetch} />
+                <DropdownFilters
+                    triggers={['DATE', 'ANSWER']}
+                    searchKey={searchKey}
+                    refetch={refetch}
+                />
             </div>
         )
     }
