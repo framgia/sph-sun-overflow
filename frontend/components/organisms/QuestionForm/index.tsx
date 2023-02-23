@@ -43,7 +43,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     let successMessage = 'Question Added Successfully'
     let errorMessage = 'Question Not Updated'
     if (router.query.slug) {
-        buttonText = 'Save Question'
+        buttonText = 'Save Edits'
         formTitle = 'Edit Question'
         successMessage = 'Question Updated Successfully'
     }
