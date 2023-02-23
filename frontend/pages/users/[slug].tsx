@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { MouseEventHandler, useEffect, useState } from 'react'
 import { RightSideBar } from '@/components/organisms/Sidebar'
-import { TagType, UserType } from '../questions/[slug]'
+import { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]'
 import { PaginatorInfo } from '../questions'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
@@ -25,6 +25,8 @@ export type ProfileType = {
     question_count: number
     answer_count: number
     about_me: string
+    top_questions: QuestionType[]
+    top_answers: AnswerType[]
 }
 
 export type BookmarkableType = {
@@ -84,7 +86,7 @@ const ProfilePage = () => {
     })
 
     const profileIsNull = (): boolean => {
-        if (data === null) {
+        if (data === undefined || data === null) {
             return true
         }
 
@@ -112,82 +114,6 @@ const ProfilePage = () => {
         ...data.user,
     }
 
-    const topQuestions = [
-        {
-            id: 1,
-            votes: 0,
-            is_answered: true,
-            question: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 2,
-            votes: 78,
-            is_answered: true,
-            question: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 3,
-            votes: 100,
-            is_answered: true,
-            question: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 4,
-            votes: 23,
-            is_answered: true,
-            question: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 5,
-            votes: 10,
-            is_answered: false,
-            question: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-    ]
-
-    const topAnswers = [
-        {
-            id: 1,
-            votes: 5,
-            is_answered: true,
-            answer: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 2,
-            votes: 78,
-            is_answered: false,
-            answer: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 3,
-            votes: 100,
-            is_answered: true,
-            answer: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 4,
-            votes: 23,
-            is_answered: false,
-            answer: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-        {
-            id: 5,
-            votes: 10,
-            is_answered: false,
-            answer: 'Material Design not styling lorem',
-            created_at: 'Dec. 20, 2023',
-        },
-    ]
-
     const onClickBookmarkTab = () => {
         setIsActiveTab('Bookmarks')
         bookmarkQuery.refetch({
@@ -196,6 +122,11 @@ const ProfilePage = () => {
             page: 1,
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         })
+    }
+
+    const onClickActivityTab = () => {
+        setIsActiveTab('Activity')
+        refetch({ slug: query.slug })
     }
 
     const bookmarkOnPageChange = (first: number, page: number) => {
@@ -245,7 +176,7 @@ const ProfilePage = () => {
                         className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
                             isActiveTab === 'Activity'
                         )}`}
-                        onClick={() => setIsActiveTab('Activity')}
+                        onClick={onClickActivityTab}
                     >
                         Activity
                     </div>
@@ -259,36 +190,52 @@ const ProfilePage = () => {
                     </div>
                 </div>
                 {isActiveTab === 'Activity' && (
-                    <div className="flex w-full flex-row justify-center gap-20 px-3">
-                        <div className="mb-6">
-                            <p className="mt-6 mb-10 text-2xl">Top Questions</p>
-                            <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
-                                {topQuestions.map((question, index) => (
-                                    <Activity
-                                        key={index}
-                                        id={question.id}
-                                        votes={question.votes}
-                                        data={question.question}
-                                        is_answered={question.is_answered}
-                                        created_at={question.created_at}
-                                    />
-                                ))}
-                            </div>
+                    <div className="mb-6 mt-6 flex w-full flex-row justify-center gap-20 px-3">
+                        <div className="w-1/2">
+                            <p className="mx-3 mb-10 text-2xl">Top Questions</p>
+                            {profile.top_questions.length > 0 ? (
+                                <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
+                                    {profile.top_questions.map((question, index) => (
+                                        <Activity
+                                            key={index}
+                                            usage={'Question'}
+                                            slug={question.slug}
+                                            id={question.id}
+                                            votes={question.vote_count}
+                                            title={question.title}
+                                            is_answered={question.is_answered}
+                                            created_at={question.humanized_created_at}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="mt-10 w-full text-center text-lg font-bold text-primary-gray">
+                                    No top question to show
+                                </div>
+                            )}
                         </div>
-                        <div className="mb-6">
-                            <p className="mt-6 mb-10 text-2xl">Top Answers</p>
-                            <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
-                                {topAnswers.map((answer, index) => (
-                                    <Activity
-                                        key={index}
-                                        id={answer.id}
-                                        votes={answer.votes}
-                                        data={answer.answer}
-                                        is_answered={answer.is_answered}
-                                        created_at={answer.created_at}
-                                    />
-                                ))}
-                            </div>
+                        <div className="w-1/2">
+                            <p className="mx-3 mb-10 text-2xl">Top Answers</p>
+                            {profile.top_answers.length > 0 ? (
+                                <div className="mt-3 flex flex-col divide-y-2 divide-black border-2 border-black">
+                                    {profile.top_answers.map((answer, index) => (
+                                        <Activity
+                                            key={index}
+                                            usage="Answer"
+                                            id={answer.id}
+                                            slug={answer.question.slug}
+                                            votes={answer.vote_count}
+                                            content={answer.content}
+                                            is_answered={answer.is_correct}
+                                            created_at={answer.humanized_created_at}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="mt-10 w-full text-center text-lg font-bold text-primary-gray">
+                                    No top answer to show
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

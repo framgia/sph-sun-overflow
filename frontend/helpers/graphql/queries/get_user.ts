@@ -13,6 +13,25 @@ const GET_USER = gql`
             question_count
             about_me
             slug
+            top_questions {
+                id
+                slug
+                title
+                content
+                humanized_created_at
+                vote_count
+                is_answered
+            }
+            top_answers {
+                id
+                content
+                humanized_created_at
+                vote_count
+                is_correct
+                question {
+                    slug
+                }
+            }
         }
     }
 `

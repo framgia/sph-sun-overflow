@@ -5,11 +5,14 @@ import { LOAD_SIDEBAR_1, LOAD_SIDEBAR_2, LOAD_SIDEBAR_3 } from '@/helpers/graphq
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 type TRightSidebarProps = {
-    usage: null | 'teams' | 'users'
+    usage: null | 'teams' | 'users' | string
 }
 const RightSideBar = ({ usage }: TRightSidebarProps) => {
     if (usage === 'teams') {
         return <Type2 />
+    }
+    if (usage === 'users') {
+        return <Type3 />
     }
     return <Type1 />
 }
