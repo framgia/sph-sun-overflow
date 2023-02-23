@@ -4,6 +4,7 @@ import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { LOAD_SIDEBAR_1 } from '@/helpers/graphql/queries/sidebar'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -68,12 +69,9 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
             <div className=" cursor-pointer py-2">
                 <p>
                     {tag.description}
-                    <a
-                        className="ml-2 underline "
-                        onClick={() => router.push(`/questions/tagged/${tag.slug}`)}
-                    >
+                    <Link href={`/questions/tagged/${tag.slug}`} className="ml-2 underline ">
                         View Tag
-                    </a>
+                    </Link>
                 </p>
             </div>
             <div className="float-right ml-2 mb-2 p-2">
