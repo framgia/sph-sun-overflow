@@ -3,7 +3,6 @@ import Navbar from '../../organisms/Navbar'
 import { LeftSideBar, RightSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
 import { ToastContainer } from 'react-toastify'
-import { getUserToken } from '@/helpers/localStorageHelper'
 
 type LayoutProps = {
     children: JSX.Element

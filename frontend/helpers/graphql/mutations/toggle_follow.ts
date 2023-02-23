@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const TOGGLE_FOLLOW = gql`
     mutation ToggleFollow($userId: ID!) {
