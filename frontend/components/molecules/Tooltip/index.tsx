@@ -5,7 +5,6 @@ import { LOAD_SIDEBAR_1 } from '@/helpers/graphql/queries/sidebar'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 type TagType = {
@@ -21,8 +20,6 @@ type TagType = {
 }
 
 const Tooltips = ({ tag }: TagType): JSX.Element => {
-    const router = useRouter()
-
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
         refetchQueries: [
             { query: LOAD_SIDEBAR_1 },
