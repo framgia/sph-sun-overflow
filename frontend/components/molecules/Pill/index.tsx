@@ -6,11 +6,18 @@ import { usePopper } from 'react-popper'
 import { Float } from '@headlessui-float/react'
 
 type PillProps = {
-    name: string
-    is_tag: boolean
+    tag: {
+        id: number
+        slug: string
+        name: string
+        description: string
+        is_watched_by_user: boolean
+        count_tagged_questions: number
+        count_watching_users: number
+    }
 }
 
-const Pill = ({ name, is_tag }: PillProps): JSX.Element => {
+const Pill = ({ tag }: PillProps): JSX.Element => {
     const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>()
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
     const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>()
@@ -26,8 +33,8 @@ const Pill = ({ name, is_tag }: PillProps): JSX.Element => {
                         className="flex min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none"
                         ref={setReferenceElement}
                     >
-                        {is_tag ? <Icons name="pill_eye" /> : ''}
-                        <span>{name}</span>
+                        {tag.is_watched_by_user ? <Icons name="pill_eye" /> : ''}
+                        <span>{tag.name}</span>
                     </div>
                 </Popover.Button>
                 <Popover.Panel
@@ -39,7 +46,7 @@ const Pill = ({ name, is_tag }: PillProps): JSX.Element => {
                     <div ref={setArrowElement} style={styles.arrow}>
                         <Float.Arrow className="relative ml-3 h-6 w-6 rotate-45 bg-zinc-200" />
                     </div>
-                    <Tooltips />
+                    <Tooltips tag={tag} />
                 </Popover.Panel>
             </Float>
         </Popover>

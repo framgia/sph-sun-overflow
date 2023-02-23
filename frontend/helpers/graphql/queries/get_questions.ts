@@ -30,6 +30,10 @@ const GET_QUESTIONS = gql`
                     id
                     name
                     is_watched_by_user
+                    slug
+                    description
+                    count_tagged_questions
+                    count_watching_users
                 }
                 user {
                     id
