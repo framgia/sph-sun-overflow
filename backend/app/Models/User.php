@@ -23,7 +23,10 @@ class User extends Authenticatable
      */
     protected $guarded = [];
 
-    protected $appends = ['question_count', 'answer_count', 'top_questions', 'top_answers', 'is_following', 'follower_count', 'following_count'];
+    protected $appends = [
+        'question_count', 'answer_count', 'top_questions', 'top_answers',
+        'is_following', 'follower_count', 'following_count'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -166,8 +169,8 @@ class User extends Authenticatable
         return $this->followers()->count();
     }
 
-        public function getFollowingCountAttribute()
-        {
-            return $this->following()->count();
-        }
+    public function getFollowingCountAttribute()
+    {
+        return $this->following()->count();
+    }
 }
