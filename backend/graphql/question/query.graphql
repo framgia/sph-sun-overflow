@@ -1,7 +1,7 @@
 input filter {
     answered: Boolean
     keyword: String
-    tag: ID
+    tag: String
 }
 
 enum ORDERBY {

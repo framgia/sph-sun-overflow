@@ -33,6 +33,7 @@ const GET_QUESTIONS = gql`
                 }
                 user {
                     id
+                    slug
                     first_name
                     last_name
                     avatar

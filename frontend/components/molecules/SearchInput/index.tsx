@@ -7,7 +7,7 @@ type Props = {
     onChange: (value: string) => void
 }
 
-const SearchInput = ({ placeholder, value, usage = 'Default', onChange }: Props): JSX.Element => {
+const SearchInput = ({ placeholder, usage = 'Default', value, onChange }: Props): JSX.Element => {
     const divStyle = {
         Default: 'relative flex w-80 flex-row',
         Users: 'relative flex w-80 flex-row',
@@ -26,10 +26,11 @@ const SearchInput = ({ placeholder, value, usage = 'Default', onChange }: Props)
             <input
                 type="text"
                 name="search"
-                className={`${inputStyle[usage]} pr-10`}
-                placeholder={placeholder}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                className={`${inputStyle[usage]} pr-10`}
+                placeholder={placeholder}
+                autoComplete="off"
             />
             <button type="submit" className={buttonStyle[usage]}>
                 <Icons name="search_input_icon" />

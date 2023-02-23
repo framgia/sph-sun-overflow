@@ -16,11 +16,11 @@ extend type Query {
 }
 
 input tagSort {
-    column: COLUMNS
+    column: TAG_COLUMNS
     order: ORDER = ASC
 }
 
-enum COLUMNS {
+enum TAG_COLUMNS {
     CREATED_AT @enum(value: "created_at")
     NAME @enum(value: "name")
     POPULARITY @enum(value: "questions_count")

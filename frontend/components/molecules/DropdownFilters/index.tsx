@@ -30,8 +30,10 @@ type FilterListsType = {
 }
 
 type Props = {
-    refetch: ({ first, page, orderBy, filter }: RefetchType) => Promise<ApolloQueryResult<any>>
     triggers: TriggerType[]
+    searchKey?: string
+    tag?: string
+    refetch: ({ first, page, orderBy, filter }: RefetchType) => Promise<ApolloQueryResult<any>>
 }
 
 const FilterTexts: FilterTextsType = {
@@ -41,18 +43,12 @@ const FilterTexts: FilterTextsType = {
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
 }
 
-const DropdownFilters = ({ refetch, triggers }: Props): JSX.Element => {
+const DropdownFilters = ({ triggers, searchKey = '', tag = '', refetch }: Props): JSX.Element => {
     const router = useRouter()
-    const { search } = router.query
-    const [searchKey, setSearchKey] = useState('')
     const [selectedDateFilter, setSelectedDateFilter] = useState(FilterTexts.DATE[1])
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState(FilterTexts.ANSWER[1])
     const [selectedWatchedFilter, setSelectedWatchedFilter] = useState(FilterTexts.WATCHED[1])
     const [selectedPopularFilter, setSelectedPopularFilter] = useState(FilterTexts.POPULAR[1])
-
-    useEffect(() => {
-        setSearchKey(search as string)
-    }, [search])
 
     useEffect(() => {
         setSelectedDateFilter(FilterTexts.DATE[1])
@@ -101,7 +97,7 @@ const DropdownFilters = ({ refetch, triggers }: Props): JSX.Element => {
                         refetch({
                             first: 10,
                             page: 1,
-                            filter: { keyword: searchKey, answered: true },
+                            filter: { keyword: searchKey, answered: true, tag },
                         })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[1])
                     },
@@ -113,7 +109,7 @@ const DropdownFilters = ({ refetch, triggers }: Props): JSX.Element => {
                         refetch({
                             first: 10,
                             page: 1,
-                            filter: { keyword: searchKey, answered: false },
+                            filter: { keyword: searchKey, answered: false, tag },
                         })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[2])
                     },

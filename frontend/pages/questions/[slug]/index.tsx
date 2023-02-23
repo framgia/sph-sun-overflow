@@ -14,6 +14,7 @@ import { FilterType } from '../index'
 
 export type UserType = {
     id?: number
+    slug?: string
     first_name?: string
     last_name?: string
     avatar?: string

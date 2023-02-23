@@ -19,6 +19,7 @@ const TagsListPage = () => {
     const router = useRouter()
     const [selectedFilter, setSelectedFilter] = useState('Most Popular')
     const [searchKey, setSearchKey] = useState('')
+    const [term, setTerm] = useState('')
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_TAGS, {
         variables: {
             first: 6,
@@ -28,7 +29,6 @@ const TagsListPage = () => {
     })
 
     useEffect(() => {
-        console.log('asd')
         refetch({
             first: 6,
             page: 1,
@@ -36,7 +36,7 @@ const TagsListPage = () => {
             sort: [{ column: 'POPULARITY', order: 'DESC' }],
         })
         setSearchKey('')
-        setSelectedFilter('Most Popular')
+        setTerm('')
     }, [router, refetch])
 
     if (loading) return loadingScreenShow()
@@ -59,6 +59,7 @@ const TagsListPage = () => {
 
         await refetch({ first: 6, page: 1, name: `%${target.search.value}%` })
         setSearchKey(target.search.value)
+        setTerm(target.search.value)
     }
 
     const refetchHandler = (column: string, order: string) => {
@@ -122,25 +123,33 @@ const TagsListPage = () => {
         ],
     ]
 
+    const onChange = (value: string) => {
+        setSearchKey(value)
+    }
+
     return (
         <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">
             <PageHeader>Tags</PageHeader>
-            <div className="flex w-full flex-col gap-2 px-5 pt-3">
+            <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
                 <div className="flex w-full flex-row items-center justify-between">
                     <div className="mt-2 flex flex-row items-center justify-between px-2">
                         <form onSubmit={handleSearchSubmit}>
-                            <SearchInput placeholder="Search tag" />
+                            <SearchInput
+                                placeholder="Search tag"
+                                value={searchKey}
+                                onChange={onChange}
+                            />
                         </form>
                     </div>
                     <SortDropdown filters={tagFilters} selectedFilter={selectedFilter} grouped />
                 </div>
-                {searchKey && (
+                {term && (
                     <div className="px-3">
                         {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                        {`"${searchKey}"`}
+                        {`"${term}"`}
                     </div>
                 )}
-                <div className="mt-4 flex w-full flex-col justify-between gap-5">
+                <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
                     <div className="grid w-full grid-cols-2 gap-5 px-3">
                         {tagList.map((tag) => (
                             <Link key={tag.id} href={`questions/tagged/${tag.slug}`}>

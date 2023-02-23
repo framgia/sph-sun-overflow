@@ -34,7 +34,7 @@ final class Questions
 
             if (isset($args['tag']) && $args['tag']) {
                 $query->whereHas('tags', function ($tags) use ($args) {
-                    $tags->where('tag_id', $args['tag']);
+                    $tags->where('slug', $args['tag']);
                 });
             }
 
