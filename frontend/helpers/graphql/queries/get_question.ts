@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 const GET_QUESTION = gql`
-    query getQuestion($slug: String!, $shouldAddViewCount: Boolean) {
-        question(slug: $slug, shouldAddViewCount: $shouldAddViewCount) {
+    query getQuestion($slug: String!, $shouldAddViewCount: Boolean, $answerSort: [answerSort]) {
+        question(slug: $slug, shouldAddViewCount: $shouldAddViewCount, answerSort: $answerSort) {
             id
             title
             content
