@@ -8,6 +8,7 @@ use App\Models\GraphQLPassportSocialite\HasSocialLogin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 
@@ -22,7 +23,10 @@ class User extends Authenticatable
      */
     protected $guarded = [];
 
-    protected $appends = ['question_count', 'answer_count', 'top_questions', 'top_answers'];
+    protected $appends = [
+        'question_count', 'answer_count', 'top_questions', 'top_answers',
+        'is_following', 'follower_count', 'following_count'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -153,5 +157,20 @@ class User extends Authenticatable
     public function getFollowerIdsAttribute()
     {
         return $this->followers()->pluck('follower_id')->toArray();
+    }
+
+    public function getIsFollowingAttribute()
+    {
+        return Auth::user()->following()->where('following_id', $this->id)->exists();
+    }
+
+    public function getFollowerCountAttribute()
+    {
+        return $this->followers()->count();
+    }
+
+    public function getFollowingCountAttribute()
+    {
+        return $this->following()->count();
     }
 }

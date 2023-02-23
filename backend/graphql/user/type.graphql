@@ -22,4 +22,7 @@ type User {
     bookmarks: [Bookmark!]! @hasMany(type: PAGINATOR, defaultCount: 5)
     notifications: [UserNotification!]! @hasMany
     teams: [Member!]! @hasMany
+    is_following: Boolean
+    follower_count: Int!
+    following_count: Int!
 }

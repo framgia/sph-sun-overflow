@@ -17,12 +17,4 @@ class UserRelationObserver
             'notifiable_id' => $userRelation->id,
         ]);
     }
-
-    public function deleted(UserRelation $userRelation)
-    {
-        UserNotification::where([
-            'notifiable_type' => 'App\Models\UserRelation',
-            'notifiable_id' => $userRelation->id,
-        ])->delete();
-    }
 }

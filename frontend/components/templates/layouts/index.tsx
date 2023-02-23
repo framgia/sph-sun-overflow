@@ -16,7 +16,6 @@ const Layout = ({ children }: LayoutProps) => {
         '/users/[slug]',
         '/questions/[slug]/edit',
     ]
-
     const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
     return (
         <ProvidersWrapper>

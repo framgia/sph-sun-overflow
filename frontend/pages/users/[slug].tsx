@@ -6,8 +6,8 @@ import Activity from '@/components/molecules/Activity'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { useBoundStore } from '@/helpers/store'
-import { errorNotify } from '@/helpers/toast'
-import { useQuery } from '@apollo/client'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { MouseEventHandler, useEffect, useState } from 'react'
 import { RightSideBar } from '@/components/organisms/Sidebar'
@@ -15,6 +15,7 @@ import { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]
 import { PaginatorInfo } from '../questions'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
+import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
 
 export type ProfileType = {
     id: number
@@ -27,6 +28,9 @@ export type ProfileType = {
     about_me: string
     top_questions: QuestionType[]
     top_answers: AnswerType[]
+    is_following: boolean
+    follower_count: number
+    following_count: number
 }
 
 export type BookmarkableType = {
@@ -93,6 +97,11 @@ const ProfilePage = () => {
         return false
     }
 
+    const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
+        refetchQueries: [{ query: GET_USER, variables: { slug: query.slug } }],
+        onCompleted: (data) => successNotify(data.toggleFollow),
+    })
+
     const bookmarkQuery = useQuery(GET_BOOKMARKS, {
         variables: {
             user_id: Number(data?.user.id),
@@ -129,6 +138,14 @@ const ProfilePage = () => {
         refetch({ slug: query.slug })
     }
 
+    const onClickFollow = () => {
+        toggleFollow({
+            variables: {
+                userId: data?.user.id,
+            },
+        })
+    }
+
     const bookmarkOnPageChange = (first: number, page: number) => {
         bookmarkQuery.refetch({ first, page })
     }
@@ -156,17 +173,24 @@ const ProfilePage = () => {
             </div>
             <div className="my-4 flex w-full flex-row ">
                 <div className=" mr-20 ml-6 flex w-1/6 justify-center">
-                    <Button type="button" usage="follow" additionalClass="my-auto drop-shadow-xl">
-                        Follow
-                    </Button>
+                    {user_id != data.user.id && (
+                        <Button
+                            type="button"
+                            usage="follow"
+                            additionalClass="my-auto drop-shadow-xl"
+                            onClick={onClickFollow}
+                        >
+                            {data.user.is_following ? 'Unfollow' : 'Follow'}
+                        </Button>
+                    )}
                 </div>
                 <div className=" flex w-1/2 px-8 ">
                     <div className="flex w-full flex-row self-end">
                         <ProfileStats value={profile.reputation} text="Reputation" />
                         <ProfileStats value={profile.question_count} text="Questions" />
                         <ProfileStats value={profile.answer_count} text="Answers" />
-                        <ProfileStats value={2} text="Followers" />
-                        <ProfileStats value={4} text="Following" />
+                        <ProfileStats value={profile.follower_count} text="Followers" />
+                        <ProfileStats value={profile.following_count} text="Following" />
                     </div>
                 </div>
             </div>

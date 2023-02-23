@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Models\UserRelation;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -31,10 +32,17 @@ final class ToggleFollow
 
                 return "You are now following {$user->first_name} {$user->last_name}";
             } else {
-                UserRelation::where([
+                $relation = UserRelation::where([
                     'follower_id' => Auth::id(),
                     'following_id' => $user->id,
+                ])->first();
+                error_log($relation->id);
+                UserNotification::where([
+                    'notifiable_type' => 'App\Models\UserRelation',
+                    'notifiable_id' => $relation->id,
                 ])->delete();
+
+                $relation->delete();
 
                 return "You unfollowed {$user->first_name} {$user->last_name}";
             }
