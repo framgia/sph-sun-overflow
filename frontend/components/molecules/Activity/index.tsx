@@ -33,15 +33,15 @@ const Activity = ({
         <div className="flex h-11 flex-row justify-between">
             <div className="flex w-full flex-row">
                 <div className="box-border min-w-[56px] p-2">
-                    {is_answered || is_correct ? (
-                        <div className="box-border h-full w-full border-2 border-green-600 bg-green-600 text-center text-white">
-                            {votes}
-                        </div>
-                    ) : (
-                        <div className="box-border h-full w-full border-2 border-black text-center">
-                            {votes}
-                        </div>
-                    )}
+                    <div
+                        className={`box-border h-full w-full border-2 text-center ${
+                            is_answered || is_correct
+                                ? 'border-green-600 bg-green-600 text-white'
+                                : 'border-black'
+                        }`}
+                    >
+                        {votes}
+                    </div>
                 </div>
                 <div className="w-full p-2">
                     <Link href={redirectTo[usage]} className="text-blue-500">
