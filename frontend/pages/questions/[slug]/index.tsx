@@ -77,6 +77,12 @@ export type AnswerEditType = {
     content: string | null
 }
 
+type RefetchType = {
+    slug?: string
+    shouldAddViewCount: boolean
+    answerSort?: { column: string; order: string }[]
+}
+
 const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
@@ -86,10 +92,11 @@ const QuestionDetailPage = () => {
 
     const query = router.query
 
-    const { data, loading, error, refetch } = useQuery(GET_QUESTION, {
+    const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTION, {
         variables: {
             slug: String(query.slug),
             shouldAddViewCount: true,
+            answerSort: [{ column: 'VOTES', order: 'DESC' }],
         },
     })
 
@@ -103,23 +110,55 @@ const QuestionDetailPage = () => {
         refetch({ shouldAddViewCount: false })
     }
 
-    const answerFilters: FilterType[] = [
-        {
-            id: 1,
-            name: 'Highest Score',
-            onClick: () => {
-                console.log('Highest Score!')
-                setSelectedAnswerFilter('Highest Score')
+    const answerFilters: FilterType[][] = [
+        [
+            {
+                id: 1,
+                name: 'Highest Score',
+                onClick: () => {
+                    refetch({
+                        shouldAddViewCount: false,
+                        answerSort: [{ column: 'VOTES', order: 'DESC' }],
+                    })
+                    setSelectedAnswerFilter('Highest Score')
+                },
             },
-        },
-        {
-            id: 2,
-            name: 'Date Posted',
-            onClick: () => {
-                console.log('Date Posted!')
-                setSelectedAnswerFilter('Date Posted')
+            {
+                id: 2,
+                name: 'Lowest Score',
+                onClick: () => {
+                    refetch({
+                        shouldAddViewCount: false,
+                        answerSort: [{ column: 'VOTES', order: 'ASC' }],
+                    })
+                    setSelectedAnswerFilter('Lowest Score')
+                },
             },
-        },
+        ],
+        [
+            {
+                id: 3,
+                name: 'Most Recent',
+                onClick: () => {
+                    refetch({
+                        shouldAddViewCount: false,
+                        answerSort: [{ column: 'CREATED_AT', order: 'DESC' }],
+                    })
+                    setSelectedAnswerFilter('Most Recent')
+                },
+            },
+            {
+                id: 2,
+                name: 'Least Recent',
+                onClick: () => {
+                    refetch({
+                        shouldAddViewCount: false,
+                        answerSort: [{ column: 'CREATED_AT', order: 'ASC' }],
+                    })
+                    setSelectedAnswerFilter('Least Recent')
+                },
+            },
+        ],
     ]
 
     return (
@@ -184,6 +223,7 @@ const QuestionDetailPage = () => {
                             <span className="w-[9rem] pr-2 text-end text-sm">Sorted by:</span>
                             <div className="w-44">
                                 <SortDropdown
+                                    grouped={true}
                                     filters={answerFilters}
                                     selectedFilter={selectedAnswerFilter}
                                 />
@@ -198,7 +238,7 @@ const QuestionDetailPage = () => {
                                 onEdit={setAnswer}
                                 question_id={question.id}
                                 content={answer.content}
-                                created_at={answer.created_at}
+                                created_at={answer.humanized_created_at}
                                 vote_count={answer.vote_count}
                                 is_bookmarked={answer.is_bookmarked}
                                 is_correct={answer.is_correct}
