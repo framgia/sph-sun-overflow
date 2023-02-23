@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { GET_TAG_SUGGESTIONS, LOAD_SIDEBAR_1 } from '@/helpers/graphql/queries/sidebar'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
 import { errorNotify, successNotify } from '@/helpers/toast'
+import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 
 type TTag = {
     id: number
@@ -31,7 +32,12 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
         variables: { queryString: `%${queryText}%` },
     })
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
-        refetchQueries: [{ query: LOAD_SIDEBAR_1 }, 'LoadSidebar1'],
+        refetchQueries: [
+            { query: LOAD_SIDEBAR_1 },
+            'LoadSidebar1',
+            { query: GET_QUESTIONS },
+            'Questions',
+        ],
         onCompleted: (data) => {
             if (data.addWatchedTag == 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
@@ -41,7 +47,12 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
         },
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
-        refetchQueries: [{ query: LOAD_SIDEBAR_1 }, 'LoadSidebar1'],
+        refetchQueries: [
+            { query: LOAD_SIDEBAR_1 },
+            'LoadSidebar1',
+            { query: GET_QUESTIONS },
+            'Questions',
+        ],
         onCompleted: (data) => {
             if (data.removeWatchedTag == 'Successfully removed tag from WatchList') {
                 successNotify(data.removeWatchedTag)

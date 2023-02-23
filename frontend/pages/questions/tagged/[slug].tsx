@@ -22,10 +22,17 @@ const TagsPage = () => {
         },
     })
 
-    const { slug } = router.query
     useEffect(() => {
+        const { slug } = router.query
+
+        refetch({
+            first: 10,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+            filter: { answered: true, tag: selectedTag },
+        })
         setSelectedTag(slug as string)
-    }, [slug])
+    }, [router, selectedTag, refetch])
 
     if (loading) return loadingScreenShow()
     if (error) return errorNotify(`Error! ${error}`)

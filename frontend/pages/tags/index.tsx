@@ -156,7 +156,7 @@ const TagsListPage = () => {
                                 <Card
                                     header={
                                         <div className="pt-1">
-                                            <Pill name={tag.slug} is_tag={tag.is_watched_by_user} />
+                                            <Pill tag={tag} />
                                         </div>
                                     }
                                     footer={`${tag.count_tagged_questions} ${
