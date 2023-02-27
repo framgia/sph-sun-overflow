@@ -4,8 +4,14 @@ import { FcGoogle } from 'react-icons/fc'
 import Head from 'next/head'
 import Image from 'next/image'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { errorNotify } from '@/helpers/toast'
 
 const Login: NextPage = () => {
+    const router = useRouter()
+
+    if (router.query.unauthorized === 'true') errorNotify('You are not authorized to login')
+
     return (
         <>
             <Head>

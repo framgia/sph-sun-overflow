@@ -18,7 +18,7 @@ const RouteWrapper = ({ children }: LayoutProps) => {
 
     const dataCheckIfNone = data?.me === null || data === undefined
     const errorCheck = error?.message === 'Unauthenticated.' || error === undefined
-    const routeIfLoginPathCheck = router.asPath === '/login' || router.asPath === '/login/check'
+    const routeIfLoginPathCheck = router.asPath.includes('login')
 
     if (!dataCheckIfNone)
         setUserID(

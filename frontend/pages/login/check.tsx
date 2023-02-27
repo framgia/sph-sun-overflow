@@ -26,10 +26,11 @@ const LoginCheck: NextPage = () => {
                 window.location.href = '/questions'
             })
             .catch((error) => {
-                if (error?.message === 'Authentication exception')
-                    errorNotify('You are not authorized to login', 'top-center')
-
-                signOut()
+                signOut({
+                    callbackUrl: `/login?${
+                        error?.message === 'Authentication exception' ? 'unauthorized=true' : ''
+                    }`,
+                })
             })
 
         if (loading) return loadingScreenShow()
