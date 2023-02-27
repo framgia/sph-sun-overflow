@@ -8,6 +8,7 @@ import '@/styles/login.css'
 import '@/styles/sidebar.css'
 import '@/styles/question.css'
 import '@/styles/RichTextEditor.css'
+import '@/styles/profile.css'
 import RouteWrapper from '@/components/templates/RouteWrapper'
 
 export default function App({ Component, pageProps }: AppProps) {

@@ -11,10 +11,11 @@ import {
 
 type IconsProps = {
     name: string
+    size?: string
     additionalClass?: string
 }
 
-const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
+const Icons = ({ name, size = '20', additionalClass }: IconsProps): JSX.Element => {
     switch (name) {
         case 'square_edit':
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
@@ -81,6 +82,8 @@ const Icons = ({ name, additionalClass }: IconsProps): JSX.Element => {
             return <HiChevronDoubleRight />
         case 'search_input_icon':
             return <HiSearch size="26" />
+        case 'x-plain':
+            return <HiX size={size} />
         default:
             return <></>
     }
