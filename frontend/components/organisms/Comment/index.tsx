@@ -13,11 +13,12 @@ type Props = {
     text: string
     author: string
     time: string
+    action: string
     userId?: number
     refetchHandler: () => void
 }
 
-const Comment = ({ id, text, author, time, userId, refetchHandler }: Props) => {
+const Comment = ({ id, text, author, time, action, userId, refetchHandler }: Props) => {
     const [comment, setComment] = useState(false)
     dayjs.extend(relativeTime)
 
@@ -31,7 +32,9 @@ const Comment = ({ id, text, author, time, userId, refetchHandler }: Props) => {
                     {author}
                 </Link>
             </span>
-            <span className="text-primary-gray">{dayjs(time).fromNow()}</span>
+            <span className="text-primary-gray">
+                {action} comment {dayjs(time).fromNow()}
+            </span>
             {currentUserId === userId && (
                 <div className="invisible ml-2 flex gap-2 group-hover:visible">
                     <span>
