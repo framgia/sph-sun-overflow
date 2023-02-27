@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client'
 import TOGGLE_BOOKMARK from '@/helpers/graphql/mutations/toggle_bookmark'
 import { successNotify } from '@/helpers/toast'
 import { useState } from 'react'
+import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
 
 type BookmarkProps = {
     is_bookmarked: boolean
@@ -17,7 +18,9 @@ const Bookmark = ({
     bookmarkable_type,
     refetchHandler,
 }: BookmarkProps): JSX.Element => {
-    const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK)
+    const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK, {
+        refetchQueries: [{ query: GET_BOOKMARKS }, 'Bookmarks'],
+    })
 
     const [isBookmarked, setIsBookmarked] = useState(is_bookmarked)
 
