@@ -15,7 +15,10 @@ import { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]
 import { PaginatorInfo } from '../questions'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
+<<<<<<< HEAD
 import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
+=======
+>>>>>>> 4b7dbed ([Overflow-56] Implement profiles edit forms components)
 import ProfileInfo from '@/components/organisms/ProfileInfo'
 import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
 
@@ -234,6 +237,29 @@ const ProfilePage = () => {
                         <ProfileStats value={profile.follower_count} text="Followers" />
                         <ProfileStats value={profile.following_count} text="Following" />
                     </div>
+                    <div className="flex w-full flex-row gap-14">
+                        <div className="flex w-2/6 justify-center">
+                            <Button
+                                type="button"
+                                usage="follow"
+                                additionalClass="my-auto drop-shadow-xl"
+                            >
+                                Follow
+                            </Button>
+                        </div>
+                        <div className="flex w-4/6 flex-row">
+                            <div className="flex w-full flex-row gap-4 self-end">
+                                <ProfileStats value={profile.reputation} text="Reputation" />
+                                <ProfileStats value={profile.question_count} text="Questions" />
+                                <ProfileStats value={profile.answer_count} text="Answers" />
+                                <ProfileStats value={2} text="Followers" />
+                                <ProfileStats value={4} text="Following" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex w-1/4 grow">
+                    {user_id == Number(data.user.id) && <RightSideBar usage="users" />}
                 </div>
             </div>
             <div className="mt-3 flex h-3/5 flex-col">
