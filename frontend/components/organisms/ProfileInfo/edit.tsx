@@ -52,8 +52,6 @@ const ProfileInfoEdit = ({ user_id, profile, profileRefetchHandler }: Props): JS
     }, [setValue, profile.about_me])
 
     const onSubmit = (data: ProfileFormValues) => {
-        console.log('Update profile!')
-        console.log(data)
         profileRefetchHandler()
     }
 
