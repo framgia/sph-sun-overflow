@@ -157,6 +157,10 @@ const ProfilePage = () => {
         setIsEditing(true)
     }
 
+    const onClickCancelProfileEdit = () => {
+        setIsEditing(false)
+    }
+
     const profileRefetchHandler = () => {
         setIsEditing(false)
         //place refetch here
@@ -179,6 +183,7 @@ const ProfilePage = () => {
                                     user_id={user_id}
                                     profile={profile}
                                     profileRefetchHandler={profileRefetchHandler}
+                                    onClickCancelProfileEdit={onClickCancelProfileEdit}
                                 />
                             )}
                         </div>

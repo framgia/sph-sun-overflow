@@ -2,13 +2,14 @@ import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import { ProfileType } from '@/pages/users/[slug]'
-import React, { ChangeEvent, MouseEventHandler, useEffect, useState } from 'react'
+import React, { ChangeEvent, Fragment, MouseEventHandler, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 type Props = {
     user_id: number
     profile: ProfileType
     profileRefetchHandler: () => void
+    onClickCancelProfileEdit: () => void
 }
 
 type ProfileFormValues = {
@@ -23,7 +24,12 @@ type FilesType = {
     preview: string
 }
 
-const ProfileInfoEdit = ({ user_id, profile, profileRefetchHandler }: Props): JSX.Element => {
+const ProfileInfoEdit = ({
+    user_id,
+    profile,
+    profileRefetchHandler,
+    onClickCancelProfileEdit,
+}: Props): JSX.Element => {
     const [previewImage, setPreviewImage] = useState('')
 
     const onChangePreview = (event: React.ChangeEvent) => {
@@ -129,12 +135,18 @@ const ProfileInfoEdit = ({ user_id, profile, profileRefetchHandler }: Props): JS
                 </div>
             </div>
             {profile.id === user_id && (
-                <Button
-                    type="submit"
-                    additionalClass="absolute top-[3px] right-0 bg-white !font-bold"
-                >
-                    Save Profile
-                </Button>
+                <div className="absolute top-[3px] right-0 flex flex-row gap-1">
+                    <Button
+                        type="button"
+                        additionalClass="bg-white !font-bold"
+                        onClick={onClickCancelProfileEdit}
+                    >
+                        Cancel
+                    </Button>
+                    <Button type="submit" additionalClass="absbg-white !font-bold">
+                        Save Profile
+                    </Button>
+                </div>
             )}
         </form>
     )
