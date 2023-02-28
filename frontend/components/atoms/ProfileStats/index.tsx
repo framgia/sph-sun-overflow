@@ -5,7 +5,7 @@ interface ProfileStatsProps {
 
 const ProfileStats = ({ value, text }: ProfileStatsProps) => {
     return (
-        <div className="p-2">
+        <div className="flex flex-col">
             <div className="text-md text-center font-bold">{value}</div>
             <div className="text-sm">{text}</div>
         </div>

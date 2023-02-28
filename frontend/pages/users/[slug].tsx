@@ -9,13 +9,15 @@ import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { MouseEventHandler, useEffect, useState } from 'react'
+import { Fragment, MouseEventHandler, useEffect, useState } from 'react'
 import { RightSideBar } from '@/components/organisms/Sidebar'
 import { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]'
 import { PaginatorInfo } from '../questions'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
 import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
+import ProfileInfo from '@/components/organisms/ProfileInfo'
+import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
 
 export type ProfileType = {
     id: number
@@ -80,6 +82,7 @@ const getActiveTabClass = (status: boolean): string => {
 const ProfilePage = () => {
     const user_id = useBoundStore.getState().user_id
     const [isActiveTab, setIsActiveTab] = useState('Activity')
+    const [isEditing, setIsEditing] = useState(false)
 
     const router = useRouter()
     const query = router.query
@@ -150,24 +153,63 @@ const ProfilePage = () => {
         bookmarkQuery.refetch({ first, page })
     }
 
+    const onClickProfileEdit = () => {
+        setIsEditing(true)
+    }
+
+    const onClickCancelProfileEdit = () => {
+        setIsEditing(false)
+    }
+
+    const profileRefetchHandler = () => {
+        setIsEditing(false)
+        //place refetch here
+    }
+
     return (
-        <div className="mx-8 mt-10 flex h-full w-full flex-col">
-            <div className="flex h-auto w-full flex-row ">
-                <div className="ml-6 flex w-1/6 flex-col ">
-                    <ProfileImage
-                        first_name={profile.first_name}
-                        last_name={profile.last_name}
-                        avatar={profile.avatar}
-                    />
+        <div className="mx-8 mt-10 flex h-full w-full flex-col gap-4">
+            <div className="flex w-full flex-row gap-6">
+                <div className="flex w-3/4 flex-col gap-4">
+                    <div className="flex h-auto w-full">
+                        <div className="relative flex w-full flex-row gap-14">
+                            {!isEditing ? (
+                                <ProfileInfo
+                                    user_id={user_id}
+                                    profile={profile}
+                                    onClickProfileEdit={onClickProfileEdit}
+                                />
+                            ) : (
+                                <ProfileInfoEdit
+                                    user_id={user_id}
+                                    profile={profile}
+                                    profileRefetchHandler={profileRefetchHandler}
+                                    onClickCancelProfileEdit={onClickCancelProfileEdit}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="flex w-full flex-row gap-14">
+                        <div className="flex w-2/6 justify-center">
+                            <Button
+                                type="button"
+                                usage="follow"
+                                additionalClass="my-auto drop-shadow-xl"
+                            >
+                                Follow
+                            </Button>
+                        </div>
+                        <div className="flex w-4/6 flex-row">
+                            <div className="flex w-full flex-row gap-4 self-end">
+                                <ProfileStats value={profile.reputation} text="Reputation" />
+                                <ProfileStats value={profile.question_count} text="Questions" />
+                                <ProfileStats value={profile.answer_count} text="Answers" />
+                                <ProfileStats value={2} text="Followers" />
+                                <ProfileStats value={4} text="Following" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="mx-10 flex w-1/2 flex-col">
-                    <AboutMe
-                        about_me={profile.about_me}
-                        authenticated_user_id={user_id}
-                        user_id={profile.id}
-                    />
-                </div>
-                <div className="mr-10 flex grow">
+                <div className="flex w-1/4 grow">
                     {user_id == Number(data.user.id) && <RightSideBar usage="users" />}
                 </div>
             </div>

@@ -9,7 +9,7 @@ interface ProfileImageProps {
 
 const ProfileImage = ({ first_name, last_name, avatar }: ProfileImageProps) => {
     return (
-        <Fragment>
+        <div className="flex flex-col gap-6">
             <div className="relative flex place-content-center ">
                 <div className="relative aspect-square">
                     <Avatar
@@ -23,10 +23,10 @@ const ProfileImage = ({ first_name, last_name, avatar }: ProfileImageProps) => {
                     />
                 </div>
             </div>
-            <div className="mt-6 flex px-6 text-center text-2xl font-semibold line-clamp-3">
+            <div className="flex px-6 text-center text-2xl font-semibold line-clamp-3">
                 {first_name} {last_name}
             </div>
-        </Fragment>
+        </div>
     )
 }
 export default ProfileImage
