@@ -1,7 +1,5 @@
 import Button from '@/components/atoms/Button'
-import ProfileImage from '@/components/atoms/ProfileImage'
 import ProfileStats from '@/components/atoms/ProfileStats'
-import AboutMe from '@/components/molecules/AboutMe'
 import Activity from '@/components/molecules/Activity'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
@@ -9,16 +7,12 @@ import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { Fragment, MouseEventHandler, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RightSideBar } from '@/components/organisms/Sidebar'
 import { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]'
-import { PaginatorInfo } from '../questions'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
-<<<<<<< HEAD
 import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
-=======
->>>>>>> 4b7dbed ([Overflow-56] Implement profiles edit forms components)
 import ProfileInfo from '@/components/organisms/ProfileInfo'
 import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
 
@@ -36,8 +30,10 @@ export type ProfileType = {
     is_following: boolean
     follower_count: number
     following_count: number
+    updated_at: string
+    slug: string
+    email: string
 }
-
 export type BookmarkableType = {
     __typename: string
     id: number
@@ -53,7 +49,6 @@ export type BookmarkableType = {
     user: UserType
     question?: BookmarkQuestionType
 }
-
 type BookmarkQuestionType = {
     id: number
     title: string
@@ -67,26 +62,22 @@ type BookmarkQuestionType = {
     tags: TagType[]
     user: UserType
 }
-
 export type BookmarkType = {
     id?: number
     bookmarkable?: BookmarkableType
     user?: UserType
 }
-
 const getActiveTabClass = (status: boolean): string => {
     if (status) {
         return '-mb-[1px] hover:text-primary-red px-6 font-semibold border-b-2 border-primary-red bg-red-100'
     }
-
     return '-mb-[1px] hover:text-primary-red px-6 active:border-red-400'
 }
-
 const ProfilePage = () => {
     const user_id = useBoundStore.getState().user_id
+    const setUserID = useBoundStore((state) => state.setUserID)
     const [isActiveTab, setIsActiveTab] = useState('Activity')
     const [isEditing, setIsEditing] = useState(false)
-
     const router = useRouter()
     const query = router.query
     const { data, loading, error, refetch } = useQuery(GET_USER, {
@@ -94,20 +85,16 @@ const ProfilePage = () => {
             slug: query.slug,
         },
     })
-
     const profileIsNull = (): boolean => {
         if (data === undefined || data === null) {
             return true
         }
-
         return false
     }
-
     const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
         refetchQueries: [{ query: GET_USER, variables: { slug: query.slug } }],
         onCompleted: (data) => successNotify(data.toggleFollow),
     })
-
     const bookmarkQuery = useQuery(GET_BOOKMARKS, {
         variables: {
             user_id: Number(data?.user.id),
@@ -117,18 +104,14 @@ const ProfilePage = () => {
         },
         skip: profileIsNull(),
     })
-
     useEffect(() => {
         refetch()
     }, [router, refetch])
-
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)
-
     const profile: ProfileType = {
         ...data.user,
     }
-
     const onClickBookmarkTab = () => {
         setIsActiveTab('Bookmarks')
         bookmarkQuery.refetch({
@@ -138,12 +121,10 @@ const ProfilePage = () => {
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         })
     }
-
     const onClickActivityTab = () => {
         setIsActiveTab('Activity')
         refetch({ slug: query.slug })
     }
-
     const onClickFollow = () => {
         toggleFollow({
             variables: {
@@ -151,24 +132,28 @@ const ProfilePage = () => {
             },
         })
     }
-
     const bookmarkOnPageChange = (first: number, page: number) => {
         bookmarkQuery.refetch({ first, page })
     }
-
     const onClickProfileEdit = () => {
         setIsEditing(true)
     }
-
     const onClickCancelProfileEdit = () => {
         setIsEditing(false)
     }
-
     const profileRefetchHandler = () => {
         setIsEditing(false)
-        //place refetch here
+        refetch()
+        setUserID(
+            profile.id,
+            profile.first_name,
+            profile.last_name,
+            profile.email,
+            profile.avatar,
+            profile.slug,
+            profile.updated_at
+        )
     }
-
     return (
         <div className="mx-8 mt-10 flex h-full w-full flex-col gap-4">
             <div className="flex w-full flex-row gap-6">
@@ -193,67 +178,24 @@ const ProfilePage = () => {
                     </div>
                     <div className="flex w-full flex-row gap-14">
                         <div className="flex w-2/6 justify-center">
-                            <Button
-                                type="button"
-                                usage="follow"
-                                additionalClass="my-auto drop-shadow-xl"
-                            >
-                                Follow
-                            </Button>
+                            {user_id != data.user.id && (
+                                <Button
+                                    type="button"
+                                    usage="follow"
+                                    additionalClass="my-auto drop-shadow-xl"
+                                    onClick={onClickFollow}
+                                >
+                                    {data.user.is_following ? 'Unfollow' : 'Follow'}
+                                </Button>
+                            )}
                         </div>
                         <div className="flex w-4/6 flex-row">
                             <div className="flex w-full flex-row gap-4 self-end">
                                 <ProfileStats value={profile.reputation} text="Reputation" />
                                 <ProfileStats value={profile.question_count} text="Questions" />
                                 <ProfileStats value={profile.answer_count} text="Answers" />
-                                <ProfileStats value={2} text="Followers" />
-                                <ProfileStats value={4} text="Following" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex w-1/4 grow">
-                    {user_id == Number(data.user.id) && <RightSideBar usage="users" />}
-                </div>
-            </div>
-            <div className="my-4 flex w-full flex-row ">
-                <div className=" mr-20 ml-6 flex w-1/6 justify-center">
-                    {user_id != data.user.id && (
-                        <Button
-                            type="button"
-                            usage="follow"
-                            additionalClass="my-auto drop-shadow-xl"
-                            onClick={onClickFollow}
-                        >
-                            {data.user.is_following ? 'Unfollow' : 'Follow'}
-                        </Button>
-                    )}
-                </div>
-                <div className=" flex w-1/2 px-8 ">
-                    <div className="flex w-full flex-row self-end">
-                        <ProfileStats value={profile.reputation} text="Reputation" />
-                        <ProfileStats value={profile.question_count} text="Questions" />
-                        <ProfileStats value={profile.answer_count} text="Answers" />
-                        <ProfileStats value={profile.follower_count} text="Followers" />
-                        <ProfileStats value={profile.following_count} text="Following" />
-                    </div>
-                    <div className="flex w-full flex-row gap-14">
-                        <div className="flex w-2/6 justify-center">
-                            <Button
-                                type="button"
-                                usage="follow"
-                                additionalClass="my-auto drop-shadow-xl"
-                            >
-                                Follow
-                            </Button>
-                        </div>
-                        <div className="flex w-4/6 flex-row">
-                            <div className="flex w-full flex-row gap-4 self-end">
-                                <ProfileStats value={profile.reputation} text="Reputation" />
-                                <ProfileStats value={profile.question_count} text="Questions" />
-                                <ProfileStats value={profile.answer_count} text="Answers" />
-                                <ProfileStats value={2} text="Followers" />
-                                <ProfileStats value={4} text="Following" />
+                                <ProfileStats value={profile.follower_count} text="Followers" />
+                                <ProfileStats value={profile.following_count} text="Following" />
                             </div>
                         </div>
                     </div>

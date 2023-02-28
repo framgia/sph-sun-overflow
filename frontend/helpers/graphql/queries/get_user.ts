@@ -35,6 +35,7 @@ const GET_USER = gql`
                     slug
                 }
             }
+            updated_at
         }
     }
 `

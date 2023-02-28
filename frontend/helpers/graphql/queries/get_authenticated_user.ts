@@ -9,6 +9,7 @@ const GET_AUTHENTICATED_USER = gql`
             email
             avatar
             slug
+            updated_at
         }
     }
 `

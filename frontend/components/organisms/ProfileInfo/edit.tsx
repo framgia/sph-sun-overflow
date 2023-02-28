@@ -1,10 +1,13 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
+import UPDATE_USER from '@/helpers/graphql/mutations/update_user'
+import { errorNotify, successNotify } from '@/helpers/toast'
 import { ProfileType } from '@/pages/users/[slug]'
-import React, { ChangeEvent, Fragment, MouseEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-
+import { useRouter } from 'next/router'
+import { useMutation } from '@apollo/client'
 type Props = {
     user_id: number
     profile: ProfileType
@@ -19,22 +22,35 @@ type ProfileFormValues = {
     about_me: string
 }
 
-type FilesType = {
-    name: string
-    preview: string
-}
-
 const ProfileInfoEdit = ({
     user_id,
     profile,
-    profileRefetchHandler,
     onClickCancelProfileEdit,
+    profileRefetchHandler,
 }: Props): JSX.Element => {
+    const router = useRouter()
+
+    const [updateUser] = useMutation(UPDATE_USER)
+
     const [previewImage, setPreviewImage] = useState('')
+
+    const [inputError, setInputError] = useState({
+        first_name: false,
+        last_name: false,
+        about_me: false,
+    })
 
     const onChangePreview = (event: React.ChangeEvent) => {
         const target = event?.target as HTMLInputElement
         const file = target.files?.[0]
+
+        const acceptedType = ['image/png', 'image/jpeg']
+
+        if (!acceptedType.includes(String(file?.type))) {
+            errorNotify('Please upload a valid image')
+            return
+        }
+
         if (file) {
             setPreviewImage(URL.createObjectURL(file))
         }
@@ -57,11 +73,58 @@ const ProfileInfoEdit = ({
         }
     }, [setValue, profile.about_me])
 
-    const onSubmit = (data: ProfileFormValues) => {
-        profileRefetchHandler()
+    const convertBase64 = (file: any) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader()
+            fileReader.readAsDataURL(file)
+
+            fileReader.onload = () => {
+                resolve(fileReader.result)
+            }
+
+            fileReader.onerror = (error) => {
+                reject(error)
+            }
+        })
+    }
+
+    const onSubmit = async (data: ProfileFormValues) => {
+        const avatar_image = data.avatar[0] !== undefined ? await convertBase64(data.avatar[0]) : ''
+
+        if (
+            data.first_name === profile.first_name &&
+            data.last_name === profile.last_name &&
+            data.about_me === profile.about_me &&
+            data.avatar[0] === undefined
+        ) {
+            errorNotify('Profile Not Updated!')
+            profileRefetchHandler()
+            return
+        } else {
+            updateUser({
+                variables: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    about_me: data.about_me,
+                    avatar: avatar_image,
+                },
+            })
+                .then(() => {
+                    successNotify('Profile updated successfully please wait for a while!')
+
+                    setTimeout(() => {
+                        router.reload()
+                        profileRefetchHandler()
+                    }, 3000)
+                })
+                .catch((e) => {
+                    errorNotify('Please Complete the Input Fields!')
+                })
+        }
     }
 
     const onCancelButton = (event: React.MouseEvent) => {
+        event.preventDefault()
         setValue('avatar', '')
         setPreviewImage('')
     }
@@ -92,7 +155,7 @@ const ProfileInfoEdit = ({
                             Change Picture
                             <input
                                 id="profileImageUpload"
-                                accept="image/*"
+                                accept="image/png, image/gif, image/jpeg"
                                 type="file"
                                 {...register('avatar', { onChange: onChangePreview })}
                             />
@@ -102,13 +165,17 @@ const ProfileInfoEdit = ({
                 <div className="flex w-full flex-col gap-2">
                     <input
                         type="text"
-                        className="form-input rounded-lg border border-border-black"
+                        className={`form-input rounded-lg border  ${
+                            inputError.first_name ? 'border-primary-red' : 'border-border-black'
+                        } `}
                         placeholder="First name"
                         {...register('first_name', {})}
                     />
                     <input
                         type="text"
-                        className="form-input rounded-lg border border-border-black"
+                        className={`form-input rounded-lg border ${
+                            inputError.last_name ? 'border-primary-red' : 'border-border-black'
+                        } `}
                         placeholder="Last name"
                         {...register('last_name', {})}
                     />

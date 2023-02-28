@@ -18,6 +18,7 @@ const ProfileInfo = ({ user_id, profile, onClickProfileEdit }: Props): JSX.Eleme
                     first_name={profile.first_name}
                     last_name={profile.last_name}
                     avatar={profile.avatar}
+                    updated_at={profile.updated_at}
                 />
             </div>
             <div className="flex w-4/6 flex-col">
