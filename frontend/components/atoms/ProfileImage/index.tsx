@@ -5,9 +5,10 @@ interface ProfileImageProps {
     first_name: string
     last_name: string
     avatar: string
+    updated_at?: string
 }
 
-const ProfileImage = ({ first_name, last_name, avatar }: ProfileImageProps) => {
+const ProfileImage = ({ first_name, last_name, avatar, updated_at }: ProfileImageProps) => {
     return (
         <div className="flex flex-col gap-6">
             <div className="relative flex place-content-center ">
@@ -17,7 +18,7 @@ const ProfileImage = ({ first_name, last_name, avatar }: ProfileImageProps) => {
                         name={`${first_name} ${last_name}`}
                         size="200"
                         alt={first_name}
-                        src={avatar}
+                        src={avatar ? `${avatar}?${updated_at}` : `${first_name}`}
                         maxInitials={1}
                         textSizeRatio={2}
                     />

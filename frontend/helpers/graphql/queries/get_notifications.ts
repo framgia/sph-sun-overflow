@@ -6,6 +6,7 @@ const GET_NOTIFICATIONS = gql`
             id
             is_read
             humanized_created_at
+            updated_at
             notifiable {
                 __typename
                 ... on UserRelation {

@@ -25,7 +25,7 @@ class User extends Authenticatable
 
     protected $appends = [
         'question_count', 'answer_count', 'top_questions', 'top_answers',
-        'is_following', 'follower_count', 'following_count'
+        'is_following', 'follower_count', 'following_count',
     ];
 
     /**

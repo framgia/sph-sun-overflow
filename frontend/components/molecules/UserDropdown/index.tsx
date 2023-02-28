@@ -12,9 +12,17 @@ export type UserProps = {
     last_name: string
     avatar: string
     slug: string
+    updated_at: string
 }
 
-const UserDropdown = ({ id, first_name, last_name, avatar, slug }: UserProps): JSX.Element => {
+const UserDropdown = ({
+    id,
+    first_name,
+    last_name,
+    avatar,
+    slug,
+    updated_at,
+}: UserProps): JSX.Element => {
     return (
         <Menu as="div" className="relative ml-1 inline-block text-left">
             <div>
@@ -25,7 +33,11 @@ const UserDropdown = ({ id, first_name, last_name, avatar, slug }: UserProps): J
                         name={`${first_name} ${last_name}`}
                         size="40"
                         alt={first_name}
-                        src={avatar}
+                        src={
+                            updated_at && updated_at.length > 0
+                                ? `${avatar}?${updated_at}`
+                                : `${avatar}`
+                        }
                         maxInitials={1}
                         textSizeRatio={2}
                     />
