@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { HiOutlineLogout, HiOutlineUser } from 'react-icons/hi'
 import { setUserToken } from '@/helpers/localStorageHelper'
 import { signOut } from 'next-auth/react'
 import Avatar from 'react-avatar'
+import { useSubscription } from '@apollo/client'
+import NOTIFICATION_SUBSCRIPTION from '@/helpers/graphql/subscriptions/notification_subscription'
 
 export type UserProps = {
     id: number
@@ -15,6 +17,14 @@ export type UserProps = {
 }
 
 const UserDropdown = ({ id, first_name, last_name, avatar, slug }: UserProps): JSX.Element => {
+    const { data, loading, error } = useSubscription(NOTIFICATION_SUBSCRIPTION, {
+        variables: { id: 1 },
+        onComplete: (e) => console.log(e),
+    })
+    useEffect(() => {
+        console.log(data)
+        console.log(error)
+    }, [data, error])
     return (
         <Menu as="div" className="relative ml-1 inline-block text-left">
             <div>

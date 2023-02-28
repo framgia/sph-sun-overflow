@@ -6,7 +6,6 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Models\User;
 use Exception;
-
 final class CreateAnswer
 {
     /**
@@ -25,7 +24,9 @@ final class CreateAnswer
                 'question_id' => $checkQuestion->id,
             ]);
 
+
             $newAnswer = Answer::latest()->first();
+            \Nuwave\Lighthouse\Execution\Utils\Subscription::broadcast('latestAnswer', $newAnswer);
 
             return $newAnswer;
         } catch (Exception $e) {

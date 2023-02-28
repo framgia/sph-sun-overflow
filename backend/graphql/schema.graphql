@@ -51,3 +51,6 @@ type Mutation {
         )
         @guard(with: ["api"])
 }
+type Subscription {
+    latestAnswer: Answer
+}
