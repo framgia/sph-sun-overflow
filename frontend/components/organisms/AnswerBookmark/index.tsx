@@ -22,6 +22,8 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                 view_count={question?.views_count}
                 tags={question?.tags}
                 user={question?.user}
+                bookmarkType="Answer"
+                bookmarkAnswerId={bookmarkable!.id}
             />
             <div className="px-10 py-3">
                 <div className="flex w-full flex-col border-l-4 border-primary-gray px-4">

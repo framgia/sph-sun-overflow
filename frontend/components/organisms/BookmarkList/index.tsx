@@ -20,6 +20,7 @@ const BookmarkList = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                     view_count={bookmarkable.views_count}
                     tags={bookmarkable.tags}
                     user={bookmarkable.user}
+                    bookmarkType="Question"
                 />
             )
         case 'Answer':

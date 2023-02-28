@@ -4,6 +4,7 @@ import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
 import { UserType, TagType } from '../../../pages/questions/[slug]'
 import { parseHTML } from '../../../helpers/htmlParsing'
+import Bookmark from '@/components/molecules/Bookmark'
 
 type Props = {
     id?: number
@@ -17,6 +18,9 @@ type Props = {
     humanized_created_at?: string
     tags?: TagType[]
     user?: UserType
+    bookmarkType?: 'Question' | 'Answer'
+    bookmarkAnswerId?: number
+    refetch?: () => void
 }
 
 const QuestionList = ({
@@ -31,6 +35,8 @@ const QuestionList = ({
     humanized_created_at,
     tags,
     user,
+    bookmarkType,
+    bookmarkAnswerId,
 }: Props): JSX.Element => {
     return (
         <div className="flex w-full flex-row p-5">
@@ -46,13 +52,21 @@ const QuestionList = ({
                 </div>
             </div>
             <div className="flex w-full flex-col gap-4">
-                <div className="w-full">
+                <div className="flex w-full justify-between">
                     <Link
                         href={`/questions/${slug}`}
                         className="text-lg text-blue-600 hover:text-blue-400"
                     >
                         {title}
                     </Link>
+                    {bookmarkType && (
+                        <Bookmark
+                            bookmarkable_id={bookmarkType === 'Answer' ? bookmarkAnswerId! : id!}
+                            bookmarkable_type={bookmarkType}
+                            refetchHandler={() => {}}
+                            is_bookmarked
+                        />
+                    )}
                 </div>
                 <div className="ql-snow flex w-full flex-col gap-1">
                     <div className="ql-editor question-parsed-content w-full">
