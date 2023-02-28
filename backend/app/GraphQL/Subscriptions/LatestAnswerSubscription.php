@@ -2,10 +2,10 @@
 
 namespace App\GraphQL\Subscriptions;
 
+use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Http\Request;
 use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
 use Nuwave\Lighthouse\Subscriptions\Subscriber;
-use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final class LatestAnswerSubscription extends GraphQLSubscription
@@ -21,6 +21,7 @@ final class LatestAnswerSubscription extends GraphQLSubscription
     {
         // TODO implement authorize
         error_log('here');
+
         return true;
     }
 
