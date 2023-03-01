@@ -7,6 +7,7 @@ type Team {
     updated_at: String
     teamLeader: User! @belongsTo
     members: [Member!]! @hasMany
+    slug: String!
 }
 
 type Member {

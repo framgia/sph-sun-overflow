@@ -14,6 +14,6 @@ class UserRelationSeeder extends Seeder
      */
     public function run()
     {
-        UserRelation::factory(5)->create();
+        UserRelation::factory(10)->create();
     }
 }
