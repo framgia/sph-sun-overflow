@@ -95,7 +95,7 @@ const TeamsListPage = () => {
                     </div>
                 </div>
                 <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
-                    <div className="grid w-full grid-cols-2 gap-5 px-3">
+                    <div className="grid w-full grid-cols-2 gap-y-5 gap-x-10 px-3">
                         {teamsList.map((team) => (
                             <Link key={team.id} href={`teams/${team.slug}`}>
                                 <Card header={team.name} footer={`${team.members_count} members`}>
