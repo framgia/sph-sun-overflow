@@ -3,6 +3,8 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\Question as ModelsQuestion;
+use App\Models\Team;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 final class Question
@@ -31,10 +33,21 @@ final class Question
 
         $question = $questionQuery->where('slug', $args['slug'])->first();
 
-        if ($args['shouldAddViewCount']) {
-            $question->update(['views_count' => $question->views_count + 1]);
+        $checker = true;
+
+        if (! $question->is_public) {
+            $team = Team::findOrFail($question->team_id);
+            if ($team->members->where('user_id', Auth::id())->isEmpty()) {
+                $checker = false;
+            }
         }
 
-        return $question;
+        if ($checker) {
+            if ($args['shouldAddViewCount']) {
+                $question->update(['views_count' => $question->views_count + 1]);
+            }
+
+            return $question;
+        }
     }
 }
