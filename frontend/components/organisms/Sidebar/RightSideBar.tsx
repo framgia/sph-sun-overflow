@@ -8,7 +8,7 @@ type TRightSidebarProps = {
     usage: null | 'teams' | 'users' | string
 }
 const RightSideBar = ({ usage }: TRightSidebarProps) => {
-    if (usage === 'teams') {
+    if (usage === 'team') {
         return <Type2 />
     }
     if (usage === 'users') {

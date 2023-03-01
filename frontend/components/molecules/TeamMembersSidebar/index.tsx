@@ -38,7 +38,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
     }
     useEffect(() => {
         if (!loading) {
-            setMembers(extractMembers())
+            setMembers([])
         }
     }, [data])
     return (

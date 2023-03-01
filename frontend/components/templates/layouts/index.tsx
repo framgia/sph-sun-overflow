@@ -48,7 +48,14 @@ const Layout = ({ children }: LayoutProps) => {
                         !hideRightSidebarInPages.includes(router.pathname) && (
                             <div className="relative mr-14 w-1/5 pt-20">
                                 <div className="fixed w-1/5">
-                                    <RightSideBar usage={router.pathname.split('/')[1]} />
+                                    <RightSideBar
+                                        usage={
+                                            router.pathname.split('/')[1] === 'teams' &&
+                                            router.pathname.split('/').length > 2
+                                                ? 'team'
+                                                : router.pathname.split('/')[1]
+                                        }
+                                    />
                                 </div>
                             </div>
                         )}
