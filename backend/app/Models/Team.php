@@ -37,6 +37,8 @@ class Team extends Model
 
 
 
+    protected $guarded = [];
+
     public function teamLeader()
     {
         return $this->belongsTo(User::class, 'user_id');
