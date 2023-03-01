@@ -11,7 +11,6 @@ class Team extends Model
 {
     use HasFactory, SoftDeletes;
     protected static function boot()
-
     {
         parent::boot();
 
