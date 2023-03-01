@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TagsInput, { ITag } from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
 import { useForm, Controller } from 'react-hook-form'
@@ -13,10 +13,14 @@ import { useMutation } from '@apollo/client'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useRouter } from 'next/router'
 import isEqual from 'lodash/isEqual'
+import SortDropdown from '@/components/molecules/SortDropdown'
+import { FilterType } from '@/pages/questions'
 export type FormValues = {
     title: string
     description: string
     tags: ITag[]
+    is_public: boolean
+    team_id: number | null
 }
 type QuestionSkeleton = {
     id: Number | undefined
@@ -53,12 +57,15 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         handleSubmit,
         control,
         setValue,
+        watch,
         formState: { errors },
     } = useForm<FormValues>({
         defaultValues: {
             title: title ? String(title) : '',
             description: content ? String(content) : '',
             tags: tags ? tags : [],
+            is_public: true,
+            team_id: null,
         },
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
@@ -68,6 +75,49 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
 
     const [createQuestion] = useMutation(CREATE_QUESTION)
     const [updateQuestion] = useMutation(UPDATE_QUESTION)
+
+    const tempTeams: FilterType[] = [
+        {
+            id: 0,
+            name: 'No Team',
+            onClick: () => {
+                setValue('team_id', null)
+                setValue('is_public', true)
+            },
+        },
+        {
+            id: 1,
+            name: '1',
+            onClick: () => {
+                setValue('team_id', 1)
+                setValue('is_public', false)
+            },
+        },
+        {
+            id: 2,
+            name: '2',
+            onClick: () => {
+                setValue('team_id', 2)
+                setValue('is_public', false)
+            },
+        },
+        {
+            id: 3,
+            name: '3',
+            onClick: () => {
+                setValue('team_id', 3)
+                setValue('is_public', false)
+            },
+        },
+        {
+            id: 4,
+            name: '4',
+            onClick: () => {
+                setValue('team_id', 4)
+                setValue('is_public', false)
+            },
+        },
+    ]
 
     const validateChanges = (data: FormValues) => {
         if (data.title != initialState?.title) {
@@ -168,20 +218,54 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                         )}
                     />
                 </div>
-                <div className="Tags w-full self-center py-4">
-                    <label htmlFor="tagsInput" className="text-2xl font-bold">
-                        Tags (max. 5)
-                    </label>
-                    <div className="w-1/2">
-                        <Controller
-                            control={control}
-                            name="tags"
-                            render={({ field: { value } }) => (
-                                <TagsInput setValue={setValue} value={value} />
-                            )}
-                        />
+
+                <div className="flex w-full flex-row  space-x-10 py-4">
+                    <div className="Tags w-1/2 self-center py-4">
+                        <label htmlFor="tagsInput" className="text-2xl font-bold">
+                            Tags (max. 5)
+                        </label>
+                        <div className="">
+                            <Controller
+                                control={control}
+                                name="tags"
+                                render={({ field: { value } }) => (
+                                    <TagsInput setValue={setValue} value={value} />
+                                )}
+                            />
+                        </div>
                     </div>
+                    <div className="flex flex-col  self-center">
+                        <label className="text-2xl font-bold">Teams</label>
+                        <div className="w-40">
+                            <Controller
+                                control={control}
+                                name="team_id"
+                                render={({ field: { value } }) => (
+                                    <SortDropdown
+                                        filters={tempTeams}
+                                        selectedFilter={tempTeams[value || 0].name}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                    {watch('team_id') && (
+                        <div className="flex flex-col items-center self-center">
+                            <label htmlFor="isPublic" className="text-2xl font-bold">
+                                Public
+                            </label>
+                            <div className="">
+                                <input
+                                    type="checkbox"
+                                    id="isPublic"
+                                    {...register('is_public')}
+                                    className=" mt-1 aspect-square h-full"
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
+
                 {!isObjectEmpty(errors) && <FormAlert errors={errors} />}
                 <div className="Submit w-full self-center py-4">
                     <div className="float-right">
