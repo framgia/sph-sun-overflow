@@ -10,13 +10,6 @@ type Team {
     slug: String!
 }
 
-type Member {
-    id: ID!
-    user: User! @belongsTo
-    teamRole: TeamRole! @belongsTo
-    team: Team! @belongsTo
-}
-
 type TeamRole {
     id: ID!
     name: String!
