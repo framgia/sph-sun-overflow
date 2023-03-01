@@ -17,13 +17,13 @@ class TeamFactory extends Factory
      */
     public function definition()
     {
-
         $userId = DB::table('users')->pluck('id')->random();
+
         return [
-            'name'=> fake()->company(),
+            'name' => fake()->company(),
             'description' => fake()->bs(),
-            'dashboard_content'=> '<p>'.fake()->paragraph($nbSentences = 1, $variableNbSentences = true).'</p>',
-            'user_id'=> $userId,
+            'dashboard_content' => '<p>'.fake()->paragraph($nbSentences = 1, $variableNbSentences = true).'</p>',
+            'user_id' => $userId,
         ];
     }
 }
