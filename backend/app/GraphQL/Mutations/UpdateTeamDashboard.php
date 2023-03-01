@@ -13,10 +13,9 @@ final class UpdateTeamDashboard
      */
     public function __invoke($_, array $args)
     {
-        $user = Auth::user();
         $content = Team::find($args['id']);
 
-        if ($user['id'] === $content['teamLeader']['id']) {
+        if (Auth::id() === $content['teamLeader']['id']) {
             $content->update(['dashboard_content' => $args['dashboard_content']]);
         }
 
