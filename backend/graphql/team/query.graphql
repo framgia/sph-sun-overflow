@@ -1,4 +1,7 @@
 extend type Query {
     teams: [Team!]! @all
     team(id: ID @eq): Team @find
+    teamMembers(team_slug: String!): [Member!]
+        @guard(with: ["api"])
+        @paginate(builder: "App\\GraphQL\\Queries\\TeamMembers")
 }
