@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import TagsInput, { ITag } from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
 import { useForm, Controller } from 'react-hook-form'
