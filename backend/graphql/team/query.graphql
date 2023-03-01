@@ -1,4 +1,7 @@
 extend type Query {
-    teams: [Team!]! @all
+    teams(name: String! = "%%" @where(operator: "like")): [Team]
+        @guard(with: ["api"])
+        @paginate
+
     team(id: ID @eq): Team @find
 }
