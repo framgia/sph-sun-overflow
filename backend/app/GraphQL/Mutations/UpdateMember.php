@@ -20,7 +20,7 @@ final class UpdateMember
         $updateData = Arr::except($args, ['tags']);
 
         if ($authId != $member->team->teamLeader->id) {
-            throw new CustomException('You are not allowed to add members to this team');
+            throw new CustomException('You are not allowed to edit members in this team');
         }
 
         $member->update($updateData);

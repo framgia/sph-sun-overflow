@@ -18,7 +18,7 @@ final class DeleteMember
         $member = Member::find($args['id']);
 
         if ($authId != $member->team->teamLeader->id) {
-            throw new CustomException('You are not allowed to add members to this team');
+            throw new CustomException('You are not allowed to remove members from this team');
         }
 
         $member->delete();
