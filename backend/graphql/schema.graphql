@@ -9,6 +9,7 @@
 #import team/*.graphql
 #import bookmark/*.graphql
 #import relation/*.graphql
+#import member/*.graphql
 
 type Mutation {
     login(input: LoginInput @spread): AuthPayload!

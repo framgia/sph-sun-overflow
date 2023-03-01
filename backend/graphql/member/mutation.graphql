@@ -1,0 +1,10 @@
+extend type Mutation {
+    addMember(user_id: ID!, team_role_id: ID, team_id: ID!): Member! @create
+    updateMember(
+        id: ID!
+        user_id: ID!
+        team_role_id: ID
+        team_id: ID!
+    ): Member! @update
+    deleteMember(id: ID!): Member! @delete
+}

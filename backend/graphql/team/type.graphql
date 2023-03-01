@@ -9,13 +9,6 @@ type Team {
     members: [Member!]! @hasMany
 }
 
-type Member {
-    id: ID!
-    user: User! @belongsTo
-    teamRole: TeamRole! @belongsTo
-    team: Team! @belongsTo
-}
-
 type TeamRole {
     id: ID!
     name: String!
