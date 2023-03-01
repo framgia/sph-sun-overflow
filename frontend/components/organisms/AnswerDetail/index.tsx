@@ -135,6 +135,11 @@ const Answer = ({
                                 text={comment.content}
                                 author={`${comment.user.first_name} ${comment.user.last_name}`}
                                 time={comment.updated_at}
+                                action={
+                                    comment.updated_at == comment.created_at
+                                        ? 'added a'
+                                        : 'updated his/her'
+                                }
                                 userId={comment.user.id}
                                 refetchHandler={refetchHandler}
                             />
