@@ -38,6 +38,12 @@ final class Questions
                 });
             }
 
+            if (isset($args['team']) && $args['team']) {
+                $query->whereHas('team', function ($teamQuestions) use ($args) {
+                    $teamQuestions->where('slug', $args['team']);
+                });
+            }
+
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
