@@ -16,13 +16,13 @@ type QuestionDetailProps = {
     id: number
     title: string
     content: string
-    slug: string
+    slug?: string
     created_at: string
     humanized_created_at: string
     views_count: number
     vote_count?: number
     tags: { id: number; name: string; is_watched_by_user: boolean }[]
-    user: UserType
+    user?: UserType
     is_bookmarked: boolean
     is_from_user: boolean
     user_vote: number
@@ -132,6 +132,7 @@ const QuestionDetail = ({
                                         first_name={user.first_name}
                                         last_name={user.last_name}
                                         avatar={user.avatar ?? ''}
+                                        slug={user.slug}
                                     />
                                 </div>
                             </div>

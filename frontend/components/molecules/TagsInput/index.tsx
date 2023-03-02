@@ -83,7 +83,7 @@ const TagsInput = ({ setValue, value }: TagInputProps) => {
                 multiple
                 disabled={disableInput}
             >
-                <span className="flex flex-row ">
+                <span className="my-1 flex flex-row">
                     {tagsSelected.map((tag, index) => {
                         let { name, id } = tag
                         return <Tag key={index} name={name} tagId={id} deleteTag={deleteTag} />

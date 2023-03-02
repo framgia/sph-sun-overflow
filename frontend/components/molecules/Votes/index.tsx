@@ -12,14 +12,14 @@ const Votes = ({ count, user_vote, voteHandler }: VotesProps): JSX.Element => {
             <div onClick={() => voteHandler(1)}>
                 <Icons
                     name="vote_up"
-                    additionalClass={user_vote === 1 ? ' text-primary-red' : ''}
+                    additionalClass={user_vote === 1 ? ' text-secondary-red' : ''}
                 />
             </div>
             <span className="text-lg">{count}</span>
             <div onClick={() => voteHandler(-1)}>
                 <Icons
                     name="vote_down"
-                    additionalClass={user_vote === -1 ? ' text-primary-red' : ''}
+                    additionalClass={user_vote === -1 ? ' text-secondary-red' : ''}
                 />
             </div>
         </div>

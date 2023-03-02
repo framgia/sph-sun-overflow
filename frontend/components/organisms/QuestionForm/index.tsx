@@ -191,7 +191,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
             <div className="mb-2 text-3xl">{formTitle}</div>
             <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
                 <div className="QuestionTitle w-full self-center py-4">
-                    <label htmlFor="titleInput" className="mb-2 text-2xl font-bold">
+                    <label htmlFor="titleInput" className="mb-2 text-2xl">
                         Question Title
                     </label>
                     <input
@@ -202,7 +202,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                     />
                 </div>
                 <div className="Description mb-8 w-full self-center py-4">
-                    <label htmlFor="descriptionInput" className="mb-2 text-2xl font-bold">
+                    <label htmlFor="descriptionInput" className="mb-2 text-2xl">
                         Description
                     </label>
                     <Controller
@@ -221,7 +221,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
 
                 <div className="flex w-full flex-row  space-x-10 py-4">
                     <div className="Tags w-1/2 self-center py-4">
-                        <label htmlFor="tagsInput" className="text-2xl font-bold">
+                        <label htmlFor="tagsInput" className="text-2xl">
                             Tags (max. 5)
                         </label>
                         <div className="">
@@ -235,7 +235,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                         </div>
                     </div>
                     <div className="flex flex-col  self-center">
-                        <label className="text-2xl font-bold">Teams</label>
+                        <label className="text-2xl">Teams</label>
                         <div className="w-40">
                             <Controller
                                 control={control}
