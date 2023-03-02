@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import QuestionForm from '@/components/organisms/QuestionForm'
 import Link from 'next/link'
 const QuestionFormPage = () => {

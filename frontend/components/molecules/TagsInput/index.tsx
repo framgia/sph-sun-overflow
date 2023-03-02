@@ -114,8 +114,10 @@ const TagsInput = ({ setValue, value }: TagInputProps) => {
                                     <Combobox.Option
                                         key={tag.id}
                                         className={({ active }) =>
-                                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                                active ? 'bg-teal-600 text-white' : 'text-gray-900'
+                                            `relative z-10 cursor-default select-none py-2 pl-10 pr-4 ${
+                                                active
+                                                    ? 'bg-teal-600 text-white'
+                                                    : 'bg-white text-gray-900'
                                             }`
                                         }
                                         value={tag}
