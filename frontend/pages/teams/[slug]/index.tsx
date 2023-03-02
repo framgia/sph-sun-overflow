@@ -1,13 +1,13 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import DashboardEditContentForm from '@/components/organisms/DashboardEditContentForm'
-import { parseHTML } from '@/helpers/htmlParsing'
-import { useEffect, useState } from 'react'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
-import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
+import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 
 type RoleType = {

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
+import { ToastContainer } from 'react-toastify'
 import Navbar from '../../organisms/Navbar'
 import { LeftSideBar, RightSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
-import { ToastContainer } from 'react-toastify'
 
 type LayoutProps = {
     children: JSX.Element

@@ -1,10 +1,10 @@
-import 'react-quill/dist/quill.snow.css'
 import Author from '@/components/molecules/Author'
+import Bookmark from '@/components/molecules/Bookmark'
 import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
-import { UserType, TagType } from '../../../pages/questions/[slug]'
+import 'react-quill/dist/quill.snow.css'
 import { parseHTML } from '../../../helpers/htmlParsing'
-import Bookmark from '@/components/molecules/Bookmark'
+import { TagType, UserType } from '../../../pages/questions/[slug]'
 
 type Props = {
     id?: number

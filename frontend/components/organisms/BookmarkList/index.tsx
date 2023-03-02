@@ -1,4 +1,3 @@
-import { QuestionType, TagType, UserType } from '@/pages/questions/[slug]'
 import { BookmarkType } from '@/pages/users/[slug]'
 import AnswerBookmark from '../AnswerBookmark'
 import QuestionList from '../QuestionList'
