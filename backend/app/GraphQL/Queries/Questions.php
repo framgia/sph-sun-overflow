@@ -16,7 +16,7 @@ final class Questions
         $query = Question::query();
         try {
             if (isset($args['keyword'])) {
-                $keywordLikeness = '%' . $args['keyword'] . '%';
+                $keywordLikeness = '%'.$args['keyword'].'%';
 
                 $query->where(function ($keywordQuery) use ($keywordLikeness) {
                     $keywordQuery->where('title', 'like', $keywordLikeness)
