@@ -14,7 +14,7 @@ export function isObjectEmpty(obj: Object): boolean {
     return obj === undefined ? true : Object.keys(obj).length === 0
 }
 
-export function compare(a: LooseObject2, b: LooseObject2) {
+export function compareFirstName(a: LooseObject2, b: LooseObject2) {
     if (a.first_name < b.first_name) {
         return -1
     }

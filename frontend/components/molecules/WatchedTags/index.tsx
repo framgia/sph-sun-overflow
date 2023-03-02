@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from 'react'
-import { removeItemViaId } from '@/utils'
-import { HiPencil, HiX } from 'react-icons/hi'
 import CustomCombobox from '@/components/molecules/CustomComboBox'
-import Link from 'next/link'
-import { useMutation, useQuery } from '@apollo/client'
-import { GET_TAG_SUGGESTIONS, LOAD_SIDEBAR_1 } from '@/helpers/graphql/queries/sidebar'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
-import { errorNotify, successNotify } from '@/helpers/toast'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
+import { GET_TAG_SUGGESTIONS, QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { removeItemViaId } from '@/utils'
+import { useMutation, useQuery } from '@apollo/client'
+import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
+import { HiPencil, HiX } from 'react-icons/hi'
 
 type TTag = {
     id: number
@@ -33,8 +33,8 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     })
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
         refetchQueries: [
-            { query: LOAD_SIDEBAR_1 },
-            'LoadSidebar1',
+            { query: QTagsSidebar },
+            'TagsSidebar',
             { query: GET_QUESTIONS },
             'Questions',
         ],
@@ -48,8 +48,8 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
         refetchQueries: [
-            { query: LOAD_SIDEBAR_1 },
-            'LoadSidebar1',
+            { query: QTagsSidebar },
+            'TagsSidebar',
             { query: GET_QUESTIONS },
             'Questions',
         ],

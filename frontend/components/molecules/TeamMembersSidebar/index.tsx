@@ -1,4 +1,4 @@
-import { compare } from '@/utils'
+import { compareFirstName } from '@/utils'
 import { useEffect, useState } from 'react'
 import UserTab from '../UserTab'
 interface IUser {
@@ -39,7 +39,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
                 return tempUser
             })
         )
-        membersList = membersList.sort(compare)
+        membersList = membersList.sort(compareFirstName)
 
         return membersList
     }
