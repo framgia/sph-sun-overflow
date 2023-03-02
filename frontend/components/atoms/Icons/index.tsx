@@ -1,7 +1,16 @@
-import { HiPencilAlt, HiBookmark, HiEye, HiChevronDown, HiSearch, HiX } from 'react-icons/hi'
+import {
+    HiPencilAlt,
+    HiBookmark,
+    HiEye,
+    HiChevronDown,
+    HiSearch,
+    HiX,
+    HiTrash,
+} from 'react-icons/hi'
 import { HiCheck } from 'react-icons/hi2'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdCheckmark } from 'react-icons/io'
-import { MdOutlineModeEditOutline } from 'react-icons/md'
+import { MdOutlineModeEditOutline, MdModeEditOutline } from 'react-icons/md'
+import { FaTrashAlt } from 'react-icons/fa'
 import {
     HiChevronDoubleLeft,
     HiChevronDoubleRight,
@@ -17,6 +26,10 @@ type IconsProps = {
 
 const Icons = ({ name, size = '20', additionalClass }: IconsProps): JSX.Element => {
     switch (name) {
+        case 'table_edit':
+            return <MdModeEditOutline size={22} className="fill-primary-red" />
+        case 'table_delete':
+            return <HiTrash size={22} className="fill-primary-red" />
         case 'square_edit':
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
         case 'vote_up':
