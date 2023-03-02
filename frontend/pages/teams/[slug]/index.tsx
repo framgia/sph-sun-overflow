@@ -1,3 +1,6 @@
+import Button from '@/components/atoms/Button'
+import Icons from '@/components/atoms/Icons'
+import DashboardEditContentForm from '@/components/organisms/DashboardEditContentForm'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { useEffect, useState } from 'react'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
@@ -5,6 +8,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import 'react-quill/dist/quill.snow.css'
 
 type RoleType = {
     name: string
@@ -37,6 +41,7 @@ type TeamType = {
 const Team = () => {
     const router = useRouter()
     const [isActiveTab, setIsActiveTab] = useState('dashboard')
+    const [dashboardContentEditing, setDashboardContentEditing] = useState(false)
 
     const { data, loading, error, refetch } = useQuery(GET_TEAM, {
         variables: {
@@ -62,15 +67,36 @@ const Team = () => {
 
     const onClickTab = (tab: string) => {
         setIsActiveTab(tab)
+        setDashboardContentEditing(false)
         refetch({ slug: router.query.slug })
+    }
+
+    const toggleDashboardContentEdit = () => {
+        setDashboardContentEditing(!dashboardContentEditing)
     }
 
     const renderActiveTab = (content: string) => {
         return isActiveTab == 'dashboard' ? (
-            <div className="ql-snow mx-5 my-4">
-                <div className="ql-editor w-full">
-                    {content ? parseHTML(content) : `No content to show.`}
-                </div>
+            <div className="flex w-full flex-col">
+                {dashboardContentEditing ? (
+                    <DashboardEditContentForm
+                        toggleEdit={toggleDashboardContentEdit}
+                        content={content}
+                    />
+                ) : (
+                    <div className="relative w-full">
+                        <div className="ql-snow mx-5 my-4">
+                            <div className="ql-editor w-full">{parseHTML(content)}</div>
+                        </div>
+                        <Button
+                            usage="edit-top-right"
+                            type="button"
+                            onClick={toggleDashboardContentEdit}
+                        >
+                            <Icons name="square_edit" />
+                        </Button>
+                    </div>
+                )}
             </div>
         ) : null
     }
@@ -78,7 +104,7 @@ const Team = () => {
     return (
         <div className="mx-10 mt-10 flex h-full w-full flex-col gap-4">
             <div className="text-2xl font-bold">{team?.name}</div>
-            <div className="mt-2 flex h-3/5 flex-col">
+            <div className="mt-2 flex h-3/5 flex-col gap-3">
                 <div className="flex h-7 w-full flex-row justify-start border-b-2 border-gray-300">
                     <div
                         className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(

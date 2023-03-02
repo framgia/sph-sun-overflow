@@ -31,6 +31,10 @@ const getButtonClasses = (usage: string): string => {
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 bg-white border-red-500 focus:ring-red-600 hover:bg-rose-200'
         case 'cancel-item':
             return 'items-center rounded-full border-2 outline-0 border-primary-red absolute outline-primary-red -top-2 -right-2 bg-white text-primary-red p-1 hover:bg-primary-red hover:text-white active:bg-primary-red active:text-white active:outline active:outline-[2px]'
+        case 'edit-top-right':
+            return 'absolute top-0 right-0 cursor-pointer'
+        case 'back-button':
+            return 'text-xl text-primary-gray hover:text-primary-red'
         default:
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
     }
