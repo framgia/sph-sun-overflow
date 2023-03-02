@@ -24,10 +24,11 @@ export const LOAD_SIDEBAR_1 = gql`
 `
 
 export const LOAD_SIDEBAR_2 = gql`
-    query LoadSidebar3($teamId: ID!) {
+    query LoadSidebar2($teamId: ID!) {
         team(id: $teamId) {
             members {
                 teamRole {
+                    id
                     name
                 }
                 user {
@@ -36,6 +37,7 @@ export const LOAD_SIDEBAR_2 = gql`
                     last_name
                     reputation
                     avatar
+                    slug
                 }
             }
         }

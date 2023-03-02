@@ -1,6 +1,6 @@
-import WatchedTags from '@/components/molecules/WatchedTags'
-import TeamSidebar from '@/components/molecules/TeamSidebar'
 import TeamMemberSidebar from '@/components/molecules/TeamMembersSidebar'
+import TeamSidebar from '@/components/molecules/TeamSidebar'
+import WatchedTags from '@/components/molecules/WatchedTags'
 import { LOAD_SIDEBAR_1, LOAD_SIDEBAR_2, LOAD_SIDEBAR_3 } from '@/helpers/graphql//queries/sidebar'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -30,8 +30,9 @@ const Type2 = () => {
     const router = useRouter()
     const { data, loading } = useQuery(LOAD_SIDEBAR_2, {
         variables: {
-            teamId: router.query.teamId,
+            teamId: 1,
         },
+        onCompleted: (e) => console.log(e),
     })
     return (
         <div className="flex w-full flex-col">
@@ -40,9 +41,7 @@ const Type2 = () => {
     )
 }
 const Type3 = () => {
-    const { data, loading, error } = useQuery(LOAD_SIDEBAR_3, {
-        variables: { userId: 1 },
-    })
+    const { data, loading, error } = useQuery(LOAD_SIDEBAR_3)
     return (
         <div className="flex w-full flex-col">
             <WatchedTags data={data} loading={loading} />

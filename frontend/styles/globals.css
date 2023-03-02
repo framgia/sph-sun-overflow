@@ -22,3 +22,12 @@ input:-webkit-autofill:active {
 .line-clamp-4 img {
     display: none !important;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
