@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
-import TagsInput, { ITag } from '../../molecules/TagsInput'
-import QuestionFormSchema from './schema'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { isObjectEmpty } from '@/utils'
-import FormAlert from '@/components/molecules/FormAlert'
 import Button from '@/components/atoms/Button'
+import FormAlert from '@/components/molecules/FormAlert'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
+import SortDropdown from '@/components/molecules/SortDropdown'
 import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
 import UPDATE_QUESTION from '@/helpers/graphql/mutations/update_question'
-import { useMutation } from '@apollo/client'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { useRouter } from 'next/router'
-import isEqual from 'lodash/isEqual'
-import SortDropdown from '@/components/molecules/SortDropdown'
 import { FilterType } from '@/pages/questions'
+import { isObjectEmpty } from '@/utils'
+import { useMutation } from '@apollo/client'
+import { yupResolver } from '@hookform/resolvers/yup'
+import isEqual from 'lodash/isEqual'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import TagsInput, { ITag } from '../../molecules/TagsInput'
+import QuestionFormSchema from './schema'
 export type FormValues = {
     title: string
     description: string
@@ -259,7 +259,8 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                                     type="checkbox"
                                     id="isPublic"
                                     {...register('is_public')}
-                                    className=" mt-1 aspect-square h-full"
+                                    className=" mt-1 aspect-square h-full "
+                                    style={{ boxShadow: 'none' }}
                                 />
                             </div>
                         </div>
