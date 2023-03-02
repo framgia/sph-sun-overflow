@@ -1,15 +1,17 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import DashboardEditContentForm from '@/components/organisms/DashboardEditContentForm'
+import QuestionsPageLayout from '@/components/templates/QuestionPageLayout'
+import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
-
 type RoleType = {
     name: string
 }
@@ -98,7 +100,9 @@ const Team = () => {
                     </div>
                 )}
             </div>
-        ) : null
+        ) : (
+            <QuestionsTab />
+        )
     }
 
     return (
@@ -125,6 +129,36 @@ const Team = () => {
                 </div>
                 {renderActiveTab(team?.dashboard_content)}
             </div>
+        </div>
+    )
+}
+
+const QuestionsTab = () => {
+    //Query will be changed
+    const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
+        variables: {
+            first: 10,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        },
+    })
+
+    useEffect(() => {
+        refetch({
+            page: 1,
+            filter: { answered: true, tag: '' },
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        })
+    }, [refetch])
+
+    if (loading) return <div></div>
+    if (error) {
+        errorNotify(`Error! ${error}`)
+        return <div></div>
+    }
+    return (
+        <div className="">
+            <QuestionsPageLayout refetch={refetch} data={data} isPrivate={true} />
         </div>
     )
 }
