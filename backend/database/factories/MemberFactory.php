@@ -17,13 +17,13 @@ class MemberFactory extends Factory
      */
     public function definition()
     {
-
         $userId = DB::table('users')->pluck('id')->random();
         $teamId = DB::table('teams')->pluck('id')->random();
+
         return [
-                    'user_id' => $userId,
-                    'team_role_id' => random_int(2, 3),
-                    'team_id' => $teamId,
+            'user_id' => $userId,
+            'team_role_id' => random_int(2, 3),
+            'team_id' => $teamId,
         ];
     }
 }

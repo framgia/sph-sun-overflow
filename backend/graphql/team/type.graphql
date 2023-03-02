@@ -8,6 +8,7 @@ type Team {
     teamLeader: User! @belongsTo
     members: [Member!]! @hasMany
     slug: String!
+    members_count: Int!
 }
 
 type TeamRole {

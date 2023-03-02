@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 class Team extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected static function boot()
     {
         parent::boot();
@@ -34,8 +35,7 @@ class Team extends Model
         });
     }
 
-
-
+    protected $appends = ['members_count'];
 
     protected $guarded = [];
 
@@ -47,5 +47,10 @@ class Team extends Model
     public function members()
     {
         return $this->hasMany(Member::class);
+    }
+
+    public function getMembersCountAttribute()
+    {
+        return $this->members()->count();
     }
 }

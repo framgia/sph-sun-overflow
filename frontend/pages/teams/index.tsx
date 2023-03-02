@@ -2,8 +2,12 @@ import PageHeader from '@/components/atoms/PageHeader'
 import SearchInput from '@/components/molecules/SearchInput'
 import Paginate from '@/components/organisms/Paginate'
 import Card from '@/components/templates/Card'
+import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
+import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { PaginatorInfo } from '../questions'
 
 type TeamType = {
@@ -15,70 +19,57 @@ type TeamType = {
 }
 
 const TeamsListPage = () => {
+    const router = useRouter()
     const [searchKey, setSearchKey] = useState('')
+    const [term, setTerm] = useState('')
 
-    const teamsList: TeamType[] = [
-        {
-            id: 1,
-            name: 'Sun Overflow',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            slug: 'sun-overflow',
-            members_count: 12,
+    const userQuery = useQuery(GET_TEAMS, {
+        variables: {
+            first: 6,
+            page: 1,
+            name: '%%',
         },
-        {
-            id: 2,
-            name: 'HRIS',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            slug: 'hris',
-            members_count: 13,
-        },
-        {
-            id: 3,
-            name: 'Zeon',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            slug: 'zeon',
-            members_count: 14,
-        },
-        {
-            id: 4,
-            name: 'Metajob',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            slug: 'metajob',
-            members_count: 15,
-        },
-    ]
+    })
 
-    const pageInfo: PaginatorInfo = {
-        perPage: 6,
-        currentPage: 1,
-        lastPage: 2,
-        total: 4,
-        hasMorePages: true,
-    }
+    if (userQuery.error) return errorNotify(`Error! ${userQuery.error}`)
 
-    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const pageInfo: PaginatorInfo = userQuery?.data?.teams.paginatorInfo
+    const teams: TeamType[] = userQuery?.data?.teams.data
+
+    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const target = e.target as typeof e.target & {
             search: { value: string }
         }
 
-        // TODO: set API call for search teams
-        console.log(target.search.value)
+        await userQuery.refetch({
+            first: 6,
+            page: 1,
+            name: `%${target.search.value}%`,
+        })
+        setSearchKey(target.search.value)
+        setTerm(target.search.value)
     }
 
     const onChange = (value: string) => {
         setSearchKey(value)
     }
 
-    const onPageChange = () => {
-        // TODO: set API call for refetch on paginate
-        console.log('Next page')
+    const onPageChange = (first: number, page: number) => {
+        userQuery.refetch({ first, page })
     }
+
+    useEffect(() => {
+        userQuery.refetch({
+            first: 6,
+            page: 1,
+            name: '%%',
+        })
+        setSearchKey('')
+        setTerm('')
+    }, [router, userQuery.refetch])
+
     return (
         <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">
             <PageHeader>Teams</PageHeader>
@@ -94,9 +85,15 @@ const TeamsListPage = () => {
                         </form>
                     </div>
                 </div>
+                {term && (
+                    <div className="px-3">
+                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                        {`"${term}"`}
+                    </div>
+                )}
                 <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
                     <div className="grid w-full grid-cols-2 gap-y-5 gap-x-10 px-3">
-                        {teamsList.map((team) => (
+                        {teams?.map((team: any) => (
                             <Link key={team.id} href={`teams/${team.slug}`}>
                                 <Card header={team.name} footer={`${team.members_count} members`}>
                                     {team.description}
@@ -104,7 +101,7 @@ const TeamsListPage = () => {
                             </Link>
                         ))}
                     </div>
-                    {pageInfo.lastPage > 1 && (
+                    {pageInfo?.lastPage > 1 && (
                         <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
                 </div>
