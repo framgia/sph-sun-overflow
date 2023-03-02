@@ -2,6 +2,7 @@ input filter {
     answered: Boolean
     keyword: String
     tag: String
+    team: String
 }
 
 enum ORDERBY {

@@ -16,7 +16,7 @@ final class Questions
         $query = Question::query();
         try {
             if (isset($args['keyword'])) {
-                $keywordLikeness = '%'.$args['keyword'].'%';
+                $keywordLikeness = '%' . $args['keyword'] . '%';
 
                 $query->where(function ($keywordQuery) use ($keywordLikeness) {
                     $keywordQuery->where('title', 'like', $keywordLikeness)
@@ -35,6 +35,12 @@ final class Questions
             if (isset($args['tag']) && $args['tag']) {
                 $query->whereHas('tags', function ($tags) use ($args) {
                     $tags->where('slug', $args['tag']);
+                });
+            }
+
+            if (isset($args['team']) && $args['team']) {
+                $query->whereHas('team', function ($teamQuestions) use ($args) {
+                    $teamQuestions->where('slug', $args['team']);
                 });
             }
 
