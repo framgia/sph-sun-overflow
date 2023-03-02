@@ -20,7 +20,7 @@ class Team extends Model
 
             $duplicateCount = Team::where('name', $team->name)->count();
 
-            $team->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-".time();
+            $team->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-" . time();
         });
 
         static::updating(function ($team) {
@@ -30,7 +30,7 @@ class Team extends Model
             $duplicateCount = Team::where('name', $team->name)->count();
 
             if ($teamFirst?->id !== $team->id) {
-                $team->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-".time();
+                $team->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-" . time();
             }
         });
     }

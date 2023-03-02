@@ -3,7 +3,7 @@ extend type Query {
         @guard(with: ["api"])
         @paginate
 
-    team(id: ID @eq): Team @find
+    team(slug: String! @eq): Team @guard(with: ["api"]) @find
     teamMembers(team_slug: String!): [Member!]
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\TeamMembers")
