@@ -54,7 +54,8 @@ const DashboardEditContentForm = ({ content, toggleEdit }: Props): JSX.Element =
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex w-full flex-col content-center gap-5 px-5">
+                <div className="flex w-full flex-col content-center gap-5 pl-5">
+                    <div className="text-3xl">Edit Content</div>
                     <div className="flex flex-col">
                         <div className="flex w-full flex-col gap-3 pb-12">
                             <label htmlFor="contentInput" className="text-2xl font-bold">
