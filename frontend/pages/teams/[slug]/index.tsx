@@ -1,15 +1,16 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import DashboardEditContentForm from '@/components/organisms/DashboardEditContentForm'
-import { parseHTML } from '@/helpers/htmlParsing'
-import { useEffect, useState } from 'react'
+import QuestionsPageLayout from '@/components/templates/QuestionPageLayout'
+import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
-import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
+import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
-
 type RoleType = {
     name: string
 }
@@ -98,12 +99,21 @@ const Team = () => {
                     </div>
                 )}
             </div>
-        ) : null
+        ) : (
+            <QuestionsTab />
+        )
     }
 
     return (
         <div className="mx-10 mt-10 flex h-full w-full flex-col gap-4">
-            <div className="text-2xl font-bold">{team?.name}</div>
+            <div className="flex flex-row items-center justify-between">
+                <div className="text-2xl font-bold">{team?.name}</div>
+                {isActiveTab === 'questions' && (
+                    <Button usage="ask_question" additionalClass="ask-btn" isDisabled={false}>
+                        Ask a Question
+                    </Button>
+                )}
+            </div>
             <div className="mt-2 flex h-3/5 flex-col gap-3">
                 <div className="flex h-7 w-full flex-row justify-start border-b-2 border-gray-300">
                     <div
@@ -125,6 +135,36 @@ const Team = () => {
                 </div>
                 {renderActiveTab(team?.dashboard_content)}
             </div>
+        </div>
+    )
+}
+
+const QuestionsTab = () => {
+    //Query will be changed
+    const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
+        variables: {
+            first: 10,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        },
+    })
+
+    useEffect(() => {
+        refetch({
+            page: 1,
+            filter: { answered: true, tag: '' },
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+        })
+    }, [refetch])
+
+    if (loading) return <div></div>
+    if (error) {
+        errorNotify(`Error! ${error}`)
+        return <div></div>
+    }
+    return (
+        <div className="">
+            <QuestionsPageLayout refetch={refetch} data={data} isPrivate={true} />
         </div>
     )
 }
