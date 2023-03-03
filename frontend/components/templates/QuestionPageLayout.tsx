@@ -104,8 +104,10 @@ const QuestionsPageLayout = ({
     const renderTeamQuestionListHeader = (): JSX.Element => {
         return <div className="flex flex-row justify-end px-5">{renderSortAndFilter()}</div>
     }
+
+    const externalStyle = !isPrivate ? 'pt-8' : ''
     return (
-        <div className="flex h-full w-full flex-col gap-4 px-10 pt-8 pb-5">
+        <div className={`flex h-full w-full flex-col gap-4 px-10 pb-5 ${externalStyle}`}>
             {isPrivate
                 ? renderTeamQuestionListHeader()
                 : isSearchResult
