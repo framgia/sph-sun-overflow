@@ -111,7 +111,6 @@ const QuestionsPageLayout = ({
                 : isSearchResult
                 ? renderSearchResultHeader()
                 : renderQuestionListHeader()}
-            {/* {} */}
             <div className="flex h-full flex-col justify-between">
                 <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
                     {questionList.map(function (question) {
