@@ -70,7 +70,7 @@ const TeamManage = () => {
             <h1 className="text-3xl font-bold">{teamName}</h1>
             <div className="flex h-full flex-col gap-4">
                 <div className="mt-4 flex items-center justify-between">
-                    <Link href={`/teams/${teamSlug}`} className="text-secondary-text">
+                    <Link href={`/teams/${teamSlug}`} className="text-lg text-secondary-text">
                         {'< Go back'}
                     </Link>
                     <Button>Add Member</Button>
