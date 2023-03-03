@@ -18,7 +18,7 @@ final class CreateQuestion
 
         $hasNoTeam = !isset($args['team_id']) || $args['team_id'] === null;
 
-        if($hasNoTeam && (isset($args['is_public']) && $args['is_public'] === false)) {
+        if ($hasNoTeam && (isset($args['is_public']) && $args['is_public'] === false)) {
             throw new CustomException('400', 'Public is required when no team is selected');
         }
 
