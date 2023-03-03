@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { isObjectEmpty } from '@/utils'
+import Link from 'next/link'
 import Avatar from 'react-avatar'
 
 export interface IUser {
@@ -26,7 +26,7 @@ const UserTab = ({ user, usage }: UserTabProps) => {
         UserList: 'my-2 py-2 px-2',
     }
     const imgSize = {
-        TeamMembers: '40',
+        TeamMembers: '60',
         UserList: '70',
     }
     const nameStyle = {

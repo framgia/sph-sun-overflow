@@ -53,16 +53,20 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
                 <span className="text-xl font-medium">Members</span>
                 {true && <div className="cursor-pointer text-lg text-[#3B8CD7]">Manage</div>}
             </div>
-            <div className="tags no-scrollbar flex h-full max-h-[55vh] flex-wrap overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
-                {members.length == 0 && (
+
+            {members.length == 0 ? (
+                <div className="tags no-scrollbar flex  flex-wrap overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
                     <div className="w-full py-4 text-center text-xl font-medium">
                         No Other Members
                     </div>
-                )}
-                {members.map((member, index) => {
-                    return <UserTab user={member} key={index} usage="TeamMembers" />
-                })}
-            </div>
+                </div>
+            ) : (
+                <div className="tags no-scrollbar  h-[55vh]  overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
+                    {members.map((member, index) => {
+                        return <UserTab user={member} key={index} usage="TeamMembers" />
+                    })}
+                </div>
+            )}
         </div>
     )
 }
