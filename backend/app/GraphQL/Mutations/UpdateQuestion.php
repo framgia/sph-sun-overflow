@@ -16,9 +16,9 @@ final class UpdateQuestion
         $questionData = Arr::except($args, ['tags', 'id']);
         $question = auth()->user()->questions()->find($args['id']);
 
-        $hasNoTeam = !isset($args['team_id']) || !$args['team_id'];
+        $hasNoTeam = ! isset($args['team_id']) || ! $args['team_id'];
 
-        if ($hasNoTeam && (isset($args['is_public']) && !$args['is_public'])) {
+        if ($hasNoTeam && (isset($args['is_public']) && ! $args['is_public'])) {
             throw new CustomException('400', 'Public is required when no team is selected');
         }
 
