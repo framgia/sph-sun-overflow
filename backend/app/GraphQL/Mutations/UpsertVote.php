@@ -2,9 +2,11 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Events\NotificationEvent;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\User;
+use App\Models\UserNotification;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -33,7 +35,16 @@ final class UpsertVote
             $current_value = $voteable->votes()->where('user_id', Auth::id())->first()->value ?? 0;
 
             if ($current_value == $args['value']) {
-                $voteable->votes()->where('user_id', Auth::id())->delete();
+                $vote = $voteable->votes()->where('user_id', Auth::id())->first();
+
+                UserNotification::where([
+                    'notifiable_type' => 'App\Models\Vote',
+                    'notifiable_id' => $vote->id,
+                ])->delete();
+
+                $vote->delete();
+
+                event(new NotificationEvent($vote->voteable->user_id));
 
                 return 'Vote Removed';
             } else {

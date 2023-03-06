@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Events\NotificationEvent;
 use App\Models\User;
 use App\Models\UserNotification;
 use App\Models\UserRelation;
@@ -43,6 +44,8 @@ final class ToggleFollow
                 ])->delete();
 
                 $relation->delete();
+
+                event(new NotificationEvent($user->id));
 
                 return "You unfollowed {$user->first_name} {$user->last_name}";
             }

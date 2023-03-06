@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\NotificationEvent;
 use App\Models\UserNotification;
 use App\Models\Vote;
 
@@ -16,5 +17,7 @@ class VoteObserver
             'notifiable_type' => 'App\Models\Vote',
             'notifiable_id' => $vote->id,
         ]);
+
+        event(new NotificationEvent($vote->voteable->user_id));
     }
 }

@@ -4,7 +4,7 @@ import { getUserToken } from '../helpers/localStorageHelper'
 let getAuthToken = getUserToken()
 
 const client = new ApolloClient({
-    uri: 'http://127.0.0.1:8000/graphql',
+    uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
     headers: {
         authorization: getAuthToken ? `Bearer ${getAuthToken}` : '',
     },

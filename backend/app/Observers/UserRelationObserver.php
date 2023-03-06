@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\NotificationEvent;
 use App\Models\UserNotification;
 use App\Models\UserRelation;
 
@@ -16,5 +17,7 @@ class UserRelationObserver
             'notifiable_type' => 'App\Models\UserRelation',
             'notifiable_id' => $userRelation->id,
         ]);
+
+        event(new NotificationEvent($userRelation->following_id));
     }
 }

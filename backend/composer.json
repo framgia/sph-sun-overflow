@@ -14,7 +14,8 @@
         "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.7",
         "mll-lab/laravel-graphiql": "^1.0",
-        "nuwave/lighthouse": "^5.70"
+        "nuwave/lighthouse": "^5.70",
+        "pusher/pusher-php-server": "^7.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
