@@ -35,7 +35,7 @@ const Modal = ({
                     <div className="fixed inset-0 bg-black bg-opacity-30" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto">
+                <div className="overflow-y-inherit fixed inset-0">
                     <div className="flex min-h-full items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}
@@ -59,7 +59,11 @@ const Modal = ({
                                     </Button>
                                 </div>
                                 <div className="px-6 py-4 ">
-                                    <Dialog.Description className="mt-2 text-sm">
+                                    <Dialog.Description
+                                        id="modal-content"
+                                        as="div"
+                                        className="mt-2 text-sm"
+                                    >
                                         {children}
                                     </Dialog.Description>
                                     <div className="mt-4 flex justify-end gap-2">
@@ -71,7 +75,7 @@ const Modal = ({
                                             Cancel
                                         </Button>
                                         <Button
-                                            type="submit"
+                                            type="button"
                                             usage="modal-submit"
                                             onClick={handleSubmit}
                                         >

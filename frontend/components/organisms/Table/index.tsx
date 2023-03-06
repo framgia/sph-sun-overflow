@@ -1,5 +1,9 @@
+import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Link from 'next/link'
+import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
+import Modal from '@/components/templates/Modal'
+import { useState } from 'react'
 
 export type ColumnType = {
     key: string
@@ -16,7 +20,29 @@ type TableProps = {
     dataSource: DataType[]
 }
 
+const roles: OptionType[] = [
+    { id: 1, name: 'FE' },
+    { id: 2, name: 'BE' },
+    { id: 3, name: 'QA' },
+]
+
 const Table = ({ columns, dataSource }: TableProps) => {
+    const [activeModal, setActiveModal] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
+
+    const handleEditSubmit = () => {
+        console.log('member role updated!')
+    }
+
+    const openModal = (modal: string) => {
+        setActiveModal(modal)
+        setIsOpen(true)
+    }
+
+    const closeModal = (modal: string) => {
+        setActiveModal(modal)
+        setIsOpen(false)
+    }
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
@@ -47,8 +73,59 @@ const Table = ({ columns, dataSource }: TableProps) => {
                                             className=" hover:bg-light-gray"
                                         >
                                             {Object.keys(data).map((key, index) => {
-                                                if (key === 'id' || key === 'slug' || key === 'key')
-                                                    return null
+                                                if (key === 'id' || key === 'key') return null
+
+                                                if (key === 'slug') {
+                                                    return (
+                                                        <td
+                                                            className="flex gap-4 whitespace-nowrap py-4 px-8"
+                                                            key={index}
+                                                        >
+                                                            <Button
+                                                                usage="toggle-modal"
+                                                                onClick={() =>
+                                                                    openModal(`edit-${data[key]}`)
+                                                                }
+                                                            >
+                                                                <Icons name="table_edit" />
+                                                            </Button>
+                                                            {activeModal === `edit-${data[key]}` &&
+                                                                isOpen && (
+                                                                    <Modal
+                                                                        title={`Assign Role`}
+                                                                        submitLabel="Save"
+                                                                        isOpen={isOpen}
+                                                                        handleSubmit={
+                                                                            handleEditSubmit
+                                                                        }
+                                                                        handleClose={() =>
+                                                                            closeModal(
+                                                                                `edit-${data[key]}`
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <form
+                                                                            onSubmit={
+                                                                                handleEditSubmit
+                                                                            }
+                                                                        >
+                                                                            <Dropdown
+                                                                                name=""
+                                                                                label="Select Role"
+                                                                                options={roles}
+                                                                            />
+                                                                        </form>
+                                                                    </Modal>
+                                                                )}
+                                                            <Link
+                                                                className="text-blue-500 hover:text-blue-700"
+                                                                href="#"
+                                                            >
+                                                                <Icons name="table_delete" />
+                                                            </Link>
+                                                        </td>
+                                                    )
+                                                }
 
                                                 return (
                                                     <td
@@ -59,20 +136,6 @@ const Table = ({ columns, dataSource }: TableProps) => {
                                                     </td>
                                                 )
                                             })}
-                                            <td className="flex gap-4 whitespace-nowrap py-4 px-8">
-                                                <Link
-                                                    className="text-blue-500 hover:text-blue-700"
-                                                    href="#"
-                                                >
-                                                    <Icons name="table_edit" />
-                                                </Link>
-                                                <Link
-                                                    className="text-blue-500 hover:text-blue-700"
-                                                    href="#"
-                                                >
-                                                    <Icons name="table_delete" />
-                                                </Link>
-                                            </td>
                                         </tr>
                                     )
                                 })}

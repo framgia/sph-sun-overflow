@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button'
+import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
 import Paginate from '@/components/organisms/Paginate'
 import Table, { ColumnType, DataType } from '@/components/organisms/Table'
 import GET_MEMBERS from '@/helpers/graphql/queries/get_members'
@@ -74,11 +75,26 @@ const TeamManage = () => {
         return tableList
     }
 
+    const users: OptionType[] = [
+        { id: 1, name: 'Nicole Amber' },
+        { id: 2, name: 'Keno Renz' },
+        { id: 3, name: 'Jules Russel' },
+        { id: 4, name: 'Ian Michael' },
+        { id: 5, name: 'Kent Nino' },
+        { id: 6, name: 'Kent Michael' },
+    ]
+
+    const roles: OptionType[] = [
+        { id: 1, name: 'FE' },
+        { id: 2, name: 'BE' },
+        { id: 3, name: 'QA' },
+    ]
+
     const [activeModal, setActiveModal] = useState('')
     const [isOpen, setIsOpen] = useState(false)
 
     const handleSubmit = () => {
-        console.log('Submitted!')
+        console.log('member added!')
     }
 
     const openModal = (modal: string) => {
@@ -111,7 +127,22 @@ const TeamManage = () => {
                             handleSubmit={handleSubmit}
                             handleClose={() => closeModal('add')}
                         >
-                            <div>Test</div>
+                            <form onSubmit={handleSubmit} id="add-member-form">
+                                <div className="flex w-full gap-2">
+                                    <Dropdown
+                                        key="user-select"
+                                        name="user"
+                                        label="Select User"
+                                        options={users}
+                                    />
+                                    <Dropdown
+                                        key="role-select"
+                                        name="role"
+                                        label="Select Role"
+                                        options={roles}
+                                    />
+                                </div>
+                            </form>
                         </Modal>
                     )}
                 </div>
