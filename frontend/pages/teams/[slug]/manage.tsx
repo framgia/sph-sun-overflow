@@ -7,6 +7,8 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Modal from '@/components/templates/Modal'
+import { useState } from 'react'
 
 const columns: ColumnType[] = [
     {
@@ -71,6 +73,24 @@ const TeamManage = () => {
         })
         return tableList
     }
+
+    const [activeModal, setActiveModal] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
+
+    const handleSubmit = () => {
+        console.log('Submitted!')
+    }
+
+    const openModal = (modal: string) => {
+        setActiveModal(modal)
+        setIsOpen(true)
+    }
+
+    const closeModal = (modal: string) => {
+        setActiveModal(modal)
+        setIsOpen(false)
+    }
+
     return (
         <div className="flex w-full flex-col gap-4 divide-y-2 p-8">
             <h1 className="text-3xl font-bold">{memberList[0].team.name || 'Undefined'}</h1>
@@ -82,7 +102,18 @@ const TeamManage = () => {
                     >
                         {'< Go back'}
                     </Link>
-                    <Button>Add Member</Button>
+                    <Button onClick={() => openModal('add')}>Add Member</Button>
+                    {activeModal === 'add' && isOpen && (
+                        <Modal
+                            title="Add Member"
+                            submitLabel="Add"
+                            isOpen={isOpen}
+                            handleSubmit={handleSubmit}
+                            handleClose={() => closeModal('add')}
+                        >
+                            <div>Test</div>
+                        </Modal>
+                    )}
                 </div>
                 <div className="overflow-hidden border border-black">
                     <Table columns={columns} dataSource={parseGetMembers(memberList)} />

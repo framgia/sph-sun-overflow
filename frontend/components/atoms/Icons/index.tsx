@@ -96,7 +96,7 @@ const Icons = ({ name, size = '20', additionalClass }: IconsProps): JSX.Element 
         case 'search_input_icon':
             return <HiSearch size="26" />
         case 'x-plain':
-            return <HiX size={size} />
+            return <HiX size={size} className={`${additionalClass}`} />
         default:
             return <></>
     }
