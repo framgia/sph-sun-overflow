@@ -41,6 +41,8 @@ interface IMember {
 }
 
 const TeamManage = () => {
+    const [activeModal, setActiveModal] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
     const { data, loading, error, refetch } = useQuery(GET_MEMBERS, {
         variables: {
@@ -89,14 +91,12 @@ const TeamManage = () => {
         { id: 3, name: 'QA' },
     ]
 
-    const [activeModal, setActiveModal] = useState('')
-    const [isOpen, setIsOpen] = useState(false)
-
     const handleSubmit = () => {
         //member added
     }
 
     const openModal = (modal: string) => {
+        ;``
         setActiveModal(modal)
         setIsOpen(true)
     }
