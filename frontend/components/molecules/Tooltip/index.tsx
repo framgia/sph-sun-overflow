@@ -1,11 +1,10 @@
 import Button from '@/components/atoms/Button'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
-import { LOAD_SIDEBAR_1 } from '@/helpers/graphql/queries/sidebar'
+import { QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import Link from 'next/link'
-import React from 'react'
 
 type TagType = {
     tag: {
@@ -22,8 +21,8 @@ type TagType = {
 const Tooltips = ({ tag }: TagType): JSX.Element => {
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
         refetchQueries: [
-            { query: LOAD_SIDEBAR_1 },
-            'LoadSidebar1',
+            { query: QTagsSidebar },
+            'TagsSidebar',
             { query: GET_QUESTIONS },
             'Questions',
         ],
@@ -37,8 +36,8 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
         refetchQueries: [
-            { query: LOAD_SIDEBAR_1 },
-            'LoadSidebar1',
+            { query: QTagsSidebar },
+            'TagsSidebar',
             { query: GET_QUESTIONS },
             'Questions',
         ],

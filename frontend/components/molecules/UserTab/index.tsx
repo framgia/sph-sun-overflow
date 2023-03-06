@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { isObjectEmpty } from '@/utils'
+import Link from 'next/link'
 import Avatar from 'react-avatar'
 
 export interface IUser {
@@ -22,11 +22,11 @@ interface UserTabProps {
 
 const UserTab = ({ user, usage }: UserTabProps) => {
     const cardStyle = {
-        TeamMembers: 'h-20 border-b-2 border-b-secondary-gray last:rounded-md last:border-b-0',
+        TeamMembers: 'h-20 border-b-2 border-b-secondary-gray last:rounded-md last:border-b-0 pl-4',
         UserList: 'my-2 py-2 px-2',
     }
     const imgSize = {
-        TeamMembers: '40',
+        TeamMembers: '60',
         UserList: '70',
     }
     const nameStyle = {
@@ -53,7 +53,7 @@ const UserTab = ({ user, usage }: UserTabProps) => {
                     textSizeRatio={2}
                     className={`flex-0 aspect-square bg-gray-800 text-sm active:ring-2 active:ring-red-500 md:mr-0`}
                 />
-                <div className="text-overflow-ellipsis ml-2 flex flex-col overflow-hidden align-middle">
+                <div className="text-overflow-ellipsis ml-4 flex flex-col overflow-hidden align-middle">
                     <div className={nameStyle[usage]}>
                         {user.first_name} {user.last_name}
                     </div>

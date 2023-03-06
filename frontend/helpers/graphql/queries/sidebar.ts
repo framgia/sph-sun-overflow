@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
-export const LOAD_SIDEBAR_1 = gql`
-    query LoadSidebar1 {
+export const QTagsTeamSidebar = gql`
+    query TagsTeamSidebar {
         me {
             id
             watchedTags {
@@ -23,11 +23,12 @@ export const LOAD_SIDEBAR_1 = gql`
     }
 `
 
-export const LOAD_SIDEBAR_2 = gql`
-    query LoadSidebar3($teamId: ID!) {
+export const QMembersSidebar = gql`
+    query MembersSidebar($teamId: ID!) {
         team(id: $teamId) {
             members {
                 teamRole {
+                    id
                     name
                 }
                 user {
@@ -36,14 +37,15 @@ export const LOAD_SIDEBAR_2 = gql`
                     last_name
                     reputation
                     avatar
+                    slug
                 }
             }
         }
     }
 `
 
-export const LOAD_SIDEBAR_3 = gql`
-    query LoadSidebar1 {
+export const QTagsSidebar = gql`
+    query TagsSidebar {
         me {
             id
             watchedTags {

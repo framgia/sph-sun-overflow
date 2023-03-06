@@ -1,24 +1,23 @@
-import WatchedTags from '@/components/molecules/WatchedTags'
-import TeamSidebar from '@/components/molecules/TeamSidebar'
 import TeamMemberSidebar from '@/components/molecules/TeamMembersSidebar'
-import { LOAD_SIDEBAR_1, LOAD_SIDEBAR_2, LOAD_SIDEBAR_3 } from '@/helpers/graphql//queries/sidebar'
+import TeamSidebar from '@/components/molecules/TeamSidebar'
+import WatchedTags from '@/components/molecules/WatchedTags'
+import { QMembersSidebar, QTagsSidebar, QTagsTeamSidebar } from '@/helpers/graphql//queries/sidebar'
 import { useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
 type TRightSidebarProps = {
     usage: null | 'teams' | 'users' | string
 }
 const RightSideBar = ({ usage }: TRightSidebarProps) => {
     if (usage === 'team') {
-        return <Type2 />
+        return <MembersSidebar />
     }
     if (usage === 'users') {
-        return <Type3 />
+        return <TagsSidebar />
     }
-    return <Type1 />
+    return <TagsTeamSidebar />
 }
 
-const Type1 = () => {
-    const { data, loading } = useQuery(LOAD_SIDEBAR_1)
+const TagsTeamSidebar = () => {
+    const { data, loading } = useQuery(QTagsTeamSidebar)
     return (
         <div className="flex w-full flex-col">
             <WatchedTags data={data} loading={loading} />
@@ -26,11 +25,10 @@ const Type1 = () => {
         </div>
     )
 }
-const Type2 = () => {
-    const router = useRouter()
-    const { data, loading } = useQuery(LOAD_SIDEBAR_2, {
+const MembersSidebar = () => {
+    const { data, loading } = useQuery(QMembersSidebar, {
         variables: {
-            teamId: router.query.teamId,
+            teamId: 1,
         },
     })
     return (
@@ -39,10 +37,8 @@ const Type2 = () => {
         </div>
     )
 }
-const Type3 = () => {
-    const { data, loading, error } = useQuery(LOAD_SIDEBAR_3, {
-        variables: { userId: 1 },
-    })
+const TagsSidebar = () => {
+    const { data, loading, error } = useQuery(QTagsSidebar)
     return (
         <div className="flex w-full flex-col">
             <WatchedTags data={data} loading={loading} />
