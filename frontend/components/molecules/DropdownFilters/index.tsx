@@ -33,6 +33,7 @@ type Props = {
     triggers: TriggerType[]
     searchKey?: string
     tag?: string
+    team?: string
     refetch: ({ first, page, orderBy, filter }: RefetchType) => Promise<ApolloQueryResult<any>>
 }
 
@@ -43,7 +44,13 @@ const FilterTexts: FilterTextsType = {
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
 }
 
-const DropdownFilters = ({ triggers, searchKey = '', tag = '', refetch }: Props): JSX.Element => {
+const DropdownFilters = ({
+    triggers,
+    searchKey = '',
+    tag = '',
+    team = '',
+    refetch,
+}: Props): JSX.Element => {
     const router = useRouter()
     const [selectedDateFilter, setSelectedDateFilter] = useState(FilterTexts.DATE[1])
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState(FilterTexts.ANSWER[1])
@@ -97,7 +104,7 @@ const DropdownFilters = ({ triggers, searchKey = '', tag = '', refetch }: Props)
                         refetch({
                             first: 10,
                             page: 1,
-                            filter: { keyword: searchKey, answered: true, tag },
+                            filter: { keyword: searchKey, answered: true, tag, team },
                         })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[1])
                     },
@@ -109,7 +116,7 @@ const DropdownFilters = ({ triggers, searchKey = '', tag = '', refetch }: Props)
                         refetch({
                             first: 10,
                             page: 1,
-                            filter: { keyword: searchKey, answered: false, tag },
+                            filter: { keyword: searchKey, answered: false, tag, team },
                         })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[2])
                     },

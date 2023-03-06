@@ -33,6 +33,7 @@ interface IProps {
             data: [QuestionType]
         }
     }
+    team?: string
 }
 
 const QuestionsPageLayout = ({
@@ -41,6 +42,7 @@ const QuestionsPageLayout = ({
     searchKey = '',
     isSearchResult = false,
     isPrivate = false,
+    team = '',
 }: IProps): JSX.Element => {
     const router = useRouter()
     const { data: questions, paginatorInfo } = data.questions
@@ -63,6 +65,7 @@ const QuestionsPageLayout = ({
                 <DropdownFilters
                     triggers={['DATE', 'ANSWER']}
                     searchKey={searchKey}
+                    team={team}
                     refetch={refetch}
                 />
             </div>
