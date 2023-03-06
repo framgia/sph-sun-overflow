@@ -46,7 +46,7 @@ const TagsPage = () => {
     }
 
     return (
-        <div className="w-full px-8 py-8">
+        <div className="w-full py-8 pr-8 pl-14">
             <h1 className="mb-6 text-2xl font-bold">
                 Questions tagged with <span className="text-primary-red">{selectedTag}</span>
             </h1>

@@ -40,7 +40,7 @@ const QuestionList = ({
 }: Props): JSX.Element => {
     return (
         <div className="flex w-full flex-row p-5">
-            <div className="flex w-36 flex-col">
+            <div className="flex w-[15%] flex-col">
                 <div className="text-sm">
                     {vote_count} {vote_count !== 1 ? 'Votes' : 'Vote'}
                 </div>
@@ -51,7 +51,7 @@ const QuestionList = ({
                     {view_count} {view_count !== 1 ? 'Views' : 'View'}
                 </div>
             </div>
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex w-[85%] flex-col gap-4">
                 <div className="flex w-full justify-between">
                     <Link
                         href={`/questions/${slug}`}
@@ -70,7 +70,7 @@ const QuestionList = ({
                 </div>
                 <div className="ql-snow flex w-full flex-col gap-1">
                     <div className="ql-editor question-parsed-content w-full">
-                        {parseHTML(content)}
+                        <span className="line-clamp-2">{parseHTML(content)}</span>
                     </div>
                     <div className="mt-[-0.8rem] flex flex-col gap-2">
                         <div className="w-full">

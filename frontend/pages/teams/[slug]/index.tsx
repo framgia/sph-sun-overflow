@@ -7,6 +7,7 @@ import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -105,7 +106,7 @@ const Team = () => {
     }
 
     return (
-        <div className="mx-10 mt-10 flex h-full w-full flex-col gap-4">
+        <div className="flex h-full w-full flex-col gap-4 pl-14 pr-10 pt-10">
             <div className="flex flex-row items-center justify-between">
                 <div className="text-2xl font-bold">{team?.name}</div>
                 {isActiveTab === 'questions' && (
@@ -140,22 +141,16 @@ const Team = () => {
 }
 
 const QuestionsTab = () => {
-    //Query will be changed
+    const router = useRouter()
+    const { slug } = router.query
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
             first: 10,
             page: 1,
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+            filter: { answered: true, team: slug as string },
         },
     })
-
-    useEffect(() => {
-        refetch({
-            page: 1,
-            filter: { answered: true, tag: '' },
-            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-        })
-    }, [refetch])
 
     if (loading) return <div></div>
     if (error) {
@@ -164,7 +159,12 @@ const QuestionsTab = () => {
     }
     return (
         <div className="">
-            <QuestionsPageLayout refetch={refetch} data={data} isPrivate={true} />
+            <QuestionsPageLayout
+                refetch={refetch}
+                data={data}
+                isPrivate={true}
+                team={slug as string}
+            />
         </div>
     )
 }

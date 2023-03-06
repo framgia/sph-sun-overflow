@@ -33,6 +33,7 @@ interface IProps {
             data: [QuestionType]
         }
     }
+    team?: string
 }
 
 const QuestionsPageLayout = ({
@@ -41,6 +42,7 @@ const QuestionsPageLayout = ({
     searchKey = '',
     isSearchResult = false,
     isPrivate = false,
+    team = '',
 }: IProps): JSX.Element => {
     const router = useRouter()
     const { data: questions, paginatorInfo } = data.questions
@@ -63,6 +65,7 @@ const QuestionsPageLayout = ({
                 <DropdownFilters
                     triggers={['DATE', 'ANSWER']}
                     searchKey={searchKey}
+                    team={team}
                     refetch={refetch}
                 />
             </div>
@@ -114,7 +117,7 @@ const QuestionsPageLayout = ({
                 ? renderSearchResultHeader()
                 : renderQuestionListHeader()}
             <div className="flex h-full flex-col justify-between">
-                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
+                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray pl-6">
                     {questionList.map(function (question) {
                         return (
                             <QuestionList
