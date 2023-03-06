@@ -106,7 +106,7 @@ const Team = () => {
     }
 
     return (
-        <div className="mx-10 mt-10 flex h-full w-full flex-col gap-4">
+        <div className="flex h-full w-full flex-col gap-4 pl-14 pr-10 pt-10">
             <div className="flex flex-row items-center justify-between">
                 <div className="text-2xl font-bold">{team?.name}</div>
                 {isActiveTab === 'questions' && (
