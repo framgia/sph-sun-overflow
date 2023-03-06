@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import UserTab from '../UserTab'
 interface IUser {
@@ -26,6 +28,8 @@ interface MembersSidebarProps {
 }
 
 const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
+    const router = useRouter()
+    const usePath = (path: string) => `${router.asPath}${path}`
     const [members, setMembers] = useState<IUser[]>([])
 
     const extractMembers = (): IUser[] => {
@@ -51,7 +55,12 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
         <div className="p-1 drop-shadow-md">
             <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
                 <span className="text-xl font-medium">Members</span>
-                {true && <div className="cursor-pointer text-lg text-[#3B8CD7]">Manage</div>}
+                <Link
+                    className="cursor-pointer text-lg text-[#3B8CD7]"
+                    href={`${usePath('/manage')}`}
+                >
+                    Manage
+                </Link>
             </div>
 
             {members.length == 0 ? (
