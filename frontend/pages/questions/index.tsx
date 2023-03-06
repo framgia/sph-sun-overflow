@@ -48,6 +48,7 @@ const QuestionsPage = () => {
             searchKey={searchKey}
             isSearchResult={isSearchResult}
             isPrivate={false}
+            page_slug={'questions'}
         />
     )
 }

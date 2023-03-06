@@ -34,6 +34,7 @@ interface IProps {
         }
     }
     team?: string
+    page_slug?: string
 }
 
 const QuestionsPageLayout = ({
@@ -43,6 +44,7 @@ const QuestionsPageLayout = ({
     isSearchResult = false,
     isPrivate = false,
     team = '',
+    page_slug = '',
 }: IProps): JSX.Element => {
     const router = useRouter()
     const { data: questions, paginatorInfo } = data.questions
@@ -125,6 +127,7 @@ const QuestionsPageLayout = ({
                                 id={question.id}
                                 title={question.title}
                                 slug={question.slug}
+                                page_slug={page_slug}
                                 content={question.content}
                                 created_at={question.created_at}
                                 humanized_created_at={question.humanized_created_at}

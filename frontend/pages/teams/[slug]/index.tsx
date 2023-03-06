@@ -164,6 +164,7 @@ const QuestionsTab = () => {
                 data={data}
                 isPrivate={true}
                 team={slug as string}
+                page_slug={'teams'}
             />
         </div>
     )

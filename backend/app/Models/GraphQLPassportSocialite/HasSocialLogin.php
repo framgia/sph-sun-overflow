@@ -20,7 +20,6 @@ trait HasSocialLogin
     }
 
     /**
-     * @param  Request  $request
      * @return mixed
      */
     public static function byOAuthToken(Request $request)
