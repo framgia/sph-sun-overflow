@@ -20,6 +20,7 @@ type Props = {
     user?: UserType
     bookmarkType?: 'Question' | 'Answer'
     bookmarkAnswerId?: number
+    page_slug?: string
     refetch?: () => void
 }
 
@@ -37,7 +38,27 @@ const QuestionList = ({
     user,
     bookmarkType,
     bookmarkAnswerId,
+    page_slug,
 }: Props): JSX.Element => {
+    const renderTeamQuestionDetailHeader = (): JSX.Element => {
+        return (
+            <Link
+                href={`/teams/question/${slug}`}
+                className="text-lg text-blue-600 hover:text-blue-400"
+            >
+                {title}
+            </Link>
+        )
+    }
+
+    const renderQuestionDetailHeader = (): JSX.Element => {
+        return (
+            <Link href={`/questions/${slug}`} className="text-lg text-blue-600 hover:text-blue-400">
+                {title}
+            </Link>
+        )
+    }
+
     return (
         <div className="flex w-full flex-row p-5">
             <div className="flex w-[15%] flex-col">
@@ -53,12 +74,10 @@ const QuestionList = ({
             </div>
             <div className="flex w-[85%] flex-col gap-4">
                 <div className="flex w-full justify-between">
-                    <Link
-                        href={`/questions/${slug}`}
-                        className="text-lg text-blue-600 hover:text-blue-400"
-                    >
-                        {title}
-                    </Link>
+                    {page_slug == 'teams'
+                        ? renderTeamQuestionDetailHeader()
+                        : page_slug == 'questions'
+                        && renderQuestionDetailHeader()}
                     {bookmarkType && (
                         <Bookmark
                             bookmarkable_id={bookmarkType === 'Answer' ? bookmarkAnswerId! : id!}
