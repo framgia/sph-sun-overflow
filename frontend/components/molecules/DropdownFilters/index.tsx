@@ -39,7 +39,7 @@ type Props = {
 
 const FilterTexts: FilterTextsType = {
     DATE: { 1: 'Newest first', 2: 'Oldest first' },
-    ANSWER: { 1: 'Answered', 2: 'Unanswered', 3: 'All Answers' },
+    ANSWER: { 1: 'Answered', 2: 'Unanswered', 3: 'All Questions' },
     WATCHED: { 1: 'Most Watched', 2: 'Least Watched' },
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
 }
