@@ -17,7 +17,7 @@ type FilterType = {
 
 type FilterTextsType = {
     DATE: { 1: string; 2: string }
-    ANSWER: { 1: string; 2: string; 3:string}
+    ANSWER: { 1: string; 2: string; 3: string }
     WATCHED: { 1: string; 2: string }
     POPULAR: { 1: string; 2: string }
 }
@@ -132,7 +132,7 @@ const DropdownFilters = ({
                         })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[3])
                     },
-                }
+                },
             ],
         },
         WATCHED: {
