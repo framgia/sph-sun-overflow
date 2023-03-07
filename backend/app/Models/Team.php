@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class Team extends Model
@@ -35,7 +36,7 @@ class Team extends Model
         });
     }
 
-    protected $appends = ['members_count'];
+    protected $appends = ['members_count','is_team_leader'];
 
     protected $guarded = [];
 
@@ -52,5 +53,9 @@ class Team extends Model
     public function getMembersCountAttribute()
     {
         return $this->members()->count();
+    }
+    public function getIsTeamLeaderAttribute()
+    {
+        return $this->teamLeader->id === Auth::id();
     }
 }

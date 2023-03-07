@@ -52,7 +52,11 @@ const TeamManage = () => {
     })
 
     if (loading) return loadingScreenShow()
-    else if (error) return errorNotify(`Error! ${error}`)
+    else if (error) {
+        errorNotify(`Error! ${error}`)
+        router.push(`/teams/${router.query.slug}`)
+        return
+    }
 
     const { paginatorInfo, data: memberList } = data.teamMembers
 

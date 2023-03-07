@@ -9,6 +9,7 @@ type Team {
     members: [Member!]! @hasMany
     slug: String!
     members_count: Int!
+    is_team_leader: Boolean!
 }
 
 type TeamRole {
