@@ -10,7 +10,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useState } from 'react'
-import { FilterType } from '../../index'
+import { FilterType } from '../../../index'
 import { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 
 type RefetchType = {
@@ -30,7 +30,7 @@ const QuestionDetailPage = () => {
 
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTION, {
         variables: {
-            slug: String(query.slug),
+            slug: String(query['question_slug']),
             shouldAddViewCount: true,
             answerSort: [{ column: 'VOTES', order: 'DESC' }],
         },
@@ -107,6 +107,7 @@ const QuestionDetailPage = () => {
                         title={question.title}
                         content={question.content}
                         slug={question.slug}
+                        slug={question.question_slug}
                         created_at={question.created_at}
                         humanized_created_at={question.humanized_created_at}
                         vote_count={question.vote_count}

@@ -21,6 +21,7 @@ type Props = {
     bookmarkType?: 'Question' | 'Answer'
     bookmarkAnswerId?: number
     page_slug?: string
+    question_slug?: string
     refetch?: () => void
 }
 
@@ -28,6 +29,7 @@ const QuestionList = ({
     id,
     title,
     slug,
+    question_slug,
     content,
     vote_count,
     answer_count,
@@ -43,7 +45,7 @@ const QuestionList = ({
     const renderTeamQuestionDetailHeader = (): JSX.Element => {
         return (
             <Link
-                href={`/teams/question/${slug}`}
+                href={`/teams/${slug}/question/${question_slug}`}
                 className="text-lg text-blue-600 hover:text-blue-400"
             >
                 {title}
