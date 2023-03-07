@@ -35,6 +35,12 @@ const getButtonClasses = (usage: string): string => {
             return 'absolute top-0 right-0 cursor-pointer'
         case 'back-button':
             return 'text-xl text-primary-gray hover:text-primary-red'
+        case 'toggle-modal':
+            return 'cursor-pointer'
+        case 'modal-cancel':
+            return 'items-center rounded-md border-2 px-4 border-primary-red text-primary-red text-sm hover:bg-light-red py-1'
+        case 'modal-submit':
+            return 'items-center rounded-md bg-primary-red text-white px-4 text-sm hover:bg-secondary-red py-1'
         default:
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
     }

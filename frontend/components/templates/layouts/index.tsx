@@ -23,7 +23,7 @@ const Layout = ({ children }: LayoutProps) => {
         <ProvidersWrapper>
             <main className="relative">
                 {!routeIfLoginPathCheck && (
-                    <div className="fixed z-50 w-full drop-shadow-md">
+                    <div className="fixed z-20 w-full drop-shadow-md">
                         <Navbar />
                     </div>
                 )}
