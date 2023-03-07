@@ -6,10 +6,15 @@ import { useBoundStore } from '@/helpers/store'
 import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
 import { useLazyQuery } from '@apollo/client'
 import { errorNotify } from '@/helpers/toast'
-import { useEffect } from 'react'
+import { getUserToken } from '@/helpers/localStorageHelper'
+import { successNotify } from '@/helpers/toast'
+import Pusher from 'pusher-js'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 const Navbar = (): JSX.Element => {
+    const [pushNotifs, setPushNotifs] = useState(false)
+
     const user: UserProps = {
         id: useBoundStore.getState().user_id,
         first_name: useBoundStore.getState().first_name,
@@ -19,7 +24,26 @@ const Navbar = (): JSX.Element => {
         updated_at: useBoundStore.getState().updated_at,
     }
 
-    const [getNotifications, { data, loading, error }] = useLazyQuery(GET_NOTIFICATIONS)
+    const [getNotifications, { data, loading, error }] = useLazyQuery(GET_NOTIFICATIONS, {
+        fetchPolicy: 'network-only',
+    })
+
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
+        encrypted: true,
+        cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
+        authEndpoint: process.env.NEXT_PUBLIC_PUSHER_APP_AUTH_ENDPOINT,
+        auth: {
+            headers: {
+                Authorization: 'Bearer ' + getUserToken(),
+            },
+        },
+    })
+
+    const channel = pusher.subscribe(`private-notification-send-${user.id}`)
+
+    channel.bind('new-notification-send', function (data: any) {
+        setPushNotifs(!pushNotifs)
+    })
 
     useEffect(() => {
         getNotifications({
@@ -27,7 +51,7 @@ const Navbar = (): JSX.Element => {
                 user_id: user.id,
             },
         })
-    }, [user.id, useBoundStore.getState().updated_at])
+    }, [user.id, useBoundStore.getState().updated_at, pushNotifs, getNotifications])
 
     if (error) {
         errorNotify(error.toString())
@@ -47,9 +71,7 @@ const Navbar = (): JSX.Element => {
                 </Link>
                 <div className="flex items-center md:order-2">
                     <SearchBar />
-                    {!loading && data && (
-                        <NotificationDropdown notifications={data.userNotifications} />
-                    )}
+                    {data && <NotificationDropdown notifications={data.userNotifications} />}
                     <UserDropdown
                         id={user.id}
                         first_name={user.first_name}

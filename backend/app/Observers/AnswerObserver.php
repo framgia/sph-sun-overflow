@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\NotificationEvent;
 use App\Models\Answer;
 use App\Models\UserNotification;
 
@@ -16,6 +17,8 @@ class AnswerObserver
             'notifiable_type' => 'App\Models\Answer',
             'notifiable_id' => $answer->id,
         ]);
+
+        event(new NotificationEvent($answer->question->user_id));
     }
 
     public function updated(Answer $answer)
@@ -26,6 +29,8 @@ class AnswerObserver
                 'notifiable_type' => 'App\Models\Answer',
                 'notifiable_id' => $answer->id,
             ]);
+
+            event(new NotificationEvent($answer->user_id));
         }
     }
 }

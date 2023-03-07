@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\NotificationEvent;
 use App\Models\Comment;
 use App\Models\UserNotification;
 
@@ -16,5 +17,7 @@ class CommentObserver
             'notifiable_type' => 'App\Models\Comment',
             'notifiable_id' => $comment->id,
         ]);
+
+        event(new NotificationEvent($comment->commentable->user_id));
     }
 }
