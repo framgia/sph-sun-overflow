@@ -3,6 +3,7 @@ input filter {
     keyword: String
     tag: String
     team: String
+    is_public: Boolean
 }
 
 enum ORDERBY {

@@ -14,6 +14,7 @@ final class Questions
     public function __invoke($_, array $args)
     {
         $query = Question::query();
+
         try {
             if (isset($args['keyword'])) {
                 $keywordLikeness = '%'.$args['keyword'].'%';
@@ -42,6 +43,12 @@ final class Questions
                 $query->whereHas('team', function ($teamQuestions) use ($args) {
                     $teamQuestions->where('slug', $args['team']);
                 });
+
+                if (isset($args['is_public'])) {
+                    $query->where('is_public', $args['is_public']);
+                }
+            } else {
+                $query->where('is_public', true);
             }
 
             return $query;

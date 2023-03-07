@@ -36,7 +36,7 @@ class Team extends Model
         });
     }
 
-    protected $appends = ['members_count','is_team_leader'];
+    protected $appends = ['members_count', 'is_team_leader'];
 
     protected $guarded = [];
 
@@ -54,6 +54,7 @@ class Team extends Model
     {
         return $this->members()->count();
     }
+
     public function getIsTeamLeaderAttribute()
     {
         return $this->teamLeader->id === Auth::id();
