@@ -17,12 +17,12 @@ final class TeamMembers
     {
             $user_id = Auth::id();
             $team =  Team::where('slug', $args['team_slug'])->first();
-            if(!$team){
-                throw new CustomException('No team found', 'No team with the specified slug found!');
-            }
-            if($team->user_id != $user_id){
-                throw new CustomException('Invalid user', 'Please access as the Team Lead');
-            }
+        if (!$team) {
+            throw new CustomException('No team found', 'No team with the specified slug found!');
+        }
+        if ($team->user_id != $user_id) {
+            throw new CustomException('Invalid user', 'Please access as the Team Lead');
+        }
             return $team->members();
     }
 }

@@ -52,7 +52,7 @@ const TeamManage = () => {
     })
 
     if (loading) return loadingScreenShow()
-    else if (error) {
+    if (error) {
         errorNotify(`Error! ${error}`)
         router.push(`/teams/${router.query.slug}`)
         return
