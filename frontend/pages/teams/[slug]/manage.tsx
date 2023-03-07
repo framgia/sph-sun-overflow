@@ -38,11 +38,7 @@ interface IMember {
 }
 
 const TeamManage = () => {
-    const teamName = 'Sun Overflow'
-    const teamSlug = 'sun-overflow'
-
     const router = useRouter()
-
     const { data, loading, error, refetch } = useQuery(GET_MEMBERS, {
         variables: {
             teamSlug: router.query.slug,
@@ -53,7 +49,8 @@ const TeamManage = () => {
 
     if (loading) return loadingScreenShow()
     if (error) {
-        errorNotify(`Error! ${error}`)
+        console.log(error)
+        errorNotify(`Error! ${error.message}`)
         router.push(`/teams/${router.query.slug}`)
         return
     }
@@ -76,10 +73,13 @@ const TeamManage = () => {
     }
     return (
         <div className="flex w-full flex-col gap-4 divide-y-2 p-8">
-            <h1 className="text-3xl font-bold">{teamName}</h1>
+            <h1 className="text-3xl font-bold">{memberList[0].team.name || 'Undefined'}</h1>
             <div className="flex h-full flex-col gap-4">
                 <div className="mt-4 flex items-center justify-between">
-                    <Link href={`/teams/${teamSlug}`} className="text-lg text-secondary-text">
+                    <Link
+                        href={`/teams/${router.query.slug}`}
+                        className="text-lg text-secondary-text"
+                    >
                         {'< Go back'}
                     </Link>
                     <Button>Add Member</Button>

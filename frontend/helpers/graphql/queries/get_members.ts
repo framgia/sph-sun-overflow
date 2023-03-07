@@ -11,7 +11,9 @@ const GET_MEMBERS = gql`
                 lastPage
             }
             data {
-                id
+                team {
+                    name
+                }
                 teamRole {
                     id
                     name
