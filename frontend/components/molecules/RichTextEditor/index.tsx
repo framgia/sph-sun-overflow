@@ -52,6 +52,9 @@ const RichTextEditor = ({ value, onChange, id = undefined, usage = 'default' }: 
         case 'description':
             style = { height: '10rem' }
             break
+        case 'dashboard':
+            style = { minHeight: '100%' }
+            break
         case 'content':
             style = { width: '50rem' }
             break
@@ -64,7 +67,7 @@ const RichTextEditor = ({ value, onChange, id = undefined, usage = 'default' }: 
 
     return (
         <ReactQuill
-            className=""
+            className="flex flex-col"
             modules={modules}
             formats={formats}
             onChange={onChange}

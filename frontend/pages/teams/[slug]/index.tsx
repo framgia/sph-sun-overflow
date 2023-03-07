@@ -6,6 +6,7 @@ import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { useBoundStore } from '@/helpers/store'
 import { errorNotify } from '@/helpers/toast'
 import { RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
@@ -77,6 +78,10 @@ const Team = () => {
         setDashboardContentEditing(!dashboardContentEditing)
     }
 
+    const isTeamLeader = () => {
+        return team.teamLeader.id === useBoundStore.getState().user_id
+    }
+
     const renderActiveTab = (content: string) => {
         return isActiveTab == 'dashboard' ? (
             <div className="flex w-full flex-col">
@@ -84,19 +89,22 @@ const Team = () => {
                     <DashboardEditContentForm
                         toggleEdit={toggleDashboardContentEdit}
                         content={content}
+                        teamId={team.id}
                     />
                 ) : (
                     <div className="relative w-full">
                         <div className="ql-snow mx-5 my-4">
                             <div className="ql-editor w-full">{parseHTML(content)}</div>
                         </div>
-                        <Button
-                            usage="edit-top-right"
-                            type="button"
-                            onClick={toggleDashboardContentEdit}
-                        >
-                            <Icons name="square_edit" />
-                        </Button>
+                        {isTeamLeader() && (
+                            <Button
+                                usage="edit-top-right"
+                                type="button"
+                                onClick={toggleDashboardContentEdit}
+                            >
+                                <Icons name="square_edit" />
+                            </Button>
+                        )}
                     </div>
                 )}
             </div>

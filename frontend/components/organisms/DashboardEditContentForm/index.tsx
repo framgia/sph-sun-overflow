@@ -1,20 +1,26 @@
 import Button from '@/components/atoms/Button'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
+import { successNotify, errorNotify } from '@/helpers/toast'
+import { useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import UPDATE_TEAM_DASHBOARD from '../../../helpers/graphql/mutations/update_team_dashboard'
 
 type DashboardContentFormValues = {
     content: string
 }
 
 type Props = {
+    teamId: number
     content: string
     toggleEdit: () => void
 }
 
-const DashboardEditContentForm = ({ content, toggleEdit }: Props): JSX.Element => {
+const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.Element => {
     const [inputError, setInputError] = useState({ content: '' })
     const errorElement = document.querySelector('#contentInput .ql-container') as HTMLDivElement
+
+    const [updateTeamDashboard] = useMutation(UPDATE_TEAM_DASHBOARD)
 
     const { register, setValue, handleSubmit, control } = useForm<DashboardContentFormValues>({
         defaultValues: {
@@ -24,7 +30,7 @@ const DashboardEditContentForm = ({ content, toggleEdit }: Props): JSX.Element =
         reValidateMode: 'onSubmit',
     })
 
-    const onSubmit = (data: DashboardContentFormValues) => {
+    const onSubmit = async (data: DashboardContentFormValues) => {
         const cleanContent = data.content.replace(/<\/?[^>]+(>|$)/g, '')
         if (cleanContent.length <= 0) {
             setInputError({ ...inputError, content: 'Content must not be empty' })
@@ -32,6 +38,19 @@ const DashboardEditContentForm = ({ content, toggleEdit }: Props): JSX.Element =
         }
 
         setInputError({ ...inputError, content: '' })
+
+        try {
+            await updateTeamDashboard({
+                variables: {
+                    id: teamId,
+                    dashboard_content: data.content,
+                },
+            })
+            successNotify('Dashboard updated successfully')
+            toggleEdit()
+        } catch (e) {
+            errorNotify('There was an error updating')
+        }
     }
 
     useEffect(() => {
@@ -45,20 +64,20 @@ const DashboardEditContentForm = ({ content, toggleEdit }: Props): JSX.Element =
     }, [inputError, errorElement])
 
     return (
-        <div className="flex w-full flex-col gap-6 pt-6">
+        <div className="flex w-full flex-col gap-6 py-6">
             <div className="flex shrink">
-                <div className="text-xl text-primary-gray">
+                <div className="text-primary-gray">
                     <Button usage="back-button" onClick={toggleEdit}>
-                        {'< Go Back'}
+                        <span className="text-base">{'<'} Go Back</span>
                     </Button>
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex w-full flex-col content-center gap-5 pl-5">
-                    <div className="text-3xl">Edit Content</div>
+                    <div className="text-2xl">Edit Content</div>
                     <div className="flex flex-col">
-                        <div className="flex w-full flex-col gap-3 pb-12">
-                            <label htmlFor="contentInput" className="text-2xl font-bold">
+                        <div className="flex w-full flex-1 flex-col gap-3 pb-12">
+                            <label htmlFor="contentInput" className="text-xl font-bold">
                                 Content
                             </label>
                             <Controller
@@ -68,19 +87,15 @@ const DashboardEditContentForm = ({ content, toggleEdit }: Props): JSX.Element =
                                     <RichTextEditor
                                         onChange={onChange}
                                         value={value}
-                                        usage="description"
+                                        usage="dashboard"
                                         id="contentInput"
                                     />
                                 )}
                             />
                         </div>
-                        {inputError.content && (
-                            <div className="px-3 text-sm text-primary-red">
-                                {inputError.content}
-                            </div>
-                        )}
                     </div>
-                    <div className="flex flex-row justify-end">
+                    <div className="mt-[-3rem] flex flex-row items-center justify-between">
+                        <div className="text-sm text-primary-red">{inputError.content}</div>
                         <Button usage="primary">Update Content</Button>
                     </div>
                 </div>
