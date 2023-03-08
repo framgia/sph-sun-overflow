@@ -81,8 +81,8 @@ const QuestionDetail = ({
                             </span>
                         </div>
                     </div>
-                    <div className="flex w-full flex-row">
-                        <div className="flex w-14 flex-col items-start">
+                    <div className="relative flex w-full flex-row justify-between">
+                        <div className="absolute flex w-14 flex-col items-start">
                             <div className="flex flex-col items-center gap-2">
                                 <Votes
                                     count={vote_count ?? 0}
@@ -97,16 +97,16 @@ const QuestionDetail = ({
                                 />
                             </div>
                         </div>
-                        <div className="flex w-full flex-col justify-between gap-3">
+                        <div className="flex w-full flex-col justify-between gap-3 pl-14">
                             <div className="ql-snow flex w-full flex-col gap-3">
                                 <div className="ql-editor w-full">{parseHTML(content)}</div>
-                                <div className="w-full">
+                                <div className="w-full px-4">
                                     <Tags values={tags} />
                                 </div>
                             </div>
                             <div className="flex w-full flex-row justify-between">
                                 <div className="flex items-end justify-start">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 px-4">
                                         <Link
                                             href="#"
                                             className="text-xs text-blue-600 hover:underline"
@@ -129,10 +129,10 @@ const QuestionDetail = ({
                                 </div>
                                 <div className="flex min-w-fit flex-row">
                                     <Avatar
-                                        first_name={user.first_name}
-                                        last_name={user.last_name}
-                                        avatar={user.avatar ?? ''}
-                                        slug={user.slug}
+                                        first_name={user?.first_name}
+                                        last_name={user?.last_name}
+                                        avatar={user?.avatar ?? ''}
+                                        slug={user?.slug}
                                     />
                                 </div>
                             </div>
