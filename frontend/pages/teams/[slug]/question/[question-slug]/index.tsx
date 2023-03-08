@@ -39,7 +39,7 @@ const QuestionDetailPage = () => {
     if (loading) return loadingScreenShow()
     if (error) {
         errorNotify(`Error! ${error}`)
-        // router.push(`/teams/${router.query.slug}`)
+        router.push(`/teams/${router.query.slug}`)
         return <></>
     }
     const question: QuestionType = data.question
