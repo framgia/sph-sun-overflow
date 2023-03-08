@@ -3,12 +3,12 @@ import Pill from '../Pill'
 type TagsProps = {
     values: {
         id: number
-        slug: string
+        slug?: string | null
         name: string
-        description: string
+        description?: string | null
         is_watched_by_user: boolean
-        count_tagged_questions: number
-        count_watching_users: number
+        count_tagged_questions?: number | null
+        count_watching_users?: number | null
     }[]
 }
 
