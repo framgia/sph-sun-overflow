@@ -118,7 +118,6 @@ const QuestionDetailPage = () => {
                         refetchHandler={refetchHandler}
                         is_bookmarked={question.is_bookmarked}
                         is_from_user={question.is_from_user}
-                        is_public={question.is_public}
                         team_slug={query.slug as string}
                     />
                     <div className="flex flex-col">

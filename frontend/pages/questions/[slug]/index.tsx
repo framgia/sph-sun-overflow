@@ -67,7 +67,6 @@ export type QuestionType = {
     is_bookmarked: boolean
     is_from_user: boolean
     is_answered: boolean
-    is_public: boolean
     user_vote: number
     user: UserType
     answers: AnswerType[]

@@ -25,7 +25,6 @@ type QuestionDetailProps = {
     user?: UserType
     is_bookmarked: boolean
     is_from_user: boolean
-    is_public: boolean
     user_vote: number
     team_slug?: null | string
     refetchHandler: () => void
