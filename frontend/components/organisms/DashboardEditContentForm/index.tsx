@@ -38,6 +38,11 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
         }
 
         setInputError({ ...inputError, content: '' })
+        if (data.content === content) {
+            errorNotify('No changes. Dashboard not updated')
+            toggleEdit()
+            return
+        }
 
         try {
             await updateTeamDashboard({
@@ -73,10 +78,10 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex w-full flex-col content-center gap-5 pl-5">
+                <div className="flex w-full flex-col content-center gap-2 pl-5">
                     <div className="text-2xl">Edit Content</div>
                     <div className="flex flex-col">
-                        <div className="flex w-full flex-1 flex-col gap-3 pb-12">
+                        <div className="flex w-full flex-1 flex-col gap-1 pb-12">
                             <label htmlFor="contentInput" className="text-xl font-bold">
                                 Content
                             </label>
@@ -92,10 +97,10 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
                                     />
                                 )}
                             />
+                            <div className="text-sm text-primary-red">{inputError.content}</div>
                         </div>
                     </div>
-                    <div className="mt-[-3rem] flex flex-row items-center justify-between">
-                        <div className="text-sm text-primary-red">{inputError.content}</div>
+                    <div className="mt-[-3rem] flex flex-row justify-end">
                         <Button usage="primary">Update Content</Button>
                     </div>
                 </div>
