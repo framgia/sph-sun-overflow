@@ -31,6 +31,16 @@ const TeamsListPage = () => {
         },
     })
 
+    useEffect(() => {
+        userQuery.refetch({
+            first: 6,
+            page: 1,
+            name: '%%',
+        })
+        setSearchKey('')
+        setTerm('')
+    }, [router, userQuery])
+
     if (userQuery.error) return errorNotify(`Error! ${userQuery.error}`)
 
     const pageInfo: PaginatorInfo = userQuery?.data?.teams.paginatorInfo
@@ -59,16 +69,6 @@ const TeamsListPage = () => {
     const onPageChange = (first: number, page: number) => {
         userQuery.refetch({ first, page })
     }
-
-    useEffect(() => {
-        userQuery.refetch({
-            first: 6,
-            page: 1,
-            name: '%%',
-        })
-        setSearchKey('')
-        setTerm('')
-    }, [router, userQuery.refetch])
 
     return (
         <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">

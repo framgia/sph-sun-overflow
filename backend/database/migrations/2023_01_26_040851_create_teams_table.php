@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('dashboard_content');
+            $table->mediumText('dashboard_content');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
