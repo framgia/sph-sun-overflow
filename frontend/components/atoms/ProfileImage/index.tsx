@@ -18,7 +18,7 @@ const ProfileImage = ({ first_name, last_name, avatar, updated_at }: ProfileImag
                         name={`${first_name} ${last_name}`}
                         size="200"
                         alt={first_name}
-                        src={avatar ? `${avatar}?${updated_at}` : `${first_name}`}
+                        src={avatar ? `${avatar}` : `${avatar}?${updated_at}`}
                         maxInitials={1}
                         textSizeRatio={2}
                     />

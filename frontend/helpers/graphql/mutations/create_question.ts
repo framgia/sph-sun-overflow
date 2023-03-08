@@ -18,6 +18,15 @@ const CREATE_QUESTION = gql`
             id
             content
             slug
+            is_public
+            tags {
+                id
+                name
+            }
+            team {
+                id
+                name
+            }
         }
     }
 `

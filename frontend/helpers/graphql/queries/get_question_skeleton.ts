@@ -8,6 +8,11 @@ const GET_QUESTION_SKELETON = gql`
             content
             slug
             is_from_user
+            is_public
+            team {
+                id
+                name
+            }
             tags {
                 id
                 name

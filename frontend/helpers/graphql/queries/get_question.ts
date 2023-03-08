@@ -15,6 +15,11 @@ const GET_QUESTION = gql`
             is_from_user
             is_answered
             user_vote
+            is_public
+            team {
+                id
+                name
+            }
             tags {
                 id
                 name
