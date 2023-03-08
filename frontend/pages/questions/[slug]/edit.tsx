@@ -21,7 +21,7 @@ const EditQuestionFormPage = () => {
                 </div>
             </div>
             <div className="ml-16 mr-16 w-full content-center lg:w-[80%]">
-                {!loading && <QuestionForm initialState={data.question} />}
+                {!loading && <QuestionForm initialState={data?.question} />}
             </div>
         </div>
     )

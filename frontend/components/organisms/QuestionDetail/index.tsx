@@ -27,6 +27,8 @@ type QuestionDetailProps = {
     is_from_user: boolean
     user_vote: number
     refetchHandler: () => void
+    is_public: boolean
+    team_name?: string
 }
 
 const QuestionDetail = ({
@@ -44,6 +46,8 @@ const QuestionDetail = ({
     is_from_user,
     user_vote,
     refetchHandler,
+    is_public,
+    team_name,
 }: QuestionDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
 
@@ -79,6 +83,19 @@ const QuestionDetail = ({
                             <span className="text-gray-500">
                                 {views_count} {views_count > 1 ? 'times' : 'time'}
                             </span>
+                        </div>
+
+                        {team_name !== '' ? (
+                            <div className="flex gap-1">
+                                <span>From Team </span>
+                                <span className="text-gray-500">{team_name}</span>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+
+                        <div className="flex gap-1">
+                            {is_public ? <Icons name={'public'} /> : <Icons name={'private'} />}
                         </div>
                     </div>
                     <div className="relative flex w-full flex-row justify-between">

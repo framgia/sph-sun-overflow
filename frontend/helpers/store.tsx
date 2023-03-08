@@ -1,5 +1,12 @@
 import { create, StateCreator } from 'zustand'
 
+type TeamType = {
+    id: number
+    team: {
+        id: number
+        name: string
+    }
+}
 interface UserSlice {
     user_id: number
     first_name: string
@@ -7,6 +14,7 @@ interface UserSlice {
     email: string
     avatar: string
     slug: string
+    teams: TeamType[]
     updated_at: string
     setUserID: (
         user_id: number,
@@ -15,6 +23,7 @@ interface UserSlice {
         email: string,
         avatar: string,
         slug: string,
+        teams: TeamType[],
         updated_at: string
     ) => void
 }
@@ -26,8 +35,9 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
     email: '',
     avatar: '',
     slug: '',
+    teams: [],
     updated_at: '',
-    setUserID: (user_id, first_name, last_name, email, avatar, slug, updated_at) =>
+    setUserID: (user_id, first_name, last_name, email, avatar, slug, teams, updated_at) =>
         set(() => ({
             user_id,
             first_name,
@@ -35,6 +45,7 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
             email,
             avatar,
             slug,
+            teams,
             updated_at,
         })),
 })

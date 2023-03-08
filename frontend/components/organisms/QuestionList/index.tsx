@@ -23,6 +23,7 @@ type Props = {
     page_slug?: string
     question_slug?: string
     refetch?: () => void
+    team_name: string
 }
 
 const QuestionList = ({
@@ -41,6 +42,7 @@ const QuestionList = ({
     bookmarkType,
     bookmarkAnswerId,
     page_slug,
+    team_name,
 }: Props): JSX.Element => {
     const renderTeamQuestionDetailHeader = (): JSX.Element => {
         return (
@@ -100,11 +102,23 @@ const QuestionList = ({
                             <Tags values={tags} />
                         </div>
                         <div className="flex flex-row justify-end">
-                            <Author
-                                author={`${user?.first_name} ${user?.last_name}`}
-                                moment={humanized_created_at}
-                                slug={user.slug}
-                            />
+                            <div className="flex flex-col">
+                                <Author
+                                    author={`${user?.first_name} ${user?.last_name}`}
+                                    moment={humanized_created_at}
+                                    slug={user?.slug}
+                                />
+                                {team_name !== '' ? (
+                                    <div className="ml-4 text-primary-gray">
+                                        From Team :
+                                        <text className="text-blue-600 hover:text-blue-400">
+                                            {team_name}
+                                        </text>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

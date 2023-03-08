@@ -9,6 +9,13 @@ const GET_AUTHENTICATED_USER = gql`
             email
             avatar
             slug
+            teams {
+                id
+                team {
+                    id
+                    name
+                }
+            }
             updated_at
         }
     }

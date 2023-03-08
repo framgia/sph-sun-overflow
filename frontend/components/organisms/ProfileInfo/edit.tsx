@@ -114,7 +114,6 @@ const ProfileInfoEdit = ({
 
                     setTimeout(() => {
                         router.reload()
-                        profileRefetchHandler()
                     }, 3000)
                 })
                 .catch((e) => {

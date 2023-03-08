@@ -2,10 +2,12 @@ import Button from '@/components/atoms/Button'
 import FormAlert from '@/components/molecules/FormAlert'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import SortDropdown from '@/components/molecules/SortDropdown'
+import { FilterType } from '@/components/templates/QuestionPageLayout'
 import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
 import UPDATE_QUESTION from '@/helpers/graphql/mutations/update_question'
+import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { FilterType } from '@/pages/questions'
+import { TeamType } from '@/pages/questions/[slug]'
 import { isObjectEmpty } from '@/utils'
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -20,14 +22,17 @@ export type FormValues = {
     description: string
     tags: ITag[]
     is_public: boolean
-    team_id: number | null
+    team_id: TeamType | null
 }
+
 type QuestionSkeleton = {
     id: Number | undefined
     content: String
     title: String
     tags: ITag[]
     slug: String
+    is_public?: boolean
+    team?: TeamType
 }
 interface Props {
     initialState?: QuestionSkeleton
@@ -38,8 +43,11 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     let title: String | undefined
     let content: String | undefined
     let tags: ITag[] | undefined
+    let is_public: Boolean | undefined
+    let team: TeamType | undefined
+
     if (initialState) {
-        ;({ id, content, title, tags } = initialState)
+        ;({ id, content, title, tags, is_public, team } = initialState)
     }
     const router = useRouter()
     let buttonText = 'Post Question'
@@ -64,8 +72,8 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
             title: title ? String(title) : '',
             description: content ? String(content) : '',
             tags: tags ? tags : [],
-            is_public: true,
-            team_id: null,
+            is_public: is_public ? true : false,
+            team_id: team,
         },
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
@@ -76,54 +84,35 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     const [createQuestion] = useMutation(CREATE_QUESTION)
     const [updateQuestion] = useMutation(UPDATE_QUESTION)
 
-    const tempTeams: FilterType[] = [
-        {
-            id: 0,
-            name: 'No Team',
-            onClick: () => {
-                setValue('team_id', null)
-                setValue('is_public', true)
-            },
-        },
-        {
-            id: 1,
-            name: '1',
-            onClick: () => {
-                setValue('team_id', 1)
-                setValue('is_public', false)
-            },
-        },
-        {
-            id: 2,
-            name: '2',
-            onClick: () => {
-                setValue('team_id', 2)
-                setValue('is_public', false)
-            },
-        },
-        {
-            id: 3,
-            name: '3',
-            onClick: () => {
-                setValue('team_id', 3)
-                setValue('is_public', false)
-            },
-        },
-        {
-            id: 4,
-            name: '4',
-            onClick: () => {
-                setValue('team_id', 4)
-                setValue('is_public', false)
-            },
-        },
-    ]
+    const [selectedFilter, setSelectedFilter] = useState(team ? team.name : '')
+
+    const tempTeams = useBoundStore.getState().teams
+
+    const transformTeams = () => {
+        return tempTeams.map(({ team: { id, name } }) => {
+            return {
+                id,
+                name,
+                onClick: () => {
+                    setValue('team_id', { id: id, name: name })
+                    setValue('is_public', true)
+                    setSelectedFilter(name)
+                },
+            } as FilterType
+        })
+    }
 
     const validateChanges = (data: FormValues) => {
         if (data.title != initialState?.title) {
             return false
         }
         if (data.description !== initialState?.content) {
+            return false
+        }
+        if (data.is_public != initialState?.is_public) {
+            return false
+        }
+        if (data?.team_id?.id !== initialState?.team?.id) {
             return false
         }
         if (
@@ -154,17 +143,21 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                     id: id,
                     title: data.title,
                     content: data.description,
+                    is_public: data.is_public,
                     tags,
+                    team_id: data?.team_id?.id,
                 },
             })
         } else {
+            let status = !data.team_id ? true : data.is_public
+            let team = data.team_id?.id ?? null
             newQuestion = createQuestion({
                 variables: {
                     title: data.title,
                     content: data.description,
-                    is_public: true,
+                    is_public: status,
                     tags,
-                    team_id: 1,
+                    team_id: team,
                 },
             })
         }
@@ -240,12 +233,16 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                             <Controller
                                 control={control}
                                 name="team_id"
-                                render={({ field: { value } }) => (
-                                    <SortDropdown
-                                        filters={tempTeams}
-                                        selectedFilter={tempTeams[value || 0].name}
-                                    />
-                                )}
+                                render={({ field: { value } }) => {
+                                    const teams = transformTeams()
+
+                                    return (
+                                        <SortDropdown
+                                            filters={teams}
+                                            selectedFilter={selectedFilter}
+                                        />
+                                    )
+                                }}
                             />
                         </div>
                     </div>
