@@ -9,8 +9,8 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
-import { FilterType } from '../../../index'
+import { Fragment, useState } from 'react'
+import { FilterType } from '@/components/templates/QuestionPageLayout'
 import { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 
 type RefetchType = {
@@ -39,9 +39,8 @@ const QuestionDetailPage = () => {
 
     if (loading) return loadingScreenShow()
     else if (error) return errorNotify(`Error! ${error}`)
-    const question: QuestionType = {
-        ...data.question,
-    }
+
+    const question: QuestionType = data.question
 
     const refetchHandler = () => {
         refetch({ shouldAddViewCount: false })
@@ -107,7 +106,6 @@ const QuestionDetailPage = () => {
                         title={question.title}
                         content={question.content}
                         slug={question.slug}
-                        slug={question.question_slug}
                         created_at={question.created_at}
                         humanized_created_at={question.humanized_created_at}
                         vote_count={question.vote_count}
