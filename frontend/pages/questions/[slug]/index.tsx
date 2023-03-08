@@ -1,15 +1,15 @@
-import CommentForm from '@/components/organisms/CommentForm'
 import SortDropdown from '@/components/molecules/SortDropdown'
-import AnswerForm from '@/components/organisms/AnswerForm'
 import AnswerDetail from '@/components/organisms/AnswerDetail'
+import AnswerForm from '@/components/organisms/AnswerForm'
 import Comment from '@/components/organisms/Comment'
+import CommentForm from '@/components/organisms/CommentForm'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { FilterType } from '../index'
 
 export type UserType = {
@@ -67,6 +67,7 @@ export type QuestionType = {
     is_bookmarked: boolean
     is_from_user: boolean
     is_answered: boolean
+    is_public: boolean
     user_vote: number
     user: UserType
     answers: AnswerType[]

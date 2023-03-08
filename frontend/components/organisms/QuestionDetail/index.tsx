@@ -1,16 +1,16 @@
-import 'react-quill/dist/quill.snow.css'
 import Icons from '@/components/atoms/Icons'
 import Avatar from '@/components/molecules/Avatar'
 import Bookmark from '@/components/molecules/Bookmark'
 import Tags from '@/components/molecules/Tags'
 import Votes from '@/components/molecules/Votes'
+import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { parseHTML } from '@/helpers/htmlParsing'
+import { useMutation } from '@apollo/client'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { UserType } from '../../../pages/questions/[slug]'
-import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
-import { useMutation } from '@apollo/client'
+import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
+import { UserType } from '../../../pages/questions/[slug]'
 
 type QuestionDetailProps = {
     id: number
@@ -25,7 +25,9 @@ type QuestionDetailProps = {
     user?: UserType
     is_bookmarked: boolean
     is_from_user: boolean
+    is_public: boolean
     user_vote: number
+    team_slug?: null | string
     refetchHandler: () => void
 }
 
@@ -43,6 +45,7 @@ const QuestionDetail = ({
     is_bookmarked,
     is_from_user,
     user_vote,
+    team_slug = null,
     refetchHandler,
 }: QuestionDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
@@ -56,15 +59,13 @@ const QuestionDetail = ({
         refetchHandler()
     }
 
+    const editLink = team_slug ? `${slug}/edit` : `/teams/${team_slug}/question/${slug}/edit`
     return (
         <Fragment>
             <div className="flex w-full flex-col">
                 <div className="relative flex w-full flex-col gap-3">
                     {is_from_user && (
-                        <Link
-                            href={`${slug}/edit`}
-                            className="absolute top-0 right-0 cursor-pointer"
-                        >
+                        <Link href={editLink} className="absolute top-0 right-0 cursor-pointer">
                             <Icons name="square_edit" />
                         </Link>
                     )}
