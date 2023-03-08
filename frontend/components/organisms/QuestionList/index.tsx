@@ -55,7 +55,10 @@ const QuestionList = ({
 
     const renderQuestionDetailHeader = (): JSX.Element => {
         return (
-            <Link href={`/questions/${slug}`} className="text-lg text-blue-600 hover:text-blue-400">
+            <Link
+                href={`/questions/${question_slug}`}
+                className="text-lg text-blue-600 hover:text-blue-400"
+            >
                 {title}
             </Link>
         )
@@ -78,8 +81,7 @@ const QuestionList = ({
                 <div className="flex w-full justify-between">
                     {page_slug == 'teams'
                         ? renderTeamQuestionDetailHeader()
-                        : page_slug == 'questions'
-                        && renderQuestionDetailHeader()}
+                        : page_slug == 'questions' && renderQuestionDetailHeader()}
                     {bookmarkType && (
                         <Bookmark
                             bookmarkable_id={bookmarkType === 'Answer' ? bookmarkAnswerId! : id!}
