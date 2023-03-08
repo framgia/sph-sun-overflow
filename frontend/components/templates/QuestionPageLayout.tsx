@@ -137,9 +137,7 @@ const QuestionsPageLayout = ({
                                 view_count={question.views_count}
                                 tags={question.tags}
                                 user={question.user}
-                                team_name={
-                                    question.team?.name === undefined ? '' : question.team?.name
-                                }
+                                team_name={question.team?.name ?? ''}
                             />
                         )
                     })}

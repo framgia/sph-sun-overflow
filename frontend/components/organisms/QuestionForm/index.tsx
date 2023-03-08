@@ -43,7 +43,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     let title: String | undefined
     let content: String | undefined
     let tags: ITag[] | undefined
-    let is_public: Boolean | undefined
+    let is_public: boolean | undefined
     let team: TeamType | undefined
 
     if (initialState) {
@@ -72,7 +72,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
             title: title ? String(title) : '',
             description: content ? String(content) : '',
             tags: tags ? tags : [],
-            is_public: is_public ? true : false,
+            is_public,
             team_id: team,
         },
         mode: 'onSubmit',
@@ -217,15 +217,13 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                         <label htmlFor="tagsInput" className="text-2xl">
                             Tags (max. 5)
                         </label>
-                        <div className="">
-                            <Controller
-                                control={control}
-                                name="tags"
-                                render={({ field: { value } }) => (
-                                    <TagsInput setValue={setValue} value={value} />
-                                )}
-                            />
-                        </div>
+                        <Controller
+                            control={control}
+                            name="tags"
+                            render={({ field: { value } }) => (
+                                <TagsInput setValue={setValue} value={value} />
+                            )}
+                        />
                     </div>
                     <div className="flex flex-col  self-center">
                         <label className="text-2xl">Teams</label>

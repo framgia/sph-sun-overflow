@@ -108,15 +108,13 @@ const QuestionList = ({
                                     moment={humanized_created_at}
                                     slug={user?.slug}
                                 />
-                                {team_name !== '' ? (
+                                {team_name && (
                                     <div className="ml-4 text-primary-gray">
                                         From Team :
-                                        <text className="text-blue-600 hover:text-blue-400">
+                                        <text className="ml-2 text-blue-600 hover:text-blue-400">
                                             {team_name}
                                         </text>
                                     </div>
-                                ) : (
-                                    ''
                                 )}
                             </div>
                         </div>

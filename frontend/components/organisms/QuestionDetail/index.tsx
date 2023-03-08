@@ -85,18 +85,14 @@ const QuestionDetail = ({
                             </span>
                         </div>
 
-                        {team_name !== '' ? (
+                        {team_name && (
                             <div className="flex gap-1">
                                 <span>From Team </span>
                                 <span className="text-gray-500">{team_name}</span>
                             </div>
-                        ) : (
-                            ''
                         )}
 
-                        <div className="flex gap-1">
-                            {is_public ? <Icons name={'public'} /> : <Icons name={'private'} />}
-                        </div>
+                        <Icons name={is_public ? 'public' : 'private'} />
                     </div>
                     <div className="relative flex w-full flex-row justify-between">
                         <div className="absolute flex w-14 flex-col items-start">
