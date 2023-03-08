@@ -10,7 +10,7 @@ import {
 import { HiCheck } from 'react-icons/hi2'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdCheckmark } from 'react-icons/io'
 import { MdOutlineModeEditOutline, MdModeEditOutline } from 'react-icons/md'
-import { FaTrashAlt } from 'react-icons/fa'
+import { FaTrashAlt, FaLockOpen, FaLock } from 'react-icons/fa'
 import {
     HiChevronDoubleLeft,
     HiChevronDoubleRight,
@@ -97,6 +97,10 @@ const Icons = ({ name, size = '20', additionalClass }: IconsProps): JSX.Element 
             return <HiSearch size="26" />
         case 'x-plain':
             return <HiX size={size} />
+        case 'private':
+            return <FaLock />
+        case 'public':
+            return <FaLockOpen />
         default:
             return <></>
     }

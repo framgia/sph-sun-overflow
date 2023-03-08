@@ -9,8 +9,8 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
-import { FilterType } from '../index'
+import { Fragment, useState } from 'react'
+import { FilterType } from '@/components/templates/QuestionPageLayout'
 
 export type UserType = {
     id?: number
@@ -54,6 +54,11 @@ export type AnswerType = {
     question: { slug: string }
 }
 
+export type TeamType = {
+    id: number
+    name: string
+}
+
 export type QuestionType = {
     id: number
     title: string
@@ -63,6 +68,8 @@ export type QuestionType = {
     vote_count: number
     views_count: number
     humanized_created_at: string
+    is_public: boolean
+    team_name: string
     tags: TagType[]
     is_bookmarked: boolean
     is_from_user: boolean
@@ -71,6 +78,7 @@ export type QuestionType = {
     user: UserType
     answers: AnswerType[]
     comments: CommentType[]
+    team: TeamType
 }
 
 export type AnswerEditType = {
@@ -107,6 +115,8 @@ const QuestionDetailPage = () => {
     const question: QuestionType = {
         ...data.question,
     }
+
+    let team = question.team === null ? '' : question.team.name
 
     const refetchHandler = () => {
         refetch({ shouldAddViewCount: false })
@@ -182,6 +192,8 @@ const QuestionDetailPage = () => {
                         user={question.user}
                         refetchHandler={refetchHandler}
                         is_from_user={question.is_from_user}
+                        is_public={question.is_public}
+                        team_name={team}
                     />
                     <div className="flex flex-col">
                         <div className="flex flex-col divide-y divide-primary-gray">
