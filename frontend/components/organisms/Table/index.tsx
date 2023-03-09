@@ -3,7 +3,9 @@ import Icons from '@/components/atoms/Icons'
 import Link from 'next/link'
 import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
 import Modal from '@/components/templates/Modal'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import RemoveMember from '../RemoveMember'
+import EditMember from '../EditMember'
 
 export type ColumnType = {
     key: string
@@ -18,8 +20,10 @@ export type DataType = {
 type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
+    roles: OptionType[]
 }
 
+<<<<<<< HEAD
 const roles: OptionType[] = [
     { id: 1, name: 'FE' },
     { id: 2, name: 'BE' },
@@ -43,6 +47,9 @@ const Table = ({ columns, dataSource }: TableProps) => {
         setActiveModal(modal)
         setIsOpen(false)
     }
+=======
+const Table = ({ columns, dataSource, roles }: TableProps) => {
+>>>>>>> [Overflow-284] [MARKUP] Create Deleting confimation modal in manage team
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
@@ -66,76 +73,23 @@ const Table = ({ columns, dataSource }: TableProps) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-black">
-                                {dataSource.map((data) => {
+                                {dataSource.map((data, key) => {
                                     return (
-                                        <tr
-                                            key={data.key as number}
-                                            className=" hover:bg-light-gray"
-                                        >
-                                            {Object.keys(data).map((key, index) => {
-                                                if (key === 'id' || key === 'key') return null
-
-                                                if (key === 'slug') {
-                                                    return (
-                                                        <td
-                                                            className="flex gap-4 whitespace-nowrap py-4 px-8"
-                                                            key={index}
-                                                        >
-                                                            <Button
-                                                                usage="toggle-modal"
-                                                                onClick={() =>
-                                                                    openModal(`edit-${data[key]}`)
-                                                                }
-                                                            >
-                                                                <Icons name="table_edit" />
-                                                            </Button>
-                                                            {activeModal === `edit-${data[key]}` &&
-                                                                isOpen && (
-                                                                    <Modal
-                                                                        title={`Assign Role`}
-                                                                        submitLabel="Save"
-                                                                        isOpen={isOpen}
-                                                                        handleSubmit={
-                                                                            handleEditSubmit
-                                                                        }
-                                                                        handleClose={() =>
-                                                                            closeModal(
-                                                                                `edit-${data[key]}`
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <form
-                                                                            onSubmit={
-                                                                                handleEditSubmit
-                                                                            }
-                                                                        >
-                                                                            <Dropdown
-                                                                                name=""
-                                                                                label="Select Role"
-                                                                                options={roles}
-                                                                            />
-                                                                        </form>
-                                                                    </Modal>
-                                                                )}
-                                                            <Link
-                                                                className="text-blue-500 hover:text-blue-700"
-                                                                href="#"
-                                                            >
-                                                                <Icons name="table_delete" />
-                                                            </Link>
-                                                        </td>
-                                                    )
-                                                }
-
-                                                return (
-                                                    <td
-                                                        className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
-                                                        key={index}
-                                                    >
-                                                        {data[key] as string}
-                                                    </td>
-                                                )
-                                            })}
+                                        <tr key={key} className=" hover:bg-light-gray">
+                                            <td className="whitespace-nowrap py-4 pl-16 pr-6 text-sm ">
+                                                {String(data.name)}
+                                            </td>
+                                            <td className="whitespace-nowrap py-4 pl-16 pr-6 text-sm ">
+                                                {String(data.role)}
+                                            </td>
+                                            <td className="flex gap-4 whitespace-nowrap py-4 px-8">
+                                                <EditMember id={Number(data.key)} roles={roles} />
+                                                <RemoveMember
+                                                    id={Number(data.key)}
+                                                    name={String(data.name)}
+                                                    role={String(data.role)}
+                                                />
+                                            </td>
                                         </tr>
                                     )
                                 })}

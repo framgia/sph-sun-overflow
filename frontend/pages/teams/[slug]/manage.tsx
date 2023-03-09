@@ -146,7 +146,11 @@ const TeamManage = () => {
                     )}
                 </div>
                 <div className="overflow-hidden border border-black">
-                    <Table columns={columns} dataSource={parseGetMembers(memberList)} />
+                    <Table
+                        columns={columns}
+                        dataSource={parseGetMembers(memberList)}
+                        roles={roles}
+                    />
                 </div>
                 <div className="mt-auto">
                     {paginatorInfo.lastPage > 1 && (
