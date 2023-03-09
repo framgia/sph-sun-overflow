@@ -93,7 +93,7 @@ const TeamManage = () => {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleSubmit = () => {
-        console.log('member added!')
+        //member added
     }
 
     const openModal = (modal: string) => {

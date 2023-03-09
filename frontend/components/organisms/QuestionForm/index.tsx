@@ -171,7 +171,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
             } else {
                 slug = data.data.createQuestion.slug
             }
-            router.replace(`/questions/${slug}`)
+            router.push(String(router.asPath).replace(`${initialState?.slug}/edit`, `${slug}`))
         })
 
         setTimeout(() => {

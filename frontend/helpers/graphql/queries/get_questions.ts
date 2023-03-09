@@ -26,6 +26,7 @@ const GET_QUESTIONS = gql`
                 humanized_created_at
                 is_from_user
                 is_answered
+                is_public
                 team {
                     id
                     name

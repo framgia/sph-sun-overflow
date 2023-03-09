@@ -1,17 +1,17 @@
-import CommentForm from '@/components/organisms/CommentForm'
 import SortDropdown from '@/components/molecules/SortDropdown'
-import AnswerForm from '@/components/organisms/AnswerForm'
 import AnswerDetail from '@/components/organisms/AnswerDetail'
+import AnswerForm from '@/components/organisms/AnswerForm'
 import Comment from '@/components/organisms/Comment'
+import CommentForm from '@/components/organisms/CommentForm'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
+import { FilterType } from '@/components/templates/QuestionPageLayout'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
-import { FilterType } from '@/components/templates/QuestionPageLayout'
-import { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 
 type RefetchType = {
     slug?: string
@@ -23,14 +23,13 @@ const QuestionDetailPage = () => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
-
     const [answer, setAnswer] = useState<AnswerEditType>({ id: null, content: null })
 
     const query = router.query
 
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTION, {
         variables: {
-            slug: String(query['question_slug']),
+            slug: String(query['question-slug']),
             shouldAddViewCount: true,
             answerSort: [{ column: 'VOTES', order: 'DESC' }],
         },
@@ -38,8 +37,11 @@ const QuestionDetailPage = () => {
     })
 
     if (loading) return loadingScreenShow()
-    else if (error) return errorNotify(`Error! ${error}`)
-
+    if (error) {
+        errorNotify(`Error! ${error}`)
+        router.push(`/teams/${router.query.slug}`)
+        return <></>
+    }
     const question: QuestionType = data.question
 
     const refetchHandler = () => {
@@ -111,11 +113,14 @@ const QuestionDetailPage = () => {
                         vote_count={question.vote_count}
                         views_count={question.views_count}
                         tags={question.tags}
-                        is_bookmarked={question.is_bookmarked}
                         user_vote={question.user_vote}
                         user={question.user}
                         refetchHandler={refetchHandler}
+                        is_bookmarked={question.is_bookmarked}
                         is_from_user={question.is_from_user}
+                        team_slug={router.query.slug as string}
+                        is_public={question.is_public}
+                        team_name=""
                     />
                     <div className="flex flex-col">
                         <div className="flex flex-col divide-y divide-primary-gray">
