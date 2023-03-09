@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Exceptions\CustomException;
 use App\Models\Question;
 use Illuminate\Support\Arr;
 

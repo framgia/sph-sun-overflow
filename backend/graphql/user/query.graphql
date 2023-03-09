@@ -1,6 +1,7 @@
 input userFilter {
     keyword: String
     role_id: ID
+    team: ID
 }
 
 input userSort {
@@ -9,6 +10,7 @@ input userSort {
 
 extend type Query {
     user(slug: String! @eq): User @guard(with: ["api"]) @find
+    usersList(filter: userFilter @spread): [User!]! @guard(with: ["api"])
     users(filter: userFilter @spread, sort: userSort @spread): [User!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Users")
