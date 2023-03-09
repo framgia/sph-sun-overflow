@@ -118,7 +118,7 @@ const QuestionDetailPage = () => {
                         refetchHandler={refetchHandler}
                         is_bookmarked={question.is_bookmarked}
                         is_from_user={question.is_from_user}
-                        team_slug={query.slug as string}
+                        team_slug={router.query.slug as string}
                         is_public={question.is_public}
                         team_name=""
                     />

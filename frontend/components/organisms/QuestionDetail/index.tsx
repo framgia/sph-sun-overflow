@@ -46,11 +46,13 @@ const QuestionDetail = ({
     is_bookmarked,
     is_from_user,
     user_vote,
-    team_slug = null,
+    team_slug,
     refetchHandler,
     is_public,
     team_name,
 }: QuestionDetailProps): JSX.Element => {
+    console.log('hihihhihihi', team_slug)
+
     const [upsertVote] = useMutation(UPSERT_VOTE)
 
     const voteHandler = (value: number) => {
@@ -62,7 +64,8 @@ const QuestionDetail = ({
         refetchHandler()
     }
 
-    const editLink = team_slug ? `${slug}/edit` : `/teams/${team_slug}/question/${slug}/edit`
+    const editLink = team_slug ? `/teams/${team_slug}/question/${slug}/edit` : `${slug}/edit`
+
     return (
         <Fragment>
             <div className="flex w-full flex-col">
