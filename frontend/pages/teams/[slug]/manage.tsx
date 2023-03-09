@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Modal from '@/components/templates/Modal'
 import { useState } from 'react'
+import ManageMembersActions from '@/components/organisms/ManageMembersActions'
 
 const columns: ColumnType[] = [
     {
@@ -106,6 +107,21 @@ const TeamManage = () => {
         setIsOpen(false)
     }
 
+    const getManageMemberActions = (key: number): JSX.Element | undefined => {
+        const dataSource = parseGetMembers(memberList).find((member) => Number(member.key) === key)
+
+        if (dataSource) {
+            return (
+                <ManageMembersActions
+                    id={Number(dataSource.key)}
+                    name={String(dataSource.name)}
+                    role={String(dataSource.role)}
+                    roles={roles}
+                />
+            )
+        }
+    }
+
     return (
         <div className="flex w-full flex-col gap-4 divide-y-2 p-8">
             <h1 className="text-3xl font-bold">{memberList[0].team.name || 'Undefined'}</h1>
@@ -149,7 +165,7 @@ const TeamManage = () => {
                     <Table
                         columns={columns}
                         dataSource={parseGetMembers(memberList)}
-                        roles={roles}
+                        actions={getManageMemberActions}
                     />
                 </div>
                 <div className="mt-auto">

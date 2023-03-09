@@ -20,10 +20,10 @@ export type DataType = {
 type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
-    roles: OptionType[]
+    actions: (key: number) => JSX.Element | undefined
 }
 
-const Table = ({ columns, dataSource, roles }: TableProps) => {
+const Table = ({ columns, dataSource, actions }: TableProps) => {
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
@@ -50,20 +50,26 @@ const Table = ({ columns, dataSource, roles }: TableProps) => {
                                 {dataSource.map((data, key) => {
                                     return (
                                         <tr key={key} className=" hover:bg-light-gray">
-                                            <td className="whitespace-nowrap py-4 pl-16 pr-6 text-sm ">
-                                                {String(data.name)}
-                                            </td>
-                                            <td className="whitespace-nowrap py-4 pl-16 pr-6 text-sm ">
-                                                {String(data.role)}
-                                            </td>
-                                            <td className="flex gap-4 whitespace-nowrap py-4 px-8">
-                                                <EditMember id={Number(data.key)} roles={roles} />
-                                                <RemoveMember
-                                                    id={Number(data.key)}
-                                                    name={String(data.name)}
-                                                    role={String(data.role)}
-                                                />
-                                            </td>
+                                            {columns.map((column, key) => {
+                                                if (column.key === 'action') {
+                                                    return (
+                                                        <td
+                                                            key={key}
+                                                            className="flex gap-4 whitespace-nowrap py-4 px-8"
+                                                        >
+                                                            {actions(Number(data.key))}
+                                                        </td>
+                                                    )
+                                                }
+                                                return (
+                                                    <td
+                                                        key={key}
+                                                        className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
+                                                    >
+                                                        {String(data[key])}
+                                                    </td>
+                                                )
+                                            })}
                                         </tr>
                                     )
                                 })}
