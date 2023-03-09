@@ -7,4 +7,5 @@ extend type Query {
     teamMembers(team_slug: String!): [Member!]
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\TeamMembers")
+    teamRoles: [TeamRole!]! @guard(with: ["api"]) @all
 }
