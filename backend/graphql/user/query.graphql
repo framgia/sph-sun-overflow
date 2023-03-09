@@ -1,7 +1,7 @@
 input userFilter {
     keyword: String
     role_id: ID
-    team: ID
+    team: ID #filter to get users that is not on the team provided yet
 }
 
 input userSort {
@@ -10,7 +10,7 @@ input userSort {
 
 extend type Query {
     user(slug: String! @eq): User @guard(with: ["api"]) @find
-    usersList(filter: userFilter @spread): [User!]! @guard(with: ["api"])
+    allUsers(filter: userFilter @spread): [User!]! @guard(with: ["api"])
     users(filter: userFilter @spread, sort: userSort @spread): [User!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Users")

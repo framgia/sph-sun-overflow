@@ -4,7 +4,7 @@ namespace App\GraphQL\Queries;
 
 use App\Models\User;
 
-final class UsersList
+final class AllUsers
 {
     /**
      * @param  null  $_
@@ -15,7 +15,7 @@ final class UsersList
         $users = User::query();
 
         if (isset($args['keyword'])) {
-            $keywordLikeness = '%'.$args['keyword'].'%';
+            $keywordLikeness = '%' . $args['keyword'] . '%';
 
             $users->where(function ($queryLikeness) use ($keywordLikeness) {
                 $queryLikeness
