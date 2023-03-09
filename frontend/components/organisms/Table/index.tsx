@@ -20,7 +20,7 @@ export type DataType = {
 type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
-    actions: (key: number) => JSX.Element | undefined
+    actions?: (key: number) => JSX.Element | undefined
 }
 
 const Table = ({ columns, dataSource, actions }: TableProps) => {
@@ -51,7 +51,7 @@ const Table = ({ columns, dataSource, actions }: TableProps) => {
                                     return (
                                         <tr key={key} className=" hover:bg-light-gray">
                                             {columns.map((column, key) => {
-                                                if (column.key === 'action') {
+                                                if (column.key === 'action' && actions) {
                                                     return (
                                                         <td
                                                             key={key}
