@@ -66,7 +66,7 @@ const Table = ({ columns, dataSource, actions }: TableProps) => {
                                                         key={key}
                                                         className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
                                                     >
-                                                        {String(data[key])}
+                                                        {String(data[column.key])}
                                                     </td>
                                                 )
                                             })}
