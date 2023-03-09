@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Modal from '@/components/templates/Modal'
 import { useState } from 'react'
+import ManageMembersActions from '@/components/organisms/ManageMembersActions'
 
 const columns: ColumnType[] = [
     {
@@ -41,6 +42,8 @@ interface IMember {
 }
 
 const TeamManage = () => {
+    const [activeModal, setActiveModal] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
     const { data, loading, error, refetch } = useQuery(GET_MEMBERS, {
         variables: {
@@ -89,14 +92,12 @@ const TeamManage = () => {
         { id: 3, name: 'QA' },
     ]
 
-    const [activeModal, setActiveModal] = useState('')
-    const [isOpen, setIsOpen] = useState(false)
-
     const handleSubmit = () => {
         //member added
     }
 
     const openModal = (modal: string) => {
+        ;``
         setActiveModal(modal)
         setIsOpen(true)
     }
@@ -104,6 +105,21 @@ const TeamManage = () => {
     const closeModal = (modal: string) => {
         setActiveModal(modal)
         setIsOpen(false)
+    }
+
+    const getManageMemberActions = (key: number): JSX.Element | undefined => {
+        const dataSource = parseGetMembers(memberList).find((member) => Number(member.key) === key)
+
+        if (dataSource) {
+            return (
+                <ManageMembersActions
+                    id={Number(dataSource.key)}
+                    name={String(dataSource.name)}
+                    role={String(dataSource.role)}
+                    roles={roles}
+                />
+            )
+        }
     }
 
     return (
@@ -146,7 +162,11 @@ const TeamManage = () => {
                     )}
                 </div>
                 <div className="overflow-hidden border border-black">
-                    <Table columns={columns} dataSource={parseGetMembers(memberList)} />
+                    <Table
+                        columns={columns}
+                        dataSource={parseGetMembers(memberList)}
+                        actions={getManageMemberActions}
+                    />
                 </div>
                 <div className="mt-auto">
                     {paginatorInfo.lastPage > 1 && (

@@ -3,7 +3,9 @@ import Icons from '@/components/atoms/Icons'
 import Link from 'next/link'
 import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
 import Modal from '@/components/templates/Modal'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import RemoveMember from '../RemoveMember'
+import EditMember from '../EditMember'
 
 export type ColumnType = {
     key: string
@@ -18,31 +20,10 @@ export type DataType = {
 type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
+    actions?: (key: number) => JSX.Element | undefined
 }
 
-const roles: OptionType[] = [
-    { id: 1, name: 'FE' },
-    { id: 2, name: 'BE' },
-    { id: 3, name: 'QA' },
-]
-
-const Table = ({ columns, dataSource }: TableProps) => {
-    const [activeModal, setActiveModal] = useState('')
-    const [isOpen, setIsOpen] = useState(false)
-
-    const handleEditSubmit = () => {
-        //member role updated
-    }
-
-    const openModal = (modal: string) => {
-        setActiveModal(modal)
-        setIsOpen(true)
-    }
-
-    const closeModal = (modal: string) => {
-        setActiveModal(modal)
-        setIsOpen(false)
-    }
+const Table = ({ columns, dataSource, actions }: TableProps) => {
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
@@ -66,73 +47,26 @@ const Table = ({ columns, dataSource }: TableProps) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-black">
-                                {dataSource.map((data) => {
+                                {dataSource.map((data, key) => {
                                     return (
-                                        <tr
-                                            key={data.key as number}
-                                            className=" hover:bg-light-gray"
-                                        >
-                                            {Object.keys(data).map((key, index) => {
-                                                if (key === 'id' || key === 'key') return null
-
-                                                if (key === 'slug') {
+                                        <tr key={key} className=" hover:bg-light-gray">
+                                            {columns.map((column, key) => {
+                                                if (column.key === 'action' && actions) {
                                                     return (
                                                         <td
+                                                            key={key}
                                                             className="flex gap-4 whitespace-nowrap py-4 px-8"
-                                                            key={index}
                                                         >
-                                                            <Button
-                                                                usage="toggle-modal"
-                                                                onClick={() =>
-                                                                    openModal(`edit-${data[key]}`)
-                                                                }
-                                                            >
-                                                                <Icons name="table_edit" />
-                                                            </Button>
-                                                            {activeModal === `edit-${data[key]}` &&
-                                                                isOpen && (
-                                                                    <Modal
-                                                                        title={`Assign Role`}
-                                                                        submitLabel="Save"
-                                                                        isOpen={isOpen}
-                                                                        handleSubmit={
-                                                                            handleEditSubmit
-                                                                        }
-                                                                        handleClose={() =>
-                                                                            closeModal(
-                                                                                `edit-${data[key]}`
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <form
-                                                                            onSubmit={
-                                                                                handleEditSubmit
-                                                                            }
-                                                                        >
-                                                                            <Dropdown
-                                                                                name=""
-                                                                                label="Select Role"
-                                                                                options={roles}
-                                                                            />
-                                                                        </form>
-                                                                    </Modal>
-                                                                )}
-                                                            <Link
-                                                                className="text-blue-500 hover:text-blue-700"
-                                                                href="#"
-                                                            >
-                                                                <Icons name="table_delete" />
-                                                            </Link>
+                                                            {actions(Number(data.key))}
                                                         </td>
                                                     )
                                                 }
-
                                                 return (
                                                     <td
+                                                        key={key}
                                                         className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
-                                                        key={index}
                                                     >
-                                                        {data[key] as string}
+                                                        {String(data[key])}
                                                     </td>
                                                 )
                                             })}
