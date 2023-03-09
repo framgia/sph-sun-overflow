@@ -13,6 +13,7 @@ const GET_MEMBERS = gql`
             data {
                 id
                 team {
+                    id
                     name
                 }
                 teamRole {
