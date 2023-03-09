@@ -17,7 +17,7 @@ type FilterType = {
 
 type FilterTextsType = {
     DATE: { 1: string; 2: string }
-    ANSWER: { 1: string; 2: string }
+    ANSWER: { 1: string; 2: string; 3: string }
     WATCHED: { 1: string; 2: string }
     POPULAR: { 1: string; 2: string }
 }
@@ -39,7 +39,7 @@ type Props = {
 
 const FilterTexts: FilterTextsType = {
     DATE: { 1: 'Newest first', 2: 'Oldest first' },
-    ANSWER: { 1: 'Answered', 2: 'Unanswered' },
+    ANSWER: { 1: 'Answered', 2: 'Unanswered', 3: 'All Questions' },
     WATCHED: { 1: 'Most Watched', 2: 'Least Watched' },
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
 }
@@ -119,6 +119,18 @@ const DropdownFilters = ({
                             filter: { keyword: searchKey, answered: false, tag, team },
                         })
                         setSelectedAnswerFilter(FilterTexts.ANSWER[2])
+                    },
+                },
+                {
+                    id: 3,
+                    name: FilterTexts.ANSWER[3],
+                    onClick: () => {
+                        refetch({
+                            first: 10,
+                            page: 1,
+                            filter: { keyword: searchKey, tag, team },
+                        })
+                        setSelectedAnswerFilter(FilterTexts.ANSWER[3])
                     },
                 },
             ],
