@@ -119,6 +119,8 @@ const QuestionDetailPage = () => {
                         is_bookmarked={question.is_bookmarked}
                         is_from_user={question.is_from_user}
                         team_slug={query.slug as string}
+                        is_public={question.is_public}
+                        team_name=""
                     />
                     <div className="flex flex-col">
                         <div className="flex flex-col divide-y divide-primary-gray">

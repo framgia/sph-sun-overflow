@@ -2,13 +2,13 @@ import PageHeader from '@/components/atoms/PageHeader'
 import SearchInput from '@/components/molecules/SearchInput'
 import Paginate from '@/components/organisms/Paginate'
 import Card from '@/components/templates/Card'
+import { PaginatorInfo } from '@/components/templates/QuestionPageLayout'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { PaginatorInfo } from '../questions'
 
 type TeamType = {
     id: number
@@ -39,7 +39,7 @@ const TeamsListPage = () => {
         })
         setSearchKey('')
         setTerm('')
-    }, [router, userQuery])
+    }, [router])
 
     if (userQuery.error) return errorNotify(`Error! ${userQuery.error}`)
 

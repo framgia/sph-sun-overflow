@@ -138,6 +138,7 @@ const QuestionsPageLayout = ({
                                 tags={question.tags}
                                 user={question.user}
                                 team_name={question.team?.name ?? ''}
+                                is_public={question.is_public}
                             />
                         )
                     })}

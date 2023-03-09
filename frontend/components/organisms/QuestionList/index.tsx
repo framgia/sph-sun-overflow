@@ -3,6 +3,7 @@ import Bookmark from '@/components/molecules/Bookmark'
 import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
 import 'react-quill/dist/quill.snow.css'
+import Icons from '@/components/atoms/Icons'
 import { parseHTML } from '../../../helpers/htmlParsing'
 import { TagType, UserType } from '../../../pages/questions/[slug]'
 
@@ -24,6 +25,7 @@ type Props = {
     question_slug?: string
     refetch?: () => void
     team_name: string
+    is_public: boolean
 }
 
 const QuestionList = ({
@@ -43,6 +45,7 @@ const QuestionList = ({
     bookmarkAnswerId,
     page_slug,
     team_name,
+    is_public,
 }: Props): JSX.Element => {
     const renderTeamQuestionDetailHeader = (): JSX.Element => {
         return (
@@ -91,6 +94,12 @@ const QuestionList = ({
                             refetchHandler={() => {}}
                             is_bookmarked
                         />
+                    )}
+                    {slug && (
+                        <div className="flex items-center gap-2">
+                            <span>{is_public ? 'Public' : 'Private'} </span>
+                            <Icons name={is_public ? 'public' : 'private'} />
+                        </div>
                     )}
                 </div>
                 <div className="ql-snow flex w-full flex-col gap-1">
