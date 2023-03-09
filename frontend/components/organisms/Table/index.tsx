@@ -31,7 +31,7 @@ const Table = ({ columns, dataSource }: TableProps) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleEditSubmit = () => {
-        console.log('member role updated!')
+        //member role updated
     }
 
     const openModal = (modal: string) => {

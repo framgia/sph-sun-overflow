@@ -130,7 +130,6 @@ const DropdownFilters = ({
                     id: 1,
                     name: FilterTexts.WATCHED[1],
                     onClick: () => {
-                        console.log(FilterTexts.WATCHED[1]) //Replace console log with refetch for watched
                         setSelectedWatchedFilter(FilterTexts.WATCHED[1])
                     },
                 },
@@ -138,7 +137,6 @@ const DropdownFilters = ({
                     id: 2,
                     name: FilterTexts.WATCHED[2],
                     onClick: () => {
-                        console.log(FilterTexts.WATCHED[2]) //Replace console log with refetch for watched
                         setSelectedWatchedFilter(FilterTexts.WATCHED[2])
                     },
                 },
@@ -151,7 +149,6 @@ const DropdownFilters = ({
                     id: 1,
                     name: FilterTexts.POPULAR[1],
                     onClick: () => {
-                        console.log(FilterTexts.POPULAR[1]) //Replace console log with refetch for poplarity
                         setSelectedPopularFilter(FilterTexts.POPULAR[1])
                     },
                 },
@@ -159,7 +156,6 @@ const DropdownFilters = ({
                     id: 2,
                     name: FilterTexts.POPULAR[2],
                     onClick: () => {
-                        console.log(FilterTexts.POPULAR[2]) //Replace console log with refetch for poplarity
                         setSelectedPopularFilter(FilterTexts.POPULAR[2])
                     },
                 },

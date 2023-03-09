@@ -51,8 +51,6 @@ const QuestionDetail = ({
     is_public,
     team_name,
 }: QuestionDetailProps): JSX.Element => {
-    console.log('hihihhihihi', team_slug)
-
     const [upsertVote] = useMutation(UPSERT_VOTE)
 
     const voteHandler = (value: number) => {
