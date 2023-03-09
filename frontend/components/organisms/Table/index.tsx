@@ -23,33 +23,7 @@ type TableProps = {
     roles: OptionType[]
 }
 
-<<<<<<< HEAD
-const roles: OptionType[] = [
-    { id: 1, name: 'FE' },
-    { id: 2, name: 'BE' },
-    { id: 3, name: 'QA' },
-]
-
-const Table = ({ columns, dataSource }: TableProps) => {
-    const [activeModal, setActiveModal] = useState('')
-    const [isOpen, setIsOpen] = useState(false)
-
-    const handleEditSubmit = () => {
-        //member role updated
-    }
-
-    const openModal = (modal: string) => {
-        setActiveModal(modal)
-        setIsOpen(true)
-    }
-
-    const closeModal = (modal: string) => {
-        setActiveModal(modal)
-        setIsOpen(false)
-    }
-=======
 const Table = ({ columns, dataSource, roles }: TableProps) => {
->>>>>>> [Overflow-284] [MARKUP] Create Deleting confimation modal in manage team
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
