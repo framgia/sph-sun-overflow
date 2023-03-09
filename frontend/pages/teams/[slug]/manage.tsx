@@ -5,11 +5,14 @@ import Table, { ColumnType, DataType } from '@/components/organisms/Table'
 import GET_MEMBERS from '@/helpers/graphql/queries/get_members'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
-import { useQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Modal from '@/components/templates/Modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import GET_ALL_USERS from '@/helpers/graphql/queries/get_all_users'
+import GET_TEAM_ROLES from '../../../helpers/graphql/queries/get_team_roles'
+import { UserType } from '../../questions/[slug]/index'
 import ManageMembersActions from '@/components/organisms/ManageMembersActions'
 
 const columns: ColumnType[] = [
@@ -42,9 +45,9 @@ interface IMember {
 }
 
 const TeamManage = () => {
+    const router = useRouter()
     const [activeModal, setActiveModal] = useState('')
     const [isOpen, setIsOpen] = useState(false)
-    const router = useRouter()
     const { data, loading, error, refetch } = useQuery(GET_MEMBERS, {
         variables: {
             teamSlug: router.query.slug,
@@ -52,6 +55,21 @@ const TeamManage = () => {
             page: 0,
         },
     })
+    const [getAllUsers, usersData] = useLazyQuery(GET_ALL_USERS)
+    const [getTeamRoles, teamRoles] = useLazyQuery(GET_TEAM_ROLES)
+
+    useEffect(() => {
+        if (!loading) {
+            getAllUsers({
+                variables: {
+                    filter: {
+                        team: +data?.teamMembers.data[0]?.team.id ?? null,
+                    },
+                },
+            })
+            getTeamRoles()
+        }
+    }, [getAllUsers, getTeamRoles, data, loading])
 
     if (loading) return loadingScreenShow()
     if (error) {
@@ -77,20 +95,15 @@ const TeamManage = () => {
         return tableList
     }
 
-    const users: OptionType[] = [
-        { id: 1, name: 'Nicole Amber' },
-        { id: 2, name: 'Keno Renz' },
-        { id: 3, name: 'Jules Russel' },
-        { id: 4, name: 'Ian Michael' },
-        { id: 5, name: 'Kent Nino' },
-        { id: 6, name: 'Kent Michael' },
-    ]
+    const users: OptionType[] = usersData.data?.allUsers.map((user: UserType) => ({
+        id: user.id,
+        name: `${user.first_name} ${user.last_name}`,
+    }))
 
-    const roles: OptionType[] = [
-        { id: 1, name: 'FE' },
-        { id: 2, name: 'BE' },
-        { id: 3, name: 'QA' },
-    ]
+    const roles: OptionType[] = teamRoles.data?.teamRoles.map((role: OptionType) => ({
+        id: role.id,
+        name: role.name,
+    }))
 
     const handleSubmit = () => {
         //member added
