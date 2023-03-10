@@ -49,7 +49,9 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     if (initialState) {
         ;({ id, content, title, tags, is_public, team } = initialState)
     }
+
     const router = useRouter()
+
     let buttonText = 'Post Question'
     let formTitle = 'Post a Question'
     let successMessage = 'Question Added Successfully'
@@ -79,12 +81,16 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         reValidateMode: 'onSubmit',
         resolver: yupResolver(QuestionFormSchema),
     })
+
+    let initial_team_name
+    initial_team_name = team ? team.name : ''
+    initial_team_name = initial_team_name ? initial_team_name : router.query.team ?? ''
+
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
     const [createQuestion] = useMutation(CREATE_QUESTION)
     const [updateQuestion] = useMutation(UPDATE_QUESTION)
-
-    const [selectedFilter, setSelectedFilter] = useState(team ? team.name : '')
+    const [selectedFilter, setSelectedFilter] = useState(initial_team_name)
 
     const tempTeams = useBoundStore.getState().teams
 
@@ -149,8 +155,13 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                 },
             })
         } else {
+            let team
             let status = !data.team_id ? true : data.is_public
-            let team = data.team_id?.id ?? null
+            if (router.query.id) {
+                team = Number(router.query.id)
+            } else {
+                team = data.team_id?.id ?? null
+            }
             newQuestion = createQuestion({
                 variables: {
                     title: data.title,
@@ -171,7 +182,18 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
             } else {
                 slug = data.data.createQuestion.slug
             }
-            router.push(String(router.asPath).replace(`${initialState?.slug}/edit`, `${slug}`))
+
+            if (router.query.prev === undefined) {
+                if (initialState?.slug !== undefined) {
+                    router.push(
+                        String(router.asPath).replace(`${initialState?.slug}/edit`, `${slug}`)
+                    )
+                } else {
+                    router.push(String(router.asPath).replace(`add`, `${slug}`))
+                }
+            } else {
+                router.push(`/teams/${router.query.prev}/question/${slug}`)
+            }
         })
 
         setTimeout(() => {
@@ -237,20 +259,21 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                                     return (
                                         <SortDropdown
                                             filters={teams}
-                                            selectedFilter={selectedFilter}
+                                            selectedFilter={String(selectedFilter)}
                                         />
                                     )
                                 }}
                             />
                         </div>
                     </div>
-                    {watch('team_id') && (
+                    {selectedFilter && (
                         <div className="flex flex-col items-center self-center">
                             <label htmlFor="isPublic" className="text-2xl font-bold">
                                 Public
                             </label>
                             <div className="">
                                 <input
+                                    defaultChecked={true}
                                     type="checkbox"
                                     id="isPublic"
                                     {...register('is_public')}

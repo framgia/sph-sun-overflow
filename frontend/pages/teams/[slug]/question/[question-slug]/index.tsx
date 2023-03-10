@@ -10,6 +10,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 import { useQuery } from '@apollo/client'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 
@@ -100,9 +101,12 @@ const QuestionDetailPage = () => {
     ]
 
     return (
-        <Fragment>
-            <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray pt-[90px] pb-8 pr-52 pl-16">
-                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
+        <div className="flex w-full flex-col gap-3 pt-[50px]">
+            <div className="px-6 text-xl text-primary-gray">
+                <Link href={`/teams/${router.query.slug}`}>{'< Go Back'}</Link>
+            </div>
+            <div className="flex w-full flex-col gap-3 divide-primary-gray  pb-8 pr-52 pl-16">
+                <div className="flex flex-col gap-3">
                     <QuestionDetail
                         id={question.id}
                         title={question.title}
@@ -208,7 +212,7 @@ const QuestionDetailPage = () => {
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </div>
     )
 }
 
