@@ -24,8 +24,8 @@ export const QTagsTeamSidebar = gql`
 `
 
 export const QMembersSidebar = gql`
-    query MembersSidebar($teamId: ID!) {
-        team(id: $teamId) {
+    query MembersSidebar($slug: String!) {
+        team(slug: $slug) {
             members {
                 teamRole {
                     id

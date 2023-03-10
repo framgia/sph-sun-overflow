@@ -47,7 +47,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
     }
     useEffect(() => {
         if (!loading) {
-            setMembers([])
+            setMembers(extractMembers())
         }
     }, [data, loading])
 
@@ -72,7 +72,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
                     </div>
                 </div>
             ) : (
-                <div className="tags no-scrollbar  h-[55vh]  overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
+                <div className="tags h-[49vh]  overflow-y-auto  overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
                     {members.map((member, index) => {
                         return <UserTab user={member} key={index} usage="TeamMembers" />
                     })}

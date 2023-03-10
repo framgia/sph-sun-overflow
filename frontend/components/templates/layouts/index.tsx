@@ -59,6 +59,7 @@ const Layout = ({ children }: LayoutProps) => {
                                                 ? 'team'
                                                 : router.pathname.split('/')[1]
                                         }
+                                        slug={router.asPath.split('/')[2]}
                                     />
                                 </div>
                             </div>
