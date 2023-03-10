@@ -6,9 +6,10 @@ import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { errorNotify } from '../../../helpers/toast'
 import { loadingScreenShow } from '../../../helpers/loaderSpinnerHelper'
 import { useRouter } from 'next/router'
-import { RefetchType, PaginatorInfo } from '../index'
+import { RefetchType } from '../index'
 import { useEffect, useState } from 'react'
 import Paginate from '@/components/organisms/Paginate'
+import { PaginatorInfo } from '@/components/templates/QuestionPageLayout'
 
 const TagsPage = () => {
     const router = useRouter()
