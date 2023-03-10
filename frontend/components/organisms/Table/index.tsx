@@ -1,12 +1,3 @@
-import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
-import Link from 'next/link'
-import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
-import Modal from '@/components/templates/Modal'
-import { Fragment, useState } from 'react'
-import RemoveMember from '../RemoveMember'
-import EditMember from '../EditMember'
-
 export type ColumnType = {
     key: string
     title: string
@@ -47,32 +38,43 @@ const Table = ({ columns, dataSource, actions }: TableProps) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-black">
-                                {dataSource.map((data, key) => {
-                                    return (
-                                        <tr key={key} className=" hover:bg-light-gray">
-                                            {columns.map((column, key) => {
-                                                if (column.key === 'action' && actions) {
+                                {dataSource.length > 0 ? (
+                                    dataSource.map((data, key) => {
+                                        return (
+                                            <tr key={key} className=" hover:bg-light-gray">
+                                                {columns.map((column, key) => {
+                                                    if (column.key === 'action' && actions) {
+                                                        return (
+                                                            <td
+                                                                key={key}
+                                                                className="flex gap-4 whitespace-nowrap py-4 px-8"
+                                                            >
+                                                                {actions(Number(data.key))}
+                                                            </td>
+                                                        )
+                                                    }
                                                     return (
                                                         <td
                                                             key={key}
-                                                            className="flex gap-4 whitespace-nowrap py-4 px-8"
+                                                            className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
                                                         >
-                                                            {actions(Number(data.key))}
+                                                            {String(data[column.key])}
                                                         </td>
                                                     )
-                                                }
-                                                return (
-                                                    <td
-                                                        key={key}
-                                                        className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
-                                                    >
-                                                        {String(data[column.key])}
-                                                    </td>
-                                                )
-                                            })}
-                                        </tr>
-                                    )
-                                })}
+                                                })}
+                                            </tr>
+                                        )
+                                    })
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan={columns.length}
+                                            className="w-full py-10 text-center text-lg font-bold text-primary-gray"
+                                        >
+                                            No members to show
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
