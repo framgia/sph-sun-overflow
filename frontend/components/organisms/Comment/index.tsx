@@ -15,10 +15,11 @@ type Props = {
     time: string
     action: string
     userId?: number
+    slug?: string
     refetchHandler: () => void
 }
 
-const Comment = ({ id, text, author, time, action, userId, refetchHandler }: Props) => {
+const Comment = ({ id, text, author, time, action, userId, slug, refetchHandler }: Props) => {
     const [comment, setComment] = useState(false)
     dayjs.extend(relativeTime)
 
@@ -28,7 +29,7 @@ const Comment = ({ id, text, author, time, action, userId, refetchHandler }: Pro
         <div className="group flex flex-wrap gap-2 px-2 py-4">
             <span className="mr-4">{text}</span>
             <span>
-                <Link href="#" className="text-blue-500 hover:text-blue-400">
+                <Link href={`/users/${slug}`} className="text-blue-500 hover:text-blue-400">
                     {author}
                 </Link>
             </span>

@@ -17,14 +17,15 @@ type Props = {
     view_count?: number
     created_at?: string
     humanized_created_at?: string
-    tags?: TagType[]
+    tags: TagType[]
     user?: UserType
     bookmarkType?: 'Question' | 'Answer'
     bookmarkAnswerId?: number
     page_slug?: string
     question_slug?: string
     refetch?: () => void
-    team_name: string
+    team_name?: string
+    team_slug?: string
     is_public: boolean
 }
 
@@ -45,6 +46,7 @@ const QuestionList = ({
     bookmarkAnswerId,
     page_slug,
     team_name,
+    team_slug,
     is_public,
 }: Props): JSX.Element => {
     const renderTeamQuestionDetailHeader = (): JSX.Element => {
@@ -118,11 +120,16 @@ const QuestionList = ({
                                     slug={user?.slug}
                                 />
                                 {team_name && (
-                                    <div className="ml-4 text-primary-gray">
-                                        From Team :
-                                        <text className="ml-2 text-blue-600 hover:text-blue-400">
-                                            {team_name}
-                                        </text>
+                                    <div className="ml-4 flex justify-end gap-1 text-primary-gray">
+                                        From Team:
+                                        <Link
+                                            href={`/teams/${team_slug}`}
+                                            className="text-blue-600 hover:text-blue-400"
+                                        >
+                                            <div className="max-w-[170px] truncate">
+                                                {team_name}
+                                            </div>
+                                        </Link>
                                     </div>
                                 )}
                             </div>

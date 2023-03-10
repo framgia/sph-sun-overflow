@@ -56,7 +56,7 @@ const RichTextEditor = ({ value, onChange, id = undefined, usage = 'default' }: 
             style = { minHeight: '100%' }
             break
         case 'content':
-            style = { width: '50rem' }
+            style = { width: '100%' }
             break
         case 'about_me':
             style = { width: '100%' }

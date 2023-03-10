@@ -156,7 +156,7 @@ const AnswerForm = ({
     }
 
     return (
-        <div className="w-full py-3 " id="answer-form">
+        <div className="w-full py-3" id="answer-form">
             <div className="flex flex-col space-y-2">
                 <div>
                     <span className="text-lg">

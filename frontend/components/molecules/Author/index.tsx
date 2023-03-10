@@ -8,13 +8,11 @@ type Props = {
 
 const Author = ({ author, moment, slug = '' }: Props): JSX.Element => {
     return (
-        <span className="flex flex-row gap-2">
-            <span className="ml-4">
-                <Link href={`/users/${slug}`} className="text-blue-600 hover:text-blue-400">
-                    {author}
-                </Link>
-            </span>
-            <span className="text-primary-gray">{moment}</span>
+        <span className="flex flex-row gap-1">
+            <Link href={`/users/${slug}`} className="text-blue-600 hover:text-blue-400">
+                <div className="max-w-[170px] truncate">{author}</div>
+            </Link>
+            <span className=" text-primary-gray">{moment}</span>
         </span>
     )
 }

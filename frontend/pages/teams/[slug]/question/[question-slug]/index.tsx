@@ -164,22 +164,24 @@ const QuestionDetailPage = () => {
                     </div>
                 </div>
                 <div className="flex w-full flex-col gap-3 pt-3">
-                    <div className="flex w-full flex-row items-center justify-between">
-                        <div className="w-full text-2xl font-bold">
-                            {question.answers.length}{' '}
-                            {question.answers.length > 1 ? 'Answers' : 'Answer'}
-                        </div>
-                        <div className="flex items-center">
-                            <span className="w-[9rem] pr-2 text-end text-sm">Sorted by:</span>
-                            <div className="w-44">
-                                <SortDropdown
-                                    grouped={true}
-                                    filters={answerFilters}
-                                    selectedFilter={selectedAnswerFilter}
-                                />
+                    {question.answers.length > 0 && (
+                        <div className="flex w-full flex-row items-center justify-between">
+                            <div className="w-full text-2xl font-bold">
+                                {question.answers.length}{' '}
+                                {question.answers.length > 1 ? 'Answers' : 'Answer'}
+                            </div>
+                            <div className="flex items-center">
+                                <span className="w-[9rem] pr-2 text-end text-sm">Sorted by:</span>
+                                <div className="w-44">
+                                    <SortDropdown
+                                        grouped={true}
+                                        filters={answerFilters}
+                                        selectedFilter={selectedAnswerFilter}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                     <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray">
                         {question.answers.map((answer) => (
                             <AnswerDetail

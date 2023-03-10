@@ -95,7 +95,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     const tempTeams = useBoundStore.getState().teams
 
     const transformTeams = () => {
-        return tempTeams.map(({ team: { id, name } }) => {
+        let teamFilters = tempTeams.map(({ team: { id, name } }) => {
             return {
                 id,
                 name,
@@ -106,6 +106,18 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                 },
             } as FilterType
         })
+
+        teamFilters.unshift({
+            id: 0,
+            name: 'No Team',
+            onClick: () => {
+                setValue('team_id', null)
+                setValue('is_public', true)
+                setSelectedFilter('No Team')
+            },
+        })
+
+        return teamFilters
     }
 
     const validateChanges = (data: FormValues) => {
@@ -247,26 +259,28 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                             )}
                         />
                     </div>
-                    <div className="flex flex-col  self-center">
-                        <label className="text-2xl">Teams</label>
-                        <div className="w-40">
-                            <Controller
-                                control={control}
-                                name="team_id"
-                                render={({ field: { value } }) => {
-                                    const teams = transformTeams()
+                    {tempTeams.length > 0 && (
+                        <div className="flex flex-col  self-center">
+                            <label className="text-2xl">Teams</label>
+                            <div className="w-40">
+                                <Controller
+                                    control={control}
+                                    name="team_id"
+                                    render={({ field: { value } }) => {
+                                        const teams = transformTeams()
 
-                                    return (
-                                        <SortDropdown
-                                            filters={teams}
-                                            selectedFilter={String(selectedFilter)}
-                                        />
-                                    )
-                                }}
-                            />
+                                        return (
+                                            <SortDropdown
+                                                filters={teams}
+                                                selectedFilter={String(selectedFilter)}
+                                            />
+                                        )
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    {selectedFilter && (
+                    )}
+                    {selectedFilter !== 'No Team' && (
                         <div className="flex flex-col items-center self-center">
                             <label htmlFor="isPublic" className="text-2xl font-bold">
                                 Public
