@@ -55,7 +55,7 @@ const UserDropdown = ({
                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1 ">
                         <Menu.Item>
-                            <span className="block px-4 py-2 text-sm font-bold text-gray-900">
+                            <span className="block px-4 py-2 text-sm font-bold text-gray-900 line-clamp-1">
                                 {`${first_name} ${last_name}`}
                             </span>
                         </Menu.Item>
