@@ -82,6 +82,15 @@ const Team = () => {
         return team.teamLeader.id === useBoundStore.getState().user_id
     }
 
+    const onClickAskQuestion = (event: React.MouseEvent) => {
+        event.preventDefault()
+
+        router.push({
+            pathname: '/questions/add',
+            query: { prev: router.query.slug, team: data?.team.name, id: data?.team.id },
+        })
+    }
+
     const renderActiveTab = (content: string) => {
         return isActiveTab == 'dashboard' ? (
             <div className="flex w-full flex-col">
@@ -118,7 +127,12 @@ const Team = () => {
             <div className="flex flex-row items-center justify-between">
                 <div className="text-2xl font-bold">{team?.name}</div>
                 {isActiveTab === 'questions' && (
-                    <Button usage="ask_question" additionalClass="ask-btn" isDisabled={false}>
+                    <Button
+                        usage="ask_question"
+                        additionalClass="ask-btn"
+                        isDisabled={false}
+                        onClick={onClickAskQuestion}
+                    >
                         Ask a Question
                     </Button>
                 )}
