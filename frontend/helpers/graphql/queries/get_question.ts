@@ -23,13 +23,18 @@ const GET_QUESTION = gql`
             tags {
                 id
                 name
+                slug
+                description
                 is_watched_by_user
+                count_tagged_questions
+                count_watching_users
             }
             user {
                 id
                 first_name
                 last_name
                 avatar
+                slug
             }
             comments {
                 id
@@ -41,6 +46,7 @@ const GET_QUESTION = gql`
                     first_name
                     last_name
                     avatar
+                    slug
                 }
             }
             answers {
@@ -59,6 +65,7 @@ const GET_QUESTION = gql`
                     first_name
                     last_name
                     avatar
+                    slug
                 }
                 comments {
                     id
@@ -69,6 +76,7 @@ const GET_QUESTION = gql`
                         id
                         first_name
                         last_name
+                        slug
                     }
                 }
             }

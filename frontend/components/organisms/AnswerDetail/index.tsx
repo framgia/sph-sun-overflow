@@ -89,9 +89,11 @@ const Answer = ({
                             refetchHandler={refetchHandler}
                         />
                     </div>
-                    <div className="ql-snow flex w-full flex-col justify-between">
-                        <div className="ql-editor mt-2 w-full pr-2 text-justify">
-                            {parseHTML(content)}
+                    <div className=" flex w-full flex-col justify-between">
+                        <div className="ql-snow">
+                            <div className="ql-editor mt-2 pr-2 text-justify">
+                                {parseHTML(content)}
+                            </div>
                         </div>
                         <div className="flex w-full flex-row justify-between">
                             <div className="flex justify-start">
@@ -111,7 +113,7 @@ const Answer = ({
                                 </div>
                             </div>
                             <div className="flex min-w-fit flex-col">
-                                <div className="mb-0.5 ml-1 flex w-full flex-row text-xs">
+                                <div className="mb-0.5 flex w-full flex-row pl-1 text-xs">
                                     <div className="flex justify-start gap-1">
                                         <span>answered</span>
                                         <span className="text-gray-500"> {created_at}</span>
@@ -121,6 +123,7 @@ const Answer = ({
                                     first_name={user.first_name}
                                     last_name={user.last_name}
                                     avatar={user.avatar ?? ''}
+                                    slug={user.slug}
                                 />
                             </div>
                         </div>
@@ -141,6 +144,7 @@ const Answer = ({
                                         : 'updated his/her'
                                 }
                                 userId={comment.user.id}
+                                slug={comment.user.slug}
                                 refetchHandler={refetchHandler}
                             />
                         ))}

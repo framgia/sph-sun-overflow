@@ -30,6 +30,7 @@ const GET_QUESTIONS = gql`
                 team {
                     id
                     name
+                    slug
                 }
                 tags {
                     id
