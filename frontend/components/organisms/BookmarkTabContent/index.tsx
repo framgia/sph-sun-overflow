@@ -1,4 +1,4 @@
-import { PaginatorInfo } from '@/pages/questions'
+import { PaginatorInfo } from '@/components/templates/QuestionPageLayout'
 import { BookmarkType } from '@/pages/users/[slug]'
 import BookmarkList from '../BookmarkList'
 import Paginate from '../Paginate'

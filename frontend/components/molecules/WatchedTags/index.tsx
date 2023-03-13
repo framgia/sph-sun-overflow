@@ -22,7 +22,7 @@ interface WatchedTagsProps {
 }
 
 const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
-    const detectorRef = useRef(null)
+    const detectorRef = useRef<HTMLDivElement>(null)
     const [watchedTags, setWatchedTags] = useState<TTag[]>([])
     const [viewAdd, setViewAdd] = useState(false)
     const [queryText, setQueryText] = useState<string>('')
@@ -81,7 +81,8 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     }, [])
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (detectorRef.current && !detectorRef.current.contains(event.target)) {
+        console.log(event)
+        if (detectorRef.current && !detectorRef.current.contains(event.target as Node)) {
             setViewAdd(false)
             setQueryText('')
         }

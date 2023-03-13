@@ -17,15 +17,15 @@ type Props = {
     view_count?: number
     created_at?: string
     humanized_created_at?: string
-    tags?: TagType[]
+    tags: TagType[]
     user?: UserType
     bookmarkType?: 'Question' | 'Answer'
     bookmarkAnswerId?: number
     page_slug?: string
     question_slug?: string
     refetch?: () => void
-    team_name: string
-    is_public: boolean
+    team_name?: string
+    is_public?: boolean
 }
 
 const QuestionList = ({

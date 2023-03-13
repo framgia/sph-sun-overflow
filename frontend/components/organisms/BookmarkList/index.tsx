@@ -17,7 +17,7 @@ const BookmarkList = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                     vote_count={bookmarkable.vote_count}
                     answer_count={bookmarkable.answers?.length}
                     view_count={bookmarkable.views_count}
-                    tags={bookmarkable.tags}
+                    tags={bookmarkable.tags ?? []}
                     user={bookmarkable.user}
                     bookmarkType="Question"
                 />
