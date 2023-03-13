@@ -1,6 +1,6 @@
 import { create, StateCreator } from 'zustand'
 
-type TeamType = {
+export type UserTeamType = {
     id: number
     team: {
         id: number
@@ -14,7 +14,7 @@ interface UserSlice {
     email: string
     avatar: string
     slug: string
-    teams: TeamType[]
+    teams: UserTeamType[]
     updated_at: string
     setUserID: (
         user_id: number,
@@ -23,7 +23,7 @@ interface UserSlice {
         email: string,
         avatar: string,
         slug: string,
-        teams: TeamType[],
+        teams: UserTeamType[],
         updated_at: string
     ) => void
 }

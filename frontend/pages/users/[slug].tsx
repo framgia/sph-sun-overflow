@@ -3,7 +3,7 @@ import ProfileStats from '@/components/atoms/ProfileStats'
 import Activity from '@/components/molecules/Activity'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { useBoundStore } from '@/helpers/store'
+import { useBoundStore, UserTeamType } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -33,6 +33,7 @@ export type ProfileType = {
     updated_at: string
     slug: string
     email: string
+    teams: [UserTeamType]
 }
 export type BookmarkableType = {
     __typename: string
@@ -151,6 +152,7 @@ const ProfilePage = () => {
             profile.email,
             profile.avatar,
             profile.slug,
+            profile.teams,
             profile.updated_at
         )
     }

@@ -35,6 +35,13 @@ const GET_USER = gql`
                     slug
                 }
             }
+            teams {
+                id
+                team {
+                    id
+                    name
+                }
+            }
             updated_at
         }
     }
