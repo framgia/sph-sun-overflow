@@ -12,25 +12,29 @@ class AnswerObserver
 
     public function created(Answer $answer)
     {
-        UserNotification::create([
-            'user_id' => $answer->question->user_id,
-            'notifiable_type' => 'App\Models\Answer',
-            'notifiable_id' => $answer->id,
-        ]);
+        if (auth()->id != $answer->user_id) {
+            UserNotification::create([
+                'user_id' => $answer->question->user_id,
+                'notifiable_type' => 'App\Models\Answer',
+                'notifiable_id' => $answer->id,
+            ]);
 
-        event(new NotificationEvent($answer->question->user_id));
+            event(new NotificationEvent($answer->question->user_id));
+        }
     }
 
     public function updated(Answer $answer)
     {
         if ($answer->is_correct) {
-            UserNotification::create([
-                'user_id' => $answer->user_id,
-                'notifiable_type' => 'App\Models\Answer',
-                'notifiable_id' => $answer->id,
-            ]);
+            if (auth()->id != $answer->user_id) {
+                UserNotification::create([
+                    'user_id' => $answer->user_id,
+                    'notifiable_type' => 'App\Models\Answer',
+                    'notifiable_id' => $answer->id,
+                ]);
 
-            event(new NotificationEvent($answer->user_id));
+                event(new NotificationEvent($answer->user_id));
+            }
         }
     }
 }

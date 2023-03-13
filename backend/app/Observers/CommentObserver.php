@@ -12,12 +12,14 @@ class CommentObserver
 
     public function created(Comment $comment)
     {
-        UserNotification::create([
-            'user_id' => $comment->commentable->user_id,
-            'notifiable_type' => 'App\Models\Comment',
-            'notifiable_id' => $comment->id,
-        ]);
+        if (auth()->id != $comment->commentable->user_id) {
+            UserNotification::create([
+                'user_id' => $comment->commentable->user_id,
+                'notifiable_type' => 'App\Models\Comment',
+                'notifiable_id' => $comment->id,
+            ]);
 
-        event(new NotificationEvent($comment->commentable->user_id));
+            event(new NotificationEvent($comment->commentable->user_id));
+        }
     }
 }
