@@ -26,11 +26,11 @@ export type FormValues = {
 }
 
 type QuestionSkeleton = {
-    id: Number | undefined
-    content: String
-    title: String
+    id: number | undefined
+    content: string
+    title: string
     tags: ITag[]
-    slug: String
+    slug: string
     is_public?: boolean
     team?: TeamType
 }
@@ -39,9 +39,9 @@ interface Props {
 }
 
 const QuestionForm = ({ initialState }: Props): JSX.Element => {
-    let id: Number | undefined
-    let title: String | undefined
-    let content: String | undefined
+    let id: number | undefined
+    let title: string | undefined
+    let content: string | undefined
     let tags: ITag[] | undefined
     let is_public: boolean | undefined
     let team: TeamType | undefined
