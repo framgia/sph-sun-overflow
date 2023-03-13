@@ -11,7 +11,7 @@ type Props = {
     id: number
     name: string
     role: string
-    refetchHandler: () => void
+    refetchHandler: (isDelete: boolean) => void
 }
 
 const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element => {
@@ -30,7 +30,7 @@ const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element =>
         })
             .then(() => {
                 successNotify('Member removed successfully!')
-                refetchHandler()
+                refetchHandler(true)
                 closeDelete()
             })
             .catch(() => {

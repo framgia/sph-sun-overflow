@@ -159,8 +159,15 @@ const TeamManage = () => {
         }
     }
 
-    const refetchHandler = () => {
-        refetch()
+    const refetchHandler = (isDelete = false) => {
+        refetch({
+            teamSlug: router.query.slug,
+            first: paginatorInfo.perPage,
+            page:
+                isDelete && memberList.length === 1 && paginatorInfo.currentPage > 1
+                    ? paginatorInfo.currentPage - 1
+                    : paginatorInfo.currentPage,
+        })
     }
 
     const onSubmit = (data: FormValues) => {
