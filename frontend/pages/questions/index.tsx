@@ -1,4 +1,4 @@
-import QuestionsPageLayout from '@/components/templates/QuestionPageLayout'
+import QuestionsPageLayout from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'

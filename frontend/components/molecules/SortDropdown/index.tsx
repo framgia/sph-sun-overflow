@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import Icons from '@/components/atoms/Icons'
-import { FilterType } from '@/components/templates/QuestionPageLayout'
+import { FilterType } from '@/components/templates/QuestionsPageLayout'
 
 type AppProps = {
     grouped?: boolean

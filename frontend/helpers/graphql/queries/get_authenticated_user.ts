@@ -16,6 +16,12 @@ const GET_AUTHENTICATED_USER = gql`
                     name
                 }
             }
+            watchedTags {
+                id
+                name
+                description
+                slug
+            }
             updated_at
         }
     }

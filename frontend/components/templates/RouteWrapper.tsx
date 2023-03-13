@@ -29,6 +29,7 @@ const RouteWrapper = ({ children }: LayoutProps) => {
             data?.me.avatar,
             data?.me.slug,
             data?.me.teams,
+            data?.me.watchedTags,
             data?.me.updated_at
         )
 

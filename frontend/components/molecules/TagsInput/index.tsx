@@ -12,6 +12,7 @@ export type ITag = {
     id: number
     name: string
     description: string
+    slug: string
 }
 interface TagInputProps {
     setValue: UseFormSetValue<FormValues>

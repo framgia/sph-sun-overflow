@@ -26,7 +26,7 @@ type Props = {
     refetch?: () => void
     team_name?: string
     team_slug?: string
-    is_public: boolean
+    is_public?: boolean
 }
 
 const QuestionList = ({
