@@ -1,14 +1,14 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import React, { EventHandler, FormEvent, Fragment, MouseEventHandler } from 'react'
 
 type ModalProps = {
     title: string
     children: JSX.Element | string
     submitLabel: string
     isOpen: boolean
-    handleSubmit: () => void
+    handleSubmit?: () => void
     handleClose: () => void
 }
 
@@ -20,6 +20,18 @@ const Modal = ({
     handleSubmit,
     handleClose,
 }: ModalProps): JSX.Element => {
+    const onClickSubmit = (event: React.MouseEvent) => {
+        event.preventDefault()
+
+        if (typeof handleSubmit === 'function') {
+            handleSubmit()
+        } else {
+            const modalElement = document.querySelector('#modal-content form') as HTMLFormElement
+
+            modalElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+        }
+    }
+
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-30" onClose={handleClose}>
@@ -77,7 +89,7 @@ const Modal = ({
                                         <Button
                                             type="button"
                                             usage="modal-submit"
-                                            onClick={handleSubmit}
+                                            onClick={onClickSubmit}
                                         >
                                             {submitLabel}
                                         </Button>

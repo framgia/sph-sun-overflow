@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ControllerRenderProps } from 'react-hook-form'
 
 export type OptionType = {
     id: number
@@ -6,21 +7,25 @@ export type OptionType = {
 }
 
 type FormProps = {
-    name: string
+    name?: string
     label: string
     options: OptionType[]
+    onChange: ControllerRenderProps['onChange']
+    value: number
+    isError?: boolean
 }
 
-const Dropdown = ({ name, label, options }: FormProps) => {
-    const [selected, setSelected] = useState(options[0].name)
-
+const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps) => {
     return (
         <div className="w-full">
             <label>{label}</label>
             <select
                 id={name}
-                defaultValue={selected}
-                className="w-full rounded-lg border border-secondary-gray px-3 py-2.5 text-sm text-secondary-black focus:border-blue-500 focus:ring-blue-500"
+                onChange={onChange}
+                value={value}
+                className={`${
+                    isError ? 'border-primary-red' : 'border-secondary-gray'
+                } w-full rounded-lg border px-3 py-2.5 text-sm text-secondary-black focus:border-blue-500 focus:ring-blue-500`}
             >
                 {options.map((option) => {
                     return (

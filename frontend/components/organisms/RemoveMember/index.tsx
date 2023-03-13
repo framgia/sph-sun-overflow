@@ -1,23 +1,41 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Modal from '@/components/templates/Modal'
+import DELETE_MEMBER from '@/helpers/graphql/mutations/delete_member'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation } from '@apollo/client'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 type Props = {
     id: number
     name: string
     role: string
+    refetchHandler: (isDelete: boolean) => void
 }
 
-const RemoveMember = ({ id, name, role }: Props): JSX.Element => {
+const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element => {
     const [isOpenDelete, setIsOpenDelete] = useState(false)
-
-    const handleDeleteSubmit = () => {
-        //submit
-    }
+    const [deleteMember] = useMutation(DELETE_MEMBER)
 
     const closeDelete = () => {
         setIsOpenDelete(!isOpenDelete)
+    }
+
+    const onSubmit = () => {
+        deleteMember({
+            variables: {
+                id: id,
+            },
+        })
+            .then(() => {
+                successNotify('Member removed successfully!')
+                refetchHandler(true)
+                closeDelete()
+            })
+            .catch(() => {
+                errorNotify('There was an error removing the member!')
+            })
     }
 
     return (
@@ -30,8 +48,8 @@ const RemoveMember = ({ id, name, role }: Props): JSX.Element => {
                     title={`Removing ${name} (${role})`}
                     submitLabel="Confirm"
                     isOpen={isOpenDelete}
-                    handleSubmit={handleDeleteSubmit}
                     handleClose={closeDelete}
+                    handleSubmit={onSubmit}
                 >
                     Are you sure you want to remove this member?
                 </Modal>
