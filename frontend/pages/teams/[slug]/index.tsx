@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import DashboardEditContentForm from '@/components/organisms/DashboardEditContentForm'
-import QuestionsPageLayout from '@/components/templates/QuestionPageLayout'
+import QuestionsPageLayout from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { parseHTML } from '@/helpers/htmlParsing'

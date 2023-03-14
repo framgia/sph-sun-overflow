@@ -3,7 +3,6 @@ import { ToastContainer } from 'react-toastify'
 import Navbar from '../../organisms/Navbar'
 import { LeftSideBar, RightSideBar } from '../../organisms/Sidebar'
 import ProvidersWrapper from '../ProvidersWrapper'
-
 type LayoutProps = {
     children: JSX.Element
 }

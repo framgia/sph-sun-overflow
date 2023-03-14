@@ -1,4 +1,5 @@
-import { create, StateCreator } from 'zustand'
+import { ITag } from '@/components/molecules/TagsInput'
+import { create, SetState, StateCreator } from 'zustand'
 
 export type UserTeamType = {
     id: number
@@ -7,6 +8,7 @@ export type UserTeamType = {
         name: string
     }
 }
+
 interface UserSlice {
     user_id: number
     first_name: string
@@ -15,6 +17,7 @@ interface UserSlice {
     avatar: string
     slug: string
     teams: UserTeamType[]
+    watchedTags: ITag[]
     updated_at: string
     setUserID: (
         user_id: number,
@@ -24,8 +27,10 @@ interface UserSlice {
         avatar: string,
         slug: string,
         teams: UserTeamType[],
+        watchedTags: ITag[],
         updated_at: string
     ) => void
+    setWatchedTags: (input: ITag[]) => void
 }
 
 const createUserSlice: StateCreator<UserSlice> = (set) => ({
@@ -36,8 +41,19 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
     avatar: '',
     slug: '',
     teams: [],
+    watchedTags: [],
     updated_at: '',
-    setUserID: (user_id, first_name, last_name, email, avatar, slug, teams, updated_at) =>
+    setUserID: (
+        user_id,
+        first_name,
+        last_name,
+        email,
+        avatar,
+        slug,
+        teams,
+        watchedTags,
+        updated_at
+    ) =>
         set(() => ({
             user_id,
             first_name,
@@ -46,8 +62,15 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
             avatar,
             slug,
             teams,
+            watchedTags,
             updated_at,
         })),
+    setWatchedTags: (input: ITag[]) => {
+        set((state) => ({
+            ...state,
+            watchedTags: input,
+        }))
+    },
 })
 
 export const useBoundStore = create<UserSlice>()((...a) => ({

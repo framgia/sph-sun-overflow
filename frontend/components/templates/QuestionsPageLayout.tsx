@@ -35,6 +35,7 @@ interface IProps {
     }
     team?: string
     page_slug?: string
+    selectedTag?: string
 }
 
 const QuestionsPageLayout = ({
@@ -45,6 +46,7 @@ const QuestionsPageLayout = ({
     isPrivate = false,
     team = '',
     page_slug = '',
+    selectedTag,
 }: IProps): JSX.Element => {
     const router = useRouter()
     const { data: questions, paginatorInfo } = data.questions
@@ -69,6 +71,7 @@ const QuestionsPageLayout = ({
                     searchKey={searchKey}
                     team={team}
                     refetch={refetch}
+                    tag={selectedTag ? selectedTag : undefined}
                 />
             </div>
         )
@@ -110,16 +113,46 @@ const QuestionsPageLayout = ({
         return <div className="flex flex-row justify-end">{renderSortAndFilter()}</div>
     }
 
+    const renderTaggedQuestionListHeader = (): JSX.Element => {
+        return (
+            <div>
+                <div className="w-full border-b-2">
+                    <h1 className="mb-6 text-2xl font-bold">
+                        Questions tagged with{' '}
+                        <span className="text-primary-red">{selectedTag}</span>
+                    </h1>
+                </div>
+                <div className="mt-2 flex flex-row items-center justify-end px-2">
+                    {renderSortAndFilter()}
+                </div>
+            </div>
+        )
+    }
+
+    const renderHeader = (): JSX.Element => {
+        if (isPrivate) {
+            return renderTeamQuestionListHeader()
+        }
+        if (isSearchResult) {
+            return renderSearchResultHeader()
+        }
+        if (selectedTag) {
+            return renderTaggedQuestionListHeader()
+        }
+        return renderQuestionListHeader()
+    }
+
     const externalStyle = !isPrivate ? 'pt-8 px-10' : ''
     return (
         <div className={`flex h-full w-full flex-col gap-4 pb-5 ${externalStyle}`}>
-            {isPrivate
-                ? renderTeamQuestionListHeader()
-                : isSearchResult
-                ? renderSearchResultHeader()
-                : renderQuestionListHeader()}
+            {renderHeader()}
             <div className="flex h-full flex-col justify-between">
-                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray pl-6">
+                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray pl-6 ">
+                    {questionList.length == 0 && (
+                        <div className="mt-10 text-center text-2xl font-semibold">
+                            No Questions to Show
+                        </div>
+                    )}
                     {questionList.map(function (question) {
                         return (
                             <QuestionList

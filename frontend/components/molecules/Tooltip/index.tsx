@@ -2,6 +2,7 @@ import Button from '@/components/atoms/Button'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
+import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import Link from 'next/link'
@@ -20,12 +21,7 @@ type TagType = {
 
 const Tooltips = ({ tag }: TagType): JSX.Element => {
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
-        refetchQueries: [
-            { query: QTagsSidebar },
-            'TagsSidebar',
-            { query: GET_QUESTIONS },
-            'Questions',
-        ],
+        refetchQueries: [{ query: QTagsSidebar }],
         onCompleted: (data) => {
             if (data.addWatchedTag == 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
@@ -35,12 +31,7 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
         },
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
-        refetchQueries: [
-            { query: QTagsSidebar },
-            'TagsSidebar',
-            { query: GET_QUESTIONS },
-            'Questions',
-        ],
+        refetchQueries: [{ query: QTagsSidebar }],
 
         onCompleted: (data) => {
             if (data.removeWatchedTag == 'Successfully removed tag from WatchList') {
@@ -51,13 +42,16 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
         },
     })
 
+    const watchedTags = useBoundStore((state) => state.watchedTags)
+    const isWatched = watchedTags.some((tempTag) => tempTag.name === tag.name)
+
     const toggleTagWatch = () => {
-        if (tag.is_watched_by_user) removeWatchedTagAPI({ variables: { tagId: tag.id } })
+        if (isWatched) removeWatchedTagAPI({ variables: { tagId: tag.id } })
         else addWatchedTagAPI({ variables: { tagId: tag.id } })
     }
 
     return (
-        <div className="p-5">
+        <div className="p-5 font-normal">
             <div className="flex items-center">
                 <p className="mr-20 text-red-700">{tag.count_watching_users} Watchers</p>
                 <p className="mr-2">{tag.count_tagged_questions} Questions</p>
@@ -72,7 +66,7 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
             </div>
             <div className="float-right ml-2 mb-2 p-2">
                 <Button usage="popover" type="submit" onClick={() => toggleTagWatch()}>
-                    {`${tag.is_watched_by_user ? 'Unw' : 'W'}atch Tag`}
+                    {`${isWatched ? 'Unwatch' : 'Watch'} Tag`}
                 </Button>
             </div>
         </div>

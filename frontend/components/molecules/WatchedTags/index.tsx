@@ -2,8 +2,8 @@ import CustomCombobox from '@/components/molecules/CustomComboBox'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { GET_TAG_SUGGESTIONS, QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
+import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { removeItemViaId } from '@/utils'
 import { useMutation, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -13,6 +13,7 @@ type TTag = {
     id: number
     name: string
     description: string
+    slug: string
 }
 interface WatchedTagsProps {
     loading: boolean
@@ -22,8 +23,10 @@ interface WatchedTagsProps {
 }
 
 const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
-    const detectorRef = useRef(null)
-    const [watchedTags, setWatchedTags] = useState<TTag[]>([])
+    let watchedTags = useBoundStore((state) => state.watchedTags)
+    let setWatchedTags = useBoundStore((state) => state.setWatchedTags)
+
+    const detectorRef = useRef<HTMLDivElement>(null)
     const [viewAdd, setViewAdd] = useState(false)
     const [queryText, setQueryText] = useState<string>('')
     const [tagSuggestions, setTagSuggestions] = useState<TTag[]>([])
@@ -32,12 +35,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
         variables: { queryString: `%${queryText}%` },
     })
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
-        refetchQueries: [
-            { query: QTagsSidebar },
-            'TagsSidebar',
-            { query: GET_QUESTIONS },
-            'Questions',
-        ],
+        refetchQueries: [{ query: QTagsSidebar }, { query: GET_QUESTIONS }],
         onCompleted: (data) => {
             if (data.addWatchedTag == 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
@@ -47,12 +45,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
         },
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
-        refetchQueries: [
-            { query: QTagsSidebar },
-            'TagsSidebar',
-            { query: GET_QUESTIONS },
-            'Questions',
-        ],
+        refetchQueries: [{ query: QTagsSidebar }, { query: GET_QUESTIONS }],
         onCompleted: (data) => {
             if (data.removeWatchedTag == 'Successfully removed tag from WatchList') {
                 successNotify(data.removeWatchedTag)
@@ -66,12 +59,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
         if (!tagLoading) {
             setTagSuggestions(tagData.tagSuggest)
         }
-    }, [tagData])
-    useEffect(() => {
-        if (!loading) {
-            setWatchedTags(data.me.watchedTags)
-        }
-    }, [data])
+    }, [tagData, tagLoading])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside, true)
@@ -81,7 +69,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     }, [])
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (detectorRef.current && !detectorRef.current.contains(event.target)) {
+        if (detectorRef.current && !detectorRef.current.contains(event.target as Node)) {
             setViewAdd(false)
             setQueryText('')
         }
@@ -94,13 +82,10 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
 
     const handleSubmit = async (tagVal: any) => {
         addWatchedTagAPI({ variables: { tagId: tagVal.id } })
-        setViewAdd(false)
     }
 
     const removeWatchedTag = (id: number): void => {
         removeWatchedTagAPI({ variables: { tagId: id } })
-        let TempTagList = removeItemViaId(watchedTags, id)
-        setWatchedTags([...TempTagList])
     }
 
     return (
@@ -127,7 +112,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                                 >
                                     <Link
                                         className="label px-2 py-1 text-xs"
-                                        href={`/tags/${tag.id}`}
+                                        href={`/questions/tagged/${tag.slug}`}
                                     >
                                         {tag.name}
                                     </Link>

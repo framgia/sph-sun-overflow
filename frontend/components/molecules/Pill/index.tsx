@@ -4,7 +4,7 @@ import Tooltips from '../Tooltip'
 import React, { useState } from 'react'
 import { usePopper } from 'react-popper'
 import { Float } from '@headlessui-float/react'
-
+import { useBoundStore } from '@/helpers/store'
 type PillProps = {
     tag: {
         id: number
@@ -17,6 +17,10 @@ type PillProps = {
     }
 }
 
+const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault()
+}
+
 const Pill = ({ tag }: PillProps): JSX.Element => {
     const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>()
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
@@ -24,6 +28,8 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
     const { styles, attributes } = usePopper(referenceElement, popperElement, {
         modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
     })
+
+    let watchedTags = useBoundStore((state) => state.watchedTags)
 
     return (
         <Popover>
@@ -33,7 +39,9 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
                         className="flex min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none"
                         ref={setReferenceElement}
                     >
-                        {tag.is_watched_by_user ? <Icons name="pill_eye" /> : ''}
+                        {watchedTags.some((tempTag) => tempTag.name === tag.name) && (
+                            <Icons name="pill_eye" />
+                        )}
                         <span>{tag.name}</span>
                     </div>
                 </Popover.Button>
@@ -42,6 +50,7 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
+                    onClick={(e) => handleClick(e)}
                 >
                     <div ref={setArrowElement} style={styles.arrow}>
                         <Float.Arrow className="relative ml-3 h-6 w-6 rotate-45 bg-zinc-200" />

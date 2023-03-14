@@ -17,6 +17,7 @@ export const QTagsTeamSidebar = gql`
                             avatar
                         }
                     }
+                    slug
                 }
             }
         }
@@ -52,6 +53,7 @@ export const QTagsSidebar = gql`
                 id
                 name
                 description
+                slug
             }
         }
     }
@@ -63,6 +65,7 @@ export const GET_TAG_SUGGESTIONS = gql`
             id
             name
             description
+            slug
         }
     }
 `

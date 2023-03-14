@@ -10,7 +10,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
-import { FilterType } from '@/components/templates/QuestionPageLayout'
+import { FilterType } from '@/components/templates/QuestionsPageLayout'
 
 export type UserType = {
     id?: number
