@@ -40,6 +40,7 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                             View answer
                         </Link>
                         <Author
+                            slug={bookmarkable?.user.slug}
                             author={`${bookmarkable?.user.first_name} ${bookmarkable?.user.last_name}`}
                             moment={bookmarkable?.humanized_created_at}
                         />

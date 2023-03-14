@@ -16,7 +16,7 @@ final class AllUsers
         $users = User::query();
 
         if (isset($args['keyword'])) {
-            $keywordLikeness = '%' . $args['keyword'] . '%';
+            $keywordLikeness = '%'.$args['keyword'].'%';
 
             $users->where(function ($queryLikeness) use ($keywordLikeness) {
                 $queryLikeness

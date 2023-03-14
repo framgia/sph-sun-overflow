@@ -47,6 +47,7 @@ const GET_BOOKMARKS = gql`
                         user {
                             id
                             first_name
+                            slug
                             last_name
                             avatar
                         }
@@ -63,6 +64,7 @@ const GET_BOOKMARKS = gql`
                             id
                             first_name
                             last_name
+                            slug
                             avatar
                         }
                         question {
@@ -86,6 +88,7 @@ const GET_BOOKMARKS = gql`
                             user {
                                 id
                                 first_name
+                                slug
                                 last_name
                                 avatar
                             }
