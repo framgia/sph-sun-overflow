@@ -1,4 +1,5 @@
 import { HiBookmark, HiHome, HiCode, HiUsers, HiOutlineUser, HiUserGroup } from 'react-icons/hi'
+import { IoIosSettings } from 'react-icons/io'
 
 type SidebarIconProps = {
     name: string
@@ -18,6 +19,8 @@ const SidebarIcon = ({ name }: SidebarIconProps): JSX.Element => {
             return <HiUsers />
         case 'Users':
             return <HiUserGroup />
+        case 'manage':
+            return <IoIosSettings />
         default:
             return <></>
     }
