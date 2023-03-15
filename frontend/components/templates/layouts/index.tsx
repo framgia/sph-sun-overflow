@@ -17,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
         '/teams/[slug]/manage',
         '/teams/[slug]/question/[question-slug]',
         '/teams/[slug]/question/[question-slug]/edit',
+        '/manage/teams/[slug]',
     ]
 
     const routeIfLoginPathCheck = router.asPath.includes('login')
