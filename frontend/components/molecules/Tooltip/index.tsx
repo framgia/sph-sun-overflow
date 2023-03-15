@@ -59,7 +59,10 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
             <div className=" cursor-pointer py-2">
                 <p>
                     {tag.description}
-                    <Link href={`/questions/tagged/${tag.slug}`} className="ml-2 underline ">
+                    <Link
+                        href={`/questions/tagged/${tag.slug}`}
+                        className="ml-2 text-blue-500 underline hover:text-blue-400"
+                    >
                         View Tag
                     </Link>
                 </p>
