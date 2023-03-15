@@ -3,4 +3,5 @@ extend type Mutation {
         id: ID! @rules(apply: ["required", "integer"])
         dashboard_content: String! @rules(apply: ["required"])
     ): Team! @guard(with: ["api"])
+    deleteTeam(id: ID!): Team!
 }
