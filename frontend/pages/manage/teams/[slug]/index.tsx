@@ -53,7 +53,7 @@ const TeamDetail = () => {
                     <PageStats label="Members" value={team.members}></PageStats>
                 </div>
             </div>
-            <div className="mt-16 flex h-3/5 flex-col">
+            <div className="mt-10 flex h-3/5 flex-col">
                 <div className="flex h-7 w-full flex-row justify-start border-b-2 border-gray-300">
                     <div
                         className={`min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
