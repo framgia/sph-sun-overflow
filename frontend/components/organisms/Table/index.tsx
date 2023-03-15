@@ -1,3 +1,5 @@
+import { parseHTML } from '@/helpers/htmlParsing'
+
 export type ColumnType = {
     key: string
     title: string
@@ -5,7 +7,7 @@ export type ColumnType = {
 }
 
 export type DataType = {
-    [key: string]: unknown
+    [key: string]: string | number | JSX.Element
 }
 
 type ClickableType = {
@@ -54,18 +56,20 @@ const Table = ({
                         <table className="min-w-full divide-y divide-black">
                             <thead className="bg-primary-gray">
                                 <tr>
-                                    {columns.map((column) => (
-                                        <th
-                                            key={column.key}
-                                            scope="col"
-                                            style={{ width: column.width }}
-                                            className={`py-3 pl-16 pr-6 text-left text-sm font-medium uppercase ${
-                                                column.key === 'action' ? 'pl-9' : ''
-                                            }`}
-                                        >
-                                            {column.title}
-                                        </th>
-                                    ))}
+                                    {columns.map((column) => {
+                                        return (
+                                            <th
+                                                key={column.key}
+                                                scope="col"
+                                                style={{ width: column.width }}
+                                                className={`py-3 pl-16 pr-6 text-left text-sm font-medium uppercase ${
+                                                    column.key === 'action' ? 'pl-9' : ''
+                                                }`}
+                                            >
+                                                {column.title}
+                                            </th>
+                                        )
+                                    })}
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-black">
@@ -90,7 +94,7 @@ const Table = ({
                                                     return (
                                                         <td
                                                             key={key}
-                                                            className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
+                                                            className="whitespace-nowrap py-4 pl-16 pr-6 text-sm"
                                                         >
                                                             {clickable !== undefined
                                                                 ? renderClickable(
