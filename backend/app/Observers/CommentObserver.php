@@ -12,6 +12,9 @@ class CommentObserver
 
     public function created(Comment $comment)
     {
+        if (! auth()->check()) {
+            return;
+        }
         if (auth()->id != $comment->commentable->user_id) {
             UserNotification::create([
                 'user_id' => $comment->commentable->user_id,

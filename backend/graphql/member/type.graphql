@@ -1,6 +1,6 @@
 type Member {
     id: ID!
     user: User! @belongsTo
-    teamRole: TeamRole! @belongsTo
+    teamRole: TeamRole @belongsTo
     team: Team! @belongsTo
 }
