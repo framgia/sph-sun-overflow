@@ -18,4 +18,7 @@ extend type Mutation {
     removeWatchedTag(tag_id: ID!): String!
         @guard(with: ["api"])
         @field(resolver: "RemoveWatchedTag")
+    assignRole(user_id: ID!, role_id: ID): User!
+        @guard(with: ["api"])
+        @field(resolver: "AssignRole")
 }
