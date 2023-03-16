@@ -61,20 +61,20 @@ const tempPaginateProps = {
     currentPage: 1,
     lastPage: 2,
     hasMorePages: true,
-    onPageChange: () => console.log('next'),
+    onPageChange: (): void => console.log('next'),
 }
 
-const handleEdit = (event: React.MouseEvent<HTMLElement>) => console.log('Edit')
-const handleDelete = (event: React.MouseEvent<HTMLElement>) => console.log('Delete')
+const handleEdit = (event: React.MouseEvent<HTMLElement>): void => console.log('Edit')
+const handleDelete = (event: React.MouseEvent<HTMLElement>): void => console.log('Delete')
 
-const editAction = (key: number) => {
+const editAction = (key: number): JSX.Element => {
     return (
         <div onClick={handleEdit}>
             <Icons name="table_edit" additionalClass="fill-gray-500" />
         </div>
     )
 }
-const deleteAction = (key: number) => {
+const deleteAction = (key: number): JSX.Element => {
     return (
         <div onClick={handleDelete}>
             <Icons name="table_delete" additionalClass="fill-gray-500" />
@@ -91,12 +91,12 @@ const renderTeamsActions = (key: number): JSX.Element | undefined => {
     )
 }
 
-const AdminTeams = () => {
+const AdminTeams = (): JSX.Element => {
     const router = useRouter()
     const clickableArr = [
         {
             column: 'name',
-            onClick: (slug: string) => {
+            onClick: (slug: string): void => {
                 router.push({
                     pathname: '/admin/teams/[slug]', //Change to Proper URL
                     query: { slug },

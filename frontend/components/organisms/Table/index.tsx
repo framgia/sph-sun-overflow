@@ -20,8 +20,12 @@ type TableProps = {
     clickableArr?: ClickableType[]
 }
 
-const renderClickable = (text: string, clickable: ClickableType, slug: string = '') => {
-    const handleClick = (e: React.MouseEvent) => {
+const renderClickable = (
+    text: string,
+    clickable: ClickableType,
+    slug: string = ''
+): JSX.Element => {
+    const handleClick = (e: React.MouseEvent): void => {
         e.preventDefault()
         clickable.onClick(slug)
     }
@@ -41,7 +45,7 @@ const Table = ({
     actions,
     isEmptyString = 'No members to show',
     clickableArr = [],
-}: TableProps) => {
+}: TableProps): JSX.Element => {
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
