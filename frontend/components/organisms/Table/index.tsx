@@ -23,7 +23,7 @@ type TableProps = {
 }
 
 const renderClickable = (
-    text: string,
+    text: string | number | JSX.Element,
     clickable: ClickableType,
     slug: string = ''
 ): JSX.Element => {
@@ -98,11 +98,11 @@ const Table = ({
                                                         >
                                                             {clickable !== undefined
                                                                 ? renderClickable(
-                                                                      String(data[column.key]),
+                                                                      data[column.key],
                                                                       clickable,
                                                                       data['slug'] as string
                                                                   )
-                                                                : String(data[column.key])}
+                                                                : data[column.key]}
                                                         </td>
                                                     )
                                                 })}

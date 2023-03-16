@@ -3,7 +3,7 @@ import PermissionPills from '@/components/organisms/PermissionPills'
 import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
 import Table, { ColumnType, DataType } from '@/components/organisms/Table'
-import { UserType } from '../questions/[slug]'
+import { UserType } from '@/pages/questions/[slug]'
 
 const columns: ColumnType[] = [
     {

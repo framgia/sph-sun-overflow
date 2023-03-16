@@ -5,7 +5,7 @@ const DeleteRole = (): JSX.Element => {
     return (
         <div>
             <Button usage="toggle-modal">
-                <Icons name="table_delete" />
+                <Icons name="table_delete" additionalClass="fill-gray-500" />
             </Button>
         </div>
     )

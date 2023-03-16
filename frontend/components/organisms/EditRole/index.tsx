@@ -5,7 +5,7 @@ const EditRole = () => {
     return (
         <div>
             <Button usage="toggle-modal">
-                <Icons name="table_edit" />
+                <Icons name="table_edit" additionalClass="fill-gray-500" />
             </Button>
         </div>
     )

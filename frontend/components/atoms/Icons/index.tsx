@@ -27,9 +27,27 @@ type IconsProps = {
 const Icons = ({ name, size = '20', additionalClass }: IconsProps): JSX.Element => {
     switch (name) {
         case 'table_edit':
-            return <MdModeEditOutline size={22} className={`fill-primary-red ${additionalClass}`} />
+            return (
+                <MdModeEditOutline
+                    size={22}
+                    className={`${
+                        additionalClass?.includes('fill')
+                            ? additionalClass
+                            : `${additionalClass} fill-primary-red`
+                    }`}
+                />
+            )
         case 'table_delete':
-            return <HiTrash size={22} className={`fill-primary-red ${additionalClass}`} />
+            return (
+                <HiTrash
+                    size={22}
+                    className={`${
+                        additionalClass?.includes('fill')
+                            ? additionalClass
+                            : `${additionalClass} fill-primary-red`
+                    }`}
+                />
+            )
         case 'square_edit':
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
         case 'vote_up':
