@@ -3,5 +3,7 @@ extend type Mutation {
         name: String! @rules(apply: ["required"])
         description: String! @rules(apply: ["required"])
         permissions: [ID!]! @rules(apply: ["required", "integer"])
-    ): Role! @guard(with: ["api"]) @can(ability: "create")
+    ): Role!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "Add role")
 }
