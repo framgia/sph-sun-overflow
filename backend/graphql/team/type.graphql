@@ -10,6 +10,8 @@ type Team {
     slug: String!
     members_count: Int!
     is_team_leader: Boolean!
+    questions_asked: Int!
+    questions_answered: Int!
 }
 
 type TeamRole {

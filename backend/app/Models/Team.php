@@ -36,7 +36,7 @@ class Team extends Model
         });
     }
 
-    protected $appends = ['members_count', 'is_team_leader'];
+    protected $appends = ['members_count', 'is_team_leader', 'questions_asked', 'questions answered'];
 
     protected $guarded = [];
 
@@ -50,6 +50,11 @@ class Team extends Model
         return $this->hasMany(Member::class);
     }
 
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
     public function getMembersCountAttribute()
     {
         return $this->members()->count();
@@ -58,5 +63,15 @@ class Team extends Model
     public function getIsTeamLeaderAttribute()
     {
         return $this->teamLeader->id === Auth::id();
+    }
+
+    public function getQuestionsAskedAttribute()
+    {
+        return $this->questions()->where('team_id', $this->id)->count();
+    }
+
+    public function getQuestionsAnsweredAttribute()
+    {
+        return $this->questions()->where('team_id', $this->id)->has('answers')->count();
     }
 }

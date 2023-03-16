@@ -7,6 +7,9 @@ const GET_TEAM = gql`
             name
             description
             dashboard_content
+            members_count
+            questions_asked
+            questions_answered
             teamLeader {
                 id
                 slug
