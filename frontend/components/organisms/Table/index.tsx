@@ -52,27 +52,25 @@ const Table = ({
                         <table className="min-w-full divide-y divide-black">
                             <thead className="bg-primary-gray">
                                 <tr>
-                                    {columns.map((column) => {
-                                        return (
-                                            <th
-                                                key={column.key}
-                                                scope="col"
-                                                style={{ width: column.width }}
-                                                className={`py-3 pl-16 pr-6 text-left text-sm font-medium uppercase ${
-                                                    column.key === 'action' ? 'pl-9' : ''
-                                                }`}
-                                            >
-                                                {column.title}
-                                            </th>
-                                        )
-                                    })}
+                                    {columns.map((column) => (
+                                        <th
+                                            key={column.key}
+                                            scope="col"
+                                            style={{ width: column.width }}
+                                            className={`py-3 pl-16 pr-6 text-center text-sm font-medium uppercase ${
+                                                column.key === 'action' ? 'pl-9' : ''
+                                            }`}
+                                        >
+                                            {column.title}
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-black">
                                 {dataSource.length > 0 ? (
                                     dataSource.map((data, key) => {
                                         return (
-                                            <tr key={key} className=" hover:bg-light-gray">
+                                            <tr key={key} className="hover:bg-light-gray">
                                                 {columns.map((column, key) => {
                                                     const clickable = clickableArr.find(
                                                         (item) => item.column === column.key
@@ -90,7 +88,7 @@ const Table = ({
                                                     return (
                                                         <td
                                                             key={key}
-                                                            className="whitespace-nowrap py-4 pl-16 pr-6 text-sm"
+                                                            className="whitespace-nowrap py-4 pl-16 pr-6 text-center text-sm"
                                                         >
                                                             {clickable !== undefined
                                                                 ? renderClickable(

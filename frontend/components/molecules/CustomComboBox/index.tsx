@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
+import type { Dispatch, SetStateAction } from 'react'
+import React, { Fragment, useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
 
 export interface ITag {
@@ -52,7 +52,7 @@ const CustomCombobox = ({
                         onChange={(event) => {
                             setQueryText(event.target.value)
                         }}
-                        onKeyDown={(e) => {
+                        onKeyDown={(e: React.KeyboardEvent): void => {
                             e.key === 'Enter' && handleSubmit()
                         }}
                     />
