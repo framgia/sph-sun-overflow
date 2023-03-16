@@ -17,7 +17,7 @@ final class Questions
 
         try {
             if (isset($args['keyword'])) {
-                $keywordLikeness = '%'.$args['keyword'].'%';
+                $keywordLikeness = '%' . $args['keyword'] . '%';
 
                 $query->where(function ($keywordQuery) use ($keywordLikeness) {
                     $keywordQuery->where('title', 'like', $keywordLikeness)
@@ -31,6 +31,10 @@ final class Questions
                 } else {
                     $query->doesntHave('answers');
                 }
+            }
+
+            if (isset($args['user_id'])) {
+                $query->where('user_id', $args['user_id'])->get();
             }
 
             if (isset($args['tag']) && $args['tag']) {
