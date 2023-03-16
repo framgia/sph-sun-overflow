@@ -5,7 +5,6 @@ namespace App\GraphQL\Mutations;
 use App\Exceptions\CustomException;
 use App\Models\Permission;
 use App\Models\Role;
-use Illuminate\Support\Facades\Auth;
 
 final class CreateRole
 {
@@ -15,10 +14,6 @@ final class CreateRole
      */
     public function __invoke($_, array $args)
     {
-        if (Auth::user()->role->name != 'Admin') {
-            throw new CustomException('You are not allowed to create a role.');
-        }
-
         if (Role::where('name', $args['name'])->exists()) {
             throw new CustomException('Role already exists.');
         }
