@@ -8,13 +8,44 @@ export type DataType = {
     [key: string]: unknown
 }
 
+type ClickableType = {
+    column: string extends 'actions' ? never : string
+    onClick: (slug: string) => void
+}
 type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
     actions?: (key: number) => JSX.Element | undefined
+    isEmptyString?: string
+    clickableArr?: ClickableType[]
 }
 
-const Table = ({ columns, dataSource, actions }: TableProps) => {
+const renderClickable = (
+    text: string,
+    clickable: ClickableType,
+    slug: string = ''
+): JSX.Element => {
+    const handleClick = (e: React.MouseEvent): void => {
+        e.preventDefault()
+        clickable.onClick(slug)
+    }
+    return (
+        <span
+            className="cursor-pointer text-blue-500 underline hover:text-blue-400"
+            onClick={handleClick}
+        >
+            {text}
+        </span>
+    )
+}
+
+const Table = ({
+    columns,
+    dataSource,
+    actions,
+    isEmptyString = 'No members to show',
+    clickableArr = [],
+}: TableProps): JSX.Element => {
     return (
         <div className="flex flex-col border-black">
             <div className="-m-1.5 overflow-x-auto">
@@ -43,6 +74,9 @@ const Table = ({ columns, dataSource, actions }: TableProps) => {
                                         return (
                                             <tr key={key} className=" hover:bg-light-gray">
                                                 {columns.map((column, key) => {
+                                                    let clickable = clickableArr.find(
+                                                        (item) => item.column === column.key
+                                                    )
                                                     if (column.key === 'action' && actions) {
                                                         return (
                                                             <td
@@ -58,7 +92,13 @@ const Table = ({ columns, dataSource, actions }: TableProps) => {
                                                             key={key}
                                                             className="whitespace-nowrap py-4 pl-16 pr-6 text-sm "
                                                         >
-                                                            {String(data[column.key])}
+                                                            {clickable !== undefined
+                                                                ? renderClickable(
+                                                                      String(data[column.key]),
+                                                                      clickable,
+                                                                      data['slug'] as string
+                                                                  )
+                                                                : String(data[column.key])}
                                                         </td>
                                                     )
                                                 })}
@@ -71,7 +111,7 @@ const Table = ({ columns, dataSource, actions }: TableProps) => {
                                             colSpan={columns.length}
                                             className="w-full py-10 text-center text-lg font-bold text-primary-gray"
                                         >
-                                            No members to show
+                                            {isEmptyString}
                                         </td>
                                     </tr>
                                 )}
