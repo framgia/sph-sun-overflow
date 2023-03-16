@@ -1,10 +1,10 @@
 import PageStats from '@/components/atoms/PageStats'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 interface UserType {
     id: number
