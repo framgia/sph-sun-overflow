@@ -107,10 +107,12 @@ const AdminTeams = (): JSX.Element => {
     return (
         <div className="mx-10 mt-[10vh] flex w-full flex-col gap-8">
             <div className="flex flex-row justify-between">
-                <div className="text-lg font-semibold">Teams</div>
-                <Button type="button">New Team</Button>
+                <div className="text-3xl font-bold">Teams</div>
+                <Button type="button" additionalClass="px-6 py-3">
+                    New Team
+                </Button>
             </div>
-            <div className="TableContainer">
+            <div className="TableContainer border-2 border-[#555555]">
                 <Table
                     columns={columns}
                     dataSource={tempData}
@@ -118,8 +120,8 @@ const AdminTeams = (): JSX.Element => {
                     actions={renderTeamsActions}
                     clickableArr={clickableArr}
                 />
-                <Paginate {...tempPaginateProps} />
             </div>
+            <Paginate {...tempPaginateProps} />
         </div>
     )
 }
