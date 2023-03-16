@@ -19,7 +19,7 @@ final class CreateRole
             throw new CustomException('You are not allowed to create a role.');
         }
 
-        if (Role::all()->contains('name', $args['name'])) {
+        if (Role::where('name', $args['name'])->exists()) {
             throw new CustomException('Role already exists.');
         }
 
