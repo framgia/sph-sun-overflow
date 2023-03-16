@@ -34,10 +34,13 @@ const RouteWrapper = ({ children }: LayoutProps) => {
         )
 
     if (loading) return <div className="pt-14">{loadingScreenShow()}</div>
-    else if (dataCheckIfNone && errorCheck && !routeIfLoginPathCheck && getUserToken() === '')
+    else if (dataCheckIfNone && errorCheck && !routeIfLoginPathCheck && getUserToken() === '') {
         router.push('/login')
-    else if (!dataCheckIfNone && routeIfLoginPathCheck && getUserToken() !== '') router.push('/')
-    else return children
+        return <></>
+    } else if (!dataCheckIfNone && routeIfLoginPathCheck && getUserToken() !== '') {
+        router.push('/')
+        return <></>
+    } else return children
 }
 
 export default RouteWrapper

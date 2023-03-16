@@ -8,7 +8,7 @@ export interface ITag {
     description: string
 }
 interface ComboboxProps {
-    setValue: ((value: any) => void) | UseFormSetValue<any>
+    setValue: (value: any) => void
     hasBtn: boolean
     btnName: string
     placeholder: string
@@ -32,7 +32,7 @@ const CustomCombobox = ({
 }: ComboboxProps) => {
     const [selected, setSelected] = useState<any>(null)
 
-    const handleSubmit = (e: React.MouseEventHandler<HTMLElement>) => {
+    const handleSubmit = () => {
         if (selected !== null) {
             setValue(selected)
             setSelected(null)
@@ -48,13 +48,7 @@ const CustomCombobox = ({
                         placeholder={placeholder}
                         className={`w-0 grow text-sm leading-5 text-gray-900 focus:ring-0 ${extraInputClasses}`}
                         onChange={(event) => setQueryText(event.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
-                        displayValue={(suggestion) => {
-                            if (suggestion) {
-                                return suggestion.name
-                            }
-                            return null
-                        }}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                     />
                     {hasBtn && (
                         <div className={extraBtnClasses} onClick={handleSubmit}>

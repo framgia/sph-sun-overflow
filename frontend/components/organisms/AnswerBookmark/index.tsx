@@ -20,7 +20,7 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                 vote_count={question?.vote_count}
                 answer_count={question?.answers.length}
                 view_count={question?.views_count}
-                tags={question?.tags}
+                tags={question?.tags ?? []}
                 user={question?.user}
                 bookmarkType="Answer"
                 bookmarkAnswerId={bookmarkable!.id}

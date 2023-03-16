@@ -15,6 +15,7 @@ import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
 import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
 import ProfileInfo from '@/components/organisms/ProfileInfo'
 import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
+import { ITag } from '@/components/molecules/TagsInput'
 
 export type ProfileType = {
     id: number
@@ -30,6 +31,7 @@ export type ProfileType = {
     is_following: boolean
     follower_count: number
     following_count: number
+    watchedTags: ITag[]
     updated_at: string
     slug: string
     email: string
@@ -153,6 +155,7 @@ const ProfilePage = () => {
             profile.avatar,
             profile.slug,
             profile.teams,
+            profile.watchedTags,
             profile.updated_at
         )
     }

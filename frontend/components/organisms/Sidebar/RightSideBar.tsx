@@ -5,14 +5,14 @@ import { QMembersSidebar, QTagsSidebar, QTagsTeamSidebar } from '@/helpers/graph
 import { useQuery } from '@apollo/client'
 type TRightSidebarProps = {
     usage: null | 'teams' | 'users' | string
-    slug: string
+    slug?: string
 }
 
 interface Teamslug {
     slug: string
 }
 
-const RightSideBar = ({ usage, slug }: TRightSidebarProps) => {
+const RightSideBar = ({ usage, slug = '' }: TRightSidebarProps) => {
     if (usage === 'team') {
         return <MembersSidebar slug={slug} />
     }

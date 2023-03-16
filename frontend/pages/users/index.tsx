@@ -8,10 +8,9 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { FilterType } from '../questions'
 import { IUser } from '@/components/molecules/UserTab'
-import { PaginatorInfo } from '../questions'
 import { useRouter } from 'next/router'
+import { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 
 type Role = {
     id: number

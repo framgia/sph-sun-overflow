@@ -28,9 +28,9 @@ const Navbar = (): JSX.Element => {
         fetchPolicy: 'network-only',
     })
 
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
-        encrypted: true,
-        cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY || '', {
+        // encrypted: true,
+        cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER || '',
         authEndpoint: process.env.NEXT_PUBLIC_PUSHER_APP_AUTH_ENDPOINT,
         auth: {
             headers: {

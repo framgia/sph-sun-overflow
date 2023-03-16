@@ -6,14 +6,14 @@ import Card from '@/components/templates/Card'
 import { useQuery } from '@apollo/client'
 import { errorNotify } from '../../helpers/toast'
 import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
-import { PaginatorInfo } from '../questions'
 import { TagType } from '../questions/[slug]'
 import GET_TAGS from '@/helpers/graphql/queries/get_tags'
-import { RefetchType, FilterType } from '../questions/index'
+import { RefetchType } from '../questions/index'
 import SortDropdown from '../../components/molecules/SortDropdown/index'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 
 const TagsListPage = () => {
     const router = useRouter()

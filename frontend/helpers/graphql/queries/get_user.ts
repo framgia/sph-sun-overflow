@@ -16,6 +16,12 @@ const GET_USER = gql`
             is_following
             follower_count
             following_count
+            watchedTags {
+                id
+                name
+                description
+                slug
+            }
             top_questions {
                 id
                 slug
