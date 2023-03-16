@@ -17,11 +17,6 @@ const LeftSideBar = (): JSX.Element => {
             url: 'questions',
         },
         {
-            IconName: 'Roles',
-            Text: 'Roles',
-            url: 'roles',
-        },
-        {
             IconName: 'Users',
             Text: 'Users',
             url: 'users',
@@ -50,6 +45,11 @@ const LeftSideBar = (): JSX.Element => {
                     IconName: 'Teams',
                     Text: 'Teams',
                     url: 'manage/teams',
+                },
+                {
+                    IconName: 'Roles',
+                    Text: 'Roles',
+                    url: 'manage/roles',
                 },
             ],
         },

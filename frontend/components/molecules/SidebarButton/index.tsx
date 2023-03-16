@@ -24,8 +24,8 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
         return urlString.includes(urlSplit[index])
     }
 
-    const selectedClass = 'bg-red-100 text-black border-r-4 border-r-[#FF2000]'
-    const notSelectedClass = ' -mr-1'
+    const selectedClass = '-mr-1 bg-red-100 text-black border-r-4 border-r-primary-red'
+    const notSelectedClass = '-mr-1'
 
     return (
         <li className="sidebar-list">
@@ -48,7 +48,7 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
                                         return (
                                             <li key={index}>
                                                 <Link
-                                                    href={child.url}
+                                                    href={`/${child.url}`}
                                                     className={`ml-6 flex items-center space-x-2 p-2 text-xl font-normal ${
                                                         isSelected(2, child.url)
                                                             ? selectedClass
