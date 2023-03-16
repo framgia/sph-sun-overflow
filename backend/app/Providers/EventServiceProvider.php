@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Models\Answer;
 use App\Models\Comment;
+use App\Models\Team;
 use App\Models\UserRelation;
 use App\Models\Vote;
 use App\Observers\AnswerObserver;
 use App\Observers\CommentObserver;
+use App\Observers\TeamObserver;
 use App\Observers\UserRelationObserver;
 use App\Observers\VoteObserver;
 use Illuminate\Auth\Events\Registered;
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
         Comment::class => [CommentObserver::class],
         Vote::class => [VoteObserver::class],
         UserRelation::class => [UserRelationObserver::class],
+        Team::class => [TeamObserver::class],
     ];
 
     /**

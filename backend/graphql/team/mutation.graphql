@@ -4,4 +4,9 @@ extend type Mutation {
         dashboard_content: String! @rules(apply: ["required"])
     ): Team! @guard(with: ["api"])
     deleteTeam(id: ID!): Team!
+    # Please add this to your code on update team if the team leader is new then add the new team leader as a member
+    # $team->members()->create([
+    #     "user_id" => $team->user_id,
+    #     "team_id" => $team->id,
+    # ]);
 }

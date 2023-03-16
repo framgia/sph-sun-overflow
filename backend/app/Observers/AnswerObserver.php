@@ -12,6 +12,10 @@ class AnswerObserver
 
     public function created(Answer $answer)
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         if (auth()->id != $answer->user_id) {
             UserNotification::create([
                 'user_id' => $answer->question->user_id,
