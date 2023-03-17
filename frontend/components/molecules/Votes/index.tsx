@@ -9,14 +9,22 @@ type VotesProps = {
 const Votes = ({ count, user_vote, voteHandler }: VotesProps): JSX.Element => {
     return (
         <div className="flex flex-col items-center">
-            <div onClick={() => voteHandler(1)}>
+            <div
+                onClick={() => {
+                    voteHandler(1)
+                }}
+            >
                 <Icons
                     name="vote_up"
                     additionalClass={user_vote === 1 ? ' text-secondary-red' : ''}
                 />
             </div>
             <span className="text-lg">{count}</span>
-            <div onClick={() => voteHandler(-1)}>
+            <div
+                onClick={() => {
+                    voteHandler(-1)
+                }}
+            >
                 <Icons
                     name="vote_down"
                     additionalClass={user_vote === -1 ? ' text-secondary-red' : ''}

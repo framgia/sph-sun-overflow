@@ -5,18 +5,18 @@ import StackedUsers from '@/components/molecules/StackedUsers'
 interface ITeam {
     id: number
     name: string
-    members: {
+    members: Array<{
         user: { avatar: string }
-    }[]
+    }>
     slug: string
 }
 interface TeamSidebarProps {
     loading: boolean
     data: {
         me: {
-            teams: {
+            teams: Array<{
                 team: ITeam
-            }[]
+            }>
         }
     }
 }
@@ -25,11 +25,11 @@ interface TeamTabProps {
     team: ITeam
 }
 
-const TeamSidebar = ({ data, loading = true }: TeamSidebarProps) => {
+const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element => {
     const [teams, setTeams] = useState<ITeam[]>([])
 
     const extractTeams = (): ITeam[] => {
-        let teamsList = Array.from(
+        const teamsList = Array.from(
             data.me.teams.map((teamWrapper) => {
                 return teamWrapper.team
             })
@@ -47,7 +47,7 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps) => {
                 <span className="text-xl font-medium">My Teams</span>
             </div>
             <div className="tags flex flex-wrap rounded-br-md rounded-bl-md bg-white">
-                {teams.length == 0 && (
+                {teams.length === 0 && (
                     <div className="text-md w-full rounded-br-md rounded-bl-md p-4 text-center font-medium">
                         Not in any teams yet
                     </div>
@@ -61,12 +61,12 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps) => {
     )
 }
 
-const TeamTab = ({ team }: TeamTabProps) => {
+const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
     const extractImageUrls = (): string[] => {
-        let imageList = Array.from(
+        const imageList = Array.from(
             team.members.map((userWrapper) => {
-                let { user } = userWrapper
-                if (user.avatar == null || user.avatar == undefined) {
+                const { user } = userWrapper
+                if (user.avatar === null || user.avatar === undefined) {
                     return 'https://www.w3schools.com/howto/img_avatar.png'
                 }
                 return user.avatar

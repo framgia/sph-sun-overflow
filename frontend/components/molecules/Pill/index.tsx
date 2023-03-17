@@ -17,10 +17,6 @@ type PillProps = {
     }
 }
 
-const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault()
-}
-
 const Pill = ({ tag }: PillProps): JSX.Element => {
     const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>()
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
@@ -29,7 +25,7 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
         modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
     })
 
-    let watchedTags = useBoundStore((state) => state.watchedTags)
+    const watchedTags = useBoundStore((state) => state.watchedTags)
 
     return (
         <Popover>
@@ -50,7 +46,6 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
-                    onClick={(e) => handleClick(e)}
                 >
                     <div ref={setArrowElement} style={styles.arrow}>
                         <Float.Arrow className="relative ml-3 h-6 w-6 rotate-45 bg-zinc-200" />

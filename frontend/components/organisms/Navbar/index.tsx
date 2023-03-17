@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import SearchBar from '../../molecules/SearchBar'
 import NotificationDropdown from '../../molecules/NotificationDropdown'
-import UserDropdown, { UserProps } from '../../molecules/UserDropdown'
+import UserDropdown from '../../molecules/UserDropdown'
+import type { UserProps } from '../../molecules/UserDropdown'
 import { useBoundStore } from '@/helpers/store'
 import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
 import { useLazyQuery } from '@apollo/client'
 import { errorNotify } from '@/helpers/toast'
 import { getUserToken } from '@/helpers/localStorageHelper'
-import { successNotify } from '@/helpers/toast'
 import Pusher from 'pusher-js'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
@@ -24,13 +24,13 @@ const Navbar = (): JSX.Element => {
         updated_at: useBoundStore.getState().updated_at,
     }
 
-    const [getNotifications, { data, loading, error }] = useLazyQuery(GET_NOTIFICATIONS, {
+    const [getNotifications, { data, error }] = useLazyQuery(GET_NOTIFICATIONS, {
         fetchPolicy: 'network-only',
     })
 
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
-        encrypted: true,
-        cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY ?? '', {
+        // encrypted: true,
+        cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER ?? '',
         authEndpoint: process.env.NEXT_PUBLIC_PUSHER_APP_AUTH_ENDPOINT,
         auth: {
             headers: {
@@ -46,7 +46,7 @@ const Navbar = (): JSX.Element => {
     })
 
     useEffect(() => {
-        getNotifications({
+        void getNotifications({
             variables: {
                 user_id: user.id,
             },
@@ -54,7 +54,7 @@ const Navbar = (): JSX.Element => {
     }, [user.id, useBoundStore.getState().updated_at, pushNotifs, getNotifications])
 
     if (error) {
-        errorNotify(error.toString())
+        errorNotify(error.message)
     }
 
     return (

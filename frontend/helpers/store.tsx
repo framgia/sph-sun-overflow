@@ -1,5 +1,6 @@
-import { ITag } from '@/components/molecules/TagsInput'
-import { create, SetState, StateCreator } from 'zustand'
+import { create } from 'zustand'
+import type { ITag } from '@/components/molecules/TagsInput'
+import type { StateCreator } from 'zustand'
 
 export type UserTeamType = {
     id: number
@@ -53,7 +54,7 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
         teams,
         watchedTags,
         updated_at
-    ) =>
+    ) => {
         set(() => ({
             user_id,
             first_name,
@@ -64,7 +65,8 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
             teams,
             watchedTags,
             updated_at,
-        })),
+        }))
+    },
     setWatchedTags: (input: ITag[]) => {
         set((state) => ({
             ...state,

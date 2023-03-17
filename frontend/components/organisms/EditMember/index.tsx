@@ -1,6 +1,7 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
-import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
+import Dropdown from '@/components/molecules/Dropdown'
+import type { OptionType } from '@/components/molecules/Dropdown'
 import Modal from '@/components/templates/Modal'
 import UPDATE_MEMBER from '@/helpers/graphql/mutations/update_member'
 import { errorNotify, successNotify } from '@/helpers/toast'
@@ -21,28 +22,28 @@ type FormValues = {
     role: number
 }
 
-const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props) => {
+const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props): JSX.Element => {
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [dropdownErrors, setDropdownErrors] = useState({ role: '' })
     const [updateMember] = useMutation(UPDATE_MEMBER)
     const defaultRoleId = roles?.find((r) => r.name === role)?.id
 
-    const { setValue, handleSubmit, reset, control } = useForm<FormValues>({
+    const { handleSubmit, reset, control } = useForm<FormValues>({
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
     })
 
-    const closeEdit = () => {
+    const closeEdit = (): void => {
         setIsOpenEdit(!isOpenEdit)
     }
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: FormValues): void => {
         let valid = true
         let noChangeCount = 0
         const dataFields = [{ key: 'role', display: 'Role' }]
         const errorFields = { role: '' }
 
-        dataFields.map((field) => {
+        dataFields.forEach((field) => {
             const key = field.key as keyof typeof data
 
             if (!data[key]) {
@@ -63,10 +64,10 @@ const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props
         if (valid) {
             updateMember({
                 variables: {
-                    id: id,
-                    user_id: user_id,
+                    id,
+                    user_id,
                     team_role_id: data.role,
-                    team_id: team_id,
+                    team_id,
                 },
             })
                 .then(() => {
@@ -85,7 +86,12 @@ const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props
 
     return (
         <div>
-            <Button usage="toggle-modal" onClick={() => setIsOpenEdit(true)}>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setIsOpenEdit(true)
+                }}
+            >
                 <Icons name="table_edit" />
             </Button>
             {isOpenEdit && (
@@ -108,9 +114,15 @@ const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props
                                     options={roles}
                                     onChange={onChange}
                                     value={value}
+                                    isError={dropdownErrors.role.length > 0}
                                 />
                             )}
                         />
+                        {dropdownErrors.role.length > 0 && (
+                            <span className="ml-2 text-sm text-primary-red">
+                                {dropdownErrors.role}
+                            </span>
+                        )}
                     </form>
                 </Modal>
             )}

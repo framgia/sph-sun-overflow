@@ -1,7 +1,7 @@
 import PermissionPill from '@/components/molecules/PermissionPill'
 
 type Props = {
-    permissions: { id: number; name: string }[]
+    permissions: Array<{ id: number; name: string }>
 }
 
 const PermissionPills = ({ permissions }: Props): JSX.Element => {

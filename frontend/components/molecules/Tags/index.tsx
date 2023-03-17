@@ -1,7 +1,7 @@
 import Pill from '../Pill'
 
 type TagsProps = {
-    values: {
+    values: Array<{
         id: number
         slug?: string | null
         name: string
@@ -9,7 +9,7 @@ type TagsProps = {
         is_watched_by_user: boolean
         count_tagged_questions?: number | null
         count_watching_users?: number | null
-    }[]
+    }>
 }
 
 const Tags = ({ values }: TagsProps): JSX.Element => {

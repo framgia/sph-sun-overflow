@@ -22,9 +22,8 @@ interface WatchedTagsProps {
     }
 }
 
-const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
-    let watchedTags = useBoundStore((state) => state.watchedTags)
-    let setWatchedTags = useBoundStore((state) => state.setWatchedTags)
+const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element => {
+    const watchedTags = useBoundStore((state) => state.watchedTags)
 
     const detectorRef = useRef<HTMLDivElement>(null)
     const [viewAdd, setViewAdd] = useState(false)
@@ -37,7 +36,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
         refetchQueries: [{ query: QTagsSidebar }, { query: GET_QUESTIONS }],
         onCompleted: (data) => {
-            if (data.addWatchedTag == 'Successfully added the tag') {
+            if (data.addWatchedTag === 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
             } else {
                 errorNotify(data.addWatchedTag)
@@ -47,7 +46,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
         refetchQueries: [{ query: QTagsSidebar }, { query: GET_QUESTIONS }],
         onCompleted: (data) => {
-            if (data.removeWatchedTag == 'Successfully removed tag from WatchList') {
+            if (data.removeWatchedTag === 'Successfully removed tag from WatchList') {
                 successNotify(data.removeWatchedTag)
             } else {
                 errorNotify(data.removeWatchedTag)
@@ -68,7 +67,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
         }
     }, [])
 
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent): void => {
         if (detectorRef.current && !detectorRef.current.contains(event.target as Node)) {
             setViewAdd(false)
             setQueryText('')
@@ -76,16 +75,16 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
     }
 
     const isVisible = viewAdd ? 'flex' : 'hidden'
-    const toggleVisible = () => {
+    const toggleVisible = (): void => {
         setViewAdd(!viewAdd)
     }
 
-    const handleSubmit = async (tagVal: any) => {
-        addWatchedTagAPI({ variables: { tagId: tagVal.id } })
+    const handleSubmit = async (tagVal: any): Promise<void> => {
+        await addWatchedTagAPI({ variables: { tagId: tagVal.id } })
     }
 
-    const removeWatchedTag = (id: number): void => {
-        removeWatchedTagAPI({ variables: { tagId: id } })
+    const removeWatchedTag = async (id: number): Promise<void> => {
+        await removeWatchedTagAPI({ variables: { tagId: id } })
     }
 
     return (
@@ -118,14 +117,14 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps) => {
                                     </Link>
                                     <HiX
                                         className="bg cursor-pointer rounded-xl hover:bg-black hover:text-white"
-                                        onClick={() => {
-                                            removeWatchedTag(tag.id)
+                                        onClick={async () => {
+                                            await removeWatchedTag(tag.id)
                                         }}
                                     />
                                 </div>
                             )
                         })}
-                    {!loading && watchedTags.length == 0 && (
+                    {!loading && watchedTags.length === 0 && (
                         <div className="text-md w-full bg-white text-center font-medium">
                             No watched tags
                         </div>

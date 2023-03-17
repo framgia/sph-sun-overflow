@@ -10,6 +10,11 @@ type Props = {
     onPageChange: (first: number, page: number) => void
 }
 
+type StyleType = {
+    isDisabled: boolean
+    additionalClass: string
+}
+
 const Paginate = ({
     currentPage,
     lastPage,
@@ -17,7 +22,7 @@ const Paginate = ({
     perPage = 10,
     onPageChange,
 }: Props): JSX.Element => {
-    const getDisabledStyle = (shouldApply: boolean) => {
+    const getDisabledStyle = (shouldApply: boolean): StyleType => {
         return {
             isDisabled: shouldApply,
             additionalClass: shouldApply
@@ -26,22 +31,22 @@ const Paginate = ({
         }
     }
 
-    const onClickStart = (event: React.MouseEvent) => {
+    const onClickStart = (event: React.MouseEvent): void => {
         event.preventDefault()
         onPageChange(perPage, 1)
     }
 
-    const onClickPrevious = (event: React.MouseEvent) => {
+    const onClickPrevious = (event: React.MouseEvent): void => {
         event.preventDefault()
         onPageChange(perPage, currentPage - 1)
     }
 
-    const onClickNext = (event: React.MouseEvent) => {
+    const onClickNext = (event: React.MouseEvent): void => {
         event.preventDefault()
         onPageChange(perPage, currentPage + 1)
     }
 
-    const onClickEnd = (event: React.MouseEvent) => {
+    const onClickEnd = (event: React.MouseEvent): void => {
         event.preventDefault()
         onPageChange(perPage, lastPage)
     }

@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import Icons from '@/components/atoms/Icons'
-import { FilterType } from '@/components/templates/QuestionsPageLayout'
+import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 
 type AppProps = {
     grouped?: boolean
@@ -9,8 +9,8 @@ type AppProps = {
     filters: FilterType[] | FilterType[][]
 }
 
-const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps) => {
-    const renderFilters = () => {
+const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps): JSX.Element => {
+    const renderFilters = (): JSX.Element[] => {
         return filters.map((filter) => {
             const newFilter = filter as FilterType
             return (
@@ -32,7 +32,7 @@ const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps) =>
         })
     }
 
-    const renderGroupedFilters = () => {
+    const renderGroupedFilters = (): JSX.Element[] => {
         return filters.map((filter, index) => {
             const newFilters = filter as FilterType[]
             return (

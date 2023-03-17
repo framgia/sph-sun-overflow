@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-const EditQuestionFormPage = () => {
+const EditQuestionFormPage = (): JSX.Element => {
     const router = useRouter()
     const query = router.query
     const { data, loading } = useQuery(GET_QUESTION_SKELETON, {
@@ -17,7 +17,11 @@ const EditQuestionFormPage = () => {
         <div className="flex w-full flex-col content-center justify-center ">
             <div className="flex shrink pb-6">
                 <div className="ml-10 pt-10 text-xl text-primary-gray">
-                    <Link href={`/teams/${query['slug']}/question/${query['question-slug']}`}>
+                    <Link
+                        href={`/teams/${query.slug as string}/question/${
+                            query['question-slug'] as string
+                        }`}
+                    >
                         {'< Go Back'}
                     </Link>
                 </div>

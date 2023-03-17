@@ -8,7 +8,7 @@ import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify } from '@/helpers/toast'
-import { RefetchType } from '@/pages/questions'
+import type { RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -41,7 +41,7 @@ type TeamType = {
     members: MemberType[]
 }
 
-const Team = () => {
+const Team = (): JSX.Element => {
     const router = useRouter()
     const [isActiveTab, setIsActiveTab] = useState('dashboard')
     const [dashboardContentEditing, setDashboardContentEditing] = useState(false)
@@ -55,11 +55,11 @@ const Team = () => {
     const team: TeamType = data?.team
 
     useEffect(() => {
-        refetch()
+        void refetch()
     }, [router, refetch])
 
     if (loading) return loadingScreenShow()
-    else if (error) return errorNotify(`Error! ${error}`)
+    else if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
     const getActiveTabClass = (status: boolean): string => {
         if (status) {
@@ -68,31 +68,29 @@ const Team = () => {
         return '-mb-[1px] hover:text-primary-red px-6 active:border-red-400'
     }
 
-    const onClickTab = (tab: string) => {
+    const onClickTab = (tab: string): void => {
         setIsActiveTab(tab)
         setDashboardContentEditing(false)
-        refetch({ slug: router.query.slug })
+        void refetch({ slug: router.query.slug })
     }
 
-    const toggleDashboardContentEdit = () => {
+    const toggleDashboardContentEdit = (): void => {
         setDashboardContentEditing(!dashboardContentEditing)
     }
 
-    const isTeamLeader = () => {
-        return team.teamLeader.id === useBoundStore.getState().user_id
-    }
+    const isTeamLeader = team.teamLeader.id === useBoundStore.getState().user_id
 
-    const onClickAskQuestion = (event: React.MouseEvent) => {
+    const onClickAskQuestion = (event: React.MouseEvent): void => {
         event.preventDefault()
 
-        router.push({
+        void router.push({
             pathname: '/questions/add',
             query: { prev: router.query.slug, team: data?.team.name, id: data?.team.id },
         })
     }
 
-    const renderActiveTab = (content: string) => {
-        return isActiveTab == 'dashboard' ? (
+    const renderActiveTab = (content: string): JSX.Element => {
+        return isActiveTab === 'dashboard' ? (
             <div className="flex w-full flex-col">
                 {dashboardContentEditing ? (
                     <DashboardEditContentForm
@@ -105,7 +103,7 @@ const Team = () => {
                         <div className="ql-snow mx-5 my-4">
                             <div className="ql-editor w-full">{parseHTML(content)}</div>
                         </div>
-                        {isTeamLeader() && (
+                        {isTeamLeader && (
                             <Button
                                 usage="edit-top-right"
                                 type="button"
@@ -143,7 +141,9 @@ const Team = () => {
                         className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
                             isActiveTab === 'dashboard'
                         )}`}
-                        onClick={() => onClickTab('dashboard')}
+                        onClick={() => {
+                            onClickTab('dashboard')
+                        }}
                     >
                         Dashboard
                     </div>
@@ -151,7 +151,9 @@ const Team = () => {
                         className={`h-7 min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
                             isActiveTab === 'questions'
                         )}`}
-                        onClick={() => onClickTab('questions')}
+                        onClick={() => {
+                            onClickTab('questions')
+                        }}
                     >
                         Questions
                     </div>
@@ -162,7 +164,7 @@ const Team = () => {
     )
 }
 
-const QuestionsTab = () => {
+const QuestionsTab = (): JSX.Element => {
     const router = useRouter()
     const { slug } = router.query
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
@@ -176,7 +178,7 @@ const QuestionsTab = () => {
 
     if (loading) return <div></div>
     if (error) {
-        errorNotify(`Error! ${error}`)
+        errorNotify(`Error! ${error.message}`)
         return <div></div>
     }
     return (

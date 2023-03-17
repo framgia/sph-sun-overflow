@@ -2,9 +2,9 @@ import Button from '@/components/atoms/Button'
 import DropdownFilters from '@/components/molecules/DropdownFilters'
 import Paginate from '@/components/organisms/Paginate'
 import QuestionList from '@/components/organisms/QuestionList'
-import { RefetchType } from '@/pages/questions'
-import { QuestionType } from '@/pages/questions/[slug]'
-import { ApolloQueryResult } from '@apollo/client'
+import type { RefetchType } from '@/pages/questions'
+import type { QuestionType } from '@/pages/questions/[slug]'
+import type { ApolloQueryResult } from '@apollo/client'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -53,14 +53,14 @@ const QuestionsPageLayout = ({
     const questionList: QuestionType[] = questions
     const pageInfo: PaginatorInfo = paginatorInfo
 
-    const onPageChange = (first: number, page: number) => {
-        refetch({ first, page })
+    const onPageChange = (first: number, page: number): void => {
+        void refetch({ first, page })
     }
 
-    const onClickAskQuestion = (event: React.MouseEvent) => {
+    const onClickAskQuestion = (event: React.MouseEvent): void => {
         event.preventDefault()
 
-        router.push('/questions/add')
+        void router.push('/questions/add')
     }
 
     const renderSortAndFilter = (): JSX.Element => {
@@ -71,7 +71,7 @@ const QuestionsPageLayout = ({
                     searchKey={searchKey}
                     team={team}
                     refetch={refetch}
-                    tag={selectedTag ? selectedTag : undefined}
+                    tag={selectedTag}
                 />
             </div>
         )
@@ -148,7 +148,7 @@ const QuestionsPageLayout = ({
             {renderHeader()}
             <div className="flex h-full flex-col justify-between">
                 <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray pl-6 ">
-                    {questionList.length == 0 && (
+                    {!questionList.length && (
                         <div className="mt-10 text-center text-2xl font-semibold">
                             No Questions to Show
                         </div>

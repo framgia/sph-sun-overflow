@@ -1,15 +1,6 @@
 import SidebarButton from '../../molecules/SidebarButton'
-import { useRouter } from 'next/router'
 
 const LeftSideBar = (): JSX.Element => {
-    const router = useRouter()
-
-    type SideBarType = {
-        IconName: string
-        Text: string
-        url: string
-    }
-
     const SidebarLinks = [
         {
             IconName: 'Questions',
@@ -55,9 +46,9 @@ const LeftSideBar = (): JSX.Element => {
         },
     ]
 
-    const renderSidebarList = () => {
+    const renderSidebarList = (): JSX.Element[] => {
         return SidebarLinks.map((link, index) => {
-            let { IconName, Text, url, subMenu } = link
+            const { IconName, Text, url, subMenu } = link
 
             return (
                 <SidebarButton

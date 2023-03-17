@@ -1,7 +1,8 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Paginate from '@/components/organisms/Paginate'
-import Table, { ColumnType } from '@/components/organisms/Table'
+import Table from '@/components/organisms/Table'
+import type { ColumnType } from '@/components/organisms/Table'
 import { useRouter } from 'next/router'
 
 const columns: ColumnType[] = [
@@ -61,11 +62,17 @@ const tempPaginateProps = {
     currentPage: 1,
     lastPage: 2,
     hasMorePages: true,
-    onPageChange: (): void => console.log('next'),
+    onPageChange: (): void => {
+        console.log('next')
+    },
 }
 
-const handleEdit = (event: React.MouseEvent<HTMLElement>): void => console.log('Edit')
-const handleDelete = (event: React.MouseEvent<HTMLElement>): void => console.log('Delete')
+const handleEdit = (event: React.MouseEvent<HTMLElement>): void => {
+    console.log('Edit')
+}
+const handleDelete = (event: React.MouseEvent<HTMLElement>): void => {
+    console.log('Delete')
+}
 
 const editAction = (key: number): JSX.Element => {
     return (
@@ -97,8 +104,8 @@ const AdminTeams = (): JSX.Element => {
         {
             column: 'name',
             onClick: (slug: string): void => {
-                router.push({
-                    pathname: '/admin/teams/[slug]', //Change to Proper URL
+                void router.push({
+                    pathname: '/admin/teams/[slug]',
                     query: { slug },
                 })
             },

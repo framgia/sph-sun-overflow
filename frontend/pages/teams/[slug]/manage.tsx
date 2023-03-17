@@ -1,18 +1,20 @@
 import Button from '@/components/atoms/Button'
-import Dropdown, { OptionType } from '@/components/molecules/Dropdown'
+import Dropdown from '@/components/molecules/Dropdown'
+import type { OptionType } from '@/components/molecules/Dropdown'
 import Paginate from '@/components/organisms/Paginate'
-import Table, { ColumnType, DataType } from '@/components/organisms/Table'
+import Table from '@/components/organisms/Table'
+import type { ColumnType, DataType } from '@/components/organisms/Table'
 import GET_MEMBERS from '@/helpers/graphql/queries/get_members'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Modal from '@/components/templates/Modal'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import GET_ALL_USERS from '@/helpers/graphql/queries/get_all_users'
 import GET_TEAM_ROLES from '../../../helpers/graphql/queries/get_team_roles'
-import { UserType } from '../../questions/[slug]/index'
+import type { UserType } from '../../questions/[slug]/index'
 import ManageMembersActions from '@/components/organisms/ManageMembersActions'
 import { Controller, useForm } from 'react-hook-form'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
@@ -52,16 +54,12 @@ type FormValues = {
     role: number
 }
 
-const TeamManage = () => {
+const TeamManage = (): JSX.Element => {
     const router = useRouter()
     const [activeModal, setActiveModal] = useState('')
     const [dropdownErrors, setDropdownErrors] = useState({ user: '', role: '' })
     const [isOpen, setIsOpen] = useState(false)
-    const {
-        data: { team } = {},
-        loading: teamLoading,
-        error: teamError,
-    } = useQuery(GET_TEAM, {
+    const { data: { team } = {} } = useQuery(GET_TEAM, {
         variables: {
             slug: router.query.slug,
         },
@@ -84,59 +82,59 @@ const TeamManage = () => {
 
     const [addMember] = useMutation(ADD_MEMBER)
 
-    const { setValue, handleSubmit, reset, control } = useForm<FormValues>({
+    const { handleSubmit, reset, control } = useForm<FormValues>({
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
     })
 
     useEffect(() => {
         if (data) {
-            usersData.refetch({ filter: { team: team?.id } })
-            teamRoles.refetch()
+            void usersData.refetch({ filter: { team: team?.id } })
+            void teamRoles.refetch()
         }
     }, [data, team, usersData, teamRoles])
 
     if (loading) return loadingScreenShow()
     if (error) {
-        errorNotify(`Error! ${error.message}`)
-        router.push(`/teams/${router.query.slug}`)
-        return
+        void router.push(`/teams/${router.query.slug as string}`)
+        return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
 
     const { paginatorInfo, data: memberList } = data.teamMembers
 
-    const onPageChange = (first: number, page: number) => {
-        refetch({ teamSlug: router.query.slug, first, page })
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await refetch({ teamSlug: router.query.slug, first, page })
     }
 
-    const parseGetMembers = (memberList: IMember[]) => {
-        let tableList: DataType[] = memberList.map((member) => {
+    const parseGetMembers = (memberList: IMember[]): DataType[] => {
+        const tableList: DataType[] = memberList.map((member) => {
             return {
                 key: member.id,
                 user_id: member.user.id,
                 name: `${member.user.first_name} ${member.user.last_name}`,
                 role: member.teamRole.name,
-            } as DataType
+            }
         })
         return tableList
     }
 
     const users: OptionType[] = usersData.data?.allUsers.map((user: UserType) => ({
         id: user.id,
-        name: `${user.first_name} ${user.last_name}`,
+        name: `${user.first_name ?? ''} ${user.last_name ?? ''}`,
     }))
+    console.log(users)
 
     const roles: OptionType[] = teamRoles.data?.teamRoles.map((role: OptionType) => ({
         id: role.id,
         name: role.name,
     }))
 
-    const openModal = (modal: string) => {
+    const openModal = (modal: string): void => {
         setActiveModal(modal)
         setIsOpen(true)
     }
 
-    const closeModal = (modal: string) => {
+    const closeModal = (modal: string): void => {
         setActiveModal(modal)
         setIsOpen(false)
     }
@@ -159,8 +157,8 @@ const TeamManage = () => {
         }
     }
 
-    const refetchHandler = (isDelete = false) => {
-        refetch({
+    const refetchHandler = async (isDelete = false): Promise<void> => {
+        await refetch({
             teamSlug: router.query.slug,
             first: paginatorInfo.perPage,
             page:
@@ -170,7 +168,7 @@ const TeamManage = () => {
         })
     }
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: FormValues): void => {
         let valid = true
         const dataFields = [
             { key: 'user', display: 'User' },
@@ -178,7 +176,7 @@ const TeamManage = () => {
         ]
         const errorFields = { user: '', role: '' }
 
-        dataFields.map((field) => {
+        dataFields.forEach((field) => {
             const key = field.key as keyof typeof data
 
             if (!data[key]) {
@@ -197,7 +195,7 @@ const TeamManage = () => {
             })
                 .then(() => {
                     reset()
-                    refetchHandler()
+                    void refetchHandler()
                     closeModal('add')
                     successNotify('Successfully added member!')
                 })
@@ -215,19 +213,27 @@ const TeamManage = () => {
             <div className="flex h-full flex-col gap-4">
                 <div className="mt-4 flex items-center justify-between">
                     <Link
-                        href={`/teams/${router.query.slug}`}
+                        href={`/teams/${router.query.slug as string}`}
                         className="text-lg text-secondary-text"
                     >
                         {'< Go back'}
                     </Link>
-                    <Button onClick={() => openModal('add')}>Add Member</Button>
+                    <Button
+                        onClick={() => {
+                            openModal('add')
+                        }}
+                    >
+                        Add Member
+                    </Button>
                     {activeModal === 'add' && isOpen && (
                         <Modal
                             title="Add Member"
                             submitLabel="Add"
                             isOpen={isOpen}
                             handleSubmit={handleSubmit(onSubmit)}
-                            handleClose={() => closeModal('add')}
+                            handleClose={() => {
+                                closeModal('add')
+                            }}
                         >
                             <form onSubmit={handleSubmit(onSubmit)} id="add-member-form">
                                 <div className="flex w-full gap-2">
@@ -235,7 +241,7 @@ const TeamManage = () => {
                                         <Controller
                                             control={control}
                                             name="user"
-                                            defaultValue={users[0].id}
+                                            defaultValue={users.length && users[0].id}
                                             render={({ field: { onChange, value } }) => (
                                                 <Dropdown
                                                     key="user-select"
@@ -244,11 +250,7 @@ const TeamManage = () => {
                                                     options={users}
                                                     onChange={onChange}
                                                     value={value}
-                                                    isError={
-                                                        dropdownErrors.user.length > 0
-                                                            ? true
-                                                            : false
-                                                    }
+                                                    isError={dropdownErrors.user.length > 0}
                                                 />
                                             )}
                                         />
@@ -271,11 +273,7 @@ const TeamManage = () => {
                                                     options={roles}
                                                     onChange={onChange}
                                                     value={value}
-                                                    isError={
-                                                        dropdownErrors.role.length > 0
-                                                            ? true
-                                                            : false
-                                                    }
+                                                    isError={dropdownErrors.role.length > 0}
                                                 />
                                             )}
                                         />

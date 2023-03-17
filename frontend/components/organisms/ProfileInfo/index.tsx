@@ -1,8 +1,9 @@
 import Button from '@/components/atoms/Button'
 import ProfileImage from '@/components/atoms/ProfileImage'
 import AboutMe from '@/components/molecules/AboutMe'
-import { ProfileType } from '@/pages/users/[slug]'
-import { Fragment, MouseEventHandler } from 'react'
+import { Fragment } from 'react'
+import type { ProfileType } from '@/pages/users/[slug]'
+import type { MouseEventHandler } from 'react'
 
 type Props = {
     user_id: number

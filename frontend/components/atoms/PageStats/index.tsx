@@ -3,7 +3,7 @@ interface StatsProps {
     value: number
 }
 
-const PageStats = ({ label, value }: StatsProps) => {
+const PageStats = ({ label, value }: StatsProps): JSX.Element => {
     return (
         <div className="flex flex-col items-center">
             <div className="text-center text-lg">{label}</div>

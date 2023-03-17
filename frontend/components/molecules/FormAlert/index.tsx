@@ -1,4 +1,4 @@
-import { FieldErrors } from 'react-hook-form'
+import type { FieldErrors } from 'react-hook-form'
 
 type FormAlertProps = {
     errors: FieldErrors
@@ -28,7 +28,7 @@ const FormAlert = ({ errors }: FormAlertProps): JSX.Element => {
                 <span className="font-medium">Ensure that these requirements are met:</span>
                 <ul className="mt-1.5 ml-4 list-inside list-disc">
                     {Object.values(errors).map((error, index) => {
-                        return <li key={index}>{error && error.message?.toString()}</li>
+                        return <li key={index}>{error?.message?.toString()}</li>
                     })}
                 </ul>
             </div>

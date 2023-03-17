@@ -32,7 +32,7 @@ const TeamDetail = (): JSX.Element => {
     const router = useRouter()
     const [activeTab, setActiveTab] = useState<string>('Questions')
 
-    const { data, loading, error, refetch } = useQuery(GET_TEAM, {
+    const { data, loading, error } = useQuery(GET_TEAM, {
         variables: { slug: router.query.slug },
     })
 
@@ -41,8 +41,7 @@ const TeamDetail = (): JSX.Element => {
 
     if (loading) return loadingScreenShow()
     if (error) {
-        errorNotify(`Error! ${error}`)
-        return <></>
+        return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
 
     const onClickQuestionsTab = (): void => {

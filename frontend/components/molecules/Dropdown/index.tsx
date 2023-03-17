@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { ControllerRenderProps } from 'react-hook-form'
+import type { ControllerRenderProps } from 'react-hook-form'
 
 export type OptionType = {
     id: number
@@ -15,7 +14,7 @@ type FormProps = {
     isError?: boolean
 }
 
-const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps) => {
+const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps): JSX.Element => {
     return (
         <div className="w-full">
             <label>{label}</label>

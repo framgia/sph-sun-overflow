@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
-import SortDropdown from '../SortDropdown'
-import { ApolloQueryResult } from '@apollo/client'
-import { RefetchType } from '../../../pages/questions/index'
 import { useRouter } from 'next/router'
+import SortDropdown from '../SortDropdown'
+import type { ApolloQueryResult } from '@apollo/client'
+import type { RefetchType } from '../../../pages/questions/index'
 
 type TriggerType = 'DATE' | 'ANSWER' | 'WATCHED' | 'POPULAR'
 
 type FilterType = {
     state: string
-    filters: {
+    filters: Array<{
         id: number
         name: string
         onClick: () => void
-    }[]
+    }>
 }
 
 type FilterTextsType = {
@@ -72,7 +72,7 @@ const DropdownFilters = ({
                     id: 1,
                     name: FilterTexts.DATE[1],
                     onClick: () => {
-                        refetch({
+                        void refetch({
                             first: 10,
                             page: 1,
                             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
@@ -84,7 +84,7 @@ const DropdownFilters = ({
                     id: 2,
                     name: FilterTexts.DATE[2],
                     onClick: () => {
-                        refetch({
+                        void refetch({
                             first: 10,
                             page: 1,
                             orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
@@ -101,7 +101,7 @@ const DropdownFilters = ({
                     id: 1,
                     name: FilterTexts.ANSWER[1],
                     onClick: () => {
-                        refetch({
+                        void refetch({
                             first: 10,
                             page: 1,
                             filter: { keyword: searchKey, answered: true, tag, team },
@@ -113,7 +113,7 @@ const DropdownFilters = ({
                     id: 2,
                     name: FilterTexts.ANSWER[2],
                     onClick: () => {
-                        refetch({
+                        void refetch({
                             first: 10,
                             page: 1,
                             filter: { keyword: searchKey, answered: false, tag, team },
@@ -125,7 +125,7 @@ const DropdownFilters = ({
                     id: 3,
                     name: FilterTexts.ANSWER[3],
                     onClick: () => {
-                        refetch({
+                        void refetch({
                             first: 10,
                             page: 1,
                             filter: { keyword: searchKey, tag, team },

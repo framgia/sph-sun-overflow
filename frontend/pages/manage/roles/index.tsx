@@ -2,8 +2,9 @@ import Paginate from '@/components/organisms/Paginate'
 import PermissionPills from '@/components/organisms/PermissionPills'
 import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
-import Table, { ColumnType, DataType } from '@/components/organisms/Table'
-import { UserType } from '@/pages/questions/[slug]'
+import Table from '@/components/organisms/Table'
+import type { ColumnType, DataType } from '@/components/organisms/Table'
+import type { UserType } from '@/pages/questions/[slug]'
 
 const columns: ColumnType[] = [
     {
@@ -28,7 +29,7 @@ const columns: ColumnType[] = [
 type RolesType = {
     id: number
     name: string
-    permissions: { id: number; name: string }[]
+    permissions: Array<{ id: number; name: string }>
     users: UserType[]
 }
 
@@ -147,9 +148,7 @@ const RolesPage = (): JSX.Element => {
         hasMorePages: true,
     }
 
-    const onPageChange = (first: number, page: number) => {
-        //paginator pagechange
-    }
+    const onPageChange = (first: number, page: number): void => {}
 
     return (
         <div className="flex w-full flex-col gap-4 p-8">

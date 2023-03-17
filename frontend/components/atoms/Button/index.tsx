@@ -53,7 +53,7 @@ const Button = ({
     isDisabled = false,
     children,
     onClick,
-}: Props) => {
+}: Props): JSX.Element => {
     return (
         <button
             onClick={onClick}

@@ -1,6 +1,4 @@
-import { NextPage } from 'next'
-
-const Tags: NextPage = () => {
+const Tags = (): JSX.Element => {
     return (
         <div>
             <h1>Tags</h1>

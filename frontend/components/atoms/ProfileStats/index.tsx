@@ -3,7 +3,7 @@ interface ProfileStatsProps {
     text: string
 }
 
-const ProfileStats = ({ value, text }: ProfileStatsProps) => {
+const ProfileStats = ({ value, text }: ProfileStatsProps): JSX.Element => {
     return (
         <div className="flex flex-col">
             <div className="text-md text-center font-bold">{value}</div>

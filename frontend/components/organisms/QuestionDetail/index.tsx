@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
-import { UserType } from '../../../pages/questions/[slug]'
+import type { UserType } from '../../../pages/questions/[slug]'
 
 type QuestionDetailProps = {
     id: number
@@ -21,7 +21,7 @@ type QuestionDetailProps = {
     humanized_created_at: string
     views_count: number
     vote_count?: number
-    tags: { id: number; name: string; is_watched_by_user: boolean }[]
+    tags: Array<{ id: number; name: string; is_watched_by_user: boolean }>
     user?: UserType
     is_bookmarked: boolean
     is_from_user: boolean
@@ -36,7 +36,7 @@ const QuestionDetail = ({
     id,
     title,
     content,
-    slug,
+    slug = '',
     created_at,
     humanized_created_at,
     views_count,
@@ -53,12 +53,12 @@ const QuestionDetail = ({
 }: QuestionDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
 
-    const voteHandler = (value: number) => {
+    const voteHandler = async (value: number): Promise<void> => {
         if (is_from_user) {
             errorNotify("You can't vote for your own post!")
             return
         }
-        upsertVote({ variables: { value: value, voteable_id: id, voteable_type: 'Question' } })
+        await upsertVote({ variables: { value, voteable_id: id, voteable_type: 'Question' } })
         refetchHandler()
     }
 

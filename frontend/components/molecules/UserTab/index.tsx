@@ -20,7 +20,7 @@ interface UserTabProps {
     usage: 'TeamMembers' | 'UserList'
 }
 
-const UserTab = ({ user, usage }: UserTabProps) => {
+const UserTab = ({ user, usage }: UserTabProps): JSX.Element => {
     const cardStyle = {
         TeamMembers: 'h-20 border-b-2 border-b-secondary-gray last:rounded-md last:border-b-0 pl-4',
         UserList: 'my-2 py-2 px-2',

@@ -1,21 +1,19 @@
 import { useRouter } from 'next/router'
 import { HiSearch } from 'react-icons/hi'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 
-const SearchBar = () => {
+const SearchBar = (): JSX.Element => {
     const router = useRouter()
     const [searchKey, setSearchKey] = useState('')
 
-    const pathIsSearchResult = router.asPath.includes('/questions?search=')
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
 
         const target = e.target as typeof e.target & {
             search: { value: string }
         }
 
-        router.push({
+        await router.push({
             pathname: `/questions`,
             query: {
                 search: target.search.value,
@@ -32,7 +30,9 @@ const SearchBar = () => {
                         type="text"
                         name="search"
                         value={searchKey}
-                        onChange={(e) => setSearchKey(e.target.value)}
+                        onChange={(e) => {
+                            setSearchKey(e.target.value)
+                        }}
                         className="form-input h-9 w-48 rounded-full border border-gray-300 px-4 text-gray-900 focus:border-red-500 focus:ring-red-500
                         lg:w-80"
                         placeholder="Search..."

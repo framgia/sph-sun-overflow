@@ -7,7 +7,7 @@ type LayoutProps = {
     children: JSX.Element
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children }: LayoutProps): JSX.Element => {
     const router = useRouter()
     const hideRightSidebarInPages: string[] = [
         '/questions/[slug]',

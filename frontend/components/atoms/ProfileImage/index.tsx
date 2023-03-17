@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import Avatar from 'react-avatar'
 
 interface ProfileImageProps {
@@ -8,7 +7,12 @@ interface ProfileImageProps {
     updated_at?: string
 }
 
-const ProfileImage = ({ first_name, last_name, avatar, updated_at }: ProfileImageProps) => {
+const ProfileImage = ({
+    first_name,
+    last_name,
+    avatar,
+    updated_at,
+}: ProfileImageProps): JSX.Element => {
     return (
         <div className="flex flex-col gap-6">
             <div className="relative flex place-content-center ">
@@ -18,7 +22,7 @@ const ProfileImage = ({ first_name, last_name, avatar, updated_at }: ProfileImag
                         name={`${first_name} ${last_name}`}
                         size="200"
                         alt={first_name}
-                        src={avatar ? `${avatar}` : `${avatar}?${updated_at}`}
+                        src={avatar ? `${avatar}` : `${avatar}?${updated_at ?? ''}`}
                         maxInitials={1}
                         textSizeRatio={2}
                     />

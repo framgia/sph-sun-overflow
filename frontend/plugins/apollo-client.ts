@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { getUserToken } from '../helpers/localStorageHelper'
 
-let getAuthToken = getUserToken()
+const getAuthToken = getUserToken()
 
 const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,

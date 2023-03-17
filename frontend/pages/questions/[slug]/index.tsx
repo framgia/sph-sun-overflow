@@ -10,7 +10,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
-import { FilterType } from '@/components/templates/QuestionsPageLayout'
+import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 
 export type UserType = {
     id?: number
@@ -90,10 +90,10 @@ export type AnswerEditType = {
 type RefetchType = {
     slug?: string
     shouldAddViewCount: boolean
-    answerSort?: { column: string; order: string }[]
+    answerSort?: Array<{ column: string; order: string }>
 }
 
-const QuestionDetailPage = () => {
+const QuestionDetailPage = (): JSX.Element => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
@@ -112,15 +112,15 @@ const QuestionDetailPage = () => {
     })
 
     if (loading) return loadingScreenShow()
-    else if (error) return errorNotify(`Error! ${error}`)
+    else if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
     const question: QuestionType = {
         ...data.question,
     }
 
-    let team = question.team === null ? '' : question.team.name
+    const team = question.team === null ? '' : question.team.name
 
-    const refetchHandler = () => {
-        refetch({ shouldAddViewCount: false })
+    const refetchHandler = (): void => {
+        void refetch({ shouldAddViewCount: false })
     }
 
     const answerFilters: FilterType[][] = [
@@ -129,7 +129,7 @@ const QuestionDetailPage = () => {
                 id: 1,
                 name: 'Highest Score',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'VOTES', order: 'DESC' }],
                     })
@@ -140,7 +140,7 @@ const QuestionDetailPage = () => {
                 id: 2,
                 name: 'Lowest Score',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'VOTES', order: 'ASC' }],
                     })
@@ -153,7 +153,7 @@ const QuestionDetailPage = () => {
                 id: 3,
                 name: 'Most Recent',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'CREATED_AT', order: 'DESC' }],
                     })
@@ -164,7 +164,7 @@ const QuestionDetailPage = () => {
                 id: 2,
                 name: 'Least Recent',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'CREATED_AT', order: 'ASC' }],
                     })
@@ -203,10 +203,12 @@ const QuestionDetailPage = () => {
                                     key={comment.id}
                                     id={comment.id}
                                     text={comment.content}
-                                    author={`${comment.user.first_name} ${comment.user.last_name}`}
+                                    author={`${comment.user.first_name ?? ''} ${
+                                        comment.user.last_name ?? ''
+                                    }`}
                                     time={comment.updated_at}
                                     action={
-                                        comment.updated_at == comment.created_at
+                                        comment.updated_at === comment.created_at
                                             ? 'added a'
                                             : 'updated his/her'
                                     }
@@ -219,7 +221,9 @@ const QuestionDetailPage = () => {
                         <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
                             <div
                                 className="w-auto cursor-pointer px-2 text-blue-500 hover:text-blue-400"
-                                onClick={() => setComment(!comment)}
+                                onClick={() => {
+                                    setComment(!comment)
+                                }}
                             >
                                 Add comment
                             </div>

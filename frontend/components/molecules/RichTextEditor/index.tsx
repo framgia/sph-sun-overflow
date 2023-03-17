@@ -1,8 +1,8 @@
 import 'react-quill/dist/quill.snow.css'
 import dynamic from 'next/dynamic'
-import { ControllerRenderProps, UseFormSetValue } from 'react-hook-form'
-import { ComponentType } from 'react'
-import { ReactQuillProps, Value } from 'react-quill'
+import type { ControllerRenderProps } from 'react-hook-form'
+import type { ComponentType } from 'react'
+import type { ReactQuillProps, Value } from 'react-quill'
 type RTEProps = {
     value: Value
     onChange: ControllerRenderProps['onChange']
@@ -42,10 +42,15 @@ const formats = [
     'image',
 ]
 const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
-    (): Promise<any> => import('react-quill'),
+    async (): Promise<any> => await import('react-quill'),
     { ssr: false }
 )
-const RichTextEditor = ({ value, onChange, id = undefined, usage = 'default' }: RTEProps) => {
+const RichTextEditor = ({
+    value,
+    onChange,
+    id = undefined,
+    usage = 'default',
+}: RTEProps): JSX.Element => {
     let style
 
     switch (usage) {
