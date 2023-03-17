@@ -132,7 +132,9 @@ const AdminTeams = (): JSX.Element => {
                     clickableArr={clickableArr}
                 />
             </div>
-            <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+            <div className="mt-auto">
+                <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+            </div>
         </div>
     )
 }
