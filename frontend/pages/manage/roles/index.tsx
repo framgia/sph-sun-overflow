@@ -2,8 +2,8 @@ import Paginate from '@/components/organisms/Paginate'
 import PermissionPills from '@/components/organisms/PermissionPills'
 import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
-import Table from '@/components/organisms/Table'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
+import Table from '@/components/organisms/Table'
 import type { UserType } from '@/pages/questions/[slug]'
 
 const columns: ColumnType[] = [
