@@ -5,7 +5,7 @@ import Link from 'next/link'
 import 'react-quill/dist/quill.snow.css'
 import Icons from '@/components/atoms/Icons'
 import { parseHTML } from '../../../helpers/htmlParsing'
-import { TagType, UserType } from '../../../pages/questions/[slug]'
+import type { TagType, UserType } from '../../../pages/questions/[slug]'
 
 type Props = {
     id?: number
@@ -30,10 +30,10 @@ type Props = {
 }
 
 const QuestionList = ({
-    id,
+    id = 0,
     title,
-    slug,
-    question_slug,
+    slug = '',
+    question_slug = '',
     content,
     vote_count,
     answer_count,
@@ -43,7 +43,7 @@ const QuestionList = ({
     tags,
     user,
     bookmarkType,
-    bookmarkAnswerId,
+    bookmarkAnswerId = 0,
     page_slug,
     team_name,
     team_slug,
@@ -86,12 +86,12 @@ const QuestionList = ({
             </div>
             <div className="flex w-[85%] flex-col gap-4">
                 <div className="flex w-full justify-between">
-                    {page_slug == 'teams'
+                    {page_slug === 'teams'
                         ? renderTeamQuestionDetailHeader()
-                        : page_slug == 'questions' && renderQuestionDetailHeader()}
+                        : page_slug === 'questions' && renderQuestionDetailHeader()}
                     {bookmarkType && (
                         <Bookmark
-                            bookmarkable_id={bookmarkType === 'Answer' ? bookmarkAnswerId! : id!}
+                            bookmarkable_id={bookmarkType === 'Answer' ? bookmarkAnswerId : id}
                             bookmarkable_type={bookmarkType}
                             refetchHandler={() => {}}
                             is_bookmarked
@@ -115,7 +115,7 @@ const QuestionList = ({
                         <div className="flex flex-row justify-end">
                             <div className="flex flex-col">
                                 <Author
-                                    author={`${user?.first_name} ${user?.last_name}`}
+                                    author={`${user?.first_name ?? ''} ${user?.last_name ?? ''}`}
                                     moment={humanized_created_at}
                                     slug={user?.slug}
                                 />
@@ -123,7 +123,7 @@ const QuestionList = ({
                                     <div className="ml-4 flex justify-end gap-1 text-primary-gray">
                                         From Team:
                                         <Link
-                                            href={`/teams/${team_slug}`}
+                                            href={`/teams/${team_slug ?? ''}`}
                                             className="text-blue-600 hover:text-blue-400"
                                         >
                                             <div className="max-w-[170px] truncate">

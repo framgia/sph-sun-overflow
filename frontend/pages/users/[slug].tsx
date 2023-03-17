@@ -3,19 +3,20 @@ import ProfileStats from '@/components/atoms/ProfileStats'
 import Activity from '@/components/molecules/Activity'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { useBoundStore, UserTeamType } from '@/helpers/store'
+import { useBoundStore } from '@/helpers/store'
+import type { UserTeamType } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { RightSideBar } from '@/components/organisms/Sidebar'
-import { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]'
+import type { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]'
 import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
 import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
 import ProfileInfo from '@/components/organisms/ProfileInfo'
 import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
-import { ITag } from '@/components/molecules/TagsInput'
+import type { ITag } from '@/components/molecules/TagsInput'
 
 export type ProfileType = {
     id: number
@@ -46,7 +47,7 @@ export type BookmarkableType = {
     created_at: string
     humanized_created_at?: string
     vote_count: number
-    answers?: { id: number; content: string }[]
+    answers?: Array<{ id: number; content: string }>
     views_count?: number
     tags?: TagType[]
     user: UserType
@@ -60,7 +61,7 @@ type BookmarkQuestionType = {
     created_at: string
     humanized_created_at: string
     vote_count: number
-    answers: { id: number; content: string }[]
+    answers: Array<{ id: number; content: string }>
     views_count: number
     tags: TagType[]
     user: UserType
@@ -76,7 +77,7 @@ const getActiveTabClass = (status: boolean): string => {
     }
     return '-mb-[1px] hover:text-primary-red px-6 active:border-red-400'
 }
-const ProfilePage = () => {
+const ProfilePage = (): JSX.Element => {
     const user_id = useBoundStore.getState().user_id
     const setUserID = useBoundStore((state) => state.setUserID)
     const [isActiveTab, setIsActiveTab] = useState('Activity')
@@ -108,45 +109,45 @@ const ProfilePage = () => {
         skip: profileIsNull(),
     })
     useEffect(() => {
-        refetch()
+        void refetch()
     }, [router, refetch])
     if (loading) return loadingScreenShow()
-    else if (error) return errorNotify(`Error! ${error}`)
+    else if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
     const profile: ProfileType = {
         ...data.user,
     }
-    const onClickBookmarkTab = () => {
+    const onClickBookmarkTab = (): void => {
         setIsActiveTab('Bookmarks')
-        bookmarkQuery.refetch({
+        void bookmarkQuery.refetch({
             user_id: Number(profile.id),
             first: 5,
             page: 1,
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         })
     }
-    const onClickActivityTab = () => {
+    const onClickActivityTab = (): void => {
         setIsActiveTab('Activity')
-        refetch({ slug: query.slug })
+        void refetch({ slug: query.slug })
     }
-    const onClickFollow = () => {
-        toggleFollow({
+    const onClickFollow = (): void => {
+        void toggleFollow({
             variables: {
                 userId: data?.user.id,
             },
         })
     }
-    const bookmarkOnPageChange = (first: number, page: number) => {
-        bookmarkQuery.refetch({ first, page })
+    const bookmarkOnPageChange = (first: number, page: number): void => {
+        void bookmarkQuery.refetch({ first, page })
     }
-    const onClickProfileEdit = () => {
+    const onClickProfileEdit = (): void => {
         setIsEditing(true)
     }
-    const onClickCancelProfileEdit = () => {
+    const onClickCancelProfileEdit = (): void => {
         setIsEditing(false)
     }
-    const profileRefetchHandler = () => {
+    const profileRefetchHandler = (): void => {
         setIsEditing(false)
-        refetch()
+        void refetch()
         setUserID(
             profile.id,
             profile.first_name,
@@ -183,7 +184,7 @@ const ProfilePage = () => {
                     </div>
                     <div className="flex w-full flex-row gap-14">
                         <div className="flex w-2/6 justify-center">
-                            {user_id != data.user.id && (
+                            {user_id !== data.user.id && (
                                 <Button
                                     type="button"
                                     usage="follow"
@@ -206,7 +207,7 @@ const ProfilePage = () => {
                     </div>
                 </div>
                 <div className="flex w-1/4 grow">
-                    {user_id == Number(data.user.id) && <RightSideBar usage="users" />}
+                    {user_id === Number(data.user.id) && <RightSideBar usage="users" />}
                 </div>
             </div>
             <div className="mt-3 flex h-3/5 flex-col">
@@ -282,7 +283,7 @@ const ProfilePage = () => {
                     (bookmarkQuery.loading ? (
                         loadingScreenShow()
                     ) : bookmarkQuery.error ? (
-                        errorNotify(`Error! ${bookmarkQuery.error}`)
+                        errorNotify(`Error! ${bookmarkQuery.error.message}`)
                     ) : (
                         <BookmarkTabContent
                             bookmarks={bookmarkQuery.data.bookmarks.data}

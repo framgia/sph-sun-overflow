@@ -1,6 +1,5 @@
 import Button from '@/components/atoms/Button'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
-import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
@@ -23,7 +22,7 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
         refetchQueries: [{ query: QTagsSidebar }],
         onCompleted: (data) => {
-            if (data.addWatchedTag == 'Successfully added the tag') {
+            if (data.addWatchedTag === 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
             } else {
                 errorNotify(data.addWatchedTag)
@@ -34,7 +33,7 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
         refetchQueries: [{ query: QTagsSidebar }],
 
         onCompleted: (data) => {
-            if (data.removeWatchedTag == 'Successfully removed tag from WatchList') {
+            if (data.removeWatchedTag === 'Successfully removed tag from WatchList') {
                 successNotify(data.removeWatchedTag)
             } else {
                 errorNotify(data.removeWatchedTag)
@@ -45,9 +44,9 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
     const watchedTags = useBoundStore((state) => state.watchedTags)
     const isWatched = watchedTags.some((tempTag) => tempTag.name === tag.name)
 
-    const toggleTagWatch = () => {
-        if (isWatched) removeWatchedTagAPI({ variables: { tagId: tag.id } })
-        else addWatchedTagAPI({ variables: { tagId: tag.id } })
+    const toggleTagWatch = async (): Promise<void> => {
+        if (isWatched) await removeWatchedTagAPI({ variables: { tagId: tag.id } })
+        else await addWatchedTagAPI({ variables: { tagId: tag.id } })
     }
 
     return (
@@ -60,7 +59,7 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
                 <p>
                     {tag.description}
                     <Link
-                        href={`/questions/tagged/${tag.slug}`}
+                        href={`/questions/tagged/${tag.slug ?? ''}`}
                         className="ml-2 text-blue-500 underline hover:text-blue-400"
                     >
                         View Tag
@@ -68,7 +67,13 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
                 </p>
             </div>
             <div className="float-right ml-2 mb-2 p-2">
-                <Button usage="popover" type="submit" onClick={() => toggleTagWatch()}>
+                <Button
+                    usage="popover"
+                    type="submit"
+                    onClick={async () => {
+                        await toggleTagWatch()
+                    }}
+                >
                     {`${isWatched ? 'Unwatch' : 'Watch'} Tag`}
                 </Button>
             </div>

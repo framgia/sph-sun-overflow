@@ -25,7 +25,7 @@ const AcceptAnswer = ({
 
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(is_correct)
     const [isHovered, setIsHovered] = useState(false)
-    const handleClick = () => {
+    const handleClick = (): void => {
         const newAcceptAnswer = acceptAnswer({
             variables: {
                 answer_id,
@@ -33,11 +33,13 @@ const AcceptAnswer = ({
             },
         })
 
-        newAcceptAnswer.then((data: any) => {
-            const message = data.data.toggleAcceptAnswer
-            setIsCorrectAnswer(!isCorrectAnswer)
-            successNotify(`${message}`)
-        })
+        newAcceptAnswer
+            .then((data: any) => {
+                const message = data.data.toggleAcceptAnswer
+                setIsCorrectAnswer(!isCorrectAnswer)
+                successNotify(`${message as string}`)
+            })
+            .catch(() => {})
 
         refetchHandler()
     }
@@ -45,7 +47,7 @@ const AcceptAnswer = ({
     return (
         <Fragment>
             {is_from_user ? (
-                is_answered === false ? (
+                !is_answered ? (
                     <div className={`flex cursor-pointer justify-center`} onClick={handleClick}>
                         <Icons name={isCorrectAnswer ? 'check_fill' : 'check_outline'} />
                     </div>
@@ -53,8 +55,12 @@ const AcceptAnswer = ({
                     <div
                         className="flex cursor-pointer justify-center"
                         onClick={isCorrectAnswer ? handleClick : undefined}
-                        onMouseOver={() => setIsHovered(true)}
-                        onMouseOut={() => setIsHovered(false)}
+                        onMouseOver={() => {
+                            setIsHovered(true)
+                        }}
+                        onMouseOut={() => {
+                            setIsHovered(false)
+                        }}
                     >
                         <Icons
                             name={isCorrectAnswer ? (isHovered ? 'cross_fill' : 'check_fill') : ''}

@@ -9,7 +9,7 @@ type LayoutProps = {
     children: JSX.Element
 }
 
-const RouteWrapper = ({ children }: LayoutProps) => {
+const RouteWrapper = ({ children }: LayoutProps): JSX.Element => {
     const { loading, error, data } = useQuery(GET_AUTHENTICATED_USER)
 
     const setUserID = useBoundStore((state) => state.setUserID)
@@ -35,12 +35,11 @@ const RouteWrapper = ({ children }: LayoutProps) => {
 
     if (loading) return <div className="pt-14">{loadingScreenShow()}</div>
     else if (dataCheckIfNone && errorCheck && !routeIfLoginPathCheck && getUserToken() === '') {
-        router.push('/login')
-        return <></>
+        void router.push('/login')
     } else if (!dataCheckIfNone && routeIfLoginPathCheck && getUserToken() !== '') {
-        router.push('/')
-        return <></>
+        void router.push('/')
     } else return children
+    return <></>
 }
 
 export default RouteWrapper

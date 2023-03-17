@@ -1,10 +1,9 @@
-import Button from '@/components/atoms/Button'
 import { parseHTML } from '../../../helpers/htmlParsing'
 interface AboutMeProps {
     about_me: string
 }
 
-const AboutMe = ({ about_me }: AboutMeProps) => {
+const AboutMe = ({ about_me }: AboutMeProps): JSX.Element => {
     return (
         <div className="align-center flex w-full flex-col gap-4">
             <div className="flex h-12 w-full flex-row items-center">

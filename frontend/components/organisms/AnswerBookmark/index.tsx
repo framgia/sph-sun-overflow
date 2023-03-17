@@ -1,7 +1,6 @@
 import Author from '@/components/molecules/Author'
-import Avatar from '@/components/molecules/Avatar'
 import { parseHTML } from '@/helpers/htmlParsing'
-import { BookmarkType } from '@/pages/users/[slug]'
+import type { BookmarkType } from '@/pages/users/[slug]'
 import Link from 'next/link'
 import QuestionList from '../QuestionList'
 
@@ -23,7 +22,7 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                 tags={question?.tags ?? []}
                 user={question?.user}
                 bookmarkType="Answer"
-                bookmarkAnswerId={bookmarkable!.id}
+                bookmarkAnswerId={bookmarkable?.id}
             />
             <div className="px-10 py-3">
                 <div className="flex w-full flex-col border-l-4 border-primary-gray px-4">
@@ -34,14 +33,18 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                     <div>{parseHTML(bookmarkable?.content)}</div>
                     <div className="flex w-full flex-row justify-between">
                         <Link
-                            href={`/questions/${bookmarkable?.question?.slug}#answer-${bookmarkable?.id}`}
+                            href={`/questions/${bookmarkable?.question?.slug ?? ''}#answer-${
+                                bookmarkable?.id ?? ''
+                            }`}
                             className="text-xs text-blue-600 hover:underline"
                         >
                             View answer
                         </Link>
                         <Author
                             slug={bookmarkable?.user.slug}
-                            author={`${bookmarkable?.user.first_name} ${bookmarkable?.user.last_name}`}
+                            author={`${bookmarkable?.user.first_name ?? ''} ${
+                                bookmarkable?.user.last_name ?? ''
+                            }`}
                             moment={bookmarkable?.humanized_created_at}
                         />
                     </div>

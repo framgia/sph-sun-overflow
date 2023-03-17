@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import { Dialog, Transition } from '@headlessui/react'
-import React, { EventHandler, FormEvent, Fragment, MouseEventHandler } from 'react'
+import React, { Fragment } from 'react'
 
 type ModalProps = {
     title: string
@@ -20,7 +20,7 @@ const Modal = ({
     handleSubmit,
     handleClose,
 }: ModalProps): JSX.Element => {
-    const onClickSubmit = (event: React.MouseEvent) => {
+    const onClickSubmit = (event: React.MouseEvent): void => {
         event.preventDefault()
 
         if (typeof handleSubmit === 'function') {

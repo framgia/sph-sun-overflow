@@ -80,7 +80,7 @@ export type Notifications = {
 
 const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => {
     const unread: NotificationProps[] = notifications.filter(
-        (notification: NotificationProps) => notification.is_read != true
+        (notification: NotificationProps) => !notification.is_read
     )
 
     return (
@@ -122,7 +122,7 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
                             {RenderNotifications(notifications)}
                         </div>
                     )}
-                    {notifications.length == 0 && (
+                    {notifications.length === 0 && (
                         <div>
                             <span className="block p-4 text-center text-sm text-gray-700">
                                 No new notifications
@@ -135,7 +135,7 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
     )
 }
 
-const RenderNotifications = (notifications: NotificationProps[]) => {
+const RenderNotifications = (notifications: NotificationProps[]): JSX.Element[] => {
     const router = useRouter()
     const [updateUserNotification] = useMutation(UPDATE_NOTIFICATION)
 
@@ -154,13 +154,13 @@ const RenderNotifications = (notifications: NotificationProps[]) => {
                             },
                         })
                             .then(() => {
-                                router.push(setLink(n.notifiable))
+                                void router.push(setLink(n.notifiable))
                             })
                             .catch((error: any) => {
                                 throw error
                             })
                     } else {
-                        router.push(setLink(n.notifiable))
+                        void router.push(setLink(n.notifiable))
                     }
                 }}
             >
@@ -180,7 +180,7 @@ const RenderNotifications = (notifications: NotificationProps[]) => {
 const setAvatar = (notifiable: any): JSX.Element => {
     let avatar = ''
 
-    if (notifiable.__typename == 'UserRelation') {
+    if (notifiable.__typename === 'UserRelation') {
         avatar = notifiable.follower.avatar
     } else {
         avatar = notifiable.user.avatar
@@ -203,18 +203,22 @@ const setLink = (notifiable: any): string => {
     let link = ''
     switch (notifiable.__typename) {
         case 'Answer':
-            link = `/questions/${notifiable.question.slug}`
+            link = `/questions/${notifiable.question.slug as string}`
             break
         case 'Comment':
             link = `/questions/${
-                notifiable.commentable.slug ?? notifiable.commentable.question.slug
+                (notifiable.commentable.slug as string) ??
+                (notifiable.commentable.question.slug as string)
             }`
             break
         case 'Vote':
-            link = `/questions/${notifiable.voteable.slug ?? notifiable.voteable.question.slug}`
+            link = `/questions/${
+                (notifiable.voteable.slug as string) ??
+                (notifiable.voteable.question.slug as string)
+            }`
             break
         case 'UserRelation':
-            link = `/users/${notifiable.follower.slug}`
+            link = `/users/${notifiable.follower.slug as string}`
             break
     }
     return link
@@ -222,36 +226,46 @@ const setLink = (notifiable: any): string => {
 
 const setName = (notifiable: any): string => {
     let name = ''
-    if (notifiable.__typename == 'Answer' && notifiable.is_correct) {
-        name = `${notifiable.question.user.first_name} ${notifiable.question.user.last_name} `
-    } else if (notifiable.__typename == 'UserRelation') {
-        name = `${notifiable.follower.first_name} ${notifiable.follower.last_name} `
+    if (notifiable.__typename === 'Answer' && notifiable.is_correct) {
+        name = `${notifiable.question.user.first_name as string} ${
+            notifiable.question.user.last_name as string
+        } `
+    } else if (notifiable.__typename === 'UserRelation') {
+        name = `${notifiable.follower.first_name as string} ${
+            notifiable.follower.last_name as string
+        } `
     } else {
-        name = `${notifiable.user.first_name} ${notifiable.user.last_name} `
+        name = `${notifiable.user.first_name as string} ${notifiable.user.last_name as string} `
     }
     return name
 }
 
 const setDetails = (notifiable: any): string => {
     let details = ''
+    let commentContent: any
+    let voteContent: any
     switch (notifiable.__typename) {
         case 'Answer':
             if (notifiable.is_correct) {
-                details = `accepted your answer to their question: "${notifiable.question.title}".`
+                details = `accepted your answer to their question: "${
+                    notifiable.question.title as string
+                }".`
             } else {
-                details = `posted an answer to your question: "${notifiable.question.title}".`
+                details = `posted an answer to your question: "${
+                    notifiable.question.title as string
+                }".`
             }
             break
         case 'Comment':
-            let commentContent: any = parseHTML(notifiable.commentable.content)
-            details = `commented on your ${notifiable.commentable.__typename}: "${
-                notifiable.commentable.title ?? commentContent.props.children
+            commentContent = parseHTML(notifiable.commentable.content)
+            details = `commented on your ${notifiable.commentable.__typename as string}: "${
+                (notifiable.commentable.title as string) ?? commentContent.props.children
             }".`
             break
         case 'Vote':
-            let voteContent: any = parseHTML(notifiable.voteable.content)
-            details = `voted on your ${notifiable.voteable.__typename}: "${
-                notifiable.voteable.title ?? voteContent.props.children
+            voteContent = parseHTML(notifiable.voteable.content)
+            details = `voted on your ${notifiable.voteable.__typename as string}: "${
+                (notifiable.voteable.title as string) ?? voteContent.props.children
             }".`
             break
         case 'UserRelation':

@@ -6,16 +6,16 @@ import Card from '@/components/templates/Card'
 import { useQuery } from '@apollo/client'
 import { errorNotify } from '../../helpers/toast'
 import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
-import { TagType } from '../questions/[slug]'
+import type { TagType } from '../questions/[slug]'
 import GET_TAGS from '@/helpers/graphql/queries/get_tags'
-import { RefetchType } from '../questions/index'
+import type { RefetchType } from '../questions/index'
 import SortDropdown from '../../components/molecules/SortDropdown/index'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 
-const TagsListPage = () => {
+const TagsListPage = (): JSX.Element => {
     const router = useRouter()
     const [selectedFilter, setSelectedFilter] = useState('Most Popular')
     const [searchKey, setSearchKey] = useState('')
@@ -29,7 +29,7 @@ const TagsListPage = () => {
     })
 
     useEffect(() => {
-        refetch({
+        void refetch({
             first: 6,
             page: 1,
             name: '%%',
@@ -40,17 +40,17 @@ const TagsListPage = () => {
     }, [router, refetch])
 
     if (loading) return loadingScreenShow()
-    if (error) return errorNotify(`Error! ${error}`)
+    if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
     const { data: tags, paginatorInfo } = data.tags
     const tagList: TagType[] = tags
     const pageInfo: PaginatorInfo = paginatorInfo
 
-    const onPageChange = (first: number, page: number) => {
-        refetch({ first, page })
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await refetch({ first, page })
     }
 
-    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
 
         const target = e.target as typeof e.target & {
@@ -62,8 +62,8 @@ const TagsListPage = () => {
         setTerm(target.search.value)
     }
 
-    const refetchHandler = (column: string, order: string) => {
-        refetch({ first: 6, page: 1, name: `%${searchKey}%`, sort: [{ column, order }] })
+    const refetchHandler = async (column: string, order: string): Promise<void> => {
+        await refetch({ first: 6, page: 1, name: `%${searchKey}%`, sort: [{ column, order }] })
     }
 
     const tagFilters: FilterType[][] = [
@@ -71,16 +71,16 @@ const TagsListPage = () => {
             {
                 id: 1,
                 name: 'Most Popular',
-                onClick: () => {
-                    refetchHandler('POPULARITY', 'DESC')
+                onClick: async () => {
+                    await refetchHandler('POPULARITY', 'DESC')
                     setSelectedFilter('Most Popular')
                 },
             },
             {
                 id: 2,
                 name: 'Least Popular',
-                onClick: () => {
-                    refetchHandler('POPULARITY', 'ASC')
+                onClick: async () => {
+                    await refetchHandler('POPULARITY', 'ASC')
                     setSelectedFilter('Least Popular')
                 },
             },
@@ -89,16 +89,16 @@ const TagsListPage = () => {
             {
                 id: 1,
                 name: 'Most Watched',
-                onClick: () => {
-                    refetchHandler('WATCH_COUNT', 'DESC')
+                onClick: async () => {
+                    await refetchHandler('WATCH_COUNT', 'DESC')
                     setSelectedFilter('Most Watched')
                 },
             },
             {
                 id: 2,
                 name: 'Least Watched',
-                onClick: () => {
-                    refetchHandler('WATCH_COUNT', 'ASC')
+                onClick: async () => {
+                    await refetchHandler('WATCH_COUNT', 'ASC')
                     setSelectedFilter('Least Watched')
                 },
             },
@@ -107,23 +107,23 @@ const TagsListPage = () => {
             {
                 id: 1,
                 name: 'Newest First',
-                onClick: () => {
-                    refetchHandler('CREATED_AT', 'ASC')
+                onClick: async () => {
+                    await refetchHandler('CREATED_AT', 'ASC')
                     setSelectedFilter('Newest First')
                 },
             },
             {
                 id: 2,
                 name: 'Oldest First',
-                onClick: () => {
-                    refetchHandler('CREATED_AT', 'DESC')
+                onClick: async () => {
+                    await refetchHandler('CREATED_AT', 'DESC')
                     setSelectedFilter('Oldest First')
                 },
             },
         ],
     ]
 
-    const onChange = (value: string) => {
+    const onChange = (value: string): void => {
         setSearchKey(value)
     }
 

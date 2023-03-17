@@ -12,7 +12,7 @@ interface Teamslug {
     slug: string
 }
 
-const RightSideBar = ({ usage, slug = '' }: TRightSidebarProps) => {
+const RightSideBar = ({ usage, slug = '' }: TRightSidebarProps): JSX.Element => {
     if (usage === 'team') {
         return <MembersSidebar slug={slug} />
     }
@@ -22,7 +22,7 @@ const RightSideBar = ({ usage, slug = '' }: TRightSidebarProps) => {
     return <TagsTeamSidebar />
 }
 
-const TagsTeamSidebar = () => {
+const TagsTeamSidebar = (): JSX.Element => {
     const { data, loading } = useQuery(QTagsTeamSidebar)
     return (
         <div className="flex w-full flex-col">
@@ -31,10 +31,10 @@ const TagsTeamSidebar = () => {
         </div>
     )
 }
-const MembersSidebar = ({ slug }: Teamslug) => {
+const MembersSidebar = ({ slug }: Teamslug): JSX.Element => {
     const { data, loading } = useQuery(QMembersSidebar, {
         variables: {
-            slug: slug,
+            slug,
         },
     })
     return (
@@ -43,8 +43,8 @@ const MembersSidebar = ({ slug }: Teamslug) => {
         </div>
     )
 }
-const TagsSidebar = () => {
-    const { data, loading, error } = useQuery(QTagsSidebar)
+const TagsSidebar = (): JSX.Element => {
+    const { data, loading } = useQuery(QTagsSidebar)
     return (
         <div className="flex w-full flex-col">
             <WatchedTags data={data} loading={loading} />

@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 
-const EditRole = () => {
+const EditRole = (): JSX.Element => {
     return (
         <div>
             <Button usage="toggle-modal">

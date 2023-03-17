@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useBoundStore } from '@/helpers/store'
 import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
-import { AnswerEditType } from '@/pages/questions/[slug]'
+import type { AnswerEditType } from '@/pages/questions/[slug]'
 import UPDATE_ANSWER from '@/helpers/graphql/mutations/update_answer'
 import { useRouter } from 'next/router'
 
@@ -51,24 +51,21 @@ const AnswerForm = ({
         }
     }, [answer.content])
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: FormValues): void => {
         setIsDisableSubmit(true)
         const errorElement = document.querySelector('.ql-container') as HTMLDivElement
 
         if (data.content !== undefined) {
             const pattern = /<img[^>]+>/
             const check_image = pattern.test(data.content)
-            if (
-                data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 &&
-                check_image === false
-            ) {
+            if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 && !check_image) {
                 errorElement.classList.add('error-form-element')
                 setAddAnswerError('No answer Input')
                 setTimeout(() => {
                     setIsDisableSubmit(false)
                 }, 2000)
             } else {
-                const newAnswer = createAnswer({
+                createAnswer({
                     variables: {
                         content: data.content,
                         user_id,
@@ -104,7 +101,7 @@ const AnswerForm = ({
         }
     }
 
-    const onEditSubmit = (data: FormValues) => {
+    const onEditSubmit = (data: FormValues): void => {
         setIsDisableSubmit(true)
         const errorElement = document.querySelector('.ql-container') as HTMLDivElement
 
@@ -112,7 +109,7 @@ const AnswerForm = ({
         const check_image = pattern.test(data.content)
         if (
             data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 &&
-            check_image === false &&
+            !check_image &&
             answer.content === null
         ) {
             errorElement.classList.add('error-form-element')
@@ -121,7 +118,7 @@ const AnswerForm = ({
                 setIsDisableSubmit(false)
             }, 2000)
         } else {
-            const newUpdateAnswer = updateAnswer({
+            updateAnswer({
                 variables: {
                     id: answer.id,
                     content:
@@ -147,7 +144,7 @@ const AnswerForm = ({
             refetchHandler()
 
             onEdit({ id: null, content: null })
-            router.push(`/questions/${slug}`)
+            void router.push(`/questions/${slug}`)
 
             setTimeout(() => {
                 setIsDisableSubmit(false)

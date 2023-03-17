@@ -4,7 +4,7 @@ type LayoutProps = {
     children: JSX.Element
 }
 
-const ProvidersWrapper = ({ children }: LayoutProps) => {
+const ProvidersWrapper = ({ children }: LayoutProps): JSX.Element => {
     return <SessionProvider>{children}</SessionProvider>
 }
 

@@ -65,7 +65,7 @@ const UserDropdown = ({
                             {({ active }) => (
                                 <Link
                                     className={`flex items-center px-4 py-2 text-sm text-gray-700  ${
-                                        active && 'bg-red-100'
+                                        active ? 'bg-red-100' : ''
                                     }`}
                                     href={`/users/${slug}`}
                                 >
@@ -79,10 +79,10 @@ const UserDropdown = ({
                                 <button
                                     onClick={() => {
                                         setUserToken('')
-                                        signOut()
+                                        void signOut()
                                     }}
                                     className={`flex w-full items-center px-4 py-2 text-left text-sm text-gray-700 ${
-                                        active && 'bg-red-100'
+                                        active ? 'bg-red-100' : ''
                                     }`}
                                 >
                                     <HiOutlineLogout className="mr-2" />

@@ -1,10 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { isObjectEmpty } from '@/utils'
-import CommentFormSchema from './schema'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import FormAlert from '../../molecules/FormAlert'
 import Button from '../../atoms/Button'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import CREATE_COMMENT from '@/helpers/graphql/mutations/create_comment'
 import UPDATE_COMMENT from '@/helpers/graphql/mutations/update_comment'
@@ -41,7 +39,6 @@ const CommentForm = ({
     const {
         register,
         handleSubmit,
-        setValue,
         reset,
         formState: { errors },
     } = useForm<FormValues>({
@@ -50,7 +47,7 @@ const CommentForm = ({
         defaultValues: { comment: content },
     })
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: FormValues): void => {
         setIsDisableSubmit(true)
 
         if (data.comment !== undefined) {
@@ -60,11 +57,10 @@ const CommentForm = ({
                 return
             }
 
-            //Update
             if (id) {
                 updateComment({
                     variables: {
-                        id: id,
+                        id,
                         content: data.comment,
                     },
                 })
@@ -84,7 +80,6 @@ const CommentForm = ({
                 return
             }
 
-            //create
             createComment({
                 variables: {
                     content: data.comment,
@@ -117,7 +112,7 @@ const CommentForm = ({
                 <div className="w-full self-center pt-3 pb-2 ">
                     <textarea
                         className={`${
-                            commentError.length > 0 && 'error-form-element'
+                            commentError.length > 0 ? 'error-form-element' : ''
                         } h-32 w-full border-2 border-gray-400 bg-white`}
                         {...register('comment', {})}
                     />

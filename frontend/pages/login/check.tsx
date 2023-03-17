@@ -4,9 +4,9 @@ import SOCIAL_LOGIN from '@/helpers/graphql/mutations/social_login'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { ISession } from '../api/auth/[...nextauth]'
+import type { ISession } from '../api/auth/[...nextauth]'
 
-const LoginCheck = () => {
+const LoginCheck = (): JSX.Element => {
     const { data: session, status } = useSession()
     const router = useRouter()
 
@@ -25,8 +25,8 @@ const LoginCheck = () => {
                 setUserToken(data.socialLogin.access_token)
                 window.location.href = '/questions'
             })
-            .catch((error) => {
-                signOut({
+            .catch(async (error) => {
+                await signOut({
                     callbackUrl: `/login?${
                         error?.message === 'Authentication exception' ? 'unauthorized=true' : ''
                     }`,
@@ -35,8 +35,9 @@ const LoginCheck = () => {
 
         if (loading) return loadingScreenShow()
     } else {
-        router.push('/login')
+        void router.push('/login')
     }
+    return <></>
 }
 
 export default LoginCheck

@@ -1,5 +1,6 @@
-import NextAuth, { Session } from 'next-auth'
+import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import type { Session } from 'next-auth'
 
 export interface ISession extends Session {
     accessToken?: string
@@ -26,8 +27,8 @@ export default NextAuth({
     // Configure one or more authentication providers
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID || '',
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+            clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
             httpOptions: {
                 timeout: 40000,
             },

@@ -19,7 +19,16 @@ type Props = {
     refetchHandler: () => void
 }
 
-const Comment = ({ id, text, author, time, action, userId, slug, refetchHandler }: Props) => {
+const Comment = ({
+    id,
+    text,
+    author,
+    time,
+    action,
+    userId,
+    slug,
+    refetchHandler,
+}: Props): JSX.Element => {
     const [comment, setComment] = useState(false)
     dayjs.extend(relativeTime)
 
@@ -29,7 +38,7 @@ const Comment = ({ id, text, author, time, action, userId, slug, refetchHandler 
         <div className="group flex flex-wrap gap-2 px-2 py-4">
             <span className="mr-4">{text}</span>
             <span>
-                <Link href={`/users/${slug}`} className="text-blue-500 hover:text-blue-400">
+                <Link href={`/users/${slug ?? ''}`} className="text-blue-500 hover:text-blue-400">
                     {author}
                 </Link>
             </span>
@@ -40,7 +49,9 @@ const Comment = ({ id, text, author, time, action, userId, slug, refetchHandler 
                 <div className="invisible ml-2 flex gap-2 group-hover:visible">
                     <span>
                         <div
-                            onClick={() => setComment(!comment)}
+                            onClick={() => {
+                                setComment(!comment)
+                            }}
                             className="cursor-pointer text-blue-500 hover:text-blue-400"
                         >
                             Edit

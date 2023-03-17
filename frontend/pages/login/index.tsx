@@ -33,8 +33,8 @@ const Login: NextPage = () => {
                             <Button
                                 additionalClass="login-btn"
                                 usage="light"
-                                onClick={() =>
-                                    signIn('google', {
+                                onClick={async () =>
+                                    await signIn('google', {
                                         callbackUrl: 'http://localhost:3000/login/check',
                                     })
                                 }

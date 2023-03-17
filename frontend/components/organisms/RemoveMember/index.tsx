@@ -5,7 +5,6 @@ import DELETE_MEMBER from '@/helpers/graphql/mutations/delete_member'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
 type Props = {
     id: number
@@ -18,14 +17,14 @@ const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element =>
     const [isOpenDelete, setIsOpenDelete] = useState(false)
     const [deleteMember] = useMutation(DELETE_MEMBER)
 
-    const closeDelete = () => {
+    const closeDelete = (): void => {
         setIsOpenDelete(!isOpenDelete)
     }
 
-    const onSubmit = () => {
+    const onSubmit = (): void => {
         deleteMember({
             variables: {
-                id: id,
+                id,
             },
         })
             .then(() => {
@@ -40,7 +39,12 @@ const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element =>
 
     return (
         <div>
-            <Button usage="toggle-modal" onClick={() => setIsOpenDelete(true)}>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setIsOpenDelete(true)
+                }}
+            >
                 <Icons name="table_delete" />
             </Button>
             {isOpenDelete && (

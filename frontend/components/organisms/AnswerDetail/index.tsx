@@ -7,13 +7,12 @@ import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import AcceptAnswer from '@/components/molecules/AcceptAnswer'
 import { parseHTML } from '@/helpers/htmlParsing'
-import { UserType, CommentType, AnswerEditType } from '../../../pages/questions/[slug]'
+import type { UserType, CommentType, AnswerEditType } from '../../../pages/questions/[slug]'
 import Comment from '@/components/organisms/Comment'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { useMutation } from '@apollo/client'
 import { errorNotify } from '../../../helpers/toast'
 import CommentForm from '../CommentForm'
-import React from 'react'
 
 type AnswerDetailProps = {
     id: number
@@ -55,12 +54,12 @@ const Answer = ({
     const [upsertVote] = useMutation(UPSERT_VOTE)
     const [comment, setComment] = useState(false)
 
-    const voteHandler = (value: number) => {
+    const voteHandler = async (value: number): Promise<void> => {
         if (answer_is_from_user) {
             errorNotify("You can't vote for your own post!")
             return
         }
-        upsertVote({ variables: { value: value, voteable_id: id, voteable_type: 'Answer' } })
+        await upsertVote({ variables: { value, voteable_id: id, voteable_type: 'Answer' } })
         refetchHandler()
     }
 
@@ -102,7 +101,9 @@ const Answer = ({
                                         <Link
                                             href="#answer-form"
                                             className="flex gap-1 decoration-red-500 underline-offset-2 hover:underline"
-                                            onClick={() => onEdit({ id, content })}
+                                            onClick={() => {
+                                                onEdit({ id, content })
+                                            }}
                                         >
                                             <Icons name={'edit'} />
                                             <span className="text-xs text-primary-red">
@@ -136,10 +137,12 @@ const Answer = ({
                                 key={comment.id}
                                 id={comment.id}
                                 text={comment.content}
-                                author={`${comment.user.first_name} ${comment.user.last_name}`}
+                                author={`${comment.user.first_name ?? ''} ${
+                                    comment.user.last_name ?? ''
+                                }`}
                                 time={comment.updated_at}
                                 action={
-                                    comment.updated_at == comment.created_at
+                                    comment.updated_at === comment.created_at
                                         ? 'added a'
                                         : 'updated his/her'
                                 }
@@ -153,7 +156,9 @@ const Answer = ({
                     <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
                         <div
                             className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"
-                            onClick={() => setComment(!comment)}
+                            onClick={() => {
+                                setComment(!comment)
+                            }}
                         >
                             Add comment
                         </div>

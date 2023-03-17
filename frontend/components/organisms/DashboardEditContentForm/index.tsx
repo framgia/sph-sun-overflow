@@ -22,7 +22,7 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
 
     const [updateTeamDashboard] = useMutation(UPDATE_TEAM_DASHBOARD)
 
-    const { register, setValue, handleSubmit, control } = useForm<DashboardContentFormValues>({
+    const { handleSubmit, control } = useForm<DashboardContentFormValues>({
         defaultValues: {
             content: content ?? '',
         },
@@ -30,7 +30,7 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
         reValidateMode: 'onSubmit',
     })
 
-    const onSubmit = async (data: DashboardContentFormValues) => {
+    const onSubmit = async (data: DashboardContentFormValues): Promise<void> => {
         const cleanContent = data.content.replace(/<\/?[^>]+(>|$)/g, '')
         if (cleanContent.length <= 0) {
             setInputError({ ...inputError, content: 'Content must not be empty' })

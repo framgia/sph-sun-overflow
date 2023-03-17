@@ -3,11 +3,12 @@ import Icons from '@/components/atoms/Icons'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import UPDATE_USER from '@/helpers/graphql/mutations/update_user'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { ProfileType } from '@/pages/users/[slug]'
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useMutation } from '@apollo/client'
+import type { ProfileType } from '@/pages/users/[slug]'
+
 type Props = {
     user_id: number
     profile: ProfileType
@@ -34,13 +35,14 @@ const ProfileInfoEdit = ({
 
     const [previewImage, setPreviewImage] = useState('')
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [inputError, setInputError] = useState({
         first_name: false,
         last_name: false,
         about_me: false,
     })
 
-    const onChangePreview = (event: React.ChangeEvent) => {
+    const onChangePreview = (event: React.ChangeEvent): void => {
         const target = event?.target as HTMLInputElement
         const file = target.files?.[0]
 
@@ -73,8 +75,8 @@ const ProfileInfoEdit = ({
         }
     }, [setValue, profile.about_me])
 
-    const convertBase64 = (file: any) => {
-        return new Promise((resolve, reject) => {
+    const convertBase64 = async (file: any): Promise<unknown> => {
+        return await new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file)
 
@@ -88,7 +90,7 @@ const ProfileInfoEdit = ({
         })
     }
 
-    const onSubmit = async (data: ProfileFormValues) => {
+    const onSubmit = async (data: ProfileFormValues): Promise<void> => {
         const avatar_image = data.avatar[0] !== undefined ? await convertBase64(data.avatar[0]) : ''
 
         if (
@@ -99,7 +101,6 @@ const ProfileInfoEdit = ({
         ) {
             errorNotify('Profile Not Updated!')
             profileRefetchHandler()
-            return
         } else {
             updateUser({
                 variables: {
@@ -122,7 +123,7 @@ const ProfileInfoEdit = ({
         }
     }
 
-    const onCancelButton = (event: React.MouseEvent) => {
+    const onCancelButton = (event: React.MouseEvent): void => {
         event.preventDefault()
         setValue('avatar', '')
         setPreviewImage('')

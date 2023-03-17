@@ -2,11 +2,11 @@ import QuestionForm from '@/components/organisms/QuestionForm'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-const QuestionFormPage = () => {
+const QuestionFormPage = (): JSX.Element => {
     let path
     const router = useRouter()
     if (router.asPath === '/questions/add') path = '/questions'
-    else path = `/teams/${router.query.prev}`
+    else path = `/teams/${router.query.prev as string}`
 
     return (
         <div className="flex w-full flex-col content-center justify-center ">

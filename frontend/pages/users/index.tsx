@@ -8,9 +8,9 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { IUser } from '@/components/molecules/UserTab'
 import { useRouter } from 'next/router'
-import { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import type { IUser } from '@/components/molecules/UserTab'
+import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 
 type Role = {
     id: number
@@ -24,7 +24,7 @@ type RefetchType = {
     sort?: { reputation?: string | null }
 }
 
-const UsersPage = () => {
+const UsersPage = (): JSX.Element => {
     const router = useRouter()
     const initialRole: { id: number | null; label: string } = { id: null, label: 'Sort by Role' }
     const initialScore: { sort: string | null; label: string } = {
@@ -54,7 +54,7 @@ const UsersPage = () => {
     useEffect(() => {
         setSearchKey('')
         setIsSearchResult(false)
-        userQuery.refetch({
+        void userQuery.refetch({
             first: 12,
             page: 1,
             filter: { keyword: '', role_id: null },
@@ -63,10 +63,12 @@ const UsersPage = () => {
     }, [router, userQuery.refetch])
 
     if (rolesQuery.loading || userQuery.loading) return loadingScreenShow()
-    if (rolesQuery.error) return errorNotify(`Error! ${rolesQuery.error}`)
-    if (userQuery.error) return errorNotify(`Error! ${userQuery.error}`)
+    if (rolesQuery.error)
+        return <span>{errorNotify(`Error! ${rolesQuery.error?.message ?? ''}`)}</span>
+    if (userQuery.error)
+        return <span>{errorNotify(`Error! ${userQuery.error?.message ?? ''}`)}</span>
 
-    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         setSelectedRole(initialRole)
         setSelectedScore(initialScore)
 
@@ -90,8 +92,8 @@ const UsersPage = () => {
 
     const roleFilters: FilterType[] = rolesQuery.data.roles.map((role: Role) => ({
         ...role,
-        onClick: () => {
-            userQuery.refetch({
+        onClick: async () => {
+            await userQuery.refetch({
                 first: 12,
                 page: 1,
                 filter: { keyword: searchKey, role_id: role.id },
@@ -105,37 +107,33 @@ const UsersPage = () => {
         {
             id: 1,
             name: 'Most Score',
-            onClick: () => {
-                {
-                    userQuery.refetch({
-                        first: 12,
-                        page: 1,
-                        filter: {
-                            keyword: searchKey,
-                            role_id: selectedRole.id,
-                        },
-                        sort: { reputation: 'DESC' },
-                    })
-                    setSelectedScore({ sort: 'DESC', label: 'Most Score' })
-                }
+            onClick: async () => {
+                await userQuery.refetch({
+                    first: 12,
+                    page: 1,
+                    filter: {
+                        keyword: searchKey,
+                        role_id: selectedRole.id,
+                    },
+                    sort: { reputation: 'DESC' },
+                })
+                setSelectedScore({ sort: 'DESC', label: 'Most Score' })
             },
         },
         {
             id: 2,
             name: 'Least Score',
-            onClick: () => {
-                {
-                    userQuery.refetch({
-                        first: 12,
-                        page: 1,
-                        filter: {
-                            keyword: searchKey,
-                            role_id: selectedRole.id,
-                        },
-                        sort: { reputation: 'ASC' },
-                    })
-                    setSelectedScore({ sort: 'ASC', label: 'Least Score' })
-                }
+            onClick: async () => {
+                await userQuery.refetch({
+                    first: 12,
+                    page: 1,
+                    filter: {
+                        keyword: searchKey,
+                        role_id: selectedRole.id,
+                    },
+                    sort: { reputation: 'ASC' },
+                })
+                setSelectedScore({ sort: 'ASC', label: 'Least Score' })
             },
         },
     ]
@@ -143,8 +141,8 @@ const UsersPage = () => {
     const userList: IUser[] = userQuery.data.users.data
     const pageInfo: PaginatorInfo = userQuery.data.users.paginatorInfo
 
-    const onPageChange = (first: number, page: number) => {
-        userQuery.refetch({ first, page })
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await userQuery.refetch({ first, page })
     }
 
     const renderSearchResultHeader = (): JSX.Element => {
@@ -159,7 +157,7 @@ const UsersPage = () => {
         )
     }
 
-    const onChange = (value: string) => {
+    const onChange = (value: string): void => {
         setSearchKey(value)
     }
 

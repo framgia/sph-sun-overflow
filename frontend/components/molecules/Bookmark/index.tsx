@@ -24,16 +24,18 @@ const Bookmark = ({
 
     const [isBookmarked, setIsBookmarked] = useState(is_bookmarked)
 
-    const handleClick = () => {
+    const handleClick = (): void => {
         toggleBookmark({
             variables: {
                 bookmarkable_id,
                 bookmarkable_type,
             },
-        }).then((data: any) => {
-            setIsBookmarked(!isBookmarked)
-            successNotify(data.data.toggleBookmark)
         })
+            .then((data: any) => {
+                setIsBookmarked(!isBookmarked)
+                successNotify(data.data.toggleBookmark)
+            })
+            .catch(() => {})
 
         refetchHandler()
     }
@@ -42,7 +44,9 @@ const Bookmark = ({
         <button
             type="button"
             className="flex cursor-pointer justify-center"
-            onClick={() => handleClick()}
+            onClick={() => {
+                handleClick()
+            }}
         >
             <Icons name={isBookmarked ? 'bookmark_fill' : 'bookmark_outline'} />
         </button>

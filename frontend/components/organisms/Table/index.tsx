@@ -1,14 +1,10 @@
-import { parseHTML } from '@/helpers/htmlParsing'
-
 export type ColumnType = {
     key: string
     title: string
     width?: number
 }
 
-export type DataType = {
-    [key: string]: string | number | JSX.Element
-}
+export type DataType = Record<string, string | number | JSX.Element>
 
 type ClickableType = {
     column: string extends 'actions' ? never : string
@@ -78,7 +74,7 @@ const Table = ({
                                         return (
                                             <tr key={key} className=" hover:bg-light-gray">
                                                 {columns.map((column, key) => {
-                                                    let clickable = clickableArr.find(
+                                                    const clickable = clickableArr.find(
                                                         (item) => item.column === column.key
                                                     )
                                                     if (column.key === 'action' && actions) {
@@ -100,7 +96,7 @@ const Table = ({
                                                                 ? renderClickable(
                                                                       data[column.key],
                                                                       clickable,
-                                                                      data['slug'] as string
+                                                                      data.slug as string
                                                                   )
                                                                 : data[column.key]}
                                                         </td>

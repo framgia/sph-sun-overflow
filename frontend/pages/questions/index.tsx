@@ -11,11 +11,11 @@ export type RefetchType = {
     page: number
     name?: string
     filter?: { keyword?: string; answered?: boolean; tag?: string; team?: string }
-    orderBy?: { column: string; order: string }[]
-    sort?: { column: string; order: string }[]
+    orderBy?: Array<{ column: string; order: string }>
+    sort?: Array<{ column: string; order: string }>
 }
 
-const QuestionsPage = () => {
+const QuestionsPage = (): JSX.Element => {
     const router = useRouter()
     const [searchKey, setSearchKey] = useState('')
 
@@ -36,10 +36,12 @@ const QuestionsPage = () => {
             filter: { keyword: router.query.search as string, answered: true, tag: '' },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         })
+            .then(() => {})
+            .catch(() => {})
     }, [router, searchKey, refetch])
 
     if (loading) return loadingScreenShow()
-    if (error) return errorNotify(`Error! ${error}`)
+    if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
     return (
         <QuestionsPageLayout

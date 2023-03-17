@@ -27,7 +27,9 @@ const SearchInput = ({ placeholder, usage = 'Default', value, onChange }: Props)
                 type="text"
                 name="search"
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e) => {
+                    onChange(e.target.value)
+                }}
                 className={`${inputStyle[usage]} pr-10`}
                 placeholder={placeholder}
                 autoComplete="off"

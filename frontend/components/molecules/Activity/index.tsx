@@ -28,6 +28,7 @@ const Activity = ({
         Question: `/questions/${slug}`,
         Answer: `/questions/${slug}#answer-${id}`,
     }
+    const active = is_answered ?? is_correct
 
     return (
         <div className="flex h-11 flex-row justify-between">
@@ -35,9 +36,7 @@ const Activity = ({
                 <div className="box-border min-w-[56px] p-2">
                     <div
                         className={`box-border h-full w-full border-2 text-center ${
-                            is_answered || is_correct
-                                ? 'border-green-600 bg-green-600 text-white'
-                                : 'border-black'
+                            active ? 'border-green-600 bg-green-600 text-white' : 'border-black'
                         }`}
                     >
                         {votes}

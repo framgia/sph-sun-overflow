@@ -19,22 +19,22 @@ interface MembersSidebarProps {
     loading: boolean
     data: {
         team: {
-            members: {
+            members: Array<{
                 teamRole: { name: string }
                 user: IUser
-            }[]
+            }>
         }
     }
 }
 
-const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
+const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element => {
     const router = useRouter()
-    const usePath = (path: string) => `${router.asPath}${path}`
+    const usePath = (path: string): string => `${router.asPath}${path}`
     const [members, setMembers] = useState<IUser[]>([])
 
     const extractMembers = (): IUser[] => {
         let tempUser
-        let membersList = Array.from(
+        const membersList = Array.from(
             data.team.members.map((memberWrapper) => {
                 tempUser = Object.create(memberWrapper.user)
                 tempUser.role = memberWrapper.teamRole
@@ -65,7 +65,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps) => {
                 )}
             </div>
 
-            {members.length == 0 ? (
+            {members.length === 0 ? (
                 <div className="tags no-scrollbar flex  flex-wrap overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
                     <div className="w-full py-4 text-center text-xl font-medium">
                         No Other Members

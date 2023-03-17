@@ -2,7 +2,7 @@ interface StackedUsersProps {
     images: string[]
 }
 
-const StackedUsers = ({ images }: StackedUsersProps) => {
+const StackedUsers = ({ images }: StackedUsersProps): JSX.Element => {
     if (images.length === 0) {
         return <div className="flex">No Members yet</div>
     }

@@ -8,17 +8,17 @@ type SidebarButtonProps = {
     IconName: string
     Text: string
     url: string
-    subMenu?: {
+    subMenu?: Array<{
         IconName: string
         Text: string
         url: string
-    }[]
+    }>
 }
 
 const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): any => {
     const router = useRouter()
 
-    const isSelected = (index: number, urlString: string) => {
+    const isSelected = (index: number, urlString: string): boolean => {
         const urlSplit = router.pathname.split('/')
 
         return urlString.includes(urlSplit[index])

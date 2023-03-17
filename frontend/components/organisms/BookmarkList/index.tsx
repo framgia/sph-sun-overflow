@@ -1,6 +1,6 @@
-import { BookmarkType } from '@/pages/users/[slug]'
 import AnswerBookmark from '../AnswerBookmark'
 import QuestionList from '../QuestionList'
+import type { BookmarkType } from '@/pages/users/[slug]'
 
 const BookmarkList = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
     switch (bookmarkable?.__typename) {

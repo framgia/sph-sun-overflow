@@ -1,6 +1,6 @@
-import { OptionType } from '@/components/molecules/Dropdown'
 import EditMember from '../EditMember'
 import RemoveMember from '../RemoveMember'
+import type { OptionType } from '@/components/molecules/Dropdown'
 
 type Props = {
     id: number

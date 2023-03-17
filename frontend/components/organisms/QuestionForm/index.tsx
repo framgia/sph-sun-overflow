@@ -2,12 +2,12 @@ import Button from '@/components/atoms/Button'
 import FormAlert from '@/components/molecules/FormAlert'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import SortDropdown from '@/components/molecules/SortDropdown'
-import { FilterType } from '@/components/templates/QuestionsPageLayout'
+import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
 import UPDATE_QUESTION from '@/helpers/graphql/mutations/update_question'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { TeamType } from '@/pages/questions/[slug]'
+import type { TeamType } from '@/pages/questions/[slug]'
 import { isObjectEmpty } from '@/utils'
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -15,7 +15,8 @@ import isEqual from 'lodash/isEqual'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import TagsInput, { ITag } from '../../molecules/TagsInput'
+import TagsInput from '../../molecules/TagsInput'
+import type { ITag } from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
 export type FormValues = {
     title: string
@@ -55,7 +56,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     let buttonText = 'Post Question'
     let formTitle = 'Post a Question'
     let successMessage = 'Question Added Successfully'
-    let errorMessage = 'Question Not Updated'
+    const errorMessage = 'Question Not Updated'
     if (router.query.slug) {
         buttonText = 'Save Edits'
         formTitle = 'Edit Question'
@@ -67,13 +68,12 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         handleSubmit,
         control,
         setValue,
-        watch,
         formState: { errors },
     } = useForm<FormValues>({
         defaultValues: {
             title: title ? String(title) : '',
             description: content ? String(content) : '',
-            tags: tags ? tags : [],
+            tags: tags ?? [],
             is_public,
             team_id: team,
         },
@@ -84,7 +84,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
 
     let initial_team_name
     initial_team_name = team ? team.name : ''
-    initial_team_name = initial_team_name ? initial_team_name : router.query.team ?? ''
+    initial_team_name = initial_team_name || (router.query.team ?? '')
 
     const [isDisableSubmit, setIsDisableSubmit] = useState(false)
 
@@ -94,17 +94,17 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
 
     const tempTeams = useBoundStore.getState().teams
 
-    const transformTeams = () => {
-        let teamFilters = tempTeams.map(({ team: { id, name } }) => {
+    const transformTeams = (): FilterType[] => {
+        const teamFilters: FilterType[] = tempTeams.map(({ team: { id, name } }) => {
             return {
                 id,
                 name,
                 onClick: () => {
-                    setValue('team_id', { id: id, name: name })
+                    setValue('team_id', { id, name })
                     setValue('is_public', true)
                     setSelectedFilter(name)
                 },
-            } as FilterType
+            }
         })
 
         teamFilters.unshift({
@@ -120,14 +120,14 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         return teamFilters
     }
 
-    const validateChanges = (data: FormValues) => {
-        if (data.title != initialState?.title) {
+    const validateChanges = (data: FormValues): boolean => {
+        if (data.title !== initialState?.title) {
             return false
         }
         if (data.description !== initialState?.content) {
             return false
         }
-        if (data.is_public != initialState?.is_public) {
+        if (data.is_public !== initialState?.is_public) {
             return false
         }
         if (data?.team_id?.id !== initialState?.team?.id) {
@@ -144,12 +144,12 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         return true
     }
 
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = async (data: FormValues): Promise<void> => {
         setIsDisableSubmit(true)
         const tags = data.tags.map((tag) => tag.id)
 
         if (initialState?.slug && validateChanges(data)) {
-            router.replace(`/questions/${initialState.slug}`)
+            await router.replace(`/questions/${initialState.slug}`)
             errorNotify(errorMessage)
             return
         }
@@ -158,7 +158,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         if (id) {
             newQuestion = updateQuestion({
                 variables: {
-                    id: id,
+                    id,
                     title: data.title,
                     content: data.description,
                     is_public: data.is_public,
@@ -168,7 +168,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
             })
         } else {
             let team
-            let status = !data.team_id ? true : data.is_public
+            const status = !data.team_id ? true : data.is_public
             if (router.query.id) {
                 team = Number(router.query.id)
             } else {
@@ -187,26 +187,28 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
 
         successNotify(successMessage)
 
-        newQuestion.then((data: any) => {
-            let slug
-            if (id) {
-                slug = data.data.updateQuestion.slug
-            } else {
-                slug = data.data.createQuestion.slug
-            }
-
-            if (router.query.prev === undefined) {
-                if (initialState?.slug !== undefined) {
-                    router.push(
-                        String(router.asPath).replace(`${initialState?.slug}/edit`, `${slug}`)
-                    )
+        newQuestion
+            .then(async (data) => {
+                let slug: string
+                if (id) {
+                    slug = data.data.updateQuestion.slug
                 } else {
-                    router.push(String(router.asPath).replace(`add`, `${slug}`))
+                    slug = data.data.createQuestion.slug
                 }
-            } else {
-                router.push(`/teams/${router.query.prev}/question/${slug}`)
-            }
-        })
+
+                if (router.query.prev === undefined) {
+                    if (initialState?.slug !== undefined) {
+                        await router.push(
+                            String(router.asPath).replace(`${initialState?.slug}/edit`, `${slug}`)
+                        )
+                    } else {
+                        await router.push(String(router.asPath).replace(`add`, `${slug}`))
+                    }
+                } else {
+                    await router.push(`/teams/${router.query.prev as string}/question/${slug}`)
+                }
+            })
+            .catch(() => {})
 
         setTimeout(() => {
             setIsDisableSubmit(false)

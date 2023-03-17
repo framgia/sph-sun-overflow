@@ -6,17 +6,15 @@ import {
     HiSearch,
     HiX,
     HiTrash,
-} from 'react-icons/hi'
-import { HiCheck } from 'react-icons/hi2'
-import { IoMdArrowDropup, IoMdArrowDropdown, IoMdCheckmark } from 'react-icons/io'
-import { MdOutlineModeEditOutline, MdModeEditOutline } from 'react-icons/md'
-import { FaTrashAlt, FaLockOpen, FaLock } from 'react-icons/fa'
-import {
     HiChevronDoubleLeft,
     HiChevronDoubleRight,
     HiChevronLeft,
     HiChevronRight,
 } from 'react-icons/hi'
+import { HiCheck } from 'react-icons/hi2'
+import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io'
+import { MdOutlineModeEditOutline, MdModeEditOutline } from 'react-icons/md'
+import { FaLockOpen, FaLock } from 'react-icons/fa'
 
 type IconsProps = {
     name: string
@@ -24,7 +22,7 @@ type IconsProps = {
     additionalClass?: string
 }
 
-const Icons = ({ name, size = '20', additionalClass }: IconsProps): JSX.Element => {
+const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Element => {
     switch (name) {
         case 'table_edit':
             return (

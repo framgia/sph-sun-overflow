@@ -4,11 +4,11 @@ import AnswerForm from '@/components/organisms/AnswerForm'
 import Comment from '@/components/organisms/Comment'
 import CommentForm from '@/components/organisms/CommentForm'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
-import { FilterType } from '@/components/templates/QuestionsPageLayout'
+import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
-import { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
+import type { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -17,10 +17,10 @@ import { Fragment, useState } from 'react'
 type RefetchType = {
     slug?: string
     shouldAddViewCount: boolean
-    answerSort?: { column: string; order: string }[]
+    answerSort?: Array<{ column: string; order: string }>
 }
 
-const QuestionDetailPage = () => {
+const QuestionDetailPage = (): JSX.Element => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
@@ -39,14 +39,14 @@ const QuestionDetailPage = () => {
 
     if (loading) return loadingScreenShow()
     if (error) {
-        errorNotify(`Error! ${error}`)
-        router.push(`/teams/${router.query.slug}`)
+        errorNotify(`Error! ${error.message}`)
+        void router.push(`/teams/${router.query.slug as string}`)
         return <></>
     }
     const question: QuestionType = data.question
 
-    const refetchHandler = () => {
-        refetch({ shouldAddViewCount: false })
+    const refetchHandler = (): void => {
+        void refetch({ shouldAddViewCount: false })
     }
 
     const answerFilters: FilterType[][] = [
@@ -55,7 +55,7 @@ const QuestionDetailPage = () => {
                 id: 1,
                 name: 'Highest Score',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'VOTES', order: 'DESC' }],
                     })
@@ -66,7 +66,7 @@ const QuestionDetailPage = () => {
                 id: 2,
                 name: 'Lowest Score',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'VOTES', order: 'ASC' }],
                     })
@@ -79,7 +79,7 @@ const QuestionDetailPage = () => {
                 id: 3,
                 name: 'Most Recent',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'CREATED_AT', order: 'DESC' }],
                     })
@@ -90,7 +90,7 @@ const QuestionDetailPage = () => {
                 id: 2,
                 name: 'Least Recent',
                 onClick: () => {
-                    refetch({
+                    void refetch({
                         shouldAddViewCount: false,
                         answerSort: [{ column: 'CREATED_AT', order: 'ASC' }],
                     })
@@ -103,7 +103,7 @@ const QuestionDetailPage = () => {
     return (
         <div className="flex w-full flex-col gap-3 pt-[50px]">
             <div className="px-6 text-xl text-primary-gray">
-                <Link href={`/teams/${router.query.slug}`}>{'< Go Back'}</Link>
+                <Link href={`/teams/${router.query.slug as string}`}>{'< Go Back'}</Link>
             </div>
             <div className="flex w-full flex-col gap-3 divide-primary-gray  pb-8 pr-52 pl-16">
                 <div className="flex flex-col gap-3">
@@ -133,10 +133,12 @@ const QuestionDetailPage = () => {
                                     key={comment.id}
                                     id={comment.id}
                                     text={comment.content}
-                                    author={`${comment.user.first_name} ${comment.user.last_name}`}
+                                    author={`${comment.user.first_name ?? ''} ${
+                                        comment.user.last_name ?? ''
+                                    }`}
                                     time={comment.updated_at}
                                     action={
-                                        comment.updated_at == comment.created_at
+                                        comment.updated_at === comment.created_at
                                             ? 'added a'
                                             : 'updated his/her'
                                     }
@@ -148,7 +150,9 @@ const QuestionDetailPage = () => {
                         <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
                             <div
                                 className="w-auto cursor-pointer px-2 text-blue-500 hover:text-blue-400"
-                                onClick={() => setComment(!comment)}
+                                onClick={() => {
+                                    setComment(!comment)
+                                }}
                             >
                                 Add comment
                             </div>

@@ -1,7 +1,7 @@
-import { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
-import { BookmarkType } from '@/pages/users/[slug]'
 import BookmarkList from '../BookmarkList'
 import Paginate from '../Paginate'
+import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import type { BookmarkType } from '@/pages/users/[slug]'
 
 type Props = {
     bookmarks: BookmarkType[]
@@ -11,7 +11,7 @@ type Props = {
 
 const BookmarkTabContent = ({ bookmarks, pageInfo, onPageChange }: Props): JSX.Element => {
     return (
-        <div className={`flex w-full flex-col ${bookmarks.length > 0 && 'pr-52'}`}>
+        <div className={`flex w-full flex-col ${bookmarks.length > 0 ? 'pr-52' : ''}`}>
             <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray pl-3">
                 {bookmarks.length > 0 ? (
                     bookmarks.map((bookmark, index) => (
