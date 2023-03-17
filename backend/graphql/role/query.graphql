@@ -1,7 +1,19 @@
 extend type Query {
-    role(id: ID @eq): Role @find
-    roles: [Role!]! @all
+    role(slug: String! @eq): Role
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "view-role")
+        @find
+    roles: [Role!]!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "view-role")
+        @all
 
-    permission(id: ID @eq): Permission @find
-    permissions: [Permission!]! @all
+    permission(id: ID @eq): Permission
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "view-role")
+        @find
+    permissions: [Permission!]!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "view-role")
+        @all
 }
