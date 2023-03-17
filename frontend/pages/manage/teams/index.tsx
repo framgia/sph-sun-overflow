@@ -109,7 +109,7 @@ const AdminTeams = (): JSX.Element => {
             column: 'name',
             onClick: (slug: string): void => {
                 void router.push({
-                    pathname: '/admin/teams/[slug]',
+                    pathname: '/manage/teams/[slug]',
                     query: { slug },
                 })
             },
