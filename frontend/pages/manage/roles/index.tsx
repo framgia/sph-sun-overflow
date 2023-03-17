@@ -52,7 +52,7 @@ const RolesPage = (): JSX.Element => {
 
     if (loading) return loadingScreenShow()
     if (error) {
-        errorNotify(`Error! ${error}`)
+        errorNotify(`Error! ${error.message}`)
         return <></>
     }
 
@@ -71,8 +71,8 @@ const RolesPage = (): JSX.Element => {
         return <RolesActions />
     }
 
-    const onPageChange = (first: number, page: number): void => {
-        refetch({ first, page })
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await refetch({ first, page })
     }
 
     return (
