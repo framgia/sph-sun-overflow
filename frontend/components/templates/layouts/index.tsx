@@ -20,6 +20,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         '/manage/teams/[slug]',
         '/manage/teams',
         '/manage/roles',
+        '/manage/tags',
     ]
 
     const routeIfLoginPathCheck = router.asPath.includes('login')
