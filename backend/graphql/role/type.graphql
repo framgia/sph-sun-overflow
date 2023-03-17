@@ -6,6 +6,7 @@ type Role {
     created_at: String!
     updated_at: String
     permissions: [Permission!]! @belongsToMany
+    users: [User]! @hasMany
 }
 
 type Permission {

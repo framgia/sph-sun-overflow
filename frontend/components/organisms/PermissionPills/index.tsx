@@ -6,7 +6,7 @@ type Props = {
 
 const PermissionPills = ({ permissions }: Props): JSX.Element => {
     return (
-        <div className="flex w-auto flex-row gap-1">
+        <div className="flex flex-wrap justify-center gap-1">
             {permissions.map((permission) => {
                 return <PermissionPill key={permission.id}>{permission.name}</PermissionPill>
             })}

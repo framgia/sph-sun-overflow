@@ -4,7 +4,11 @@ import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import GET_ROLES_PAGINATE from '@/helpers/graphql/queries/get_roles_paginate'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
 import type { UserType } from '@/pages/questions/[slug]'
+import { useQuery } from '@apollo/client'
 
 const columns: ColumnType[] = [
     {
@@ -20,7 +24,7 @@ const columns: ColumnType[] = [
         key: 'users',
     },
     {
-        title: 'Action',
+        title: '',
         key: 'action',
         width: 20,
     },
@@ -34,96 +38,23 @@ type RolesType = {
 }
 
 const RolesPage = (): JSX.Element => {
-    const roles: RolesType[] = [
-        {
-            id: 1,
-            name: 'Admin',
-            permissions: [
-                {
-                    id: 1,
-                    name: 'Add Role',
-                },
-                {
-                    id: 2,
-                    name: 'Delete Role',
-                },
-                {
-                    id: 3,
-                    name: 'Permission 3',
-                },
-            ],
-            users: [
-                {
-                    id: 1,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-                {
-                    id: 2,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-                {
-                    id: 3,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-            ],
+    const {
+        data: { rolesPaginate: { data: roles = {}, paginatorInfo = {} } = {} } = {},
+        loading,
+        error,
+        refetch,
+    } = useQuery(GET_ROLES_PAGINATE, {
+        variables: {
+            first: 10,
+            page: 1,
         },
-        {
-            id: 3,
-            name: 'Admin 2',
-            permissions: [
-                {
-                    id: 3,
-                    name: 'Permission 3',
-                },
-            ],
-            users: [
-                {
-                    id: 1,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-                {
-                    id: 2,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-            ],
-        },
-        {
-            id: 2,
-            name: 'Admin 3',
-            permissions: [
-                {
-                    id: 2,
-                    name: 'Delete Role',
-                },
-                {
-                    id: 3,
-                    name: 'Permission 3',
-                },
-            ],
-            users: [
-                {
-                    id: 1,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-                {
-                    id: 2,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-                {
-                    id: 3,
-                    first_name: 'User1',
-                    last_name: 'User1',
-                },
-            ],
-        },
-    ]
+    })
+
+    if (loading) return loadingScreenShow()
+    if (error) {
+        errorNotify(`Error! ${error.message}`)
+        return <></>
+    }
 
     const getRolesDataTable = (roles: RolesType[]): DataType[] => {
         return roles.map((role): DataType => {
@@ -140,15 +71,9 @@ const RolesPage = (): JSX.Element => {
         return <RolesActions />
     }
 
-    const paginatorInfo = {
-        currentPage: 1,
-        lastPage: 2,
-        first: 10,
-        page: 1,
-        hasMorePages: true,
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await refetch({ first, page })
     }
-
-    const onPageChange = (first: number, page: number): void => {}
 
     return (
         <div className="flex w-full flex-col gap-4 p-8">

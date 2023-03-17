@@ -4,7 +4,7 @@ type Props = {
 
 const PermissionPill = ({ children }: Props): JSX.Element => {
     return (
-        <div className="flex min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none">
+        <div className="flex w-fit min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none">
             <span>{children}</span>
         </div>
     )
