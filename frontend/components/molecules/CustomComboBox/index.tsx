@@ -2,7 +2,6 @@ import { Combobox, Transition } from '@headlessui/react'
 import type { Dispatch, SetStateAction } from 'react'
 import React, { Fragment, useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
-
 export interface ITag {
     id: number
     name: string
@@ -49,7 +48,7 @@ const CustomCombobox = ({
                         id="comboBoxInput"
                         placeholder={placeholder}
                         className={`w-0 grow text-sm leading-5 text-gray-900 focus:ring-0 ${extraInputClasses}`}
-                        onChange={(event) => {
+                        onChange={(event): void => {
                             setQueryText(event.target.value)
                         }}
                         onKeyDown={(e: React.KeyboardEvent): void => {
