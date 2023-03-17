@@ -4,10 +4,10 @@ import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
-import type { UserType } from '@/pages/questions/[slug]'
 import GET_ROLES_PAGINATE from '@/helpers/graphql/queries/get_roles_paginate'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import type { UserType } from '@/pages/questions/[slug]'
 import { useQuery } from '@apollo/client'
 
 const columns: ColumnType[] = [
