@@ -18,18 +18,21 @@ class RoleSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Admin',
+                'slug' => 'admin',
                 'description' => 'This is the Admin',
             ],
             [
                 'id' => 2,
                 'name' => 'Team Leader',
+                'slug' => 'team-leader',
                 'description' => 'This is the Team Leader',
             ],
             [
                 'id' => 3,
                 'name' => 'User',
+                'slug' => 'user',
                 'description' => 'This is the User',
             ],
-        ], ['id'], ['name', 'description']);
+        ], ['id'], ['name', 'slug', 'description']);
     }
 }

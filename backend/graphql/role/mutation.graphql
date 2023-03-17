@@ -5,5 +5,5 @@ extend type Mutation {
         permissions: [ID!]! @rules(apply: ["required", "integer"])
     ): Role!
         @guard(with: ["api"])
-        @hasPermissions(requiredPermission: "Add role")
+        @hasPermissions(requiredPermission: "add-role")
 }

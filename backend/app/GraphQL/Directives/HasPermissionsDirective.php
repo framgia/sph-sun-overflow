@@ -53,7 +53,7 @@ GRAPHQL;
                 }
 
                 $user = $context->user();
-                $permissions = $user->role->permissions->pluck('name')->toArray();
+                $permissions = $user->role->permissions->pluck('slug')->toArray();
 
                 if (
                     // Unauthenticated users don't get to see anything

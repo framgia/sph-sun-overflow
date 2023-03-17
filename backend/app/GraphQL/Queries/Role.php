@@ -2,9 +2,9 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Member;
+use App\Models\Role as ModelsRole;
 
-final class UserTeams
+final class Role
 {
     /**
      * @param  null  $_
@@ -12,8 +12,6 @@ final class UserTeams
      */
     public function __invoke($_, array $args)
     {
-        $members = Member::where('user_id', $args['id']);
-
-        return $members;
+        return ModelsRole::where('slug', $args['slug'])->first();
     }
 }
