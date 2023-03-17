@@ -5,6 +5,16 @@ const GET_ROLES = gql`
         roles {
             id
             name
+            permissions {
+                id
+                name
+            }
+            users {
+                id
+                first_name
+                last_name
+                avatar
+            }
         }
     }
 `

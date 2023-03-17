@@ -79,7 +79,7 @@ const Table = ({
                                                         return (
                                                             <td
                                                                 key={key}
-                                                                className="flex gap-4 whitespace-nowrap py-4 px-8"
+                                                                className="whitespace-nowrap py-4 px-8"
                                                             >
                                                                 {actions(Number(data.key))}
                                                             </td>
@@ -88,7 +88,7 @@ const Table = ({
                                                     return (
                                                         <td
                                                             key={key}
-                                                            className="whitespace-nowrap py-4 pl-16 pr-6 text-center text-sm"
+                                                            className="min-w-[300px] whitespace-nowrap py-4 text-center text-sm"
                                                         >
                                                             {clickable !== undefined
                                                                 ? renderClickable(
