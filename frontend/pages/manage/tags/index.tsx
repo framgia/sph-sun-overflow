@@ -1,22 +1,30 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Paginate from '@/components/organisms/Paginate'
-import type { ColumnType } from '@/components/organisms/Table'
+import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import GET_TAGS from '@/helpers/graphql/queries/get_tags'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
+import type { RefetchType } from '@/pages/questions'
+import { useQuery } from '@apollo/client'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const columns: ColumnType[] = [
     {
         title: 'Tag',
-        key: 'tag',
+        key: 'name',
     },
     {
         title: 'Description',
-        key: 'decription',
+        key: 'description',
     },
     {
         title: 'Questions',
-        key: 'questions',
+        key: 'count_tagged_questions',
     },
     {
         title: '',
@@ -24,42 +32,6 @@ const columns: ColumnType[] = [
         width: 20,
     },
 ]
-
-const tempValues = [
-    {
-        id: 1,
-        tag: 'test',
-        decription: 'test',
-        questions: 1,
-    },
-    {
-        id: 2,
-        tag: 'test',
-        decription: 'test',
-        questions: 2,
-    },
-    {
-        id: 2,
-        tag: 'test',
-        decription: 'test',
-        questions: 2,
-    },
-    {
-        id: 2,
-        tag: 'test',
-        decription: 'test',
-        questions: 2,
-    },
-]
-
-const tempPaginateProps = {
-    currentPage: 1,
-    lastPage: 2,
-    hasMorePages: true,
-    onPageChange: () => {
-        console.log('next')
-    },
-}
 
 const editAction = (): JSX.Element => {
     return (
@@ -87,6 +59,42 @@ const renderTagsActions = (): JSX.Element => {
 }
 
 const Tags: NextPage = () => {
+    const router = useRouter()
+    const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_TAGS, {
+        variables: {
+            first: 6,
+            page: 1,
+            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+        },
+    })
+
+    useEffect(() => {
+        void refetch({
+            first: 6,
+            page: 1,
+            name: '%%',
+            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+        })
+    }, [router, refetch])
+
+    if (loading) return loadingScreenShow()
+    if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
+
+    const { data: tags, paginatorInfo } = data.tags
+    const tagList: DataType[] = tags
+    const pageInfo: PaginatorInfo = paginatorInfo
+
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await refetch({ first, page })
+    }
+    const renderPagination = (): JSX.Element => {
+        return pageInfo.lastPage > 1 ? (
+            <Paginate {...pageInfo} perPage={6} onPageChange={onPageChange} />
+        ) : (
+            <></>
+        )
+    }
+
     return (
         <div className="flex w-full flex-col gap-4 p-8">
             <div className="flex h-full flex-col gap-4">
@@ -95,9 +103,9 @@ const Tags: NextPage = () => {
                     <Button type="button">New Tag</Button>
                 </div>
                 <div className="overflow-hidden border border-black">
-                    <Table columns={columns} dataSource={tempValues} actions={renderTagsActions} />
+                    <Table columns={columns} dataSource={tagList} actions={renderTagsActions} />
                 </div>
-                <Paginate {...tempPaginateProps} />
+                <div className="mt-auto">{renderPagination()}</div>
             </div>
         </div>
     )
