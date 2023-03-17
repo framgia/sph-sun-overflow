@@ -4,6 +4,7 @@ input filter {
     tag: String
     team: String
     is_public: Boolean
+    user_id: ID
 }
 
 enum ORDERBY {

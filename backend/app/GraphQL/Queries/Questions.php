@@ -33,6 +33,10 @@ final class Questions
                 }
             }
 
+            if (isset($args['user_id'])) {
+                $query->where('user_id', $args['user_id'])->get();
+            }
+
             if (isset($args['tag']) && $args['tag']) {
                 $query->whereHas('tags', function ($tags) use ($args) {
                     $tags->where('slug', $args['tag']);
