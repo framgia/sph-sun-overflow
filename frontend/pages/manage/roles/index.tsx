@@ -24,7 +24,7 @@ const columns: ColumnType[] = [
         key: 'users',
     },
     {
-        title: 'Action',
+        title: '',
         key: 'action',
         width: 20,
     },
