@@ -57,7 +57,7 @@ const UserTab = ({ user, usage }: UserTabProps): JSX.Element => {
                     <div className={nameStyle[usage]}>
                         {user.first_name} {user.last_name}
                     </div>
-                    <div className={roleStyle[usage]}>{user.role.name}</div>
+                    <div className={roleStyle[usage]}>{user.role?.name}</div>
                     <div className="hidden  lg:flex">
                         {usage === 'UserList' ? (
                             <div className="text-md font-bold">{user.reputation} pts</div>

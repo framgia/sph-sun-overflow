@@ -43,8 +43,8 @@ const TeamsListPage = (): JSX.Element => {
 
     if (userQuery.error) return <span>{errorNotify(`Error! ${userQuery.error?.message}`)}</span>
 
-    const pageInfo: PaginatorInfo = userQuery?.data?.teams.paginatorInfo
-    const teams: TeamType[] = userQuery?.data?.teams.data
+    const pageInfo: PaginatorInfo = userQuery?.data?.getUserTeams.paginatorInfo
+    const teams: TeamType[] = userQuery?.data?.getUserTeams.data
 
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
@@ -73,39 +73,48 @@ const TeamsListPage = (): JSX.Element => {
     return (
         <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">
             <PageHeader>Teams</PageHeader>
-            <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
-                <div className="flex w-full flex-row items-center justify-between">
-                    <div className="mt-2 flex flex-row items-center justify-between px-2">
-                        <form onSubmit={handleSearchSubmit}>
-                            <SearchInput
-                                placeholder="Search team"
-                                value={searchKey}
-                                onChange={onChange}
-                            />
-                        </form>
+            {teams?.length !== 0 ? (
+                <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
+                    <div className="flex w-full flex-row items-center justify-between">
+                        <div className="mt-2 flex flex-row items-center justify-between px-2">
+                            <form onSubmit={handleSearchSubmit}>
+                                <SearchInput
+                                    placeholder="Search team"
+                                    value={searchKey}
+                                    onChange={onChange}
+                                />
+                            </form>
+                        </div>
                     </div>
-                </div>
-                {term && (
-                    <div className="px-3">
-                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                        {`"${term}"`}
-                    </div>
-                )}
-                <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
-                    <div className="grid w-full grid-cols-2 gap-y-5 gap-x-10 px-3">
-                        {teams?.map((team: TeamType) => (
-                            <Link key={team.id} href={`teams/${team.slug}`}>
-                                <Card header={team.name} footer={`${team.members_count} members`}>
-                                    {team.description}
-                                </Card>
-                            </Link>
-                        ))}
-                    </div>
-                    {pageInfo?.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
+                    {term && (
+                        <div className="px-3">
+                            {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                            {`"${term}"`}
+                        </div>
                     )}
+                    <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
+                        <div className="grid w-full grid-cols-2 gap-y-5 gap-x-10 px-3">
+                            {teams?.map((team: TeamType) => (
+                                <Link key={team.id} href={`teams/${team.slug}`}>
+                                    <Card
+                                        header={team.name}
+                                        footer={`${team.members_count} members`}
+                                    >
+                                        {team.description}
+                                    </Card>
+                                </Link>
+                            ))}
+                        </div>
+                        {pageInfo?.lastPage > 1 && (
+                            <Paginate {...pageInfo} onPageChange={onPageChange} />
+                        )}
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <text className="mt-4 p-2 text-center text-lg font-bold text-primary-gray">
+                    No teams to show
+                </text>
+            )}
         </div>
     )
 }

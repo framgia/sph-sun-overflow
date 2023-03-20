@@ -38,6 +38,7 @@ trait HasSocialLogin
                 $user = static::create([
                     'first_name' => $userData->offsetGet('given_name'),
                     'last_name' => $userData->offsetGet('family_name'),
+                    'about_me' => '',
                     'email' => $userData->getEmail(),
                     'avatar' => $userData->getAvatar(),
                     'role_id' => 3,
