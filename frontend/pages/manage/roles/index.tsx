@@ -4,6 +4,7 @@ import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_ROLES_PAGINATE from '@/helpers/graphql/queries/get_roles_paginate'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
@@ -39,7 +40,7 @@ type RolesType = {
 
 const RolesPage = (): JSX.Element => {
     const {
-        data: { rolesPaginate: { data: roles = {}, paginatorInfo = {} } = {} } = {},
+        data: { rolesPaginate } = {},
         loading,
         error,
         refetch,
@@ -56,6 +57,11 @@ const RolesPage = (): JSX.Element => {
         return <></>
     }
 
+    const {
+        data: roles,
+        paginatorInfo: pageInfo,
+    }: { data: RolesType[]; paginatorInfo: PaginatorInfo } = rolesPaginate
+
     const getRolesDataTable = (roles: RolesType[]): DataType[] => {
         return roles.map((role): DataType => {
             return {
@@ -67,8 +73,19 @@ const RolesPage = (): JSX.Element => {
         })
     }
 
-    const getRolesActions = (): JSX.Element => {
-        return <RolesActions />
+    const getRolesActions = (key: number): JSX.Element | undefined => {
+        const dataSource = getRolesDataTable(roles).find((role) => +role.key === key)
+
+        if (dataSource) {
+            return (
+                <RolesActions
+                    id={dataSource.key as number}
+                    refetchHandler={() => {
+                        void refetch({ first: pageInfo.perPage, page: pageInfo.currentPage })
+                    }}
+                />
+            )
+        }
     }
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
@@ -90,8 +107,8 @@ const RolesPage = (): JSX.Element => {
                     />
                 </div>
                 <div className="mt-auto">
-                    {paginatorInfo.lastPage > 1 && (
-                        <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+                    {pageInfo.lastPage > 1 && (
+                        <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
                 </div>
             </div>
