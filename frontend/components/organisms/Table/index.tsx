@@ -57,7 +57,7 @@ const Table = ({
                                             key={column.key}
                                             scope="col"
                                             style={{ width: column.width }}
-                                            className={`py-3 pl-16 pr-6 text-center text-sm font-medium uppercase ${
+                                            className={`py-3 text-center text-sm font-medium uppercase ${
                                                 column.key === 'action' ? 'pl-9' : ''
                                             }`}
                                         >
