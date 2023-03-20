@@ -1,10 +1,10 @@
 import Icons from '@/components/atoms/Icons'
-import { Popover } from '@headlessui/react'
-import Tooltips from '../Tooltip'
-import React, { useState } from 'react'
-import { usePopper } from 'react-popper'
-import { Float } from '@headlessui-float/react'
 import { useBoundStore } from '@/helpers/store'
+import { Float } from '@headlessui-float/react'
+import { Popover } from '@headlessui/react'
+import { useState } from 'react'
+import { usePopper } from 'react-popper'
+import Tooltips from '../Tooltip'
 type PillProps = {
     tag: {
         id: number
@@ -42,13 +42,13 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
                     </div>
                 </Popover.Button>
                 <Popover.Panel
-                    className="absolute z-10 mt-3 w-96 rounded-lg bg-zinc-200 shadow-lg"
+                    className="bg-zinc-200 absolute z-10 mt-3 w-96 rounded-lg shadow-lg"
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
                 >
                     <div ref={setArrowElement} style={styles.arrow}>
-                        <Float.Arrow className="relative ml-3 h-6 w-6 rotate-45 bg-zinc-200" />
+                        <Float.Arrow className="bg-zinc-200 relative ml-3 h-6 w-6 rotate-45" />
                     </div>
                     <Tooltips tag={tag} />
                 </Popover.Panel>
