@@ -154,6 +154,24 @@ class PermissionSeeder extends Seeder
                 'slug' => 'delete-team-role',
                 'description' => 'Can delete own team role',
             ],
+            [
+                'id' => 24,
+                'name' => 'Create tag',
+                'slug' => 'create-tag',
+                'description' => 'Can create a tag',
+            ],
+            [
+                'id' => 25,
+                'name' => 'Update tag',
+                'slug' => 'update-tag',
+                'description' => 'Can update a tag',
+            ],
+            [
+                'id' => 26,
+                'name' => 'Delete tag',
+                'slug' => 'delete-tag',
+                'description' => 'Can delete a tag',
+            ],
         ], ['id'], ['name', 'slug', 'description']);
 
         $admin = Role::find(1);
@@ -161,7 +179,7 @@ class PermissionSeeder extends Seeder
         $user = Role::find(3);
 
         $admin->permissions()->sync(
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
         );
         $teamLead->permissions()->sync([1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]);
         $user->permissions()->sync([1, 2, 3, 4, 8, 10, 11, 12, 13, 14, 15, 16, 17]);
