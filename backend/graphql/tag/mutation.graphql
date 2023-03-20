@@ -1,0 +1,5 @@
+extend type Mutation {
+    deleteTag(id: ID): Tag!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "delete-tag")
+}
