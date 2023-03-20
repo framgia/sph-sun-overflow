@@ -132,7 +132,7 @@ const Team = (): JSX.Element => {
                         isDisabled={false}
                         onClick={onClickAskQuestion}
                     >
-                        Ask a Questiondddd
+                        Ask a Question
                     </Button>
                 )}
             </div>
