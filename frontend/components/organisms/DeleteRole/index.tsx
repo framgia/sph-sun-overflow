@@ -1,10 +1,37 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Modal from '@/components/templates/Modal'
+import DELETE_ROLE from '@/helpers/graphql/mutations/delete_role'
+import { useMutation } from '@apollo/client'
 import { useState } from 'react'
+import { errorNotify, successNotify } from '../../../helpers/toast'
 
-const DeleteRole = (): JSX.Element => {
+type Props = {
+    id: number
+    refetchHandler: () => void
+}
+
+const DeleteRole = ({ id, refetchHandler }: Props): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
+    const [deleteRole] = useMutation(DELETE_ROLE)
+
+    const onSubmit = (): void => {
+        if ([1, 2, 3].includes(+id)) {
+            errorNotify('You cannot delete this role!')
+            setShowModal(false)
+            return
+        }
+
+        deleteRole({ variables: { id } })
+            .then(() => {
+                successNotify('Role deleted successfully!')
+                refetchHandler()
+                setShowModal(false)
+            })
+            .catch(() => {
+                errorNotify('There was an error removing the role!')
+            })
+    }
 
     return (
         <div>
@@ -23,7 +50,7 @@ const DeleteRole = (): JSX.Element => {
                     setShowModal(false)
                 }}
                 handleSubmit={() => {
-                    setShowModal(false)
+                    onSubmit()
                 }}
                 submitLabel="Delete"
             >

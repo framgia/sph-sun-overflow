@@ -1,24 +1,24 @@
 import Button from '@/components/atoms/Button'
-import Dropdown from '@/components/molecules/Dropdown'
 import type { OptionType } from '@/components/molecules/Dropdown'
+import Dropdown from '@/components/molecules/Dropdown'
+import ManageMembersActions from '@/components/organisms/ManageMembersActions'
 import Paginate from '@/components/organisms/Paginate'
-import Table from '@/components/organisms/Table'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
+import Table from '@/components/organisms/Table'
+import Modal from '@/components/templates/Modal'
+import ADD_MEMBER from '@/helpers/graphql/mutations/add_member'
+import GET_ALL_USERS from '@/helpers/graphql/queries/get_all_users'
 import GET_MEMBERS from '@/helpers/graphql/queries/get_members'
+import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { useQuery, useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Modal from '@/components/templates/Modal'
 import { useEffect, useState } from 'react'
-import GET_ALL_USERS from '@/helpers/graphql/queries/get_all_users'
+import { Controller, useForm } from 'react-hook-form'
 import GET_TEAM_ROLES from '../../../helpers/graphql/queries/get_team_roles'
 import type { UserType } from '../../questions/[slug]/index'
-import ManageMembersActions from '@/components/organisms/ManageMembersActions'
-import { Controller, useForm } from 'react-hook-form'
-import GET_TEAM from '@/helpers/graphql/queries/get_team'
-import ADD_MEMBER from '@/helpers/graphql/mutations/add_member'
 
 const columns: ColumnType[] = [
     {
@@ -122,7 +122,6 @@ const TeamManage = (): JSX.Element => {
         id: user.id,
         name: `${user.first_name ?? ''} ${user.last_name ?? ''}`,
     }))
-    console.log(users)
 
     const roles: OptionType[] = teamRoles.data?.teamRoles.map((role: OptionType) => ({
         id: role.id,
