@@ -16,6 +16,12 @@ const DeleteRole = ({ id, refetchHandler }: Props): JSX.Element => {
     const [deleteRole] = useMutation(DELETE_ROLE)
 
     const onSubmit = (): void => {
+        if ([1, 2, 3].includes(+id)) {
+            errorNotify('You cannot delete this role!')
+            setShowModal(false)
+            return
+        }
+
         deleteRole({ variables: { id } })
             .then(() => {
                 successNotify('Role deleted successfully!')
