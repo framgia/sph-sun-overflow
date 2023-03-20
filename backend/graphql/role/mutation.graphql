@@ -6,4 +6,7 @@ extend type Mutation {
     ): Role!
         @guard(with: ["api"])
         @hasPermissions(requiredPermission: "add-role")
+    deleteRole(id: ID!): Role!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "delete-role")
 }
