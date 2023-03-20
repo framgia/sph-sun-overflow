@@ -23,10 +23,8 @@ const user: UserType = {
 }
 
 const getActiveTabClass = (status: boolean): string => {
-    if (status) {
-        return '-mb-[1px] hover:text-primary-red px-6 font-semibold border-b-2 border-primary-red bg-red-100'
-    }
-    return '-mb-[1px] hover:text-primary-red px-6 active:border-red-400'
+    return `min-w-[120px] text-center hover:cursor-pointer -mb-[1px] hover:text-primary-red px-6 active:border-red-400 
+    ${status ? 'font-semibold border-b-2 border-primary-red bg-red-100' : ''}`
 }
 
 const UserDetail = (): JSX.Element => {
@@ -62,33 +60,27 @@ const UserDetail = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="mt-8 flex w-full justify-center gap-8 self-start">
-                    <PageStats label="Questions Asked" value={user.question_count}></PageStats>
-                    <PageStats label="Questions Answered" value={user.answer_count}></PageStats>
-                    <PageStats label="Votes Acquired" value={user.vote_count}></PageStats>
+                    <PageStats label="Questions Asked" value={user.question_count} />
+                    <PageStats label="Questions Answered" value={user.answer_count} />
+                    <PageStats label="Votes Acquired" value={user.vote_count} />
                 </div>
             </div>
             <div className="mt-10 flex h-3/5 flex-col">
                 <div className="flex h-7 w-full flex-row justify-start border-b-2 border-gray-300">
                     <div
-                        className={`min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
-                            activeTab === 'Questions'
-                        )}`}
+                        className={getActiveTabClass(activeTab === 'Questions')}
                         onClick={onClickQuestionsTab}
                     >
                         Questions
                     </div>
                     <div
-                        className={`min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
-                            activeTab === 'Answers'
-                        )}`}
+                        className={getActiveTabClass(activeTab === 'Answers')}
                         onClick={onClickAnswersTab}
                     >
                         Answers
                     </div>
                     <div
-                        className={`min-w-[120px] text-center hover:cursor-pointer ${getActiveTabClass(
-                            activeTab === 'Teams'
-                        )}`}
+                        className={getActiveTabClass(activeTab === 'Teams')}
                         onClick={onClickTeamsTab}
                     >
                         Teams
