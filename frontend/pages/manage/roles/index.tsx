@@ -1,6 +1,6 @@
+import Button from '@/components/atoms/Button'
 import Paginate from '@/components/organisms/Paginate'
 import PermissionPills from '@/components/organisms/PermissionPills'
-import RoleForm from '@/components/organisms/RoleForm'
 import RolesActions from '@/components/organisms/RolesAction'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
@@ -9,6 +9,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import type { UserType } from '@/pages/questions/[slug]'
 import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 const columns: ColumnType[] = [
     {
@@ -38,6 +39,8 @@ type RolesType = {
 }
 
 const RolesPage = (): JSX.Element => {
+    const router = useRouter()
+
     const {
         data: { rolesPaginate: { data: roles = {}, paginatorInfo = {} } = {} } = {},
         loading,
@@ -80,7 +83,13 @@ const RolesPage = (): JSX.Element => {
             <div className="flex h-full flex-col gap-4">
                 <div className="mt-4 flex items-center justify-between">
                     <h1 className="text-3xl font-bold">User Roles</h1>
-                    <RoleForm />
+                    <Button
+                        onClick={() => {
+                            void router.push('/manage/roles/create')
+                        }}
+                    >
+                        Add Role
+                    </Button>
                 </div>
                 <div className="overflow-hidden border border-black">
                     <Table
