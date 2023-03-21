@@ -58,7 +58,7 @@ const Table = ({
                                             style={{
                                                 width: column.width,
                                             }}
-                                            className={`py-3 text-center text-sm font-medium uppercase ${
+                                            className={`font-se py-3 text-center text-sm font-semibold uppercase ${
                                                 column.key === 'action' ? 'pl-9' : ''
                                             }`}
                                         >
