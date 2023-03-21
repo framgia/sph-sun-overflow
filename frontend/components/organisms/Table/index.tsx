@@ -57,7 +57,7 @@ const Table = ({
                                             key={column.key}
                                             scope="col"
                                             style={{ width: column.width }}
-                                            className={`py-3 pl-16 pr-6 text-center text-sm font-medium uppercase ${
+                                            className={`py-3 text-center text-sm font-medium uppercase ${
                                                 column.key === 'action' ? 'pl-9' : ''
                                             }`}
                                         >
@@ -88,7 +88,7 @@ const Table = ({
                                                     return (
                                                         <td
                                                             key={key}
-                                                            className="min-w-[300px] whitespace-nowrap py-4 text-center text-sm"
+                                                            className="min-w-[200px] whitespace-nowrap py-4 text-center text-sm"
                                                         >
                                                             {clickable !== undefined
                                                                 ? renderClickable(

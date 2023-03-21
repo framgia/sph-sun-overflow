@@ -42,6 +42,11 @@ const LeftSideBar = (): JSX.Element => {
                     Text: 'Roles',
                     url: 'manage/roles',
                 },
+                {
+                    IconName: 'Users',
+                    Text: 'Users',
+                    url: 'manage/users',
+                },
             ],
         },
     ]

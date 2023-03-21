@@ -22,6 +22,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         '/manage/roles',
         '/manage/roles/create',
         '/manage/tags',
+        '/manage/users',
         '/manage/users/[slug]',
     ]
 
