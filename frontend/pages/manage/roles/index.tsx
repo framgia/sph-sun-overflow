@@ -35,6 +35,7 @@ const columns: ColumnType[] = [
 type RolesType = {
     id: number
     name: string
+    slug: string
     permissions: Array<{ id: number; name: string }>
     users: UserType[]
 }
@@ -64,12 +65,14 @@ const RolesPage = (): JSX.Element => {
         data: roles,
         paginatorInfo: pageInfo,
     }: { data: RolesType[]; paginatorInfo: PaginatorInfo } = rolesPaginate
+    console.log(roles)
 
     const getRolesDataTable = (roles: RolesType[]): DataType[] => {
         return roles.map((role): DataType => {
             return {
                 key: role.id,
                 name: role.name,
+                slug: role.slug,
                 permissions: <PermissionPills permissions={role.permissions} />,
                 users: role.users.length,
             }
@@ -83,6 +86,7 @@ const RolesPage = (): JSX.Element => {
             return (
                 <RolesActions
                     id={dataSource.key as number}
+                    slug={dataSource.slug as string}
                     refetchHandler={() => {
                         void refetch({ first: pageInfo.perPage, page: pageInfo.currentPage })
                     }}
