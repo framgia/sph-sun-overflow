@@ -20,7 +20,7 @@ class Tag extends Model
         parent::boot();
 
         static::creating(function ($tag) {
-            $tag->slug = Str::slug($tag->title);
+            $tag->slug = Str::slug($tag->name);
         });
     }
 

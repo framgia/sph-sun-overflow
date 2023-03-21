@@ -1,4 +1,8 @@
 extend type Mutation {
+    createTag(
+        name: String! @rules(apply: ["required"])
+        description: String! @rules(apply: ["required"])
+    ): Tag! @guard(with: ["api"]) @hasPermissions(requiredPermission: "add-tag")
     deleteTag(id: ID): Tag!
         @guard(with: ["api"])
         @hasPermissions(requiredPermission: "delete-tag")
