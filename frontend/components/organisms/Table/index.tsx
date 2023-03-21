@@ -88,7 +88,7 @@ const Table = ({
                                                     return (
                                                         <td
                                                             key={key}
-                                                            className="min-w-[300px] whitespace-nowrap py-4 text-center text-sm"
+                                                            className="min-w-[200px] whitespace-nowrap py-4 text-center text-sm"
                                                         >
                                                             {clickable !== undefined
                                                                 ? renderClickable(
