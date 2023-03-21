@@ -90,36 +90,58 @@ const ProfileInfoEdit = ({
         })
     }
 
+    const handleUpdateUser = (
+        first_name: string,
+        last_name: string,
+        about_me: string,
+        avatar: unknown
+    ): void => {
+        updateUser({
+            variables: {
+                first_name,
+                last_name,
+                about_me,
+                avatar,
+            },
+        })
+            .then(() => {
+                successNotify('Profile updated successfully please wait for a while!')
+
+                setTimeout(() => {
+                    router.reload()
+                }, 3000)
+            })
+            .catch((e) => {
+                errorNotify('Please Complete the Input Fields!')
+            })
+    }
+
     const onSubmit = async (data: ProfileFormValues): Promise<void> => {
         const avatar_image = data.avatar[0] !== undefined ? await convertBase64(data.avatar[0]) : ''
 
-        if (
-            data.first_name === profile.first_name &&
-            data.last_name === profile.last_name &&
-            data.about_me === profile.about_me &&
-            data.avatar[0] === undefined
-        ) {
-            errorNotify('Profile Not Updated!')
-            profileRefetchHandler()
+        if (profile.about_me === null && data.about_me === '') {
+            if (
+                data.first_name === profile.first_name &&
+                data.last_name === profile.last_name &&
+                data.avatar[0] === undefined
+            ) {
+                errorNotify('Profile Not Updated!')
+                profileRefetchHandler()
+            } else {
+                handleUpdateUser(data.first_name, data.last_name, data.about_me, avatar_image)
+            }
         } else {
-            updateUser({
-                variables: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    about_me: data.about_me,
-                    avatar: avatar_image,
-                },
-            })
-                .then(() => {
-                    successNotify('Profile updated successfully please wait for a while!')
-
-                    setTimeout(() => {
-                        router.reload()
-                    }, 3000)
-                })
-                .catch((e) => {
-                    errorNotify('Please Complete the Input Fields!')
-                })
+            if (
+                data.first_name === profile.first_name &&
+                data.last_name === profile.last_name &&
+                data.about_me === profile.about_me &&
+                data.avatar[0] === undefined
+            ) {
+                errorNotify('Profile Not Updated!')
+                profileRefetchHandler()
+            } else {
+                handleUpdateUser(data.first_name, data.last_name, data.about_me, avatar_image)
+            }
         }
     }
 

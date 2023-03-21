@@ -76,6 +76,7 @@ const Team = (): JSX.Element => {
 
     const toggleDashboardContentEdit = (): void => {
         setDashboardContentEditing(!dashboardContentEditing)
+        void refetch({ slug: router.query.slug })
     }
 
     const isTeamLeader = team.teamLeader.id === useBoundStore.getState().user_id

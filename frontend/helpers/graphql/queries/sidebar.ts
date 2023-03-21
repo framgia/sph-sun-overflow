@@ -41,6 +41,7 @@ export const QMembersSidebar = gql`
                     slug
                 }
             }
+            is_team_leader
         }
     }
 `

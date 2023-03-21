@@ -112,7 +112,7 @@ const TeamManage = (): JSX.Element => {
                 key: member.id,
                 user_id: member.user.id,
                 name: `${member.user.first_name} ${member.user.last_name}`,
-                role: member.teamRole.name,
+                role: member.teamRole?.name,
             }
         })
         return tableList

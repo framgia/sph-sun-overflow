@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 const GET_TEAMS = gql`
     query Teams($first: Int!, $page: Int!, $name: String) {
-        teams(first: $first, page: $page, name: $name) {
+        getUserTeams(first: $first, page: $page, name: $name) {
             paginatorInfo {
                 perPage
                 currentPage

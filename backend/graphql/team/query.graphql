@@ -3,6 +3,10 @@ extend type Query {
         @guard(with: ["api"])
         @paginate
 
+    getUserTeams(name: String! = "%%" @where(operator: "like")): [Team!]!
+        @guard(with: ["api"])
+        @paginate(builder: "App\\GraphQL\\Queries\\Teams")
+
     team(slug: String! @eq): Team @guard(with: ["api"]) @find
     teamMembers(team_slug: String!): [Member!]
         @guard(with: ["api"])

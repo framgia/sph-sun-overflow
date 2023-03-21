@@ -17,8 +17,10 @@ interface IUser {
 
 interface MembersSidebarProps {
     loading: boolean
+
     data: {
         team: {
+            is_team_leader: boolean
             members: Array<{
                 teamRole: { name: string }
                 user: IUser
@@ -55,7 +57,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element 
         <div className="p-1 drop-shadow-md">
             <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
                 <span className="text-xl font-medium">Members</span>
-                {true && (
+                {data?.team?.is_team_leader && (
                     <Link
                         className="cursor-pointer text-lg text-[#3B8CD7]"
                         href={`${usePath('/manage')}`}
