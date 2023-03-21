@@ -22,6 +22,10 @@ class Tag extends Model
         static::creating(function ($tag) {
             $tag->slug = Str::slug($tag->name);
         });
+
+        static::updating(function ($tag) {
+            $tag->slug = Str::slug($tag->name);
+        });
     }
 
     public function usersWatching()
