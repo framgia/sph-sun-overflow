@@ -1,9 +1,18 @@
 extend type Mutation {
+    createTeam(
+        name: String! @rules(apply: ["required"])
+        description: String! @rules(apply: ["required"])
+        user_id: ID! @rules(apply: ["required", "integer"])
+    ): Team!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "add-team")
     updateTeamDashboard(
         id: ID! @rules(apply: ["required", "integer"])
         dashboard_content: String! @rules(apply: ["required"])
     ): Team! @guard(with: ["api"])
     deleteTeam(id: ID!): Team!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "delete-team")
     # Please add this to your code on update team if the team leader is new then add the new team leader as a member
     # $team->members()->create([
     #     "user_id" => $team->user_id,
