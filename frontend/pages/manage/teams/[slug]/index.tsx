@@ -125,7 +125,7 @@ const columns: ColumnType[] = [
     {
         title: 'Name',
         key: 'fullName',
-        width: '15%',
+        width: '20%',
     },
     {
         title: 'Team Role',
@@ -135,7 +135,7 @@ const columns: ColumnType[] = [
     {
         title: '',
         key: 'action',
-        width: '15%',
+        width: '10%',
     },
 ]
 
