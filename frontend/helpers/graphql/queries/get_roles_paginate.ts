@@ -6,6 +6,7 @@ const GET_ROLES_PAGINATE = gql`
             data {
                 id
                 name
+                slug
                 permissions {
                     id
                     name

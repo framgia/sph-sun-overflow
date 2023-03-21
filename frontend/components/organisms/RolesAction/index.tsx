@@ -3,13 +3,14 @@ import EditRole from '../EditRole'
 
 type Props = {
     id: number
+    slug: string
     refetchHandler: () => void
 }
 
-const RolesActions = ({ id, refetchHandler }: Props): JSX.Element => {
+const RolesActions = ({ id, slug, refetchHandler }: Props): JSX.Element => {
     return (
         <div className="flex flex-row gap-4">
-            <EditRole />
+            <EditRole slug={slug} />
             <DeleteRole id={id} refetchHandler={refetchHandler} />
         </div>
     )
