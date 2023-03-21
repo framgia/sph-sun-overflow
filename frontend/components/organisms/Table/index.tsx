@@ -1,9 +1,8 @@
 export type ColumnType = {
     key: string
     title: string
-    width?: number
+    width?: number | string
 }
-
 export type DataType = Record<string, string | number | JSX.Element>
 
 type ClickableType = {
@@ -56,8 +55,10 @@ const Table = ({
                                         <th
                                             key={column.key}
                                             scope="col"
-                                            style={{ width: column.width }}
-                                            className={`py-3 text-center text-sm font-medium uppercase ${
+                                            style={{
+                                                width: column.width,
+                                            }}
+                                            className={`font-se py-3 text-center text-sm font-semibold uppercase ${
                                                 column.key === 'action' ? 'pl-9' : ''
                                             }`}
                                         >
