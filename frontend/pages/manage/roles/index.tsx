@@ -65,7 +65,6 @@ const RolesPage = (): JSX.Element => {
         data: roles,
         paginatorInfo: pageInfo,
     }: { data: RolesType[]; paginatorInfo: PaginatorInfo } = rolesPaginate
-    console.log(roles)
 
     const getRolesDataTable = (roles: RolesType[]): DataType[] => {
         return roles.map((role): DataType => {
