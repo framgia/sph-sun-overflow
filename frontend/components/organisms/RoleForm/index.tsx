@@ -142,7 +142,7 @@ const RoleForm = ({ role, onSubmit }: Props): JSX.Element => {
                             void router.push('/manage/roles')
                         }}
                     >
-                        <span className="text-base">{'<'} Go Back</span>
+                        <span className="text-xl">{'<'} Go Back</span>
                     </Button>
                 </div>
             </div>
