@@ -1,8 +1,13 @@
+import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
+import Dropdown from '@/components/molecules/Dropdown'
 import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import Modal from '@/components/templates/Modal'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 
 const columns: ColumnType[] = [
     {
@@ -62,6 +67,9 @@ const tempValues = [
         role: 'Admin',
     },
 ]
+type FormValues = {
+    role: number
+}
 
 const tempPaginateProps = {
     currentPage: 1,
@@ -72,16 +80,43 @@ const tempPaginateProps = {
     },
 }
 
-const editAction = (): JSX.Element => {
-    return (
-        <div>
-            <Icons name="table_edit" additionalClass="fill-gray-500" />
-        </div>
-    )
-}
-
 const AdminUsers = (): JSX.Element => {
     const router = useRouter()
+    const [isOpenEdit, setIsOpenEdit] = useState(false)
+    const roles = [
+        {
+            id: 1,
+            name: 'Admin',
+        },
+        {
+            id: 2,
+            name: 'Team Leader',
+        },
+        {
+            id: 3,
+            name: 'User',
+        },
+    ]
+    const { control } = useForm<FormValues>({
+        mode: 'onSubmit',
+        reValidateMode: 'onSubmit',
+    })
+
+    const closeEdit = (): void => {
+        setIsOpenEdit(!isOpenEdit)
+    }
+    const editAction = (): JSX.Element => {
+        return (
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setIsOpenEdit(true)
+                }}
+            >
+                <Icons name="table_edit" additionalClass="fill-gray-500" />
+            </Button>
+        )
+    }
 
     const clickableArr = [
         {
@@ -108,6 +143,32 @@ const AdminUsers = (): JSX.Element => {
                         actions={editAction}
                         clickableArr={clickableArr}
                     />
+                    {isOpenEdit && (
+                        <Modal
+                            title={`Assign Role`}
+                            submitLabel="Save"
+                            isOpen={isOpenEdit}
+                            handleClose={closeEdit}
+                        >
+                            <form>
+                                <Controller
+                                    control={control}
+                                    name="role"
+                                    defaultValue={1}
+                                    render={({ field: { onChange, value } }) => (
+                                        <Dropdown
+                                            key="role-select"
+                                            name="role"
+                                            label=""
+                                            options={roles}
+                                            onChange={onChange}
+                                            value={value}
+                                        />
+                                    )}
+                                />
+                            </form>
+                        </Modal>
+                    )}
                 </div>
                 <Paginate {...tempPaginateProps} />
             </div>

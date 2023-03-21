@@ -62,7 +62,7 @@ const Modal = ({
                                 <div className="flex justify-between bg-secondary-gray px-6 py-3">
                                     <Dialog.Title
                                         as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
+                                        className="text-lg font-bold leading-6 text-gray-900"
                                     >
                                         {title}
                                     </Dialog.Title>
