@@ -156,14 +156,14 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id' => 24,
-                'name' => 'Create tag',
-                'slug' => 'create-tag',
+                'name' => 'Add tag',
+                'slug' => 'add-tag',
                 'description' => 'Can create a tag',
             ],
             [
                 'id' => 25,
-                'name' => 'Update tag',
-                'slug' => 'update-tag',
+                'name' => 'Edit tag',
+                'slug' => 'edit-tag',
                 'description' => 'Can update a tag',
             ],
             [

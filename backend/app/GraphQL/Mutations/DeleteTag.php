@@ -15,7 +15,7 @@ final class DeleteTag
     {
         $tag = Tag::find($args['id']);
 
-        if (!$tag) {
+        if (! $tag) {
             throw new CustomException('Tag not found!');
         }
 
