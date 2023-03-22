@@ -216,7 +216,7 @@ const MembersTab = (): JSX.Element => {
         return (
             <div
                 onClick={() => {
-                    setIsMemberToDelete(findMember(key)) //
+                    setIsMemberToDelete(findMember(key))
                     setIsOpenDelete(true)
                 }}
                 className="cursor-pointer"
