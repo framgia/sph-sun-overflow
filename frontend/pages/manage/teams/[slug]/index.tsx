@@ -5,9 +5,12 @@ import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
 import Modal from '@/components/templates/Modal'
+import QuestionsPageLayout from '@/components/templates/QuestionsPageLayout'
+import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import { type RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -38,14 +41,24 @@ const TeamDetail = (): JSX.Element => {
     const router = useRouter()
     const [activeTab, setActiveTab] = useState<string>('Questions')
 
+    const { slug } = router.query
+    const questionsApi = useQuery<any, RefetchType>(GET_QUESTIONS, {
+        variables: {
+            first: 5,
+            page: 1,
+            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+            filter: { team: slug as string },
+        },
+    })
+
     const { data, loading, error } = useQuery(GET_TEAM, {
-        variables: { slug: router.query.slug },
+        variables: { slug },
     })
 
     const team: TeamType = data?.team
     const teamLeader: UserType = team?.teamLeader
 
-    if (loading) return loadingScreenShow()
+    if (loading || questionsApi.loading) return loadingScreenShow()
     if (error) {
         return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
@@ -56,6 +69,20 @@ const TeamDetail = (): JSX.Element => {
 
     const onClickMembersTab = (): void => {
         setActiveTab('Members')
+    }
+
+    const renderQuestions = (): JSX.Element => {
+        return (
+            <div className="h-[70%] w-[85%] pt-5">
+                <QuestionsPageLayout
+                    refetch={questionsApi.refetch}
+                    data={questionsApi.data}
+                    isPrivate={true}
+                    team={slug as string}
+                    page_slug={'teams'}
+                />
+            </div>
+        )
     }
 
     return (
@@ -97,11 +124,7 @@ const TeamDetail = (): JSX.Element => {
                 </div>
                 <div className="flex w-full">
                     {activeTab === 'Members' && <MembersTab />}
-                    {activeTab === 'Questions' && (
-                        <div className="w-full pt-8 text-center text-lg font-medium text-primary-gray">
-                            No Questions to Show
-                        </div>
-                    )}
+                    {activeTab === 'Questions' && renderQuestions()}
                 </div>
             </div>
         </div>
