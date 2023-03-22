@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import SortDropdown from '../SortDropdown'
 import type { ApolloQueryResult } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import type { RefetchType } from '../../../pages/questions/index'
+import SortDropdown from '../SortDropdown'
 
 type TriggerType = 'DATE' | 'ANSWER' | 'WATCHED' | 'POPULAR'
 
@@ -59,7 +59,7 @@ const DropdownFilters = ({
 
     useEffect(() => {
         setSelectedDateFilter(FilterTexts.DATE[1])
-        setSelectedAnswerFilter(FilterTexts.ANSWER[1])
+        setSelectedAnswerFilter(FilterTexts.ANSWER[3])
         setSelectedWatchedFilter(FilterTexts.WATCHED[1])
         setSelectedPopularFilter(FilterTexts.POPULAR[1])
     }, [router])

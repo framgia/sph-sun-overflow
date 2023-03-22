@@ -173,7 +173,7 @@ const QuestionsTab = (): JSX.Element => {
             first: 10,
             page: 1,
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-            filter: { answered: true, team: slug as string },
+            filter: { team: slug as string },
         },
     })
 

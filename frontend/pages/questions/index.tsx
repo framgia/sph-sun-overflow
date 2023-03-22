@@ -24,7 +24,7 @@ const QuestionsPage = (): JSX.Element => {
         variables: {
             first: 10,
             page: 1,
-            filter: { keyword: searchKey, answered: true, tag: '' },
+            filter: { keyword: searchKey, tag: '' },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         },
     })
@@ -33,7 +33,7 @@ const QuestionsPage = (): JSX.Element => {
         setSearchKey(router.query.search as string)
         refetch({
             page: 1,
-            filter: { keyword: router.query.search as string, answered: true, tag: '' },
+            filter: { keyword: router.query.search as string, tag: '' },
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
         })
             .then(() => {})
