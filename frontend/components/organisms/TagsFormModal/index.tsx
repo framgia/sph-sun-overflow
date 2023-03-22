@@ -1,10 +1,10 @@
-// import FormAlert from "@/components/molecules/FormAlert"
-// import { errorNotify, successNotify } from '@/helpers/toast'
 import Modal from '@/components/templates/Modal'
+
 const tempData = {
     title: '',
     description: '',
 }
+
 type FormProps = {
     initialData?: {
         title: string

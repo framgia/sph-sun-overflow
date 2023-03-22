@@ -111,9 +111,9 @@ const TeamsListPage = (): JSX.Element => {
                     </div>
                 </div>
             ) : (
-                <text className="mt-4 p-2 text-center text-lg font-bold text-primary-gray">
+                <span className="mt-4 p-2 text-center text-lg font-bold text-primary-gray">
                     No teams to show
-                </text>
+                </span>
             )}
         </div>
     )

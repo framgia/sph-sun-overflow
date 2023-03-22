@@ -14,6 +14,11 @@ final class Teams
     public function __invoke($_, array $args)
     {
         $query = Team::query();
+
+        if ($args['isAdmin']) {
+            return $query;
+        }
+
         $user_id = Auth::id();
 
         $query->where('user_id', $user_id);

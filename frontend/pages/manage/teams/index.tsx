@@ -10,6 +10,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import TeamsFormModal from '../../../components/organisms/TeamsFormModal/index'
 
 type TeamType = {
     id: number
@@ -20,7 +21,7 @@ type TeamType = {
 }
 
 type TeamsQuery = {
-    teams: {
+    getUserTeams: {
         data: TeamType[]
         paginatorInfo: {
             currentPage: number
@@ -50,16 +51,29 @@ const columns: ColumnType[] = [
     },
 ]
 
-const handleEdit = (event: React.MouseEvent<HTMLElement>): void => {
-    console.log('Edit')
-}
-
 const editAction = (key: number): JSX.Element => {
+    const [showModal, setShowModal] = useState(false)
+
     return (
         <div>
-            <Button usage="toggle-modal" onClick={handleEdit}>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setShowModal(true)
+                }}
+            >
                 <Icons name="table_edit" additionalClass="fill-gray-500" />
             </Button>
+            <TeamsFormModal
+                initialData={{
+                    title: 'Test',
+                    description: 'Test description',
+                }}
+                isOpen={showModal}
+                closeModal={() => {
+                    setShowModal(false)
+                }}
+            />
         </div>
     )
 }
@@ -106,16 +120,18 @@ const renderTeamsActions = (key: number): JSX.Element | undefined => {
 
 const AdminTeams = (): JSX.Element => {
     const router = useRouter()
+    const [showModal, setShowModal] = useState(false)
 
     const { data, loading, error, refetch } = useQuery<TeamsQuery>(GET_TEAMS, {
         variables: {
             first: 6,
             page: 1,
+            isAdmin: true,
         },
     })
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
-        await refetch({ first, page })
+        await refetch({ first, page, isAdmin: true })
     }
 
     if (loading) return loadingScreenShow()
@@ -124,7 +140,7 @@ const AdminTeams = (): JSX.Element => {
         return <></>
     }
 
-    const { data: teamArr, paginatorInfo } = data?.teams ?? {
+    const { data: teamArr, paginatorInfo } = data?.getUserTeams ?? {
         data: [],
         paginatorInfo: { currentPage: 1, hasMorePages: false, lastPage: 1 },
     }
@@ -144,7 +160,13 @@ const AdminTeams = (): JSX.Element => {
         <div className="flex h-full w-full flex-col gap-4 p-8">
             <div className="mt-4 flex flex-row items-center justify-between">
                 <h1 className="text-3xl font-bold">Teams</h1>
-                <Button type="button" additionalClass="px-6 py-3">
+                <Button
+                    type="button"
+                    additionalClass="px-6 py-3"
+                    onClick={() => {
+                        setShowModal(true)
+                    }}
+                >
                     New Team
                 </Button>
             </div>
@@ -160,6 +182,12 @@ const AdminTeams = (): JSX.Element => {
             <div className="mt-auto">
                 <Paginate {...paginatorInfo} onPageChange={onPageChange} />
             </div>
+            <TeamsFormModal
+                isOpen={showModal}
+                closeModal={() => {
+                    setShowModal(false)
+                }}
+            />
         </div>
     )
 }
