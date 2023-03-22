@@ -6,6 +6,14 @@ extend type Mutation {
     ): Team!
         @guard(with: ["api"])
         @hasPermissions(requiredPermission: "add-team")
+    updateTeam(
+        id: ID! @rules(apply: ["required", "integer"])
+        name: String!
+        description: String!
+        user_id: ID! @rules(apply: ["integer"])
+    ): Team!
+        @guard(with: ["api"])
+        @hasPermissions(requiredPermission: "edit-team")
     updateTeamDashboard(
         id: ID! @rules(apply: ["required", "integer"])
         dashboard_content: String! @rules(apply: ["required"])
@@ -13,9 +21,4 @@ extend type Mutation {
     deleteTeam(id: ID!): Team!
         @guard(with: ["api"])
         @hasPermissions(requiredPermission: "delete-team")
-    # Please add this to your code on update team if the team leader is new then add the new team leader as a member
-    # $team->members()->create([
-    #     "user_id" => $team->user_id,
-    #     "team_id" => $team->id,
-    # ]);
 }
