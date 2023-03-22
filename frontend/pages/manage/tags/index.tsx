@@ -89,6 +89,7 @@ const Tags: NextPage = () => {
                 key: tag.id,
                 name: tag.name,
                 description: tag.description,
+                count_tagged_questions: tag.count_tagged_questions,
                 slug: tag.slug,
             }
         })

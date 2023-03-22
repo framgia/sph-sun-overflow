@@ -1,16 +1,16 @@
 import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
+import type { IUser } from '@/components/molecules/UserTab'
 import UserTab from '@/components/molecules/UserTab'
 import Paginate from '@/components/organisms/Paginate'
-import GET_USERS from '@/helpers/graphql/queries/get_users'
+import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_ROLES from '@/helpers/graphql/queries/get_roles'
+import GET_USERS from '@/helpers/graphql/queries/get_users'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import type { IUser } from '@/components/molecules/UserTab'
-import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import { useEffect, useState } from 'react'
 
 type Role = {
     id: number

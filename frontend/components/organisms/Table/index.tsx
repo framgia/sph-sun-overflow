@@ -44,7 +44,7 @@ const Table = ({
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
-        <div className="flex flex-col border-black">
+        <div className="flex flex-col  border-black">
             <div className="-m-1.5 overflow-x-auto">
                 <div className="inline-block min-w-full p-1.5 align-middle">
                     <div className="overflow-hidden">
@@ -91,13 +91,17 @@ const Table = ({
                                                             key={key}
                                                             className="min-w-[200px] whitespace-nowrap py-4 text-center text-sm"
                                                         >
-                                                            {clickable !== undefined
-                                                                ? renderClickable(
-                                                                      data[column.key],
-                                                                      clickable,
-                                                                      data.slug as string
-                                                                  )
-                                                                : data[column.key]}
+                                                            {clickable !== undefined ? (
+                                                                renderClickable(
+                                                                    data[column.key],
+                                                                    clickable,
+                                                                    data.slug as string
+                                                                )
+                                                            ) : (
+                                                                <p className="max-w-[50ch] truncate px-6">
+                                                                    {data[column.key]}
+                                                                </p>
+                                                            )}
                                                         </td>
                                                     )
                                                 })}

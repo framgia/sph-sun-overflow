@@ -39,41 +39,45 @@ const TagsFormModal = ({
         const name = target.tagName.value
         const description = target.tagDescription.value
 
-        if (formTitle === 'Add Tag') {
-            createTag({
-                variables: {
-                    name,
-                    description,
-                },
-            })
-                .then(() => {
-                    successNotify('Tag Successfully Added!')
-                    refetchHandler()
-                    closeModal()
-                })
-                .catch((e) => {
-                    errorNotify(e.message)
-                })
+        if (name === '' || description === '') {
+            errorNotify('Please input some data')
         } else {
-            if (initialData.name === name && initialData.description === description) {
-                errorNotify('Tag is not updated!')
-                closeModal()
-            } else {
-                updateTag({
+            if (formTitle === 'Add Tag') {
+                createTag({
                     variables: {
-                        id: initialData?.id,
                         name,
                         description,
                     },
                 })
                     .then(() => {
-                        successNotify('Tag Successfully Updated!')
+                        successNotify('Tag Successfully Added!')
                         refetchHandler()
                         closeModal()
                     })
                     .catch((e) => {
                         errorNotify(e.message)
                     })
+            } else {
+                if (initialData.name === name && initialData.description === description) {
+                    errorNotify('Tag is not updated!')
+                    closeModal()
+                } else {
+                    updateTag({
+                        variables: {
+                            id: initialData?.id,
+                            name,
+                            description,
+                        },
+                    })
+                        .then(() => {
+                            successNotify('Tag Successfully Updated!')
+                            refetchHandler()
+                            closeModal()
+                        })
+                        .catch((e) => {
+                            errorNotify(e.message)
+                        })
+                }
             }
         }
     }
@@ -97,6 +101,7 @@ const TagsFormModal = ({
                         defaultValue={initialData.name || ''}
                     />
                 </div>
+
                 <div className="flex flex-col gap-2">
                     <textarea
                         name="tagDescription"
