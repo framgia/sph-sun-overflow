@@ -207,7 +207,7 @@ const onPageChange = async (first: number, page: number): Promise<void> => {
 }
 const MembersTab = (): JSX.Element => {
     const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false)
-    const [memberToDelete, setIsMemberToDelete] = useState<Member | undefined>()
+    const [memberToDelete, setMemberToDelete] = useState<Member | undefined>()
 
     const findMember = (key: number): Member | undefined =>
         tempMembers.find((item: Member): boolean => item.key === key) // replace temporary data
@@ -216,7 +216,7 @@ const MembersTab = (): JSX.Element => {
         return (
             <div
                 onClick={() => {
-                    setIsMemberToDelete(findMember(key))
+                    setMemberToDelete(findMember(key))
                     setIsOpenDelete(true)
                 }}
                 className="cursor-pointer"
@@ -236,7 +236,7 @@ const MembersTab = (): JSX.Element => {
     }
     const closeModal = (): void => {
         setIsOpenDelete(false)
-        setIsMemberToDelete(undefined)
+        setMemberToDelete(undefined)
     }
 
     return (
