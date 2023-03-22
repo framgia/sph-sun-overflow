@@ -1,8 +1,9 @@
 import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
 import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import TagsActions from '@/components/organisms/TagsAction'
+import TagsFormModal from '@/components/organisms/TagsFormModal'
 import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TAGS from '@/helpers/graphql/queries/get_tags'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
@@ -11,7 +12,7 @@ import type { RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const columns: ColumnType[] = [
     {
@@ -33,32 +34,8 @@ const columns: ColumnType[] = [
     },
 ]
 
-const editAction = (): JSX.Element => {
-    return (
-        <div>
-            <Icons name="table_edit" additionalClass="fill-gray-500" />
-        </div>
-    )
-}
-
-const deleteAction = (): JSX.Element => {
-    return (
-        <div>
-            <Icons name="table_delete" additionalClass="fill-gray-500" />
-        </div>
-    )
-}
-
-const renderTagsActions = (): JSX.Element => {
-    return (
-        <div className="flex flex-row gap-4">
-            {editAction()}
-            {deleteAction()}
-        </div>
-    )
-}
-
 const Tags: NextPage = () => {
+    const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_TAGS, {
         variables: {
@@ -81,7 +58,6 @@ const Tags: NextPage = () => {
     if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
     const { data: tags, paginatorInfo } = data.tags
-    const tagList: DataType[] = tags
     const pageInfo: PaginatorInfo = paginatorInfo
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
@@ -95,16 +71,66 @@ const Tags: NextPage = () => {
         )
     }
 
+    const closeModal = (): void => {
+        setIsOpen(false)
+    }
+
+    const refetchHandler = (): void => {
+        void refetch({
+            first: 6,
+            page: 1,
+            name: '%%',
+            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+        })
+    }
+    const getTagsDataTable = (tagList: DataType[]): DataType[] => {
+        return tagList.map((tag): DataType => {
+            return {
+                key: tag.id,
+                name: tag.name,
+                description: tag.description,
+                slug: tag.slug,
+            }
+        })
+    }
+
+    const getTagsActions = (key: number): JSX.Element | undefined => {
+        const dataSource = getTagsDataTable(tags).find((tag) => +tag.key === key)
+
+        if (dataSource) {
+            return (
+                <TagsActions
+                    id={dataSource.key as number}
+                    name={dataSource.name as string}
+                    description={dataSource.description as string}
+                    refetchHandler={refetchHandler}
+                />
+            )
+        }
+    }
+
     return (
         <div className="flex w-full flex-col gap-4 p-8">
             <div className="flex h-full flex-col gap-4">
                 <div className="mt-4 flex items-center justify-between">
                     <h1 className="text-3xl font-bold">Tags</h1>
-                    <Button type="button">New Tag</Button>
+                    <Button
+                        type="button"
+                        onClick={() => {
+                            setIsOpen(true)
+                        }}
+                    >
+                        New Tag
+                    </Button>
                 </div>
                 <div className="overflow-hidden border border-black">
-                    <Table columns={columns} dataSource={tagList} actions={renderTagsActions} />
+                    <Table
+                        columns={columns}
+                        dataSource={getTagsDataTable(tags)}
+                        actions={getTagsActions}
+                    />
                 </div>
+                <TagsFormModal isOpen={isOpen} closeModal={closeModal} refetchHandler={refetch} />
                 <div className="mt-auto">{renderPagination()}</div>
             </div>
         </div>
