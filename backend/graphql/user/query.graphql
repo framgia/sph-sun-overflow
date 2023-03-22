@@ -14,6 +14,7 @@ extend type Query {
     users(filter: userFilter @spread, sort: userSort @spread): [User!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Users")
+    teamLeaders: [User!] @guard(with: ["api"])
     me: User @guard(with: ["api"]) @auth
     userTeams(id: ID!): [Member!]!
         @guard(with: ["api"])
