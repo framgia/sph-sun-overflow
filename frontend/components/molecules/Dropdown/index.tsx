@@ -23,7 +23,7 @@ const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps)
                 onChange={onChange}
                 value={value}
                 className={`${
-                    isError ? 'border-primary-red' : 'border-secondary-gray'
+                    isError ? 'border-primary-red' : ''
                 } w-full rounded-lg border px-3 py-2.5 text-sm text-secondary-black focus:border-blue-500 focus:ring-blue-500`}
             >
                 {options.map((option) => {

@@ -3,7 +3,10 @@ extend type Query {
         @guard(with: ["api"])
         @paginate
 
-    getUserTeams(name: String! = "%%" @where(operator: "like")): [Team!]!
+    getUserTeams(
+        name: String! = "%%" @where(operator: "like")
+        isAdmin: Boolean = false
+    ): [Team!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Teams")
 
