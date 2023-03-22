@@ -3,11 +3,13 @@ import Icons from '@/components/atoms/Icons'
 import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import Modal from '@/components/templates/Modal'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 type TeamType = {
     id: number
@@ -51,21 +53,44 @@ const columns: ColumnType[] = [
 const handleEdit = (event: React.MouseEvent<HTMLElement>): void => {
     console.log('Edit')
 }
-const handleDelete = (event: React.MouseEvent<HTMLElement>): void => {
-    console.log('Delete')
-}
 
 const editAction = (key: number): JSX.Element => {
     return (
-        <div onClick={handleEdit}>
-            <Icons name="table_edit" additionalClass="fill-gray-500" />
+        <div>
+            <Button usage="toggle-modal" onClick={handleEdit}>
+                <Icons name="table_edit" additionalClass="fill-gray-500" />
+            </Button>
         </div>
     )
 }
 const deleteAction = (key: number): JSX.Element => {
+    const [showModal, setShowModal] = useState(false)
+
     return (
-        <div onClick={handleDelete}>
-            <Icons name="table_delete" additionalClass="fill-gray-500" />
+        <div>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setShowModal(true)
+                }}
+            >
+                <Icons name="table_delete" additionalClass="fill-gray-500" />
+            </Button>
+            <Modal
+                title="Delete Team"
+                isOpen={showModal}
+                handleClose={() => {
+                    setShowModal(false)
+                }}
+                handleSubmit={() => {
+                    setShowModal(false)
+                }}
+                submitLabel="Delete"
+            >
+                <span>
+                    Are you sure you wish to delete <span className="font-bold">Team B</span>?
+                </span>
+            </Modal>
         </div>
     )
 }
