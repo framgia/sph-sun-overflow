@@ -3,6 +3,7 @@ import PageStats from '@/components/atoms/PageStats'
 import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import Modal from '@/components/templates/Modal'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
@@ -10,7 +11,6 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { HiPlus } from 'react-icons/hi'
-
 interface UserType {
     id: number
     first_name: string
@@ -109,16 +109,18 @@ const TeamDetail = (): JSX.Element => {
 
 type MembersQuery = {
     members: {
-        data: Array<{
-            fullName: string
-            teamRole: string
-        }>
+        data: Member[]
         paginatorInfo: {
             currentPage: number
             hasMorePages: boolean
             lastPage: number
         }
     }
+}
+type Member = {
+    fullName: string
+    teamRole: string
+    key: number
 }
 
 const columns: ColumnType[] = [
@@ -143,40 +145,49 @@ const tempMembers = [
     {
         fullName: 'a',
         teamRole: 'QA',
+        key: 1,
     },
     {
-        fullName: 'a',
+        fullName: 'ab',
         teamRole: 'QA',
+        key: 2,
     },
     {
-        fullName: 'a',
+        fullName: 'ac',
         teamRole: 'QA',
+        key: 3,
     },
     {
-        fullName: 'a',
+        fullName: 'ad',
         teamRole: 'QA',
+        key: 4,
     },
     {
-        fullName: 'a',
+        fullName: 'ae',
         teamRole: 'QA',
+        key: 5,
     },
     {
-        fullName: 'a',
+        fullName: 'af',
         teamRole: 'QA',
+        key: 6,
     },
     {
-        fullName: 'a',
+        fullName: 'ag',
         teamRole: 'QA',
+        key: 7,
     },
     {
-        fullName: 'a',
+        fullName: 'aa',
         teamRole: 'QA',
+        key: 8,
     },
     {
-        fullName: 'a',
+        fullName: 'aq',
         teamRole: 'QA',
+        key: 9,
     },
-]
+] as Member[]
 
 const tempPaginateInfo = {
     currentPage: 1,
@@ -194,23 +205,40 @@ const onPageChange = async (first: number, page: number): Promise<void> => {
         console.log('ok')
     })
 }
-const handleDelete = (event: React.MouseEvent<HTMLElement>): void => {
-    console.log('Delete')
-}
-
-const deleteAction = (key: number): JSX.Element => {
-    return (
-        <div onClick={handleDelete}>
-            <Icons name="table_delete" additionalClass="fill-gray-500" />
-        </div>
-    )
-}
-
-const renderMembersActions = (key: number): JSX.Element | undefined => {
-    return <div className="flex flex-row justify-end gap-4 ">{deleteAction(key)}</div>
-}
-
 const MembersTab = (): JSX.Element => {
+    const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false)
+    const [memberToDelete, setIsMemberToDelete] = useState<Member | undefined>()
+
+    const findMember = (key: number): Member | undefined =>
+        tempMembers.find((item: Member): boolean => item.key === key) // replace temporary data
+
+    const deleteAction = (key: number): JSX.Element => {
+        return (
+            <div
+                onClick={() => {
+                    setIsMemberToDelete(findMember(key)) //
+                    setIsOpenDelete(true)
+                }}
+                className="cursor-pointer"
+            >
+                <Icons name="table_delete" additionalClass="fill-gray-500" />
+            </div>
+        )
+    }
+
+    const renderMembersActions = (key: number): JSX.Element | undefined => {
+        return <div className="flex flex-row justify-end gap-4 ">{deleteAction(key)}</div>
+    }
+
+    const handleDelete = (): void => {
+        console.log('Delete') // replace with delete call
+        setIsOpenDelete(false)
+    }
+    const closeModal = (): void => {
+        setIsOpenDelete(false)
+        setIsMemberToDelete(undefined)
+    }
+
     return (
         <div className="w-full">
             <div className="  w-[85%] border border-[#555555]">
@@ -234,6 +262,15 @@ const MembersTab = (): JSX.Element => {
                     <HiPlus color="white" size={50} />
                 </button>
             </div>
+            <Modal
+                title={`Removing ${memberToDelete?.fullName ?? ''}`}
+                submitLabel="Confirm"
+                isOpen={isOpenDelete}
+                handleClose={closeModal}
+                handleSubmit={handleDelete}
+            >
+                Are you sure you want to remove this member?
+            </Modal>
         </div>
     )
 }
