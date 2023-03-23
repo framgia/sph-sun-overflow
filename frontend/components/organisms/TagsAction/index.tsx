@@ -1,6 +1,9 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Modal from '@/components/templates/Modal'
+import DELETE_TAG from '@/helpers/graphql/mutations/delete_tag'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation } from '@apollo/client'
 import { useState } from 'react'
 import TagsFormModal from '../TagsFormModal'
 
@@ -11,9 +14,56 @@ type Props = {
     refetchHandler: () => void
 }
 
+const renderDeleteAction = (id: number, name: string, refetch: () => void): JSX.Element => {
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [deleteTag] = useMutation(DELETE_TAG)
+
+    const closeDeleteModal = (): void => {
+        setShowDeleteModal(false)
+    }
+
+    const handleSubmit = (): void => {
+        deleteTag({ variables: { id } })
+            .then(() => {
+                successNotify('Tag deleted.')
+                refetch()
+            })
+            .catch(() => {
+                errorNotify('Failed to delete tag.')
+            })
+            .finally(() => {
+                setShowDeleteModal(false)
+            })
+    }
+
+    return (
+        <>
+            <Button
+                usage="toggle-modal"
+                onClick={(): void => {
+                    setShowDeleteModal(true)
+                }}
+            >
+                <Icons name="table_delete" additionalClass="fill-gray-500" />
+            </Button>
+            <Modal
+                title="Delete Tag"
+                isOpen={showDeleteModal}
+                handleClose={closeDeleteModal}
+                handleSubmit={handleSubmit}
+                submitLabel="Delete"
+            >
+                <div className="flex flex-wrap gap-1">
+                    Are you sure you wish to delete the{' '}
+                    <div className="truncate font-bold">{name}</div> tag?
+                </div>
+            </Modal>
+        </>
+    )
+}
+
 const TagsActions = ({ id, name, description, refetchHandler }: Props): JSX.Element => {
     const [showEditModal, setShowEditModal] = useState(false)
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     const initialData = {
         id,
@@ -23,10 +73,6 @@ const TagsActions = ({ id, name, description, refetchHandler }: Props): JSX.Elem
 
     const closeEditModal = (): void => {
         setShowEditModal(false)
-    }
-
-    const closeDeleteModal = (): void => {
-        setShowDeleteModal(false)
     }
 
     return (
@@ -39,32 +85,13 @@ const TagsActions = ({ id, name, description, refetchHandler }: Props): JSX.Elem
             >
                 <Icons name="table_edit" additionalClass="fill-gray-500" />
             </Button>
-            <Button
-                usage="toggle-modal"
-                onClick={(): void => {
-                    setShowDeleteModal(true)
-                }}
-            >
-                <Icons name="table_delete" additionalClass="fill-gray-500" />
-            </Button>
             <TagsFormModal
                 isOpen={showEditModal}
                 closeModal={closeEditModal}
                 refetchHandler={refetchHandler}
                 initialData={initialData}
             />
-            <Modal
-                title="Delete Tag"
-                isOpen={showDeleteModal}
-                handleClose={closeDeleteModal}
-                handleSubmit={closeDeleteModal}
-                submitLabel="Delete"
-            >
-                <span>
-                    Are you sure you wish to delete the{' '}
-                    <span className="font-bold">JavaScript</span> tag?
-                </span>
-            </Modal>
+            {renderDeleteAction(id, name, refetchHandler)}
         </div>
     )
 }
