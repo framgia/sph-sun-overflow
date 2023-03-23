@@ -2,7 +2,7 @@ type Team {
     id: ID!
     name: String!
     description: String!
-    dashboard_content: String!
+    dashboard_content: String
     created_at: String!
     updated_at: String
     teamLeader: User! @belongsTo

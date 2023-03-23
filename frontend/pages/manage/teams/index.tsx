@@ -1,13 +1,15 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import Paginate from '@/components/organisms/Paginate'
-import type { ColumnType } from '@/components/organisms/Table'
+import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
 import Modal from '@/components/templates/Modal'
+import { type PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import DELETE_TEAM from '@/helpers/graphql/mutations/delete_team'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { errorNotify } from '@/helpers/toast'
-import { useQuery } from '@apollo/client'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import TeamsFormModal from '../../../components/organisms/TeamsFormModal/index'
@@ -23,11 +25,7 @@ type TeamType = {
 type TeamsQuery = {
     getUserTeams: {
         data: TeamType[]
-        paginatorInfo: {
-            currentPage: number
-            hasMorePages: boolean
-            lastPage: number
-        }
+        paginatorInfo: PaginatorInfo
     }
 }
 
@@ -77,8 +75,23 @@ const editAction = (key: number): JSX.Element => {
         </div>
     )
 }
-const deleteAction = (key: number): JSX.Element => {
+const deleteAction = (key: number, name: string, refetch: () => void): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
+    const [deleteRole] = useMutation(DELETE_TEAM)
+
+    const onSubmit = (): void => {
+        deleteRole({ variables: { id: key } })
+            .then(() => {
+                successNotify('Team successfully deleted')
+                refetch()
+            })
+            .catch(() => {
+                errorNotify('Failed deleting the team')
+            })
+            .finally(() => {
+                setShowModal(false)
+            })
+    }
 
     return (
         <div>
@@ -96,24 +109,13 @@ const deleteAction = (key: number): JSX.Element => {
                 handleClose={() => {
                     setShowModal(false)
                 }}
-                handleSubmit={() => {
-                    setShowModal(false)
-                }}
+                handleSubmit={onSubmit}
                 submitLabel="Delete"
             >
                 <span>
-                    Are you sure you wish to delete <span className="font-bold">Team B</span>?
+                    Are you sure you wish to delete <span className="font-bold">{name}</span>?
                 </span>
             </Modal>
-        </div>
-    )
-}
-
-const renderTeamsActions = (key: number): JSX.Element | undefined => {
-    return (
-        <div className="flex flex-row gap-4">
-            {editAction(key)}
-            {deleteAction(key)}
         </div>
     )
 }
@@ -156,6 +158,38 @@ const AdminTeams = (): JSX.Element => {
             },
         },
     ]
+
+    const getTeamDataTable = (teams: TeamType[]): DataType[] => {
+        return teams.map((team): DataType => {
+            const { id, name, slug, description, members_count } = team
+            return {
+                key: id,
+                name,
+                slug,
+                description,
+                members_count,
+            }
+        })
+    }
+
+    const renderTeamsActions = (key: number): JSX.Element | undefined => {
+        const team = getTeamDataTable(teamArr).find((team) => +team.key === key)
+
+        return (
+            <div className="flex flex-row gap-4">
+                {editAction(key)}
+                {deleteAction(key, String(team?.name), () => {
+                    void refetch({
+                        variables: {
+                            first: paginatorInfo.perPage,
+                            page: paginatorInfo.currentPage,
+                        },
+                    })
+                })}
+            </div>
+        )
+    }
+
     return (
         <div className="flex h-full w-full flex-col gap-4 p-8">
             <div className="mt-4 flex flex-row items-center justify-between">
@@ -173,7 +207,7 @@ const AdminTeams = (): JSX.Element => {
             <div className="TableContainer overflow-hidden border border-[#555555]">
                 <Table
                     columns={columns}
-                    dataSource={teamArr}
+                    dataSource={getTeamDataTable(teamArr)}
                     isEmptyString="No Teams to Show"
                     actions={renderTeamsActions}
                     clickableArr={clickableArr}
