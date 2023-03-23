@@ -14,10 +14,10 @@ final class DeleteMember
      */
     public function __invoke($_, array $args)
     {
-        $authId = Auth::id();
+        $authUser = Auth::user();
         $member = Member::find($args['id']);
 
-        if ($authId != $member->team->teamLeader->id) {
+        if ($authUser->id != $member->team->teamLeader->id && $authUser->role_id != 1) {
             throw new CustomException('You are not allowed to remove members from this team');
         }
 

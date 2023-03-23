@@ -9,7 +9,7 @@ import { useState } from 'react'
 type Props = {
     id: number
     name: string
-    role: string
+    role: string | undefined
     refetchHandler: (isDelete: boolean) => void
 }
 
@@ -49,7 +49,7 @@ const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element =>
             </Button>
             {isOpenDelete && (
                 <Modal
-                    title={`Removing ${name} (${role})`}
+                    title={`Removing ${name} (${role ?? 'Member'})`}
                     submitLabel="Confirm"
                     isOpen={isOpenDelete}
                     handleClose={closeDelete}
