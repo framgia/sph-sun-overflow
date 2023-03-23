@@ -91,17 +91,13 @@ const Table = ({
                                                             key={key}
                                                             className="min-w-[200px] whitespace-nowrap py-4 text-center text-sm"
                                                         >
-                                                            {clickable !== undefined ? (
-                                                                renderClickable(
-                                                                    data[column.key],
-                                                                    clickable,
-                                                                    data.slug as string
-                                                                )
-                                                            ) : (
-                                                                <p className="max-w-[50ch] truncate px-6">
-                                                                    {data[column.key]}
-                                                                </p>
-                                                            )}
+                                                            {clickable !== undefined
+                                                                ? renderClickable(
+                                                                      data[column.key],
+                                                                      clickable,
+                                                                      data.slug as string
+                                                                  )
+                                                                : data[column.key]}
                                                         </td>
                                                     )
                                                 })}

@@ -87,8 +87,8 @@ const Tags: NextPage = () => {
         return tagList.map((tag): DataType => {
             return {
                 key: tag.id,
-                name: tag.name,
-                description: tag.description,
+                name: tag.truncated_name,
+                description: tag.truncated_description,
                 count_tagged_questions: tag.count_tagged_questions,
                 slug: tag.slug,
             }
