@@ -11,7 +11,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TeamsFormModal from '../../../components/organisms/TeamsFormModal/index'
 
 type TeamType = {
@@ -143,6 +143,14 @@ const AdminTeams = (): JSX.Element => {
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await refetch({ first, page, isAdmin: true })
     }
+
+    useEffect(() => {
+        void refetch({
+            first: 6,
+            page: 1,
+            isAdmin: true,
+        })
+    }, [router, refetch])
 
     if (loading) return loadingScreenShow()
     if (error) {
