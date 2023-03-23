@@ -1,10 +1,8 @@
 import Icons from '@/components/atoms/Icons'
 import { useBoundStore } from '@/helpers/store'
-import { Float } from '@headlessui-float/react'
-import { Popover } from '@headlessui/react'
-import { useState } from 'react'
-import { usePopper } from 'react-popper'
+import { Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react'
 import Tooltips from '../Tooltip'
+
 type PillProps = {
     tag: {
         id: number
@@ -18,41 +16,27 @@ type PillProps = {
 }
 
 const Pill = ({ tag }: PillProps): JSX.Element => {
-    const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>()
-    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
-    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>()
-    const { styles, attributes } = usePopper(referenceElement, popperElement, {
-        modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-    })
-
     const watchedTags = useBoundStore((state) => state.watchedTags)
 
     return (
-        <Popover>
-            <Float placement="bottom-start" offset={5} arrow>
-                <Popover.Button type="button" className="!outline-none">
-                    <div
-                        className="flex min-w-fit flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none"
-                        ref={setReferenceElement}
-                    >
-                        {watchedTags.some((tempTag) => tempTag.name === tag.name) && (
-                            <Icons name="pill_eye" />
-                        )}
-                        <span>{tag.name}</span>
-                    </div>
-                </Popover.Button>
-                <Popover.Panel
-                    className="bg-zinc-200 absolute z-10 mt-3 w-96 rounded-lg shadow-lg"
-                    ref={setPopperElement}
-                    style={styles.popper}
-                    {...attributes.popper}
-                >
-                    <div ref={setArrowElement} style={styles.arrow}>
-                        <Float.Arrow className="bg-zinc-200 relative ml-3 h-6 w-6 rotate-45" />
-                    </div>
-                    <Tooltips tag={tag} />
-                </Popover.Panel>
-            </Float>
+        <Popover
+            placement="bottom-start"
+            animate={{
+                mount: { scale: 1, y: 0 },
+                unmount: { scale: 0, y: 25 },
+            }}
+        >
+            <PopoverHandler>
+                <div className="flex min-w-fit cursor-pointer flex-row items-center gap-1 rounded-full bg-red-300 py-1 px-3 text-xs font-normal !outline-none">
+                    {watchedTags.some((tempTag) => tempTag.name === tag.name) && (
+                        <Icons name="pill_eye" />
+                    )}
+                    <span>{tag.name}</span>
+                </div>
+            </PopoverHandler>
+            <PopoverContent className="max-w-[22rem] bg-gray-200">
+                <Tooltips tag={tag} />
+            </PopoverContent>
         </Popover>
     )
 }
