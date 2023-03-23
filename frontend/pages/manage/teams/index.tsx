@@ -49,7 +49,7 @@ const columns: ColumnType[] = [
     },
 ]
 
-const editAction = (key: number): JSX.Element => {
+const EditAction = ({ id }: { id: number }): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
 
     return (
@@ -75,12 +75,20 @@ const editAction = (key: number): JSX.Element => {
         </div>
     )
 }
-const deleteAction = (key: number, name: string, refetch: () => void): JSX.Element => {
+const DeleteAction = ({
+    id,
+    name,
+    refetch,
+}: {
+    id: number
+    name: string
+    refetch: () => void
+}): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
     const [deleteRole] = useMutation(DELETE_TEAM)
 
     const onSubmit = (): void => {
-        deleteRole({ variables: { id: key } })
+        deleteRole({ variables: { id } })
             .then(() => {
                 successNotify('Team successfully deleted')
                 refetch()
@@ -177,15 +185,19 @@ const AdminTeams = (): JSX.Element => {
 
         return (
             <div className="flex flex-row gap-4">
-                {editAction(key)}
-                {deleteAction(key, String(team?.name), () => {
-                    void refetch({
-                        variables: {
-                            first: paginatorInfo.perPage,
-                            page: paginatorInfo.currentPage,
-                        },
-                    })
-                })}
+                <EditAction id={key} />
+                <DeleteAction
+                    id={key}
+                    name={String(team?.name)}
+                    refetch={() => {
+                        void refetch({
+                            variables: {
+                                first: paginatorInfo.perPage,
+                                page: paginatorInfo.currentPage,
+                            },
+                        })
+                    }}
+                />
             </div>
         )
     }
