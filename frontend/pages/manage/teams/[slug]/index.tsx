@@ -1,3 +1,4 @@
+import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
 import PageStats from '@/components/atoms/PageStats'
 import Paginate from '@/components/organisms/Paginate'
@@ -214,15 +215,15 @@ const MembersTab = (): JSX.Element => {
 
     const deleteAction = (key: number): JSX.Element => {
         return (
-            <div
+            <Button
+                usage="toggle-modal"
                 onClick={() => {
                     setMemberToDelete(findMember(key))
                     setIsOpenDelete(true)
                 }}
-                className="cursor-pointer"
             >
                 <Icons name="table_delete" additionalClass="fill-gray-500" />
-            </div>
+            </Button>
         )
     }
 
