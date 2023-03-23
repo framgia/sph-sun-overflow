@@ -5,6 +5,12 @@ import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
 import Modal from '@/components/templates/Modal'
+import ASSIGN_ROLE from '@/helpers/graphql/mutations/assign_role'
+import GET_ROLES_SELECTION from '@/helpers/graphql/queries/get_role_selection'
+import GET_USERS_ADMIN from '@/helpers/graphql/queries/get_users_admin'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation, useQuery, type ApolloError } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -33,89 +39,81 @@ const columns: ColumnType[] = [
     },
 ]
 
-const tempValues = [
-    {
-        id: 1,
-        name: 'John Doe',
-        slug: 'john-doe',
-        question_count: 5,
-        answer_count: 6,
-        role: 'Admin',
-    },
-    {
-        id: 2,
-        name: 'Jane Doe',
-        slug: 'jane-doe',
-        question_count: 5,
-        answer_count: 6,
-        role: 'Admin',
-    },
-    {
-        id: 3,
-        name: 'John Smith',
-        slug: 'john-smith',
-        question_count: 5,
-        answer_count: 6,
-        role: 'Admin',
-    },
-    {
-        id: 4,
-        name: 'Jane Roe',
-        slug: 'jane-roe',
-        question_count: 5,
-        answer_count: 6,
-        role: 'Admin',
-    },
-]
 type FormValues = {
     role: number
+    userId: number
 }
 
-const tempPaginateProps = {
-    currentPage: 1,
-    lastPage: 2,
-    hasMorePages: true,
-    onPageChange: () => {
-        console.log('next')
-    },
+type TUser = {
+    id: number
+    first_name: string
+    last_name: string
+    question_count: number
+    answer_count: number
+    role: {
+        name: string
+    }
+    slug: string
+}
+
+type TUserConverted = {
+    id: number
+    name: string
+    question_count: number
+    answer_count: number
+    role: string
+    key: number
+    slug: string
+}
+
+const convertUserArr = (oldArr: TUser[]): TUserConverted[] => {
+    return oldArr.map((user, index) => {
+        return {
+            id: user.id,
+            name: `${user.first_name} ${user.last_name}`,
+            question_count: user.question_count,
+            answer_count: user.answer_count,
+            role: user.role.name,
+            key: index,
+            slug: user.slug,
+        }
+    })
+}
+
+const convertRoleStrToInt = (
+    roleArr: Array<{ id: number; name: string }>,
+    roleStr: string
+): number => {
+    return roleArr.find((role) => role.name === roleStr)?.id ?? 0
 }
 
 const AdminUsers = (): JSX.Element => {
     const router = useRouter()
     const [isOpenEdit, setIsOpenEdit] = useState(false)
-    const roles = [
-        {
-            id: 1,
-            name: 'Admin',
+    const usersQuery = useQuery(GET_USERS_ADMIN, {
+        variables: {
+            first: 10,
+            page: 1,
+            filter: { keyword: '', role_id: null },
+            sort: { reputation: null },
         },
-        {
-            id: 2,
-            name: 'Team Leader',
+    })
+    const rolesQuery = useQuery(GET_ROLES_SELECTION)
+    const [assignRole] = useMutation(ASSIGN_ROLE)
+    const roles = rolesQuery?.data?.roles ?? []
+    const { control, handleSubmit, setValue } = useForm<FormValues>({
+        defaultValues: {
+            userId: 0,
+            role: 1,
         },
-        {
-            id: 3,
-            name: 'User',
-        },
-    ]
-    const { control } = useForm<FormValues>({
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
     })
 
     const closeEdit = (): void => {
         setIsOpenEdit(!isOpenEdit)
-    }
-    const editAction = (): JSX.Element => {
-        return (
-            <Button
-                usage="toggle-modal"
-                onClick={() => {
-                    setIsOpenEdit(true)
-                }}
-            >
-                <Icons name="table_edit" additionalClass="fill-gray-500" />
-            </Button>
-        )
+        setValue('role', 1)
+        setValue('userId', 0)
     }
 
     const clickableArr = [
@@ -129,6 +127,46 @@ const AdminUsers = (): JSX.Element => {
             },
         },
     ]
+    if (usersQuery.loading) return loadingScreenShow()
+    if (usersQuery.error) {
+        errorNotify(`Error! ${usersQuery.error?.message ?? ''}`)
+        return <></>
+    }
+    const {
+        users: { data: userArr, paginatorInfo },
+    } = usersQuery.data
+    const newUserArr = convertUserArr(userArr)
+
+    const editAction = (key: number): JSX.Element => {
+        return (
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setIsOpenEdit(true)
+                    setValue('role', convertRoleStrToInt(roles, newUserArr[key].role))
+                    setValue('userId', newUserArr[key].id)
+                }}
+            >
+                <Icons name="table_edit" additionalClass="fill-gray-500" />
+            </Button>
+        )
+    }
+
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await usersQuery.refetch({ first, page })
+    }
+
+    const onSubmit = async (data: FormValues): Promise<void> => {
+        console.log(data)
+        closeEdit()
+        await assignRole({ variables: { userId: data.userId, roleId: data.role } })
+            .then((data) => {
+                successNotify('Roles Successfully Changed')
+            })
+            .catch((error: ApolloError) => {
+                errorNotify(`Error: ${error.message}`)
+            })
+    }
 
     return (
         <div className="flex w-full flex-col gap-4 p-8">
@@ -139,7 +177,7 @@ const AdminUsers = (): JSX.Element => {
                 <div className="overflow-hidden border border-secondary-black">
                     <Table
                         columns={columns}
-                        dataSource={tempValues}
+                        dataSource={newUserArr}
                         actions={editAction}
                         clickableArr={clickableArr}
                     />
@@ -149,6 +187,7 @@ const AdminUsers = (): JSX.Element => {
                             submitLabel="Save"
                             isOpen={isOpenEdit}
                             handleClose={closeEdit}
+                            handleSubmit={handleSubmit(onSubmit)}
                         >
                             <form>
                                 <Controller
@@ -170,7 +209,9 @@ const AdminUsers = (): JSX.Element => {
                         </Modal>
                     )}
                 </div>
-                <Paginate {...tempPaginateProps} />
+                {paginatorInfo.lastPage > 1 && (
+                    <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+                )}
             </div>
         </div>
     )

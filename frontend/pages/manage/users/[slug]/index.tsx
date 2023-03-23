@@ -1,4 +1,9 @@
 import PageStats from '@/components/atoms/PageStats'
+import GET_USER from '@/helpers/graphql/queries/get_user'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Avatar from 'react-avatar'
 
@@ -9,27 +14,33 @@ interface UserType {
     avatar: string
     question_count: number
     answer_count: number
-    vote_count: number
+    reputation: number
 }
 
-const user: UserType = {
+const tempUser: UserType = {
     id: 1,
     first_name: 'John',
     last_name: 'Doe',
     avatar: 'John Doe',
     question_count: 10,
     answer_count: 5,
-    vote_count: 20,
+    reputation: 20,
 }
 
 const getActiveTabClass = (status: boolean): string => {
-    return `min-w-[120px] text-center hover:cursor-pointer -mb-[1px] hover:text-primary-red px-6 active:border-red-400 
+    return `min-w-[120px] text-center hover:cursor-pointer -mb-[1px] hover:text-primary-red px-6 active:border-red-400
     ${status ? 'font-semibold border-b-2 border-primary-red bg-red-100' : ''}`
 }
 
 const UserDetail = (): JSX.Element => {
+    const router = useRouter()
     const [activeTab, setActiveTab] = useState('Questions')
-
+    const userQuery = useQuery<{ user: UserType }>(GET_USER, {
+        variables: { slug: router.query.slug },
+        onCompleted: (e) => {
+            console.log(e)
+        },
+    })
     const onClickQuestionsTab = (): void => {
         setActiveTab('Questions')
     }
@@ -42,6 +53,12 @@ const UserDetail = (): JSX.Element => {
         setActiveTab('Teams')
     }
 
+    if (userQuery.loading) return loadingScreenShow()
+    if (userQuery.error) {
+        errorNotify(`Error! ${userQuery.error?.message ?? ''}`)
+        return <></>
+    }
+    const user: UserType = userQuery?.data?.user ?? tempUser
     return (
         <div className="mx-10 mt-10 w-full flex-col">
             <div className="flex">
@@ -62,7 +79,7 @@ const UserDetail = (): JSX.Element => {
                 <div className="mt-8 flex w-full justify-center gap-8 self-start">
                     <PageStats label="Questions Asked" value={user.question_count} />
                     <PageStats label="Questions Answered" value={user.answer_count} />
-                    <PageStats label="Votes Acquired" value={user.vote_count} />
+                    <PageStats label="Votes Acquired" value={user.reputation} />
                 </div>
             </div>
             <div className="mt-10 flex h-3/5 flex-col">
