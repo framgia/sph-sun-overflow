@@ -63,6 +63,7 @@ const Tags: NextPage = () => {
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await refetch({ first, page })
     }
+
     const renderPagination = (): JSX.Element => {
         return pageInfo.lastPage > 1 ? (
             <Paginate {...pageInfo} perPage={6} onPageChange={onPageChange} />
@@ -78,11 +79,12 @@ const Tags: NextPage = () => {
     const refetchHandler = (): void => {
         void refetch({
             first: 6,
-            page: 1,
+            page: pageInfo.currentPage,
             name: '%%',
             sort: [{ column: 'POPULARITY', order: 'DESC' }],
         })
     }
+
     const getTagsDataTable = (tagList: DataType[]): DataType[] => {
         return tagList.map((tag): DataType => {
             return {
