@@ -62,15 +62,11 @@ class Tag extends Model
 
     public function getTruncatedNameAttribute()
     {
-        $name = $this->name;
-
-        return Str::limit($name, 15, '...');
+        return Str::limit($this->name, 15, '...');
     }
 
     public function getTruncatedDescriptionAttribute()
     {
-        $description = $this->description;
-
-        return Str::limit($description, 50, '...');
+        return Str::limit($this->description, 50, '...');
     }
 }

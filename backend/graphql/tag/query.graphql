@@ -10,7 +10,7 @@ extend type Query {
     ): [Tag!]
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Tags")
-    tag(slug: String! @eq): Tag @guard(with: ["api"]) @find
+    tag(slug: String! @eq): Tag @find
     tagSuggest(name: String! = "%%" @where(operator: "like")): [Tag]
         @guard(with: ["api"])
         @all
