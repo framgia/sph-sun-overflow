@@ -17,6 +17,8 @@ const GET_TAGS = gql`
                 is_watched_by_user
                 count_tagged_questions
                 count_watching_users
+                truncated_name
+                truncated_description
             }
         }
     }

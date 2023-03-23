@@ -13,7 +13,10 @@ class Tag extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['is_watched_by_user', 'count_tagged_questions', 'count_watching_users'];
+    protected $appends = [
+        'is_watched_by_user', 'count_tagged_questions', 'count_watching_users',
+        'truncated_name', 'truncated_description',
+    ];
 
     protected static function boot()
     {
@@ -55,5 +58,15 @@ class Tag extends Model
     public function getCountWatchingUsersAttribute()
     {
         return $this->belongsToMany(User::class)->count();
+    }
+
+    public function getTruncatedNameAttribute()
+    {
+        return Str::limit($this->name, 15, '...');
+    }
+
+    public function getTruncatedDescriptionAttribute()
+    {
+        return Str::limit($this->description, 50, '...');
     }
 }
