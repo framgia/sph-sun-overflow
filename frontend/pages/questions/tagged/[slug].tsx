@@ -1,21 +1,21 @@
-import { useQuery } from '@apollo/client'
-import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
-import { errorNotify } from '../../../helpers/toast'
-import { loadingScreenShow } from '../../../helpers/loaderSpinnerHelper'
-import { useRouter } from 'next/router'
-import type { RefetchType } from '../index'
-import { useEffect, useState } from 'react'
 import QuestionsPageLayout from '@/components/templates/QuestionsPageLayout'
+import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
+import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { loadingScreenShow } from '../../../helpers/loaderSpinnerHelper'
+import { errorNotify } from '../../../helpers/toast'
+import type { RefetchType } from '../index'
 
 const TagsPage = (): JSX.Element => {
     const router = useRouter()
-    const [selectedTag, setSelectedTag] = useState('')
+    const [selectedTag, setSelectedTag] = useState(router.query.slug as string)
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
             first: 10,
             page: 1,
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-            filter: { answered: true, tag: selectedTag },
+            filter: { tag: selectedTag },
         },
     })
 
@@ -26,7 +26,7 @@ const TagsPage = (): JSX.Element => {
             first: 10,
             page: 1,
             orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-            filter: { answered: true, tag: selectedTag },
+            filter: { tag: selectedTag },
         })
         setSelectedTag(slug as string)
     }, [router, selectedTag, refetch])

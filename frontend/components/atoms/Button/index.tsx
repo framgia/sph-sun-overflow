@@ -44,7 +44,7 @@ const getButtonClasses = (usage: string): string => {
         case 'icon':
             return 'absolute inset-y-0 right-0 mr-2 flex items-center'
         case 'popover':
-            return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 bg-white border-red-500 focus:ring-red-600 hover:bg-rose-200'
+            return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 bg-white border-red-500 focus:ring-red-600 hover:bg-light-red'
         case 'cancel-item':
             return 'items-center rounded-full border-2 outline-0 border-primary-red absolute outline-primary-red -top-2 -right-2 bg-white text-primary-red p-1 hover:bg-primary-red hover:text-white active:bg-primary-red active:text-white active:outline active:outline-[2px]'
         case 'edit-top-right':

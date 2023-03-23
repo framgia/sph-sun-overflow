@@ -50,13 +50,19 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
     }
 
     return (
-        <div className="p-5 font-normal">
+        <div className="cursor-default font-normal">
             <div className="flex items-center">
-                <p className="mr-20 text-red-700">{tag.count_watching_users} Watchers</p>
-                <p className="mr-2">{tag.count_tagged_questions} Questions</p>
+                <span className="mr-20 text-red-700">
+                    {tag.count_watching_users}{' '}
+                    {(tag.count_watching_users as number) !== 1 ? `Watchers` : `Watcher`}
+                </span>
+                <span className="mr-2">
+                    {tag.count_tagged_questions}{' '}
+                    {(tag.count_tagged_questions as number) !== 1 ? `Questions` : `Question`}
+                </span>
             </div>
-            <div className=" cursor-pointer py-2">
-                <p>
+            <div className="py-2">
+                <span>
                     {tag.description}
                     <Link
                         href={`/questions/tagged/${tag.slug ?? ''}`}
@@ -64,9 +70,9 @@ const Tooltips = ({ tag }: TagType): JSX.Element => {
                     >
                         View Tag
                     </Link>
-                </p>
+                </span>
             </div>
-            <div className="float-right ml-2 mb-2 p-2">
+            <div className="float-right p-2">
                 <Button
                     usage="popover"
                     type="submit"
