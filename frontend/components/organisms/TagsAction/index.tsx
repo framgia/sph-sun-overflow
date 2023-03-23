@@ -53,10 +53,10 @@ const renderDeleteAction = (id: number, name: string, refetch: () => void): JSX.
                 handleSubmit={handleSubmit}
                 submitLabel="Delete"
             >
-                <span>
-                    Are you sure you wish to delete the <span className="font-bold">{name}</span>{' '}
-                    tag?
-                </span>
+                <div className="flex flex-wrap gap-1">
+                    Are you sure you wish to delete the{' '}
+                    <div className="truncate font-bold">{name}</div> tag?
+                </div>
             </Modal>
         </>
     )
