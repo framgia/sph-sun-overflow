@@ -1,7 +1,23 @@
 import * as React from 'react'
 
+type TUsage =
+    | 'primary'
+    | 'light'
+    | 'ask_question'
+    | 'date_filter'
+    | 'answered_filter'
+    | 'paginate'
+    | 'follow'
+    | 'icon'
+    | 'popover'
+    | 'cancel-item'
+    | 'edit-top-right'
+    | 'back-button'
+    | 'toggle-modal'
+    | 'modal-cancel'
+    | 'modal-submit'
 type Props = {
-    usage?: string
+    usage?: TUsage | string
     type?: 'button' | 'submit' | 'reset'
     additionalClass?: string
     isDisabled?: boolean
