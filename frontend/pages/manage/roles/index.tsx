@@ -53,6 +53,7 @@ const RolesPage = (): JSX.Element => {
             first: 10,
             page: 1,
         },
+        fetchPolicy: 'network-only',
     })
 
     if (loading) return loadingScreenShow()
