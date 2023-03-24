@@ -26,7 +26,7 @@ final class UpdateTeam
             $team->user_id = $args['user_id'];
 
             if ($team->isDirty('user_id')) {
-                if (User::where('id', $team->user_id)->exists() && User::find($team->user_id)->role_id == 2) {
+                if (optional(User::find($team->user_id))->role_id == 2) {
                     $team->members()->where('user_id', $teamLeader)->delete();
 
                     $team->members()->create([

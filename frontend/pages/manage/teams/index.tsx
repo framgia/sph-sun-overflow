@@ -49,7 +49,7 @@ const columns: ColumnType[] = [
     },
 ]
 
-const EditAction = ({ id }: { id: number }): JSX.Element => {
+const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void }): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
 
     return (
@@ -64,13 +64,15 @@ const EditAction = ({ id }: { id: number }): JSX.Element => {
             </Button>
             <TeamsFormModal
                 initialData={{
-                    title: 'Test',
-                    description: 'Test description',
+                    id: team?.key as number,
+                    title: team?.name as string,
+                    description: team?.description as string,
                 }}
                 isOpen={showModal}
                 closeModal={() => {
                     setShowModal(false)
                 }}
+                refetch={refetch}
             />
         </div>
     )
@@ -193,7 +195,16 @@ const AdminTeams = (): JSX.Element => {
 
         return (
             <div className="flex flex-row gap-4">
-                <EditAction id={key} />
+                <EditAction
+                    team={team}
+                    refetch={async () => {
+                        await refetch({
+                            first: paginatorInfo.perPage,
+                            page: paginatorInfo.currentPage,
+                            isAdmin: true,
+                        })
+                    }}
+                />
                 <DeleteAction
                     id={key}
                     name={String(team?.name)}
@@ -240,6 +251,13 @@ const AdminTeams = (): JSX.Element => {
                 isOpen={showModal}
                 closeModal={() => {
                     setShowModal(false)
+                }}
+                refetch={async () => {
+                    await refetch({
+                        first: paginatorInfo.perPage,
+                        page: paginatorInfo.currentPage,
+                        isAdmin: true,
+                    })
                 }}
             />
         </div>
