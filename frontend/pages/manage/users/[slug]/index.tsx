@@ -37,9 +37,6 @@ const UserDetail = (): JSX.Element => {
     const [activeTab, setActiveTab] = useState('Questions')
     const userQuery = useQuery<{ user: UserType }>(GET_USER, {
         variables: { slug: router.query.slug },
-        onCompleted: (e) => {
-            console.log(e)
-        },
     })
     const onClickQuestionsTab = (): void => {
         setActiveTab('Questions')

@@ -157,7 +157,6 @@ const AdminUsers = (): JSX.Element => {
     }
 
     const onSubmit = async (data: FormValues): Promise<void> => {
-        console.log(data)
         closeEdit()
         await assignRole({ variables: { userId: data.userId, roleId: data.role } })
             .then((data) => {
