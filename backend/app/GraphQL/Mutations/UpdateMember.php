@@ -15,11 +15,11 @@ final class UpdateMember
      */
     public function __invoke($_, array $args)
     {
-        $authId = Auth::id();
+        $authUser = Auth::user();
         $member = Member::find($args['id']);
         $updateData = Arr::except($args, ['tags']);
 
-        if ($authId != $member->team->teamLeader->id) {
+        if ($authUser->id != $member->team->teamLeader->id && $authUser->role_id != 1) {
             throw new CustomException('You are not allowed to edit members in this team');
         }
 

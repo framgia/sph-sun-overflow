@@ -1,10 +1,5 @@
-import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
 import PageStats from '@/components/atoms/PageStats'
-import Paginate from '@/components/organisms/Paginate'
-import type { ColumnType } from '@/components/organisms/Table'
-import Table from '@/components/organisms/Table'
-import Modal from '@/components/templates/Modal'
+import MemberManage from '@/components/templates/MemberManage'
 import QuestionsPageLayout from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
@@ -14,7 +9,6 @@ import { type RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { HiPlus } from 'react-icons/hi'
 interface UserType {
     id: number
     first_name: string
@@ -71,6 +65,14 @@ const TeamDetail = (): JSX.Element => {
         setActiveTab('Members')
     }
 
+    const renderMembers = (): JSX.Element => {
+        return (
+            <div className="h-[70%] w-[85%]">
+                <MemberManage isForAdmin={true} />{' '}
+            </div>
+        )
+    }
+
     const renderQuestions = (): JSX.Element => {
         return (
             <div className="h-[70%] w-[85%] pt-5">
@@ -83,6 +85,13 @@ const TeamDetail = (): JSX.Element => {
                 />
             </div>
         )
+    }
+
+    const renderActiveTab = (): JSX.Element => {
+        if (activeTab === 'Questions') return renderQuestions()
+        else if (activeTab === 'Members') return renderMembers()
+
+        return <></>
     }
 
     return (
@@ -122,179 +131,8 @@ const TeamDetail = (): JSX.Element => {
                         Members
                     </div>
                 </div>
-                <div className="flex w-full">
-                    {activeTab === 'Members' && <MembersTab />}
-                    {activeTab === 'Questions' && renderQuestions()}
-                </div>
+                <div className="flex w-full">{renderActiveTab()}</div>
             </div>
-        </div>
-    )
-}
-
-type MembersQuery = {
-    members: {
-        data: Member[]
-        paginatorInfo: {
-            currentPage: number
-            hasMorePages: boolean
-            lastPage: number
-        }
-    }
-}
-type Member = {
-    fullName: string
-    teamRole: string
-    key: number
-}
-
-const columns: ColumnType[] = [
-    {
-        title: 'Name',
-        key: 'fullName',
-        width: '20%',
-    },
-    {
-        title: 'Team Role',
-        key: 'teamRole',
-        width: '70%',
-    },
-    {
-        title: '',
-        key: 'action',
-        width: '10%',
-    },
-]
-
-const tempMembers = [
-    {
-        fullName: 'a',
-        teamRole: 'QA',
-        key: 1,
-    },
-    {
-        fullName: 'ab',
-        teamRole: 'QA',
-        key: 2,
-    },
-    {
-        fullName: 'ac',
-        teamRole: 'QA',
-        key: 3,
-    },
-    {
-        fullName: 'ad',
-        teamRole: 'QA',
-        key: 4,
-    },
-    {
-        fullName: 'ae',
-        teamRole: 'QA',
-        key: 5,
-    },
-    {
-        fullName: 'af',
-        teamRole: 'QA',
-        key: 6,
-    },
-    {
-        fullName: 'ag',
-        teamRole: 'QA',
-        key: 7,
-    },
-    {
-        fullName: 'aa',
-        teamRole: 'QA',
-        key: 8,
-    },
-    {
-        fullName: 'aq',
-        teamRole: 'QA',
-        key: 9,
-    },
-] as Member[]
-
-const tempPaginateInfo = {
-    currentPage: 1,
-    hasMorePages: false,
-    lastPage: 1,
-}
-const tempData: MembersQuery = {
-    members: {
-        data: tempMembers,
-        paginatorInfo: tempPaginateInfo,
-    },
-}
-const onPageChange = async (first: number, page: number): Promise<void> => {
-    await new Promise(() => {
-        console.log('ok')
-    })
-}
-const MembersTab = (): JSX.Element => {
-    const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false)
-    const [memberToDelete, setMemberToDelete] = useState<Member | undefined>()
-
-    const findMember = (key: number): Member | undefined =>
-        tempMembers.find((item: Member): boolean => item.key === key) // replace temporary data
-
-    const deleteAction = (key: number): JSX.Element => {
-        return (
-            <Button
-                usage="toggle-modal"
-                onClick={() => {
-                    setMemberToDelete(findMember(key))
-                    setIsOpenDelete(true)
-                }}
-            >
-                <Icons name="table_delete" additionalClass="fill-gray-500" />
-            </Button>
-        )
-    }
-
-    const renderMembersActions = (key: number): JSX.Element | undefined => {
-        return <div className="flex flex-row justify-end gap-4 ">{deleteAction(key)}</div>
-    }
-
-    const handleDelete = (): void => {
-        console.log('Delete') // replace with delete call
-        setIsOpenDelete(false)
-    }
-    const closeModal = (): void => {
-        setIsOpenDelete(false)
-        setMemberToDelete(undefined)
-    }
-
-    return (
-        <div className="w-full">
-            <div className="  w-[85%] border border-[#555555]">
-                <Table
-                    columns={columns}
-                    dataSource={tempData.members.data}
-                    actions={renderMembersActions}
-                    isEmptyString="No Members to Show"
-                />
-            </div>
-            <div className="relative mt-5 flex w-[85%] ">
-                <div className="mx-auto ">
-                    <div className="ml-32">
-                        <Paginate {...tempData.members.paginatorInfo} onPageChange={onPageChange} />{' '}
-                    </div>
-                </div>
-                <button
-                    className="absolute -right-1 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-red-500
-                    "
-                >
-                    <HiPlus color="white" size={50} />
-                </button>
-            </div>
-            <Modal
-                title={`Removing ${memberToDelete?.fullName ?? ''}`}
-                submitLabel="Confirm"
-                isOpen={isOpenDelete}
-                handleClose={closeModal}
-                handleSubmit={handleDelete}
-            >
-                Are you sure you want to remove this member?
-            </Modal>
         </div>
     )
 }

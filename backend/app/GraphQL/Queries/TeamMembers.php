@@ -14,12 +14,12 @@ final class TeamMembers
      */
     public function __invoke($_, array $args)
     {
-        $user_id = Auth::id();
+        $user = Auth::user();
         $team = Team::where('slug', $args['team_slug'])->first();
         if (! $team) {
             throw new CustomException('No team found', 'No team with the specified slug found!');
         }
-        if ($team->user_id != $user_id) {
+        if ($team->user_id != $user->id && $user->role_id != 1) { // checking if admin
             throw new CustomException('Invalid user', 'Please access as the Team Lead');
         }
 
