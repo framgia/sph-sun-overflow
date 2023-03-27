@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import StackedUsers from '@/components/molecules/StackedUsers'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 interface ITeam {
     id: number
@@ -46,7 +46,11 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
             <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
                 <span className="text-xl font-medium">My Teams</span>
             </div>
-            <div className="tags flex flex-wrap rounded-br-md rounded-bl-md bg-white">
+            <div
+                className={`tags flex max-h-[384px] flex-wrap rounded-br-md rounded-bl-md bg-white ${
+                    teams.length > 0 ? 'overflow-y-scroll' : ''
+                }`}
+            >
                 {teams.length === 0 && (
                     <div className="text-md w-full rounded-br-md rounded-bl-md p-4 text-center font-medium">
                         Not in any teams yet
@@ -78,11 +82,13 @@ const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
         extractImageUrls()
         return (
             <Link
-                className="flex h-20 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-[#E8E8E8]"
+                className="flex h-24 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-[#E8E8E8]"
                 href={`/teams/${team.slug}`}
             >
                 <div className="ml-2 flex flex-col overflow-hidden align-middle">
-                    <div className="w-24 overflow-hidden text-ellipsis text-xl ">{team.name}</div>
+                    <div className="text-md w-36 overflow-hidden text-ellipsis line-clamp-2 ">
+                        {team.name}
+                    </div>
                     <div className="text-md hidden md:text-xs lg:flex">
                         {team.members.length} members
                     </div>
