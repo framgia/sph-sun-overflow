@@ -1,9 +1,8 @@
 import Icons from '@/components/atoms/Icons'
-import { useMutation } from '@apollo/client'
 import TOGGLE_BOOKMARK from '@/helpers/graphql/mutations/toggle_bookmark'
-import { successNotify } from '@/helpers/toast'
-import { useState } from 'react'
 import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
+import { successNotify } from '@/helpers/toast'
+import { useMutation } from '@apollo/client'
 
 type BookmarkProps = {
     is_bookmarked: boolean
@@ -22,8 +21,6 @@ const Bookmark = ({
         refetchQueries: [{ query: GET_BOOKMARKS }, 'Bookmarks'],
     })
 
-    const [isBookmarked, setIsBookmarked] = useState(is_bookmarked)
-
     const handleClick = (): void => {
         toggleBookmark({
             variables: {
@@ -32,7 +29,6 @@ const Bookmark = ({
             },
         })
             .then((data: any) => {
-                setIsBookmarked(!isBookmarked)
                 successNotify(data.data.toggleBookmark)
             })
             .catch(() => {})
@@ -48,7 +44,7 @@ const Bookmark = ({
                 handleClick()
             }}
         >
-            <Icons name={isBookmarked ? 'bookmark_fill' : 'bookmark_outline'} />
+            <Icons name={is_bookmarked ? 'bookmark_fill' : 'bookmark_outline'} />
         </button>
     )
 }

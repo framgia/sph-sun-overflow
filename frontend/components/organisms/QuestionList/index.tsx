@@ -20,7 +20,6 @@ type Props = {
     tags: TagType[]
     user?: UserType
     bookmarkType?: 'Question' | 'Answer'
-    bookmarkAnswerId?: number
     page_slug?: string
     previous_page_slug?: string
     question_slug?: string
@@ -44,7 +43,6 @@ const QuestionList = ({
     tags,
     user,
     bookmarkType,
-    bookmarkAnswerId = 0,
     previous_page_slug,
     page_slug,
     team_name,
@@ -91,24 +89,28 @@ const QuestionList = ({
                 </div>
             </div>
             <div className="flex w-[85%] flex-col gap-4">
-                <div className="flex w-full justify-between">
-                    {page_slug === 'teams'
-                        ? renderTeamQuestionDetailHeader()
-                        : page_slug === 'questions' && renderQuestionDetailHeader()}
-                    {bookmarkType && (
-                        <Bookmark
-                            bookmarkable_id={bookmarkType === 'Answer' ? bookmarkAnswerId : id}
-                            bookmarkable_type={bookmarkType}
-                            refetchHandler={() => {}}
-                            is_bookmarked
-                        />
-                    )}
-                    {slug && (
-                        <div className="flex items-center gap-2">
-                            <span>{is_public ? 'Public' : 'Private'} </span>
-                            <Icons name={is_public ? 'public' : 'private'} />
-                        </div>
-                    )}
+                <div>
+                    <div className="flex justify-end">
+                        {bookmarkType === 'Question' && (
+                            <Bookmark
+                                bookmarkable_id={id}
+                                bookmarkable_type={bookmarkType}
+                                refetchHandler={() => {}}
+                                is_bookmarked
+                            />
+                        )}
+                    </div>
+                    <div className="flex w-full justify-between ">
+                        {page_slug === 'teams'
+                            ? renderTeamQuestionDetailHeader()
+                            : renderQuestionDetailHeader()}
+                        {slug && (
+                            <div className="flex items-center gap-2">
+                                <span>{is_public ? 'Public' : 'Private'} </span>
+                                <Icons name={is_public ? 'public' : 'private'} />
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className="ql-snow flex w-full flex-col gap-1">
                     <div className="ql-editor question-parsed-content w-full">
