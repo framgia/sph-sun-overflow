@@ -85,12 +85,12 @@ const Tags: NextPage = () => {
         })
     }
 
-    const getTagsDataTable = (tagList: DataType[]): DataType[] => {
+    const getTagsDataTable = (tagList: DataType[], truncate: boolean = true): DataType[] => {
         return tagList.map((tag): DataType => {
             return {
                 key: tag.id,
-                name: tag.truncated_name,
-                description: tag.truncated_description,
+                name: truncate ? tag.truncated_name : tag.name,
+                description: truncate ? tag.truncated_description : tag.description,
                 count_tagged_questions: tag.count_tagged_questions,
                 slug: tag.slug,
             }
@@ -98,7 +98,7 @@ const Tags: NextPage = () => {
     }
 
     const getTagsActions = (key: number): JSX.Element | undefined => {
-        const dataSource = getTagsDataTable(tags).find((tag) => +tag.key === key)
+        const dataSource = getTagsDataTable(tags, false).find((tag) => +tag.key === key)
 
         if (dataSource) {
             return (
