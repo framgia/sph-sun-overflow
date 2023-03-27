@@ -35,6 +35,7 @@ interface IProps {
     }
     team?: string
     page_slug?: string
+    previous_page_slug?: string
     selectedTag?: string
 }
 
@@ -46,6 +47,7 @@ const QuestionsPageLayout = ({
     isPrivate = false,
     team = '',
     page_slug = '',
+    previous_page_slug = '',
     selectedTag,
 }: IProps): JSX.Element => {
     const router = useRouter()
@@ -162,6 +164,7 @@ const QuestionsPageLayout = ({
                                 slug={team}
                                 question_slug={question.slug}
                                 page_slug={page_slug}
+                                previous_page_slug={previous_page_slug}
                                 content={question.content}
                                 created_at={question.created_at}
                                 humanized_created_at={question.humanized_created_at}

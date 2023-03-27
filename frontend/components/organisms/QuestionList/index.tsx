@@ -1,9 +1,9 @@
+import Icons from '@/components/atoms/Icons'
 import Author from '@/components/molecules/Author'
 import Bookmark from '@/components/molecules/Bookmark'
 import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
 import 'react-quill/dist/quill.snow.css'
-import Icons from '@/components/atoms/Icons'
 import { parseHTML } from '../../../helpers/htmlParsing'
 import type { TagType, UserType } from '../../../pages/questions/[slug]'
 
@@ -22,6 +22,7 @@ type Props = {
     bookmarkType?: 'Question' | 'Answer'
     bookmarkAnswerId?: number
     page_slug?: string
+    previous_page_slug?: string
     question_slug?: string
     refetch?: () => void
     team_name?: string
@@ -44,6 +45,7 @@ const QuestionList = ({
     user,
     bookmarkType,
     bookmarkAnswerId = 0,
+    previous_page_slug,
     page_slug,
     team_name,
     team_slug,
@@ -52,7 +54,11 @@ const QuestionList = ({
     const renderTeamQuestionDetailHeader = (): JSX.Element => {
         return (
             <Link
-                href={`/teams/${slug}/question/${question_slug}`}
+                href={{
+                    pathname: `/teams/${slug}/question/${question_slug}`,
+                    query: { check: previous_page_slug },
+                }}
+                as={`/teams/${slug}/question/${question_slug}`}
                 className="text-lg text-blue-600 hover:text-blue-400"
             >
                 {title}
