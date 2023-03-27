@@ -22,6 +22,7 @@ const TeamsListPage = (): JSX.Element => {
     const router = useRouter()
     const [searchKey, setSearchKey] = useState('')
     const [term, setTerm] = useState('')
+    const [isSearchResult, setIsSearchResult] = useState(false)
 
     const userQuery = useQuery(GET_TEAMS, {
         variables: {
@@ -39,6 +40,7 @@ const TeamsListPage = (): JSX.Element => {
         })
         setSearchKey('')
         setTerm('')
+        setIsSearchResult(false)
     }, [router])
 
     if (userQuery.error) return <span>{errorNotify(`Error! ${userQuery.error?.message}`)}</span>
@@ -60,6 +62,7 @@ const TeamsListPage = (): JSX.Element => {
         })
         setSearchKey(target.search.value)
         setTerm(target.search.value)
+        target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
     }
 
     const onChange = (value: string): void => {
@@ -73,25 +76,25 @@ const TeamsListPage = (): JSX.Element => {
     return (
         <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">
             <PageHeader>Teams</PageHeader>
-            {teams?.length !== 0 ? (
-                <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
-                    <div className="flex w-full flex-row items-center justify-between">
-                        <div className="mt-2 flex flex-row items-center justify-between px-2">
-                            <form onSubmit={handleSearchSubmit}>
-                                <SearchInput
-                                    placeholder="Search team"
-                                    value={searchKey}
-                                    onChange={onChange}
-                                />
-                            </form>
-                        </div>
+            <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
+                <div className="flex w-full flex-row items-center justify-between">
+                    <div className="mt-2 flex flex-row items-center justify-between px-2">
+                        <form onSubmit={handleSearchSubmit}>
+                            <SearchInput
+                                placeholder="Search team"
+                                value={searchKey}
+                                onChange={onChange}
+                            />
+                        </form>
                     </div>
-                    {term && (
-                        <div className="px-3">
-                            {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                            {`"${term}"`}
-                        </div>
-                    )}
+                </div>
+                {isSearchResult && (
+                    <div className="px-3">
+                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                        {`"${term}"`}
+                    </div>
+                )}
+                {teams?.length !== 0 ? (
                     <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
                         <div className="grid w-full grid-cols-2 gap-y-5 gap-x-10 px-3">
                             {teams?.map((team: TeamType) => (
@@ -109,12 +112,14 @@ const TeamsListPage = (): JSX.Element => {
                             <Paginate {...pageInfo} onPageChange={onPageChange} />
                         )}
                     </div>
-                </div>
-            ) : (
-                <span className="mt-4 p-2 text-center text-lg font-bold text-primary-gray">
-                    No teams to show
-                </span>
-            )}
+                ) : (
+                    !isSearchResult && (
+                        <span className="mt-4 p-2 text-center text-lg font-bold text-primary-gray">
+                            No teams to show
+                        </span>
+                    )
+                )}
+            </div>
         </div>
     )
 }
