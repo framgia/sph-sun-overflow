@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client'
 
-const GET_ROLES = gql`
-    query Roles {
-        roles {
+const UPDATE_ROLE = gql`
+    mutation UpdateRole($id: ID!, $name: String!, $description: String!, $permissions: [ID!]!) {
+        updateRole(id: $id, name: $name, description: $description, permissions: $permissions) {
             id
             name
+            description
             truncated_name
             permissions {
                 id
@@ -19,5 +20,4 @@ const GET_ROLES = gql`
         }
     }
 `
-
-export default GET_ROLES
+export default UPDATE_ROLE

@@ -1,23 +1,34 @@
-import type { RoleType } from '@/components/organisms/RoleForm'
 import RoleForm from '@/components/organisms/RoleForm'
+import GET_ROLE from '@/helpers/graphql/queries/get_role'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
+import { errorNotify } from '@/helpers/toast'
+import { useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
 
-const RoleCreate = (): JSX.Element => {
-    const role: RoleType = {
-        name: '',
-        id: 1,
-        description: '',
-        permissions: [],
-    }
+const RoleEdit = (): JSX.Element => {
+    const router = useRouter()
+    const {
+        data: { role } = {},
+        loading,
+        error,
+    } = useQuery(GET_ROLE, {
+        variables: {
+            slug: router.query.slug,
+        },
+        fetchPolicy: 'network-only',
+    })
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault()
+    if (loading) return loadingScreenShow()
+    if (error) {
+        void router.push('/manage/roles')
+        return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
 
     return (
         <div className="w-full pt-16 pl-10">
-            <RoleForm role={role} onSubmit={onSubmit}></RoleForm>
+            <RoleForm role={role}></RoleForm>
         </div>
     )
 }
 
-export default RoleCreate
+export default RoleEdit

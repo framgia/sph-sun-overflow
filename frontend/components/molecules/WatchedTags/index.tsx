@@ -56,7 +56,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element =>
 
     useEffect(() => {
         if (!tagLoading) {
-            setTagSuggestions(tagData.tagSuggest)
+            setTagSuggestions(tagData?.tagSuggest)
         }
     }, [tagData, tagLoading])
 
