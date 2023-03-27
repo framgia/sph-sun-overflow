@@ -109,12 +109,17 @@ const RoleForm = ({ role }: Props): JSX.Element => {
 
         if (valid) {
             if (role) {
-                const matchPermissions = selectedPermissions.map((permission) =>
-                    permissionsForm.includes(permission)
-                )
+                const matchPermissions: number[] = []
+
+                permissionsForm.forEach((permission) => {
+                    if (selectedPermissions.includes(permission)) {
+                        matchPermissions.push(permission)
+                    }
+                })
 
                 if (
                     matchPermissions.length === permissionsForm.length &&
+                    matchPermissions.length === selectedPermissions.length &&
                     role?.name === data.name &&
                     role?.description === data.description
                 ) {
@@ -129,9 +134,11 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                             permissions: permissionsForm,
                         },
                     })
-                        .then(async () => {
+                        .then(() => {
                             successNotify('Successfully updated role!')
-                            void router.push('/manage/roles')
+                            setTimeout(() => {
+                                void router.push('/manage/roles')
+                            }, 1)
                         })
                         .catch(() => {
                             errorNotify('There was an Error!')
@@ -145,9 +152,11 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                         permissions: permissionsForm,
                     },
                 })
-                    .then(async () => {
+                    .then(() => {
                         successNotify('Successfully created role!')
-                        void router.push('/manage/roles')
+                        setTimeout(() => {
+                            void router.push('/manage/roles')
+                        }, 1)
                     })
                     .catch(() => {
                         errorNotify('There was an Error!')
