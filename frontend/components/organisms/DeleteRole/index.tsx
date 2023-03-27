@@ -8,7 +8,7 @@ import { errorNotify, successNotify } from '../../../helpers/toast'
 
 type Props = {
     id: number
-    refetchHandler: () => void
+    refetchHandler: (isDelete?: boolean) => void
 }
 
 const DeleteRole = ({ id, refetchHandler }: Props): JSX.Element => {
@@ -25,7 +25,7 @@ const DeleteRole = ({ id, refetchHandler }: Props): JSX.Element => {
         deleteRole({ variables: { id } })
             .then(() => {
                 successNotify('Role deleted successfully!')
-                refetchHandler()
+                refetchHandler(true)
                 setShowModal(false)
             })
             .catch(() => {

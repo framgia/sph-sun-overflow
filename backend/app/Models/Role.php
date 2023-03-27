@@ -13,6 +13,8 @@ class Role extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['truncated_name'];
+
     protected static function boot()
     {
         parent::boot();
@@ -34,5 +36,10 @@ class Role extends Model
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'permission_role');
+    }
+
+    public function getTruncatedNameAttribute()
+    {
+        return Str::limit($this->name, 15, '...');
     }
 }

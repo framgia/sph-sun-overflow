@@ -5,6 +5,7 @@ const GET_ROLES = gql`
         roles {
             id
             name
+            truncated_name
             permissions {
                 id
                 name

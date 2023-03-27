@@ -36,6 +36,7 @@ type RolesType = {
     id: number
     name: string
     slug: string
+    truncated_name: string
     permissions: Array<{ id: number; name: string }>
     users: UserType[]
 }
@@ -71,7 +72,7 @@ const RolesPage = (): JSX.Element => {
         return roles.map((role): DataType => {
             return {
                 key: role.id,
-                name: role.name,
+                name: role.truncated_name,
                 slug: role.slug,
                 permissions: <PermissionPills permissions={role.permissions} />,
                 users: role.users.length,
@@ -87,8 +88,14 @@ const RolesPage = (): JSX.Element => {
                 <RolesActions
                     id={dataSource.key as number}
                     slug={dataSource.slug as string}
-                    refetchHandler={() => {
-                        void refetch({ first: pageInfo.perPage, page: pageInfo.currentPage })
+                    refetchHandler={(isDelete = false) => {
+                        void refetch({
+                            first: pageInfo.perPage,
+                            page:
+                                isDelete && roles.length === 1 && pageInfo.currentPage > 1
+                                    ? pageInfo.currentPage - 1
+                                    : pageInfo.currentPage,
+                        })
                     }}
                 />
             )

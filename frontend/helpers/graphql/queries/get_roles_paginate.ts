@@ -7,6 +7,7 @@ const GET_ROLES_PAGINATE = gql`
                 id
                 name
                 slug
+                truncated_name
                 permissions {
                     id
                     name
