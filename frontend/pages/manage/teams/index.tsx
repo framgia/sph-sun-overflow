@@ -20,6 +20,8 @@ type TeamType = {
     slug: string
     description: string
     members_count: string
+    truncated_name: string
+    truncated_description: string
 }
 
 type TeamsQuery = {
@@ -49,7 +51,7 @@ const columns: ColumnType[] = [
     },
 ]
 
-const EditAction = ({ id }: { id: number }): JSX.Element => {
+const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void }): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
 
     return (
@@ -64,13 +66,15 @@ const EditAction = ({ id }: { id: number }): JSX.Element => {
             </Button>
             <TeamsFormModal
                 initialData={{
-                    title: 'Test',
-                    description: 'Test description',
+                    id: team?.key as number,
+                    title: team?.full_name as string,
+                    description: team?.full_description as string,
                 }}
                 isOpen={showModal}
                 closeModal={() => {
                     setShowModal(false)
                 }}
+                refetch={refetch}
             />
         </div>
     )
@@ -177,13 +181,23 @@ const AdminTeams = (): JSX.Element => {
 
     const getTeamDataTable = (teams: TeamType[]): DataType[] => {
         return teams.map((team): DataType => {
-            const { id, name, slug, description, members_count } = team
-            return {
-                key: id,
+            const {
+                id,
                 name,
+                truncated_name,
                 slug,
                 description,
+                truncated_description,
                 members_count,
+            } = team
+            return {
+                key: id,
+                slug,
+                members_count,
+                name: truncated_name,
+                description: truncated_description,
+                full_name: name,
+                full_description: description,
             }
         })
     }
@@ -193,16 +207,25 @@ const AdminTeams = (): JSX.Element => {
 
         return (
             <div className="flex flex-row gap-4">
-                <EditAction id={key} />
+                <EditAction
+                    team={team}
+                    refetch={async () => {
+                        await refetch({
+                            first: paginatorInfo.perPage,
+                            page: paginatorInfo.currentPage,
+                            isAdmin: true,
+                        })
+                    }}
+                />
                 <DeleteAction
                     id={key}
-                    name={String(team?.name)}
+                    name={String(team?.full_name)}
                     refetch={() => {
+                        const { perPage, currentPage, count } = paginatorInfo
+
                         void refetch({
-                            variables: {
-                                first: paginatorInfo.perPage,
-                                page: paginatorInfo.currentPage,
-                            },
+                            first: perPage,
+                            page: currentPage !== 1 && count === 1 ? currentPage - 1 : currentPage,
                         })
                     }}
                 />
@@ -240,6 +263,13 @@ const AdminTeams = (): JSX.Element => {
                 isOpen={showModal}
                 closeModal={() => {
                     setShowModal(false)
+                }}
+                refetch={async () => {
+                    await refetch({
+                        first: paginatorInfo.perPage,
+                        page: paginatorInfo.currentPage,
+                        isAdmin: true,
+                    })
                 }}
             />
         </div>

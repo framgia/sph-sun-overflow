@@ -22,6 +22,7 @@ interface TeamType {
     members_count: number
     questions_asked: number
     questions_answered: number
+    truncated_name: string
 }
 
 const getActiveTabClass = (status: boolean): string => {
@@ -98,7 +99,7 @@ const TeamDetail = (): JSX.Element => {
         <div className="mx-10 mt-10 w-full flex-col">
             <div className="flex">
                 <div className="w-full flex-col">
-                    <div className="text-3xl font-medium">{team?.name}</div>
+                    <div className="text-3xl font-medium">{team?.truncated_name}</div>
                     <div className="mt-1 text-lg text-secondary-black line-clamp-1">
                         {`Handled by: ${teamLeader?.first_name} ${teamLeader?.last_name}`}
                     </div>

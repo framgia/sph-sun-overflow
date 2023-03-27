@@ -14,6 +14,7 @@ export interface PaginatorInfo {
     lastPage: number
     total: number
     hasMorePages: boolean
+    count: number
 }
 
 export type FilterType = {
