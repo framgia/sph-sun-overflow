@@ -112,6 +112,7 @@ const AnswerForm = ({
         if (!isDirty) {
             errorNotify('Error: No changes were made')
             reset()
+            onEdit({ id: null, content: null })
             const qlEditor = document.querySelector('.quill .ql-editor') as HTMLDivElement
             qlEditor.innerHTML = ''
             return
