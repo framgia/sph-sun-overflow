@@ -43,9 +43,7 @@ const AnswerForm = ({
     const {
         handleSubmit,
         control,
-        watch,
         reset,
-        setValue,
         formState: { isDirty },
     } = useForm<FormValues>({
         mode: 'onSubmit',
