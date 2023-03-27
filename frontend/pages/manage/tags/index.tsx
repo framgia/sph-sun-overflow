@@ -76,12 +76,15 @@ const Tags: NextPage = () => {
         setIsOpen(false)
     }
 
-    const refetchHandler = (): void => {
+    const refetchHandler = (isDelete = false): void => {
         void refetch({
             first: 6,
-            page: pageInfo.currentPage,
             name: '%%',
             sort: [{ column: 'POPULARITY', order: 'DESC' }],
+            page:
+                isDelete && paginatorInfo.count === 1 && paginatorInfo.currentPage > 1
+                    ? paginatorInfo.currentPage - 1
+                    : paginatorInfo.currentPage,
         })
     }
 

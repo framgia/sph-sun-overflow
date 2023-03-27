@@ -8,6 +8,7 @@ const GET_TAGS = gql`
                 currentPage
                 hasMorePages
                 total
+                count
             }
             data {
                 id
