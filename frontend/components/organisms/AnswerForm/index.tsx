@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import RichTextEditor from '../../molecules/RichTextEditor'
-import Button from '../../atoms/Button'
-import { useForm, Controller } from 'react-hook-form'
-import { useMutation } from '@apollo/client'
-import { errorNotify, successNotify } from '@/helpers/toast'
-import { useBoundStore } from '@/helpers/store'
-import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
-import type { AnswerEditType } from '@/pages/questions/[slug]'
 import UPDATE_ANSWER from '@/helpers/graphql/mutations/update_answer'
+import { useBoundStore } from '@/helpers/store'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import type { AnswerEditType } from '@/pages/questions/[slug]'
+import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import CREATE_ANSWER from '../../../helpers/graphql/mutations/create_answer'
+import Button from '../../atoms/Button'
+import RichTextEditor from '../../molecules/RichTextEditor'
 
 export type FormValues = {
     content: string
@@ -40,14 +40,21 @@ const AnswerForm = ({
     const [createAnswer] = useMutation(CREATE_ANSWER)
     const [updateAnswer] = useMutation(UPDATE_ANSWER)
 
-    const { setValue, handleSubmit, control } = useForm<FormValues>({
+    const {
+        handleSubmit,
+        control,
+        watch,
+        reset,
+        setValue,
+        formState: { isDirty },
+    } = useForm<FormValues>({
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
     })
 
     useEffect(() => {
         if (answer.content) {
-            setValue('content', answer.content)
+            reset({ content: answer.content })
         }
     }, [answer.content])
 
@@ -102,6 +109,13 @@ const AnswerForm = ({
     }
 
     const onEditSubmit = (data: FormValues): void => {
+        if (!isDirty) {
+            errorNotify('Error: No changes were made')
+            reset()
+            const qlEditor = document.querySelector('.quill .ql-editor') as HTMLDivElement
+            qlEditor.innerHTML = ''
+            return
+        }
         setIsDisableSubmit(true)
         const errorElement = document.querySelector('.ql-container') as HTMLDivElement
 
