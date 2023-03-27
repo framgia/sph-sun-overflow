@@ -11,10 +11,14 @@ type Props = {
     id: number
     name: string
     description: string
-    refetchHandler: () => void
+    refetchHandler: (isDelete?: boolean) => void
 }
 
-const renderDeleteAction = (id: number, name: string, refetch: () => void): JSX.Element => {
+const renderDeleteAction = (
+    id: number,
+    name: string,
+    refetch: (isDelete?: boolean) => void
+): JSX.Element => {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [deleteTag] = useMutation(DELETE_TAG)
 
@@ -26,7 +30,7 @@ const renderDeleteAction = (id: number, name: string, refetch: () => void): JSX.
         deleteTag({ variables: { id } })
             .then(() => {
                 successNotify('Tag deleted.')
-                refetch()
+                refetch(true)
             })
             .catch(() => {
                 errorNotify('Failed to delete tag.')
