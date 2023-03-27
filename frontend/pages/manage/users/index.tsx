@@ -101,7 +101,13 @@ const AdminUsers = (): JSX.Element => {
     const rolesQuery = useQuery(GET_ROLES_SELECTION)
     const [assignRole] = useMutation(ASSIGN_ROLE)
     const roles = rolesQuery?.data?.roles ?? []
-    const { control, handleSubmit, setValue } = useForm<FormValues>({
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        reset,
+        formState: { isDirty },
+    } = useForm<FormValues>({
         defaultValues: {
             userId: 0,
             role: 1,
@@ -143,8 +149,10 @@ const AdminUsers = (): JSX.Element => {
                 usage="toggle-modal"
                 onClick={() => {
                     setIsOpenEdit(true)
-                    setValue('role', convertRoleStrToInt(roles, newUserArr[key].role))
-                    setValue('userId', newUserArr[key].id)
+                    reset({
+                        role: convertRoleStrToInt(roles, newUserArr[key].role),
+                        userId: newUserArr[key].id,
+                    })
                 }}
             >
                 <Icons name="table_edit" additionalClass="fill-gray-500" />
@@ -157,6 +165,10 @@ const AdminUsers = (): JSX.Element => {
     }
 
     const onSubmit = async (data: FormValues): Promise<void> => {
+        if (!isDirty) {
+            errorNotify(`Error: No changes were made`)
+            return
+        }
         closeEdit()
         await assignRole({ variables: { userId: data.userId, roleId: data.role } })
             .then((data) => {
