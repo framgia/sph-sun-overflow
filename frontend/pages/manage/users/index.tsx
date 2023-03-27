@@ -167,6 +167,7 @@ const AdminUsers = (): JSX.Element => {
     const onSubmit = async (data: FormValues): Promise<void> => {
         if (!isDirty) {
             errorNotify(`Error: No changes were made`)
+            closeEdit()
             return
         }
         closeEdit()
