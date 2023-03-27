@@ -45,7 +45,9 @@ final class ToggleFollow
 
                 $relation->delete();
 
-                event(new NotificationEvent($user->id));
+                if (env('NOTIFY_USERS')) {
+                    event(new NotificationEvent($user->id));
+                }
 
                 return "You unfollowed {$user->first_name} {$user->last_name}";
             }

@@ -18,6 +18,8 @@ class UserRelationObserver
             'notifiable_id' => $userRelation->id,
         ]);
 
-        event(new NotificationEvent($userRelation->following_id));
+        if (env('NOTIFY_USERS')) {
+            event(new NotificationEvent($userRelation->following_id));
+        }
     }
 }

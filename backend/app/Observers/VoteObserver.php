@@ -18,6 +18,8 @@ class VoteObserver
             'notifiable_id' => $vote->id,
         ]);
 
-        event(new NotificationEvent($vote->voteable->user_id));
+        if (env('NOTIFY_USERS')) {
+            event(new NotificationEvent($vote->voteable->user_id));
+        }
     }
 }
