@@ -118,7 +118,8 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                     role?.name === data.name &&
                     role?.description === data.description
                 ) {
-                    await router.push('/manage/roles')
+                    errorNotify('No changes were made!')
+                    void router.push('/manage/roles')
                 } else {
                     updateRole({
                         variables: {
