@@ -36,7 +36,8 @@ class Team extends Model
         });
     }
 
-    protected $appends = ['members_count', 'is_team_leader', 'questions_asked', 'questions answered'];
+    protected $appends = ['members_count', 'is_team_leader', 'questions_asked',
+        'questions answered', 'truncated_name', 'truncated_description'];
 
     protected $guarded = [];
 
@@ -73,5 +74,15 @@ class Team extends Model
     public function getQuestionsAnsweredAttribute()
     {
         return $this->questions()->where('team_id', $this->id)->has('answers')->count();
+    }
+
+    public function getTruncatedNameAttribute()
+    {
+        return Str::limit($this->name, 15, '...');
+    }
+
+    public function getTruncatedDescriptionAttribute()
+    {
+        return Str::limit($this->description, 50, '...');
     }
 }

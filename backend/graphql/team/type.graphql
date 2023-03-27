@@ -12,6 +12,8 @@ type Team {
     is_team_leader: Boolean!
     questions_asked: Int!
     questions_answered: Int!
+    truncated_name: String!
+    truncated_description: String!
 }
 
 type TeamRole {

@@ -9,6 +9,7 @@ const GET_TEAMS = gql`
                 lastPage
                 hasMorePages
                 total
+                count
             }
             data {
                 id
@@ -17,6 +18,8 @@ const GET_TEAMS = gql`
                 dashboard_content
                 created_at
                 updated_at
+                truncated_name
+                truncated_description
                 teamLeader {
                     id
                     first_name

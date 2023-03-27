@@ -20,6 +20,8 @@ type TeamType = {
     slug: string
     description: string
     members_count: string
+    truncated_name: string
+    truncated_description: string
 }
 
 type TeamsQuery = {
@@ -65,8 +67,8 @@ const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void })
             <TeamsFormModal
                 initialData={{
                     id: team?.key as number,
-                    title: team?.name as string,
-                    description: team?.description as string,
+                    title: team?.full_name as string,
+                    description: team?.full_description as string,
                 }}
                 isOpen={showModal}
                 closeModal={() => {
@@ -179,13 +181,23 @@ const AdminTeams = (): JSX.Element => {
 
     const getTeamDataTable = (teams: TeamType[]): DataType[] => {
         return teams.map((team): DataType => {
-            const { id, name, slug, description, members_count } = team
-            return {
-                key: id,
+            const {
+                id,
                 name,
+                truncated_name,
                 slug,
                 description,
+                truncated_description,
                 members_count,
+            } = team
+            return {
+                key: id,
+                slug,
+                members_count,
+                name: truncated_name,
+                description: truncated_description,
+                full_name: name,
+                full_description: description,
             }
         })
     }
@@ -207,13 +219,13 @@ const AdminTeams = (): JSX.Element => {
                 />
                 <DeleteAction
                     id={key}
-                    name={String(team?.name)}
+                    name={String(team?.full_name)}
                     refetch={() => {
+                        const { perPage, currentPage, count } = paginatorInfo
+
                         void refetch({
-                            variables: {
-                                first: paginatorInfo.perPage,
-                                page: paginatorInfo.currentPage,
-                            },
+                            first: perPage,
+                            page: currentPage !== 1 && count === 1 ? currentPage - 1 : currentPage,
                         })
                     }}
                 />

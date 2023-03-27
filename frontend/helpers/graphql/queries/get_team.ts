@@ -10,6 +10,7 @@ const GET_TEAM = gql`
             members_count
             questions_asked
             questions_answered
+            truncated_name
             teamLeader {
                 id
                 slug

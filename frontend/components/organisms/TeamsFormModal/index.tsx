@@ -49,7 +49,19 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
         const description = target.teamDescription.value
         const user_id = target.teamLeader.value
 
+        if (!(name && description)) {
+            errorNotify('Please input some data')
+            return
+        }
+
         if (initialData) {
+            const { title, description: init_desc } = initialData
+            if (title === name && init_desc === description) {
+                errorNotify('No changes were made!')
+                closeModal()
+                return
+            }
+
             updateTeam({
                 variables: {
                     id: initialData.id,
