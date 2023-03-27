@@ -83,6 +83,7 @@ const TeamDetail = (): JSX.Element => {
                     isPrivate={true}
                     team={slug as string}
                     page_slug={'teams'}
+                    previous_page_slug={router.asPath}
                 />
             </div>
         )

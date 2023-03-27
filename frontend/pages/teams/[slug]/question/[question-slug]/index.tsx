@@ -12,7 +12,7 @@ import type { AnswerEditType, QuestionType } from '@/pages/questions/[slug]'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 type RefetchType = {
     slug?: string
@@ -21,12 +21,19 @@ type RefetchType = {
 }
 
 const QuestionDetailPage = (): JSX.Element => {
+    let path
     const router = useRouter()
     const [comment, setComment] = useState(false)
     const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
     const [answer, setAnswer] = useState<AnswerEditType>({ id: null, content: null })
 
     const query = router.query
+
+    path = `/teams/${router.query.slug as string}`
+
+    if (query.check !== '') {
+        path = query.check as string
+    }
 
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTION, {
         variables: {
@@ -36,7 +43,6 @@ const QuestionDetailPage = (): JSX.Element => {
         },
         fetchPolicy: 'network-only',
     })
-
     if (loading) return loadingScreenShow()
     if (error) {
         errorNotify(`Error! ${error.message}`)
@@ -102,11 +108,11 @@ const QuestionDetailPage = (): JSX.Element => {
 
     return (
         <div className="flex w-full flex-col gap-3 pt-[50px]">
-            <div className="px-6 text-xl text-primary-gray">
-                <Link href={`/teams/${router.query.slug as string}`}>{'< Go Back'}</Link>
+            <div className="ml-16 text-xl text-primary-gray">
+                <Link href={path}>{'< Go Back'}</Link>
             </div>
-            <div className="flex w-full flex-col gap-3 divide-primary-gray  pb-8 pr-52 pl-16">
-                <div className="flex flex-col gap-3">
+            <div className="flex w-full flex-col gap-3 divide-y-2 divide-primary-gray  pb-8 pr-52 pl-16">
+                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray">
                     <QuestionDetail
                         id={question.id}
                         title={question.title}
@@ -117,14 +123,12 @@ const QuestionDetailPage = (): JSX.Element => {
                         vote_count={question.vote_count}
                         views_count={question.views_count}
                         tags={question.tags}
+                        is_bookmarked={question.is_bookmarked}
                         user_vote={question.user_vote}
                         user={question.user}
                         refetchHandler={refetchHandler}
-                        is_bookmarked={question.is_bookmarked}
                         is_from_user={question.is_from_user}
-                        team_slug={router.query.slug as string}
                         is_public={question.is_public}
-                        team_name=""
                     />
                     <div className="flex flex-col">
                         <div className="flex flex-col divide-y divide-primary-gray">
@@ -143,6 +147,7 @@ const QuestionDetailPage = (): JSX.Element => {
                                             : 'updated his/her'
                                     }
                                     userId={comment.user.id}
+                                    slug={comment.user.slug}
                                     refetchHandler={refetchHandler}
                                 />
                             ))}
