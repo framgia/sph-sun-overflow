@@ -44,7 +44,9 @@ final class UpsertVote
 
                 $vote->delete();
 
-                event(new NotificationEvent($vote->voteable->user_id));
+                if (env('NOTIFY_USERS')) {
+                    event(new NotificationEvent($vote->voteable->user_id));
+                }
 
                 return 'Vote Removed';
             } else {
