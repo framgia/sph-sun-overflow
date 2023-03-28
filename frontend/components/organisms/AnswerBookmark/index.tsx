@@ -13,7 +13,7 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
             <QuestionList
                 id={question?.id}
                 title={question?.title}
-                slug={question?.slug}
+                question_slug={question?.slug}
                 content={question?.content}
                 created_at={question?.created_at}
                 humanized_created_at={question?.humanized_created_at}
