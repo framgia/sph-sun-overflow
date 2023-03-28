@@ -1,4 +1,5 @@
 import Author from '@/components/molecules/Author'
+import Bookmark from '@/components/molecules/Bookmark'
 import { parseHTML } from '@/helpers/htmlParsing'
 import type { BookmarkType } from '@/pages/users/[slug]'
 import Link from 'next/link'
@@ -12,7 +13,7 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
             <QuestionList
                 id={question?.id}
                 title={question?.title}
-                slug={question?.slug}
+                question_slug={question?.slug}
                 content={question?.content}
                 created_at={question?.created_at}
                 humanized_created_at={question?.humanized_created_at}
@@ -21,14 +22,24 @@ const AnswerBookmark = ({ id, bookmarkable }: BookmarkType): JSX.Element => {
                 view_count={question?.views_count}
                 tags={question?.tags ?? []}
                 user={question?.user}
-                bookmarkType="Answer"
-                bookmarkAnswerId={bookmarkable?.id}
             />
             <div className="px-10 py-3">
                 <div className="flex w-full flex-col border-l-4 border-primary-gray px-4">
-                    <div className="text-sm">
-                        {bookmarkable?.vote_count}{' '}
-                        {bookmarkable?.vote_count !== 1 ? 'Votes' : 'Vote'}
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm">
+                            {bookmarkable?.vote_count}{' '}
+                            {bookmarkable?.vote_count !== 1 ? 'Votes' : 'Vote'}
+                        </div>
+                        <div>
+                            {bookmarkable && (
+                                <Bookmark
+                                    bookmarkable_id={bookmarkable.id}
+                                    bookmarkable_type={'Answer'}
+                                    refetchHandler={() => {}}
+                                    is_bookmarked
+                                />
+                            )}
+                        </div>
                     </div>
                     <div>{parseHTML(bookmarkable?.content)}</div>
                     <div className="flex w-full flex-row justify-between">
