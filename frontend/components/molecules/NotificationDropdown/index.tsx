@@ -1,12 +1,12 @@
-import Link from 'next/link'
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import { HiBell } from 'react-icons/hi'
-import { useMutation } from '@apollo/client'
-import { useRouter } from 'next/router'
-import { parseHTML } from '@/helpers/htmlParsing'
 import UPDATE_NOTIFICATION from '@/helpers/graphql/mutations/update_notification'
+import { parseHTML } from '@/helpers/htmlParsing'
+import { useMutation } from '@apollo/client'
+import { Menu, Transition } from '@headlessui/react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { Fragment } from 'react'
 import Avatar from 'react-avatar'
+import { TbBell } from 'react-icons/tb'
 
 type User = {
     id: number
@@ -86,8 +86,8 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="mx-1 flex items-center rounded-full bg-gray-200 p-2 text-primary-black hover:bg-red-200 hover:text-red-500 active:bg-red-200 active:text-red-500 sm:mx-3">
-                    <HiBell size={24} />
+                <Menu.Button className="mr-[37px] flex items-center rounded-full text-primary-black hover:text-red-500 active:text-red-500 ">
+                    <TbBell className="h-[36px] w-[36px]" />
                     <span className="sr-only">Notifications</span>
                     <div
                         className={

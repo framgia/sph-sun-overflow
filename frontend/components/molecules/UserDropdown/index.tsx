@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import { HiOutlineLogout, HiOutlineUser } from 'react-icons/hi'
 import { setUserToken } from '@/helpers/localStorageHelper'
+import { Menu, Transition } from '@headlessui/react'
 import { signOut } from 'next-auth/react'
+import Link from 'next/link'
+import { Fragment } from 'react'
 import Avatar from 'react-avatar'
+import { HiOutlineLogout, HiOutlineUser } from 'react-icons/hi'
 
 export type UserProps = {
     id: number
@@ -24,14 +24,14 @@ const UserDropdown = ({
     updated_at,
 }: UserProps): JSX.Element => {
     return (
-        <Menu as="div" className="relative ml-1 inline-block text-left">
+        <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="flex rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500 sm:mx-3 md:mr-0">
+                <Menu.Button className="mr-[60px] flex rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500">
                     <span className="sr-only">Open user menu</span>
                     <Avatar
                         round={true}
                         name={`${first_name} ${last_name}`}
-                        size="40"
+                        size="50"
                         alt={first_name}
                         src={
                             updated_at && updated_at.length > 0
