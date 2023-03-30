@@ -1,16 +1,15 @@
-import Link from 'next/link'
-import SearchBar from '../../molecules/SearchBar'
-import NotificationDropdown from '../../molecules/NotificationDropdown'
-import UserDropdown from '../../molecules/UserDropdown'
-import type { UserProps } from '../../molecules/UserDropdown'
-import { useBoundStore } from '@/helpers/store'
 import GET_NOTIFICATIONS from '@/helpers/graphql/queries/get_notifications'
-import { useLazyQuery } from '@apollo/client'
-import { errorNotify } from '@/helpers/toast'
 import { getUserToken } from '@/helpers/localStorageHelper'
+import { useBoundStore } from '@/helpers/store'
+import { errorNotify } from '@/helpers/toast'
+import { useLazyQuery } from '@apollo/client'
+import Link from 'next/link'
 import Pusher from 'pusher-js'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import NotificationDropdown from '../../molecules/NotificationDropdown'
+import SearchBar from '../../molecules/SearchBar'
+import type { UserProps } from '../../molecules/UserDropdown'
+import UserDropdown from '../../molecules/UserDropdown'
 
 const Navbar = (): JSX.Element => {
     const [pushNotifs, setPushNotifs] = useState(false)
@@ -58,16 +57,13 @@ const Navbar = (): JSX.Element => {
     }
 
     return (
-        <nav className="z-10 w-full bg-gray-100 px-9 py-2 drop-shadow-md">
-            <div className="flex w-full flex-wrap items-center justify-between">
-                <Link href="/questions" className="flex">
-                    <div className="mr-4">
-                        <Image src="/images/logo.png" alt="sun-logo" width={40} height={40} />
-                    </div>
-                    <span className="text-3xl font-bold tracking-tighter">
+        <nav className="z-10 h-[80px] w-full bg-white drop-shadow-md">
+            <div className="flex h-full w-full flex-wrap items-center justify-between">
+                <Link href="/questions" className="flex h-full items-center justify-center">
+                    <div className="ml-[60px] text-[32px] font-bold leading-[38px] tracking-tighter">
                         <span className="text-primary-red">Sun* </span>
                         <span className="text-primary-black">Overflow</span>
-                    </span>
+                    </div>
                 </Link>
                 <div className="flex items-center md:order-2">
                     <SearchBar />

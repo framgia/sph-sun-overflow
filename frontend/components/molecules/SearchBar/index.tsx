@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
-import { HiSearch } from 'react-icons/hi'
 import { useState } from 'react'
+import { HiSearch } from 'react-icons/hi'
 
 const SearchBar = (): JSX.Element => {
     const router = useRouter()
@@ -23,9 +23,9 @@ const SearchBar = (): JSX.Element => {
     }
 
     return (
-        <div className="my-1 flex sm:mx-3">
-            <div className="relative w-48 lg:w-80">
-                <form onSubmit={handleSubmit}>
+        <div className="mt-[15px] mb-[13px] mr-[34px] flex h-[50px] w-[530px]">
+            <div className="relative h-full w-full">
+                <form onSubmit={handleSubmit} className="relative h-full w-full">
                     <input
                         type="text"
                         name="search"
@@ -33,16 +33,15 @@ const SearchBar = (): JSX.Element => {
                         onChange={(e) => {
                             setSearchKey(e.target.value)
                         }}
-                        className="form-input h-9 w-48 rounded-full border border-gray-300 px-4 text-gray-900 focus:border-red-500 focus:ring-red-500
-                        lg:w-80"
+                        className="form-input h-full w-full rounded-full border border-gray-300 pr-[55px] text-gray-900 focus:border-red-500 focus:ring-red-500"
                         placeholder="Search..."
                         required
                     />
                     <button
                         type="submit"
-                        className="absolute inset-y-0 right-0 flex items-center rounded-r-full pl-1 pr-2"
+                        className="absolute inset-y-0 right-0 flex items-center rounded-r-full"
                     >
-                        <HiSearch size={20} className="mr-1 text-gray-400" />
+                        <HiSearch className="mr-[19px] text-3xl text-primary-red" />
                     </button>
                 </form>
             </div>
