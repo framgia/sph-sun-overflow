@@ -265,7 +265,7 @@ const setDetails = (notifiable: any): string => {
         case 'Vote':
             voteContent = parseHTML(notifiable.voteable.content)
             details = `voted on your ${notifiable.voteable.__typename as string}: "${
-                (notifiable.voteable.title as string) ?? voteContent.props.children
+                (notifiable.voteable.title as string) ?? voteContent.props?.children
             }".`
             break
         case 'UserRelation':

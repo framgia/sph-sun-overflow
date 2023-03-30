@@ -9,6 +9,7 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps): JSX.Element => {
     const router = useRouter()
+    const hideLeftSideBarInPages = ['/403', '/404']
     const hideRightSidebarInPages: string[] = [
         '/questions/[slug]',
         '/questions/add',
@@ -25,6 +26,8 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         '/manage/tags',
         '/manage/users',
         '/manage/users/[slug]',
+        '/403',
+        '/404',
     ]
 
     const routeIfLoginPathCheck = router.asPath.includes('login')
@@ -37,13 +40,14 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                     </div>
                 )}
                 <div className="flex w-full flex-row">
-                    {!routeIfLoginPathCheck && (
-                        <div className="relative w-1/5 ">
-                            <div className="fixed h-screen w-1/5">
-                                <LeftSideBar />
+                    {!routeIfLoginPathCheck &&
+                        !hideLeftSideBarInPages.includes(router.pathname) && (
+                            <div className="relative w-1/5 ">
+                                <div className="fixed h-screen w-1/5">
+                                    <LeftSideBar />
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                     <div
                         className={`flex min-h-screen ${
                             hideRightSidebarInPages.includes(router.pathname)
@@ -51,7 +55,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                                 : routeIfLoginPathCheck
                                 ? 'w-full'
                                 : 'w-3/5 pt-14'
-                        }`}
+                        } ${hideLeftSideBarInPages.includes(router.pathname) ? '!w-full' : ''}`}
                     >
                         {children}
                     </div>
