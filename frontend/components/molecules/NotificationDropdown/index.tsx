@@ -86,7 +86,7 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="mr-[37px] flex items-center rounded-full text-primary-black hover:text-red-500 active:text-red-500 ">
+                <Menu.Button className="relative mr-[37px] flex items-center rounded-full text-primary-black hover:text-red-500 active:text-red-500 ">
                     <TbBell className="h-[36px] w-[36px]" />
                     <span className="sr-only">Notifications</span>
                     <div

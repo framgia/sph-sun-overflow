@@ -33,7 +33,7 @@ const SearchBar = (): JSX.Element => {
                         onChange={(e) => {
                             setSearchKey(e.target.value)
                         }}
-                        className="form-input h-full w-full rounded-full border border-gray-300 text-gray-900 focus:border-red-500 focus:ring-red-500"
+                        className="form-input h-full w-full rounded-full border border-gray-300 pr-[55px] text-gray-900 focus:border-red-500 focus:ring-red-500"
                         placeholder="Search..."
                         required
                     />
