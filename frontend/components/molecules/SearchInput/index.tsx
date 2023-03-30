@@ -1,4 +1,6 @@
-import Icons from '@/components/atoms/Icons'
+import { Input } from '@material-tailwind/react'
+import React from 'react'
+import { HiSearch } from 'react-icons/hi'
 
 type Props = {
     placeholder?: string
@@ -8,35 +10,21 @@ type Props = {
 }
 
 const SearchInput = ({ placeholder, usage = 'Default', value, onChange }: Props): JSX.Element => {
-    const divStyle = {
-        Default: 'relative flex w-80 flex-row',
-        Users: 'relative flex w-80 flex-row',
-    }
-    const inputStyle = {
-        Default:
-            'border-1 form-input h-11 w-full rounded-lg border-border-black bg-white px-5 focus:border-primary-red focus:ring-primary-red',
-        Users: 'border-1 form-input h-13 py-3 w-full rounded-lg border-border-black bg-white px-5 focus:border-primary-red focus:ring-primary-red',
-    }
-    const buttonStyle = {
-        Default: 'absolute inset-y-0 right-0 rounded-r-lg pr-3 pl-2',
-        Users: 'absolute inset-y-0 right-0 rounded-r-lg pr-3 pl-2',
-    }
     return (
-        <div className={divStyle[usage]}>
-            <input
-                type="text"
+        <div className="w-[310px]">
+            <Input
+                size="md"
+                className="bg-white placeholder-shown:border-gray-300 placeholder-shown:border-t-gray-300"
+                label={placeholder}
+                icon={<HiSearch className="text-lg" />}
                 name="search"
+                color="red"
                 value={value}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     onChange(e.target.value)
                 }}
-                className={`${inputStyle[usage]} pr-10`}
-                placeholder={placeholder}
                 autoComplete="off"
             />
-            <button type="submit" className={buttonStyle[usage]}>
-                <Icons name="search_input_icon" />
-            </button>
         </div>
     )
 }

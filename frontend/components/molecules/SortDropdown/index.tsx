@@ -1,7 +1,7 @@
+import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import Icons from '@/components/atoms/Icons'
-import type { FilterType } from '@/components/templates/QuestionsPageLayout'
+import { HiChevronDown } from 'react-icons/hi'
 
 type AppProps = {
     grouped?: boolean
@@ -19,8 +19,8 @@ const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps): J
                         {({ active }) => (
                             <div
                                 className={`${
-                                    active ? 'bg-light-gray' : ''
-                                } w-full py-2 px-4 text-sm text-gray-900`}
+                                    active ? 'bg-light-red' : 'bg-white-100'
+                                } w-full py-2 px-4 text-sm text-primary-black`}
                                 onClick={newFilter.onClick}
                             >
                                 {newFilter.name}
@@ -43,8 +43,8 @@ const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps): J
                                 {({ active }) => (
                                     <div
                                         className={`${
-                                            active ? 'bg-light-gray' : ''
-                                        } w-full py-2 px-4 text-sm text-gray-900`}
+                                            active ? 'bg-light-red' : 'bg-white-100'
+                                        } w-full py-2 px-4 text-sm text-primary-black`}
                                         onClick={newFilter.onClick}
                                     >
                                         {newFilter.name}
@@ -62,10 +62,10 @@ const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps): J
         <div className="flex items-center">
             <Menu as="div" className="relative inline-block w-full text-left">
                 <div>
-                    <Menu.Button className="flex w-full items-center justify-between bg-gray-200 p-2 text-sm text-primary-black">
-                        <span className="pl-2 ">{selectedFilter}</span>
-                        <div className="items-end">
-                            <Icons name={'dropdown'} />
+                    <Menu.Button className="inline-flex items-center justify-center rounded-md bg-primary-red p-2 text-center text-sm text-white hover:bg-dark-red focus:outline-none focus:ring-1 focus:ring-red-700">
+                        <span className="px-2">{selectedFilter}</span>
+                        <div className="items-end items-center">
+                            <HiChevronDown className="text-red text-lg" />
                         </div>
                     </Menu.Button>
                 </div>
@@ -78,7 +78,7 @@ const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps): J
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 w-44 origin-top divide-y divide-gray-100 border bg-white drop-shadow-lg">
+                    <Menu.Items className="absolute right-0 z-10 mt-1 w-44 divide-y divide-gray-200 rounded-lg bg-white bg-white shadow">
                         {grouped ? renderGroupedFilters() : renderFilters()}
                     </Menu.Items>
                 </Transition>

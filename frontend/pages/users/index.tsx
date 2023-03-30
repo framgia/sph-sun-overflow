@@ -1,7 +1,7 @@
 import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
+import UserCard from '@/components/molecules/UserCard'
 import type { IUser } from '@/components/molecules/UserTab'
-import UserTab from '@/components/molecules/UserTab'
 import Paginate from '@/components/organisms/Paginate'
 import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_ROLES from '@/helpers/graphql/queries/get_roles'
@@ -147,10 +147,10 @@ const UsersPage = (): JSX.Element => {
 
     const renderSearchResultHeader = (): JSX.Element => {
         return (
-            <div className="w-80 pt-2">
-                <div className="text-md mt-1 mb-2 truncate pl-5 text-gray-800">
+            <div className="w-80">
+                <div className="truncate px-2 pt-1 text-sm text-gray-600">
                     {`${pageInfo.total} search ${
-                        pageInfo.total > 1 ? `results` : `result`
+                        pageInfo.total !== 1 ? `results` : `result`
                     } for "${term}"`}
                 </div>
             </div>
@@ -162,32 +162,30 @@ const UsersPage = (): JSX.Element => {
     }
 
     return (
-        <div className="ml-6 mr-6 flex h-full w-full flex-col ">
-            <div className="mt-10 w-full  pl-14">
-                <div className="text-3xl font-bold">Overflow Users</div>
-                <div className="mt-4 w-full border-b-2 border-b-gray-300"></div>
+        <div className="flex flex-col">
+            <div className="w-full">
+                <div className="text-3xl font-bold text-gray-800">Users</div>
             </div>
-            <div className="mt-3 flex w-full flex-row pl-16 pr-2">
+            <div className="mt-4 flex w-full flex-row">
                 <div className="mr-auto">
                     <form onSubmit={handleSearchSubmit}>
                         <SearchInput
-                            usage="Users"
-                            placeholder="Search"
+                            placeholder="Search user"
                             value={searchKey}
                             onChange={onChange}
                         />
                     </form>
                 </div>
-                <div className="flex flex-row justify-end gap-1">
+                <div className="flex flex-row justify-end gap-2">
                     <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
                     <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                 </div>
             </div>
-            <div className="pl-16 pr-2">{isSearchResult && renderSearchResultHeader()}</div>
-            <div className="mt-3 flex h-full w-full flex-col">
-                <div className="mr-4 ml-20 grid grid-cols-3 ">
+            {isSearchResult && renderSearchResultHeader()}
+            <div className="my-4 flex h-full w-full flex-col">
+                <div className="grid grid-cols-3 justify-center gap-3">
                     {userList.map((user: IUser) => (
-                        <UserTab user={user} usage="UserList" key={user.id} />
+                        <UserCard user={user} key={user.id} />
                     ))}
                 </div>
                 <div className="mt-auto ">

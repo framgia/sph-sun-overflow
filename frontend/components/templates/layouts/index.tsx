@@ -42,27 +42,27 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                 <div className="flex w-full flex-row">
                     {!routeIfLoginPathCheck &&
                         !hideLeftSideBarInPages.includes(router.pathname) && (
-                            <div className="relative w-1/5 ">
-                                <div className="fixed h-screen w-1/5">
+                            <div className="relative w-1/6 ">
+                                <div className="fixed h-screen w-1/6 pt-20">
                                     <LeftSideBar />
                                 </div>
                             </div>
                         )}
                     <div
-                        className={`flex min-h-screen ${
+                        className={`flex h-screen ${
                             hideRightSidebarInPages.includes(router.pathname)
-                                ? 'w-4/5 pt-14'
+                                ? 'w-full pt-20'
                                 : routeIfLoginPathCheck
                                 ? 'w-full'
-                                : 'w-3/5 pt-14'
+                                : 'w-4/6 pt-20'
                         } ${hideLeftSideBarInPages.includes(router.pathname) ? '!w-full' : ''}`}
                     >
-                        {children}
+                        <div className="h-full w-full bg-gray-100 p-8">{children}</div>
                     </div>
                     {!routeIfLoginPathCheck &&
                         !hideRightSidebarInPages.includes(router.pathname) && (
-                            <div className="relative mr-14 w-1/5 pt-20">
-                                <div className="fixed w-1/5">
+                            <div className="w-1/6 bg-gray-100 pt-28">
+                                <div className="fixed w-1/6 pr-4">
                                     <RightSideBar
                                         usage={
                                             router.pathname.split('/')[1] === 'teams' &&

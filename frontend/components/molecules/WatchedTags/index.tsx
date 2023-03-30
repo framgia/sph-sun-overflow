@@ -88,16 +88,14 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element =>
     }
 
     return (
-        <div className="z-10 m-3 mb-0 p-1 drop-shadow-md" ref={detectorRef}>
-            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
-                <span className="align-left text-xl font-medium">Watched Tags</span>
-                <div className="">
-                    <HiPencil className="cursor-pointer text-2xl" onClick={toggleVisible} />
-                </div>
+        <div className="z-10 mb-0 drop-shadow-md" ref={detectorRef}>
+            <div className="flex w-full justify-between rounded-tr-md rounded-tl-md bg-primary-red p-2.5 text-white drop-shadow-md">
+                <span className="align-left text-md">Watched Tags</span>
+                <HiPencil className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>
             <div className="rounded-br-xl rounded-bl-xl bg-white">
                 {loading && <div className="animate-spin"></div>}
-                <div className={`tags flex flex-wrap rounded-br-xl rounded-bl-xl bg-white p-4 `}>
+                <div className={`tags flex flex-wrap rounded-br-md rounded-bl-md bg-white p-4 `}>
                     {loading && (
                         <svg className="... mr-3 h-5 w-5 animate-spin" viewBox="0 0 24 24"></svg>
                     )}
@@ -110,13 +108,13 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element =>
                                     className="max-w-20 mx-0.5 my-1 flex items-center overflow-hidden text-ellipsis rounded-2xl bg-red-300 py-0.5 px-1"
                                 >
                                     <Link
-                                        className="label px-2 py-1 text-xs"
+                                        className="label px-2 py-1 text-xs text-white"
                                         href={`/questions/tagged/${tag.slug}`}
                                     >
                                         {tag.name}
                                     </Link>
                                     <HiX
-                                        className="bg cursor-pointer rounded-xl hover:bg-black hover:text-white"
+                                        className="bg cursor-pointer rounded-xl text-white hover:bg-black"
                                         onClick={async () => {
                                             await removeWatchedTag(tag.id)
                                         }}
