@@ -67,11 +67,7 @@ const LeftSideBar = (): JSX.Element => {
         })
     }
 
-    return (
-        <ul className="h-full w-full border-r-4 border-gray-300 bg-white pt-4">
-            {renderSidebarList()}
-        </ul>
-    )
+    return <ul className="h-full w-full bg-primary-red text-white">{renderSidebarList()}</ul>
 }
 
 export default LeftSideBar
