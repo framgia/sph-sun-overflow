@@ -51,7 +51,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                     <div
                         className={`flex h-screen ${
                             hideRightSidebarInPages.includes(router.pathname)
-                                ? 'w-full pt-20'
+                                ? 'w-5/6 pt-20'
                                 : routeIfLoginPathCheck
                                 ? 'w-full'
                                 : 'w-4/6 pt-20'

@@ -68,7 +68,7 @@ const TeamDetail = (): JSX.Element => {
 
     const renderMembers = (): JSX.Element => {
         return (
-            <div className="h-[70%] w-[85%]">
+            <div className="h-[70%] w-[93%]">
                 <MemberManage isForAdmin={true} />{' '}
             </div>
         )
@@ -76,7 +76,7 @@ const TeamDetail = (): JSX.Element => {
 
     const renderQuestions = (): JSX.Element => {
         return (
-            <div className="h-[70%] w-[85%] pt-5">
+            <div className="h-[70%] w-[93%] pt-5">
                 <QuestionsPageLayout
                     refetch={questionsApi.refetch}
                     data={questionsApi.data}
@@ -97,7 +97,7 @@ const TeamDetail = (): JSX.Element => {
     }
 
     return (
-        <div className="mx-10 mt-10 w-full flex-col">
+        <div className=" w-full flex-col">
             <div className="flex">
                 <div className="w-full flex-col">
                     <div className="text-3xl font-medium">{team?.truncated_name}</div>

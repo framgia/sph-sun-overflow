@@ -225,7 +225,7 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col gap-4 divide-y-2">
+        <div className="flex w-full flex-col gap-4 divide-y-8 ">
             {!isForAdmin && <h1 className="text-3xl font-bold">{team?.name}</h1>}
             <div className="flex h-full flex-col gap-4">
                 <div className="mt-4 flex items-center justify-between">
@@ -300,13 +300,13 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                         </Modal>
                     )}
                 </div>
-                <div className="overflow-hidden border border-black">
-                    <Table
-                        columns={columns}
-                        dataSource={parseGetMembers(memberList)}
-                        actions={getManageMemberActions}
-                    />
-                </div>
+
+                <Table
+                    columns={columns}
+                    dataSource={parseGetMembers(memberList)}
+                    actions={getManageMemberActions}
+                />
+
                 <div className="mt-auto">
                     {paginatorInfo.lastPage > 1 && (
                         <Paginate {...paginatorInfo} onPageChange={onPageChange} />

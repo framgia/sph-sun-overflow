@@ -28,7 +28,7 @@ const renderClickable = (
     }
     return (
         <span
-            className="cursor-pointer text-blue-500 underline hover:text-blue-400"
+            className="text-l cursor-pointer text-left font-semibold text-gray-800 hover:text-primary-red"
             onClick={handleClick}
         >
             {text}
@@ -44,80 +44,75 @@ const Table = ({
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
-        <div className="flex flex-col  border-black">
-            <div className="-m-1.5 overflow-x-auto">
-                <div className="inline-block min-w-full p-1.5 align-middle">
-                    <div className="overflow-hidden">
-                        <table className="min-w-full divide-y divide-black">
-                            <thead className="bg-primary-gray">
-                                <tr>
-                                    {columns.map((column) => (
-                                        <th
-                                            key={column.key}
-                                            scope="col"
-                                            style={{
-                                                width: column.width,
-                                            }}
-                                            className={`font-se py-3 text-center text-sm font-semibold uppercase ${
-                                                column.key === 'action' ? 'pl-9' : ''
-                                            }`}
-                                        >
-                                            {column.title}
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-black">
-                                {dataSource.length > 0 ? (
-                                    dataSource.map((data, key) => {
-                                        return (
-                                            <tr key={key} className="hover:bg-light-gray">
-                                                {columns.map((column, key) => {
-                                                    const clickable = clickableArr.find(
-                                                        (item) => item.column === column.key
-                                                    )
-                                                    if (column.key === 'action' && actions) {
-                                                        return (
-                                                            <td
-                                                                key={key}
-                                                                className="whitespace-nowrap py-4 px-8"
-                                                            >
-                                                                {actions(Number(data.key))}
-                                                            </td>
-                                                        )
-                                                    }
-                                                    return (
-                                                        <td
-                                                            key={key}
-                                                            className="min-w-[200px] whitespace-nowrap py-4 text-center text-sm"
-                                                        >
-                                                            {clickable !== undefined
-                                                                ? renderClickable(
-                                                                      data[column.key],
-                                                                      clickable,
-                                                                      data.slug as string
-                                                                  )
-                                                                : data[column.key]}
-                                                        </td>
-                                                    )
-                                                })}
-                                            </tr>
-                                        )
-                                    })
-                                ) : (
-                                    <tr>
-                                        <td
-                                            colSpan={columns.length}
-                                            className="w-full py-10 text-center text-lg font-bold text-primary-gray"
-                                        >
-                                            {isEmptyString}
-                                        </td>
+        <div className="w-full place-self-center overflow-hidden rounded-md pt-4">
+            <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
+                <table className="w-full text-center text-sm text-gray-500 dark:text-gray-400">
+                    <thead className="bg-gray-200 uppercase text-gray-800 ">
+                        <tr>
+                            {columns.map((column) => (
+                                <th
+                                    key={column.key}
+                                    scope="col"
+                                    style={{
+                                        width: column.width,
+                                    }}
+                                    className={`px-6 py-3 ${
+                                        column.key === 'name' ? 'text-left' : ''
+                                    }`}
+                                >
+                                    {column.title}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {dataSource.length > 0 ? (
+                            dataSource.map((data, key) => {
+                                return (
+                                    <tr
+                                        key={key}
+                                        className="cursor-default border-b bg-white text-gray-600 hover:bg-gray-50"
+                                    >
+                                        {columns.map((column, key) => {
+                                            const clickable = clickableArr.find(
+                                                (item) => item.column === column.key
+                                            )
+                                            if (column.key === 'action' && actions) {
+                                                return (
+                                                    <td key={key} className="px-6 py-4">
+                                                        {actions(Number(data.key))}
+                                                    </td>
+                                                )
+                                            }
+                                            return (
+                                                <td
+                                                    key={key}
+                                                    className={`whitespace-nowrap px-6 py-4  ${
+                                                        column.key === 'name' ? 'text-left' : ''
+                                                    } `}
+                                                >
+                                                    {clickable !== undefined
+                                                        ? renderClickable(
+                                                              data[column.key],
+                                                              clickable,
+                                                              data.slug as string
+                                                          )
+                                                        : data[column.key]}
+                                                </td>
+                                            )
+                                        })}
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                )
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan={columns.length} className="px-6 py-4">
+                                    {isEmptyString}
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     )
