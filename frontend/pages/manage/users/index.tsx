@@ -155,7 +155,7 @@ const AdminUsers = (): JSX.Element => {
                     })
                 }}
             >
-                <Icons name="table_edit" additionalClass="fill-gray-500" />
+                <Icons name="table_edit" />
             </Button>
         )
     }

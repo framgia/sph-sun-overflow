@@ -62,7 +62,7 @@ const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void })
                     setShowModal(true)
                 }}
             >
-                <Icons name="table_edit" additionalClass="fill-gray-500" />
+                <Icons name="table_edit" />
             </Button>
             <TeamsFormModal
                 initialData={{
