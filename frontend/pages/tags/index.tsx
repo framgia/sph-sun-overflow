@@ -155,12 +155,14 @@ const TagsListPage = (): JSX.Element => {
                         {tagList.map((tag) => {
                             return (
                                 <Link key={tag.id} href={`questions/tagged/${tag.slug}`}>
-                                    <Card className="justify-between">
+                                    <Card className="h-52 justify-between">
                                         <CardBody className="">
                                             <Typography variant="h5" className="mb-2">
                                                 {tag.name}
                                             </Typography>
-                                            <Typography>{tag.description}</Typography>
+                                            <Typography className="line-clamp-3">
+                                                {tag.description}
+                                            </Typography>
                                         </CardBody>
                                         <CardFooter
                                             divider
