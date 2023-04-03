@@ -13,7 +13,7 @@ final class Teams
      */
     public function __invoke($_, array $args)
     {
-        $query = Team::query();
+        $query = Team::query()->orderBy('created_at', 'desc');
 
         if ($args['isAdmin']) {
             return $query;

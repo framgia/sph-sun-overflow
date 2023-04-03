@@ -155,7 +155,7 @@ const AdminUsers = (): JSX.Element => {
                     })
                 }}
             >
-                <Icons name="table_edit" additionalClass="fill-gray-500" />
+                <Icons name="table_edit" />
             </Button>
         )
     }
@@ -181,46 +181,45 @@ const AdminUsers = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col gap-4 p-8">
-            <div className="flex h-full flex-col gap-4">
-                <div className="mt-4 flex items-center">
-                    <h1 className="text-3xl font-bold">Users</h1>
+        <div className="flex w-full flex-col">
+            <div className="flex h-full flex-col">
+                <div className="flex items-center">
+                    <h1 className="text-3xl font-bold text-gray-800">Users</h1>
                 </div>
-                <div className="overflow-hidden border border-secondary-black">
-                    <Table
-                        columns={columns}
-                        dataSource={newUserArr}
-                        actions={editAction}
-                        clickableArr={clickableArr}
-                    />
-                    {isOpenEdit && (
-                        <Modal
-                            title={`Assign Role`}
-                            submitLabel="Save"
-                            isOpen={isOpenEdit}
-                            handleClose={closeEdit}
-                            handleSubmit={handleSubmit(onSubmit)}
-                        >
-                            <form>
-                                <Controller
-                                    control={control}
-                                    name="role"
-                                    defaultValue={1}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Dropdown
-                                            key="role-select"
-                                            name="role"
-                                            label=""
-                                            options={roles}
-                                            onChange={onChange}
-                                            value={value}
-                                        />
-                                    )}
-                                />
-                            </form>
-                        </Modal>
-                    )}
-                </div>
+                <Table
+                    columns={columns}
+                    dataSource={newUserArr}
+                    actions={editAction}
+                    clickableArr={clickableArr}
+                />
+                {isOpenEdit && (
+                    <Modal
+                        title={`Assign Role`}
+                        submitLabel="Save"
+                        isOpen={isOpenEdit}
+                        handleClose={closeEdit}
+                        handleSubmit={handleSubmit(onSubmit)}
+                    >
+                        <form>
+                            <Controller
+                                control={control}
+                                name="role"
+                                defaultValue={1}
+                                render={({ field: { onChange, value } }) => (
+                                    <Dropdown
+                                        key="role-select"
+                                        name="role"
+                                        label=""
+                                        options={roles}
+                                        onChange={onChange}
+                                        value={value}
+                                    />
+                                )}
+                            />
+                        </form>
+                    </Modal>
+                )}
+
                 {paginatorInfo.lastPage > 1 && (
                     <Paginate {...paginatorInfo} onPageChange={onPageChange} />
                 )}

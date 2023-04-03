@@ -116,10 +116,10 @@ const Tags: NextPage = () => {
     }
 
     return (
-        <div className="flex w-full flex-col gap-4 p-8">
-            <div className="flex h-full flex-col gap-4">
-                <div className="mt-4 flex items-center justify-between">
-                    <h1 className="text-3xl font-bold">Tags</h1>
+        <div className="flex w-full flex-col">
+            <div className="flex h-full flex-col">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-bold text-gray-800">Tags</h1>
                     <Button
                         type="button"
                         onClick={() => {
@@ -129,13 +129,11 @@ const Tags: NextPage = () => {
                         New Tag
                     </Button>
                 </div>
-                <div className="overflow-hidden border border-black">
-                    <Table
-                        columns={columns}
-                        dataSource={getTagsDataTable(tags)}
-                        actions={getTagsActions}
-                    />
-                </div>
+                <Table
+                    columns={columns}
+                    dataSource={getTagsDataTable(tags)}
+                    actions={getTagsActions}
+                />
                 <TagsFormModal isOpen={isOpen} closeModal={closeModal} refetchHandler={refetch} />
                 <div className="mt-auto">{renderPagination()}</div>
             </div>

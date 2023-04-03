@@ -1,20 +1,20 @@
+import { FaLock, FaLockOpen } from 'react-icons/fa'
 import {
-    HiPencilAlt,
     HiBookmark,
-    HiEye,
-    HiChevronDown,
-    HiSearch,
-    HiX,
-    HiTrash,
     HiChevronDoubleLeft,
     HiChevronDoubleRight,
+    HiChevronDown,
     HiChevronLeft,
     HiChevronRight,
+    HiEye,
+    HiPencilAlt,
+    HiSearch,
+    HiTrash,
+    HiX,
 } from 'react-icons/hi'
 import { HiCheck } from 'react-icons/hi2'
-import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io'
-import { MdOutlineModeEditOutline, MdModeEditOutline } from 'react-icons/md'
-import { FaLockOpen, FaLock } from 'react-icons/fa'
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
+import { MdModeEditOutline, MdOutlineModeEditOutline } from 'react-icons/md'
 
 type IconsProps = {
     name: string
@@ -25,27 +25,9 @@ type IconsProps = {
 const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Element => {
     switch (name) {
         case 'table_edit':
-            return (
-                <MdModeEditOutline
-                    size={22}
-                    className={`${
-                        additionalClass?.includes('fill')
-                            ? additionalClass
-                            : `${additionalClass} fill-primary-red`
-                    }`}
-                />
-            )
+            return <MdModeEditOutline size={20} className="fill-blue-800" />
         case 'table_delete':
-            return (
-                <HiTrash
-                    size={22}
-                    className={`${
-                        additionalClass?.includes('fill')
-                            ? additionalClass
-                            : `${additionalClass} fill-primary-red`
-                    }`}
-                />
-            )
+            return <HiTrash size={20} className="fill-primary-red" />
         case 'square_edit':
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
         case 'vote_up':

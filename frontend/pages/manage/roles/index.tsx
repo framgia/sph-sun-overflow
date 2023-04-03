@@ -107,10 +107,10 @@ const RolesPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col gap-4 p-8">
-            <div className="flex h-full flex-col gap-4">
-                <div className="mt-4 flex items-center justify-between">
-                    <h1 className="text-3xl font-bold">User Roles</h1>
+        <div className="flex w-full flex-col">
+            <div className="flex h-full flex-col">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-bold text-gray-800">User Roles</h1>
                     <Button
                         onClick={() => {
                             void router.push('/manage/roles/create')
@@ -119,13 +119,11 @@ const RolesPage = (): JSX.Element => {
                         Add Role
                     </Button>
                 </div>
-                <div className="overflow-hidden border border-black">
-                    <Table
-                        columns={columns}
-                        dataSource={getRolesDataTable(roles)}
-                        actions={getRolesActions}
-                    />
-                </div>
+                <Table
+                    columns={columns}
+                    dataSource={getRolesDataTable(roles)}
+                    actions={getRolesActions}
+                />
                 <div className="mt-auto">
                     {pageInfo.lastPage > 1 && (
                         <Paginate {...pageInfo} onPageChange={onPageChange} />

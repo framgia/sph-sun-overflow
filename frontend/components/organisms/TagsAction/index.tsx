@@ -87,7 +87,7 @@ const TagsActions = ({ id, name, description, refetchHandler }: Props): JSX.Elem
                     setShowEditModal(true)
                 }}
             >
-                <Icons name="table_edit" additionalClass="fill-gray-500" />
+                <Icons name="table_edit" />
             </Button>
             <TagsFormModal
                 isOpen={showEditModal}

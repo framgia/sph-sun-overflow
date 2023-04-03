@@ -62,7 +62,7 @@ const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void })
                     setShowModal(true)
                 }}
             >
-                <Icons name="table_edit" additionalClass="fill-gray-500" />
+                <Icons name="table_edit" />
             </Button>
             <TeamsFormModal
                 initialData={{
@@ -234,9 +234,9 @@ const AdminTeams = (): JSX.Element => {
     }
 
     return (
-        <div className="flex h-full w-full flex-col gap-4 p-8">
-            <div className="mt-4 flex flex-row items-center justify-between">
-                <h1 className="text-3xl font-bold">Teams</h1>
+        <div className="flex flex-col">
+            <div className="flex w-full flex-row items-center justify-between">
+                <h1 className="text-3xl font-bold text-gray-800">Teams</h1>
                 <Button
                     type="button"
                     additionalClass="px-6 py-3"
@@ -247,15 +247,14 @@ const AdminTeams = (): JSX.Element => {
                     New Team
                 </Button>
             </div>
-            <div className="TableContainer overflow-hidden border border-[#555555]">
-                <Table
-                    columns={columns}
-                    dataSource={getTeamDataTable(teamArr)}
-                    isEmptyString="No Teams to Show"
-                    actions={renderTeamsActions}
-                    clickableArr={clickableArr}
-                />
-            </div>
+
+            <Table
+                columns={columns}
+                dataSource={getTeamDataTable(teamArr)}
+                isEmptyString="No Teams to Show"
+                actions={renderTeamsActions}
+                clickableArr={clickableArr}
+            />
             <div className="mt-auto">
                 <Paginate {...paginatorInfo} onPageChange={onPageChange} />
             </div>

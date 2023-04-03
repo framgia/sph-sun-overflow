@@ -36,8 +36,10 @@ class Team extends Model
         });
     }
 
-    protected $appends = ['members_count', 'is_team_leader', 'questions_asked',
-        'questions answered', 'truncated_name', 'truncated_description'];
+    protected $appends = [
+        'members_count', 'is_team_leader', 'questions_asked',
+        'questions_answered', 'truncated_name', 'truncated_description',
+    ];
 
     protected $guarded = [];
 
@@ -78,11 +80,11 @@ class Team extends Model
 
     public function getTruncatedNameAttribute()
     {
-        return Str::limit($this->name, 15, '...');
+        return Str::limit($this->name, 45, '...');
     }
 
     public function getTruncatedDescriptionAttribute()
     {
-        return Str::limit($this->description, 50, '...');
+        return Str::limit($this->description, 70, '...');
     }
 }
