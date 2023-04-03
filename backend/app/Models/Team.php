@@ -38,7 +38,7 @@ class Team extends Model
 
     protected $appends = [
         'members_count', 'is_team_leader', 'questions_asked',
-        'questions answered', 'truncated_name', 'truncated_description',
+        'questions_answered', 'truncated_name', 'truncated_description',
     ];
 
     protected $guarded = [];
