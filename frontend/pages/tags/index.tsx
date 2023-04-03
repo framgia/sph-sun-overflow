@@ -1,7 +1,6 @@
-import Paginate from '@/components/organisms/Paginate'
-// import Card from '@/components/templates/Card'
 import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
+import Paginate from '@/components/organisms/Paginate'
 import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TAGS from '@/helpers/graphql/queries/get_tags'
 import { useQuery } from '@apollo/client'
