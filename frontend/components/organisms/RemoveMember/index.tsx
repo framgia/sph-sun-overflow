@@ -45,7 +45,7 @@ const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element =>
                     setIsOpenDelete(true)
                 }}
             >
-                <HiTrash className="text-xl text-gray-500" />
+                <HiTrash className="text-xl text-primary-red" />
             </Button>
             {isOpenDelete && (
                 <Modal

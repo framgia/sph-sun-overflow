@@ -101,7 +101,7 @@ const EditMember = ({
                     setIsOpenEdit(true)
                 }}
             >
-                <MdModeEditOutline className="text-xl text-gray-500" />
+                <MdModeEditOutline className="text-xl text-blue-800" />
             </Button>
             {isOpenEdit && (
                 <Modal
