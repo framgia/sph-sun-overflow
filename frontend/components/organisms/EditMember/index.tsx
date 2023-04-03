@@ -67,6 +67,7 @@ const EditMember = ({
 
         if (noChangeCount === dataFields.length) {
             valid = false
+            errorNotify('Member is not updated!')
             closeEdit()
         }
 
