@@ -1,3 +1,4 @@
+import { Option, Select } from '@material-tailwind/react'
 import type { ControllerRenderProps } from 'react-hook-form'
 
 export type OptionType = {
@@ -17,23 +18,22 @@ type FormProps = {
 const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps): JSX.Element => {
     return (
         <div className="w-full">
-            <label>{label}</label>
-            <select
+            <Select
                 id={name}
+                name={name}
                 onChange={onChange}
-                value={value}
-                className={`${
-                    isError ? 'border-primary-red' : ''
-                } w-full rounded-lg border px-3 py-2.5 text-sm text-secondary-black focus:border-blue-500 focus:ring-blue-500`}
+                label={label}
+                value={`${value}`}
+                color="red"
             >
                 {options.map((option) => {
                     return (
-                        <option key={option.id} value={option.id}>
+                        <Option key={option.id} value={`${option.id}`}>
                             {option.name}
-                        </option>
+                        </Option>
                     )
                 })}
-            </select>
+            </Select>
         </div>
     )
 }

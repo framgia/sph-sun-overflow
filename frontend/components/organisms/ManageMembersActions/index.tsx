@@ -1,6 +1,6 @@
+import type { OptionType } from '@/components/molecules/Dropdown'
 import EditMember from '../EditMember'
 import RemoveMember from '../RemoveMember'
-import type { OptionType } from '@/components/molecules/Dropdown'
 
 type Props = {
     id: number
@@ -22,9 +22,10 @@ const ManageMembersActions = ({
     refetchHandler,
 }: Props): JSX.Element => {
     return (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row justify-center gap-4">
             <EditMember
                 id={id}
+                name={name}
                 user_id={user_id}
                 team_id={team_id}
                 roles={roles}

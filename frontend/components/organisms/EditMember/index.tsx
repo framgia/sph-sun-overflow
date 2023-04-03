@@ -1,16 +1,17 @@
 import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
-import Dropdown from '@/components/molecules/Dropdown'
 import type { OptionType } from '@/components/molecules/Dropdown'
+import Dropdown from '@/components/molecules/Dropdown'
 import Modal from '@/components/templates/Modal'
 import UPDATE_MEMBER from '@/helpers/graphql/mutations/update_member'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { MdModeEditOutline } from 'react-icons/md'
 
 type Props = {
     id: number
+    name: string
     user_id: number
     team_id: number
     roles: OptionType[]
@@ -22,7 +23,15 @@ type FormValues = {
     role: number
 }
 
-const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props): JSX.Element => {
+const EditMember = ({
+    id,
+    name,
+    user_id,
+    team_id,
+    roles,
+    role,
+    refetchHandler,
+}: Props): JSX.Element => {
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [dropdownErrors, setDropdownErrors] = useState({ role: '' })
     const [updateMember] = useMutation(UPDATE_MEMBER)
@@ -58,6 +67,7 @@ const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props
 
         if (noChangeCount === dataFields.length) {
             valid = false
+            errorNotify('Member is not updated!')
             closeEdit()
         }
 
@@ -92,11 +102,11 @@ const EditMember = ({ id, user_id, team_id, roles, role, refetchHandler }: Props
                     setIsOpenEdit(true)
                 }}
             >
-                <Icons name="table_edit" />
+                <MdModeEditOutline className="text-xl text-blue-800" />
             </Button>
             {isOpenEdit && (
                 <Modal
-                    title={`Assign Role`}
+                    title={`Assign Role to ${name}`}
                     submitLabel="Save"
                     isOpen={isOpenEdit}
                     handleClose={closeEdit}

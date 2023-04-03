@@ -1,7 +1,7 @@
-import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
 import { Dialog, Transition } from '@headlessui/react'
+import { Button } from '@material-tailwind/react'
 import React, { Fragment } from 'react'
+import { HiX } from 'react-icons/hi'
 
 type ModalProps = {
     title: string
@@ -58,37 +58,37 @@ const Modal = ({
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
-                                <div className="flex justify-between bg-secondary-gray px-6 py-3">
+                            <Dialog.Panel className="w-full max-w-md transform text-left align-middle shadow-xl transition-all">
+                                <div className="flex justify-between rounded-t-lg bg-primary-red px-4 py-3">
                                     <Dialog.Title
                                         as="h3"
-                                        className="text-lg font-bold leading-6 text-gray-900"
+                                        className="text-md font-bold leading-6 text-white"
                                     >
                                         {title}
                                     </Dialog.Title>
-                                    <Button usage="toggle-modal" onClick={handleClose}>
-                                        <Icons name="x-plain" size="16" />
-                                    </Button>
+                                    <HiX
+                                        className="cursor-pointer self-center text-lg text-white"
+                                        onClick={handleClose}
+                                    />
                                 </div>
-                                <div className="px-6 py-4 ">
-                                    <Dialog.Description
-                                        id="modal-content"
-                                        as="div"
-                                        className="mt-2 text-sm"
-                                    >
-                                        {children}
-                                    </Dialog.Description>
-                                    <div className="mt-4 flex justify-end gap-2">
-                                        <Button
-                                            type="button"
-                                            usage="modal-cancel"
-                                            onClick={handleClose}
+                                <div className="flex flex-col rounded-b-lg bg-white">
+                                    <div className="flex justify-center p-4">
+                                        <Dialog.Description
+                                            id="modal-content"
+                                            as="div"
+                                            className="mt-2 w-full text-sm text-gray-800"
                                         >
+                                            {children}
+                                        </Dialog.Description>
+                                    </div>
+                                    <div className="flex justify-end gap-2 px-4 pb-4 pt-3">
+                                        <Button size="sm" color="gray" onClick={handleClose}>
                                             Cancel
                                         </Button>
                                         <Button
-                                            type="button"
-                                            usage="modal-submit"
+                                            size="sm"
+                                            color="red"
+                                            className="bg-primary-red hover:bg-dark-red"
                                             onClick={onClickSubmit}
                                         >
                                             {submitLabel}

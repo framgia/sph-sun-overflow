@@ -1,4 +1,3 @@
-import Button from '@/components/atoms/Button'
 import type { OptionType } from '@/components/molecules/Dropdown'
 import Dropdown from '@/components/molecules/Dropdown'
 import ManageMembersActions from '@/components/organisms/ManageMembersActions'
@@ -15,10 +14,11 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { type UserType } from '@/pages/questions/[slug]'
 import { useMutation, useQuery } from '@apollo/client'
-import Link from 'next/link'
+import { Button } from '@material-tailwind/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import BackButton from '../atoms/BackButton'
 
 interface IMember {
     id: number
@@ -48,7 +48,7 @@ const columns: ColumnType[] = [
         key: 'role',
     },
     {
-        title: 'Action',
+        title: '',
         key: 'action',
         width: 20,
     },
@@ -211,107 +211,95 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
         setDropdownErrors(errorFields)
     }
 
-    const renderGoBackRoute = (): JSX.Element => {
-        return !isForAdmin ? (
-            <Link
-                href={`/teams/${router.query.slug as string}`}
-                className="text-lg text-secondary-text"
-            >
-                {'< Go back'}
-            </Link>
-        ) : (
-            <div></div>
-        )
-    }
-
     return (
-        <div className="flex w-full flex-col gap-4 divide-y-8 ">
-            {!isForAdmin && <h1 className="text-3xl font-bold">{team?.name}</h1>}
-            <div className="flex h-full flex-col gap-4">
-                <div className="mt-4 flex items-center justify-between">
-                    {renderGoBackRoute()}
-                    <Button
-                        onClick={() => {
-                            openModal('add')
+        <div className="flex h-full w-full flex-col">
+            {!isForAdmin && <BackButton path={`/teams/${router.query.slug as string}`} />}
+            <div className="mt-4 flex items-center justify-between">
+                {!isForAdmin && <h1 className="text-3xl font-bold text-gray-800">{team?.name}</h1>}
+                <Button
+                    size="md"
+                    color="red"
+                    className="bg-primary-red hover:bg-dark-red"
+                    onClick={() => {
+                        openModal('add')
+                    }}
+                >
+                    Add Member
+                </Button>
+                {activeModal === 'add' && isOpen && (
+                    <Modal
+                        title="Add Member"
+                        submitLabel="Add"
+                        isOpen={isOpen}
+                        handleSubmit={handleSubmit(onSubmit)}
+                        handleClose={() => {
+                            closeModal('add')
                         }}
                     >
-                        Add Member
-                    </Button>
-                    {activeModal === 'add' && isOpen && (
-                        <Modal
-                            title="Add Member"
-                            submitLabel="Add"
-                            isOpen={isOpen}
-                            handleSubmit={handleSubmit(onSubmit)}
-                            handleClose={() => {
-                                closeModal('add')
-                            }}
-                        >
-                            <form onSubmit={handleSubmit(onSubmit)} id="add-member-form">
-                                <div className="flex w-full gap-2">
-                                    <div className="flex flex-col">
-                                        <Controller
-                                            control={control}
-                                            name="user"
-                                            defaultValue={users.length && users[0].id}
-                                            render={({ field: { onChange, value } }) => (
-                                                <Dropdown
-                                                    key="user-select"
-                                                    name="user"
-                                                    label="Select User"
-                                                    options={users}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                    isError={dropdownErrors.user.length > 0}
-                                                />
-                                            )}
-                                        />
-                                        {dropdownErrors.user.length > 0 && (
-                                            <span className="ml-2 text-sm text-primary-red">
-                                                {dropdownErrors.user}
-                                            </span>
+                        <form onSubmit={handleSubmit(onSubmit)} id="add-member-form">
+                            <div className="flex w-full justify-center gap-2">
+                                <div className="flex flex-col">
+                                    <Controller
+                                        control={control}
+                                        name="user"
+                                        defaultValue={users.length && users[0].id}
+                                        render={({ field: { onChange, value } }) => (
+                                            <Dropdown
+                                                key="user-select"
+                                                name="user"
+                                                label="Select User"
+                                                options={users}
+                                                onChange={onChange}
+                                                value={value}
+                                                isError={dropdownErrors.user.length > 0}
+                                            />
                                         )}
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <Controller
-                                            control={control}
-                                            name="role"
-                                            defaultValue={roles[0].id}
-                                            render={({ field: { onChange, value } }) => (
-                                                <Dropdown
-                                                    key="role-select"
-                                                    name="role"
-                                                    label="Select Role"
-                                                    options={roles}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                    isError={dropdownErrors.role.length > 0}
-                                                />
-                                            )}
-                                        />
-                                        {dropdownErrors.role.length > 0 && (
-                                            <span className="ml-2 text-sm text-primary-red">
-                                                {dropdownErrors.role}
-                                            </span>
-                                        )}
-                                    </div>
+                                    />
+                                    {dropdownErrors.user.length > 0 && (
+                                        <span className="ml-2 text-sm text-primary-red">
+                                            {dropdownErrors.user}
+                                        </span>
+                                    )}
                                 </div>
-                            </form>
-                        </Modal>
-                    )}
-                </div>
+                                <div className="flex flex-col">
+                                    <Controller
+                                        control={control}
+                                        name="role"
+                                        defaultValue={roles[0].id}
+                                        render={({ field: { onChange, value } }) => (
+                                            <Dropdown
+                                                key="role-select"
+                                                name="role"
+                                                label="Select Role"
+                                                options={roles}
+                                                onChange={onChange}
+                                                value={value}
+                                                isError={dropdownErrors.role.length > 0}
+                                            />
+                                        )}
+                                    />
+                                    {dropdownErrors.role.length > 0 && (
+                                        <span className="ml-2 text-sm text-primary-red">
+                                            {dropdownErrors.role}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </form>
+                    </Modal>
+                )}
+            </div>
 
-                <Table
-                    columns={columns}
-                    dataSource={parseGetMembers(memberList)}
-                    actions={getManageMemberActions}
-                />
+            <Table
+                columns={columns}
+                dataSource={parseGetMembers(memberList)}
+                actions={getManageMemberActions}
+            />
 
-                <div className="mt-auto">
-                    {paginatorInfo.lastPage > 1 && (
-                        <Paginate {...paginatorInfo} onPageChange={onPageChange} />
-                    )}
-                </div>
+            <div className="mt-auto">
+                {paginatorInfo.lastPage > 1 && (
+                    <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+                )}
             </div>
         </div>
     )
