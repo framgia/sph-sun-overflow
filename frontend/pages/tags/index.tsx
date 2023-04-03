@@ -1,19 +1,17 @@
-import PageHeader from '@/components/atoms/PageHeader'
-import Pill from '@/components/molecules/Pill'
 import SearchInput from '@/components/molecules/SearchInput'
+import SortDropdown from '@/components/molecules/SortDropdown'
 import Paginate from '@/components/organisms/Paginate'
-import Card from '@/components/templates/Card'
-import { useQuery } from '@apollo/client'
-import { errorNotify } from '../../helpers/toast'
-import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
-import type { TagType } from '../questions/[slug]'
+import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TAGS from '@/helpers/graphql/queries/get_tags'
-import type { RefetchType } from '../questions/index'
-import SortDropdown from '../../components/molecules/SortDropdown/index'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { Card, CardBody, CardFooter, Typography } from '@material-tailwind/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import { useEffect, useState } from 'react'
+import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
+import { errorNotify } from '../../helpers/toast'
+import type { TagType } from '../questions/[slug]'
+import type { RefetchType } from '../questions/index'
 
 const TagsListPage = (): JSX.Element => {
     const router = useRouter()
@@ -128,11 +126,13 @@ const TagsListPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">
-            <PageHeader>Tags</PageHeader>
-            <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
-                <div className="flex w-full flex-row items-center justify-between">
-                    <div className="mt-2 flex flex-row items-center justify-between px-2">
+        <div className="flex flex-col">
+            <div className="w-full">
+                <div className="text-3xl font-bold text-gray-800">Tags</div>
+            </div>
+            <div className="mt-4 flex h-full w-full flex-col">
+                <div className="flex h-full w-full flex-row items-center justify-between">
+                    <div className="flex flex-row items-center justify-between">
                         <form onSubmit={handleSearchSubmit}>
                             <SearchInput
                                 placeholder="Search tag"
@@ -144,29 +144,46 @@ const TagsListPage = (): JSX.Element => {
                     <SortDropdown filters={tagFilters} selectedFilter={selectedFilter} grouped />
                 </div>
                 {term && (
-                    <div className="px-3">
+                    <div className="truncate px-2 pt-1 text-sm text-gray-600">
                         {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
                         {`"${term}"`}
                     </div>
                 )}
                 <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
-                    <div className="grid w-full grid-cols-2 gap-5 px-3">
-                        {tagList.map((tag) => (
-                            <Link key={tag.id} href={`questions/tagged/${tag.slug}`}>
-                                <Card
-                                    header={
-                                        <div className="pt-1">
-                                            <Pill tag={tag} />
-                                        </div>
-                                    }
-                                    footer={`${tag.count_tagged_questions} ${
-                                        tag.count_tagged_questions > 1 ? 'questions' : 'question'
-                                    }`}
-                                >
-                                    {tag.description}
-                                </Card>
-                            </Link>
-                        ))}
+                    <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3">
+                        {tagList.map((tag) => {
+                            return (
+                                <Link key={tag.id} href={`questions/tagged/${tag.slug}`}>
+                                    <Card className="h-52 justify-between">
+                                        <CardBody className="">
+                                            <Typography variant="h5" className="mb-2">
+                                                {tag.name}
+                                            </Typography>
+                                            <Typography className="line-clamp-3">
+                                                {tag.description}
+                                            </Typography>
+                                        </CardBody>
+                                        <CardFooter
+                                            divider
+                                            className="flex items-center justify-between py-3"
+                                        >
+                                            <Typography variant="small">
+                                                {tag.count_tagged_questions}{' '}
+                                                {tag.count_tagged_questions === 1
+                                                    ? 'question'
+                                                    : 'questions'}
+                                            </Typography>
+                                            <Typography variant="small">
+                                                {tag.count_watching_users}{' '}
+                                                {tag.count_watching_users === 1
+                                                    ? 'watcher'
+                                                    : 'watchers'}
+                                            </Typography>
+                                        </CardFooter>
+                                    </Card>
+                                </Link>
+                            )
+                        })}
                     </div>
                     {pageInfo.lastPage > 1 && (
                         <Paginate {...pageInfo} perPage={6} onPageChange={onPageChange} />

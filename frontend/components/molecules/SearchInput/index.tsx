@@ -14,7 +14,7 @@ const SearchInput = ({ placeholder, usage = 'Default', value, onChange }: Props)
         <div className="w-[310px]">
             <Input
                 size="md"
-                className="bg-white placeholder-shown:border-gray-300 placeholder-shown:border-t-gray-300"
+                className="!bg-white placeholder-shown:border-gray-300 placeholder-shown:border-t-gray-300"
                 label={placeholder}
                 icon={<HiSearch className="text-lg" />}
                 name="search"
