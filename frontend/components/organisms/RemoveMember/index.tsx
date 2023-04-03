@@ -1,10 +1,10 @@
 import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
 import Modal from '@/components/templates/Modal'
 import DELETE_MEMBER from '@/helpers/graphql/mutations/delete_member'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
+import { HiTrash } from 'react-icons/hi'
 
 type Props = {
     id: number
@@ -45,11 +45,11 @@ const RemoveMember = ({ id, name, role, refetchHandler }: Props): JSX.Element =>
                     setIsOpenDelete(true)
                 }}
             >
-                <Icons name="table_delete" />
+                <HiTrash className="text-xl text-gray-500" />
             </Button>
             {isOpenDelete && (
                 <Modal
-                    title={`Removing ${name} (${role ?? 'Member'})`}
+                    title={`Remove ${name}`}
                     submitLabel="Confirm"
                     isOpen={isOpenDelete}
                     handleClose={closeDelete}
