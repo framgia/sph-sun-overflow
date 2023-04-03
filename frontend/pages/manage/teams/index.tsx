@@ -22,6 +22,7 @@ type TeamType = {
     members_count: string
     truncated_name: string
     truncated_description: string
+    teamLeader: { id: number }
 }
 
 type TeamsQuery = {
@@ -68,6 +69,7 @@ const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void })
                 initialData={{
                     id: team?.key as number,
                     title: team?.full_name as string,
+                    teamLeaderId: team?.teamLeaderId as number,
                     description: team?.full_description as string,
                 }}
                 isOpen={showModal}
@@ -189,11 +191,13 @@ const AdminTeams = (): JSX.Element => {
                 description,
                 truncated_description,
                 members_count,
+                teamLeader: { id: teamLeaderId },
             } = team
             return {
                 key: id,
                 slug,
                 members_count,
+                teamLeaderId: +teamLeaderId,
                 name: truncated_name,
                 description: truncated_description,
                 full_name: name,

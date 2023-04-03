@@ -21,6 +21,8 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
     const isSelected = (index: number, urlString: string): boolean => {
         const urlSplit = router.pathname.split('/')
 
+        if (!urlSplit[index]) return urlString.includes('questions')
+
         return urlString.includes(urlSplit[index])
     }
 

@@ -3,6 +3,7 @@ import CREATE_TAG from '@/helpers/graphql/mutations/create_tag'
 import UPDATE_TAG from '@/helpers/graphql/mutations/update_tag'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
+import { Input, Textarea } from '@material-tailwind/react'
 import React from 'react'
 const tempData = {
     id: 0,
@@ -81,6 +82,7 @@ const TagsFormModal = ({
             }
         }
     }
+
     return (
         <Modal
             title={formTitle}
@@ -91,27 +93,18 @@ const TagsFormModal = ({
             }}
         >
             <form className="flex w-full flex-col gap-4 " onSubmit={onSubmit}>
-                <div className="flex flex-col gap-2">
-                    <input
-                        name="tagName"
-                        type="text"
-                        id="tagName"
-                        className="rounded-lg"
-                        placeholder="Name"
-                        defaultValue={initialData.name || ''}
-                    />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <textarea
-                        name="tagDescription"
-                        id="tagDescription"
-                        className="rounded-lg"
-                        placeholder="Briefly Describe the Tag"
-                        defaultValue={initialData.description || ''}
-                        rows={4}
-                    />
-                </div>
+                <Input
+                    id="tagName"
+                    name="tagName"
+                    label="Name"
+                    defaultValue={initialData.name || ''}
+                />
+                <Textarea
+                    id="tagDescription"
+                    name="tagDescription"
+                    label="Description"
+                    defaultValue={initialData.description || ''}
+                />
             </form>
         </Modal>
     )

@@ -41,7 +41,7 @@ const Tags: NextPage = () => {
         variables: {
             first: 6,
             page: 1,
-            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+            sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
         },
     })
 
@@ -50,7 +50,7 @@ const Tags: NextPage = () => {
             first: 6,
             page: 1,
             name: '%%',
-            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+            sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
         })
     }, [router, refetch])
 
@@ -80,7 +80,7 @@ const Tags: NextPage = () => {
         void refetch({
             first: 6,
             name: '%%',
-            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+            sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
             page:
                 isDelete && paginatorInfo.count === 1 && paginatorInfo.currentPage > 1
                     ? paginatorInfo.currentPage - 1
