@@ -49,7 +49,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                             </div>
                         )}
                     <div
-                        className={`flex min-h-screen ${
+                        className={`flex min-h-screen bg-gray-100 ${
                             hideRightSidebarInPages.includes(router.pathname)
                                 ? 'w-5/6 pt-20'
                                 : routeIfLoginPathCheck

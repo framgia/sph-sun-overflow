@@ -1,13 +1,27 @@
 .quill .ql-container.ql-snow {
     background-color: white;
     border-radius: 0 0 1em 1em;
-    border-color: rgb(156 163 175);
+    border-color: #eeeeee;
     border-width: 2px;
 }
 
 .quill .ql-toolbar.ql-snow {
     background-color: white;
     border-radius: 1em 1em 0 0;
-    border-color: rgb(156 163 175);
+    border-color: #eeeeee;
     border-width: 2px;
+}
+
+.ql-snow .ql-fill {
+    fill: #adadad !important;
+    stroke: none;
+}
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-options {
+    color: #adadad !important;
+}
+
+.ql-toolbar .ql-stroke:not(.ql-color-label) {
+    fill: none;
+    stroke: #adadad !important;
 }

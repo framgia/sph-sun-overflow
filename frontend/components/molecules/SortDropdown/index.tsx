@@ -78,7 +78,7 @@ const SortDropdown = ({ grouped = false, selectedFilter, filters }: AppProps): J
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-10 mt-1 w-44 divide-y divide-gray-200 rounded-lg bg-white bg-white shadow">
+                    <Menu.Items className="absolute left-0 z-10 mt-1 w-44 divide-y divide-gray-200 rounded-lg bg-white bg-white shadow">
                         {grouped ? renderGroupedFilters() : renderFilters()}
                     </Menu.Items>
                 </Transition>
