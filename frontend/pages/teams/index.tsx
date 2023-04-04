@@ -1,14 +1,15 @@
 import PageHeader from '@/components/atoms/PageHeader'
 import SearchInput from '@/components/molecules/SearchInput'
 import Paginate from '@/components/organisms/Paginate'
-import Card from '@/components/templates/Card'
 import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
+import { Card, CardBody, CardFooter, CardHeader, Typography } from '@material-tailwind/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { BsPeopleFill } from 'react-icons/bs'
 
 type TeamType = {
     id: number
@@ -73,12 +74,24 @@ const TeamsListPage = (): JSX.Element => {
         await userQuery.refetch({ first, page })
     }
 
+    const renderSearchResultHeader = (): JSX.Element => {
+        return (
+            <div className="w-80">
+                <div className="truncate px-2 pt-1 text-sm text-gray-600">
+                    {`${pageInfo.total} search ${
+                        pageInfo.total !== 1 ? `results` : `result`
+                    } for "${term}"`}
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <div className="flex h-full w-full flex-col gap-3 divide-y-2 divide-primary-gray px-10 pt-8 pb-5">
+        <div className="flex h-full w-full flex-col">
             <PageHeader>Teams</PageHeader>
-            <div className="flex h-full w-full flex-col gap-2 px-5 pt-3">
-                <div className="flex w-full flex-row items-center justify-between">
-                    <div className="mt-2 flex flex-row items-center justify-between px-2">
+            <div className="flex h-full w-full flex-col">
+                <div className="flex w-full flex-row">
+                    <div className="ml-auto">
                         <form onSubmit={handleSearchSubmit}>
                             <SearchInput
                                 placeholder="Search team"
@@ -88,22 +101,34 @@ const TeamsListPage = (): JSX.Element => {
                         </form>
                     </div>
                 </div>
-                {isSearchResult && (
-                    <div className="px-3">
-                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                        {`"${term}"`}
-                    </div>
-                )}
+                {isSearchResult && renderSearchResultHeader()}
                 {teams?.length !== 0 ? (
-                    <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
-                        <div className="grid w-full grid-cols-2 gap-y-5 gap-x-10 px-3">
+                    <div className="mt-6 flex h-full w-full flex-col justify-between">
+                        <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3">
                             {teams?.map((team: TeamType) => (
                                 <Link key={team.id} href={`teams/${team.slug}`}>
-                                    <Card
-                                        header={team.name}
-                                        footer={`${team.members_count} members`}
-                                    >
-                                        {team.description}
+                                    <Card className="h-48 justify-end">
+                                        <CardHeader
+                                            floated={false}
+                                            color="transparent"
+                                            shadow={false}
+                                            className="mx-6 rounded-none"
+                                        >
+                                            <Typography variant="h5" className="text-gray-800">
+                                                {team.name}
+                                            </Typography>
+                                        </CardHeader>
+                                        <CardBody className="items-center pt-1">
+                                            <div className="leading-tight text-gray-600 line-clamp-3">
+                                                {team.description}
+                                            </div>
+                                        </CardBody>
+                                        <CardFooter className="flex self-center py-4 text-sm text-gray-500">
+                                            <div className="flex gap-2">
+                                                <BsPeopleFill className="text-xl" />
+                                                {team.members_count}
+                                            </div>
+                                        </CardFooter>
                                     </Card>
                                 </Link>
                             ))}

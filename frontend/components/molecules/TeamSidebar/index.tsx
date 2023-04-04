@@ -6,7 +6,11 @@ interface ITeam {
     id: number
     name: string
     members: Array<{
-        user: { avatar: string }
+        user: {
+            first_name: string
+            last_name: string
+            avatar: string
+        }
     }>
     slug: string
 }
@@ -41,14 +45,15 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
             setTeams(extractTeams())
         }
     }, [data])
+
     return (
         <div className="mt-4 rounded-br-md rounded-bl-md  drop-shadow-md">
             <div className="flex w-full justify-between rounded-tr-md rounded-tl-md bg-primary-red p-2.5 text-white drop-shadow-md">
                 <span className="text-md">My Teams</span>
             </div>
             <div
-                className={`tags flex max-h-[384px] flex-wrap rounded-br-md rounded-bl-md bg-white ${
-                    teams.length > 0 ? 'overflow-y-scroll' : ''
+                className={`flex max-h-[384px] flex-wrap rounded-br-md rounded-bl-md bg-white ${
+                    teams.length > 0 ? 'overflow-y-auto' : ''
                 }`}
             >
                 {teams.length === 0 && (
@@ -66,35 +71,46 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
 }
 
 const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
-    const extractImageUrls = (): string[] => {
+    const extractAvatars = (): Array<{
+        user: {
+            first_name: string
+            last_name: string
+            avatar: string
+        }
+    }> => {
         const imageList = Array.from(
             team.members.map((userWrapper) => {
                 const { user } = userWrapper
-                if (user.avatar === null || user.avatar === undefined) {
-                    return 'https://www.w3schools.com/howto/img_avatar.png'
+                return {
+                    user: {
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        avatar: user.avatar,
+                    },
                 }
-                return user.avatar
             })
         )
+
         return imageList
     }
+
     if (team !== undefined) {
-        extractImageUrls()
+        extractAvatars()
         return (
             <Link
-                className="flex h-24 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-[#E8E8E8]"
+                className="flex h-20 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-red-50"
                 href={`/teams/${team.slug}`}
             >
                 <div className="ml-2 flex flex-col overflow-hidden align-middle">
-                    <div className="text-md w-36 overflow-hidden text-ellipsis line-clamp-2 ">
+                    <div className="text-md w-36 overflow-hidden text-ellipsis text-gray-800 line-clamp-2">
                         {team.name}
                     </div>
-                    <div className="text-md hidden md:text-xs lg:flex">
-                        {team.members.length} members
+                    <div className="text-md align-center hidden text-gray-600 md:text-sm lg:flex">
+                        {team.members.length} {team.members.length !== 1 ? 'members' : 'member'}
                     </div>
                 </div>
                 <div className="hidden h-full items-center align-middle xl:flex">
-                    <StackedUsers images={extractImageUrls()} />
+                    <StackedUsers images={extractAvatars()} />
                 </div>
             </Link>
         )
