@@ -157,6 +157,7 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
                             label="Description"
                             value={value}
                             onChange={onChange}
+                            className="focus:ring-0"
                         />
                     )}
                 />

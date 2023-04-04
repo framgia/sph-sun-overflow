@@ -104,6 +104,7 @@ const TagsFormModal = ({
                     name="tagDescription"
                     label="Description"
                     defaultValue={initialData.description || ''}
+                    className="focus:ring-0"
                 />
             </form>
         </Modal>
