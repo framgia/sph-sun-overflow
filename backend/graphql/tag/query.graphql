@@ -23,6 +23,7 @@ input tagSort {
 
 enum TAG_COLUMNS {
     CREATED_AT @enum(value: "created_at")
+    UPDATED_AT @enum(value: "updated_at")
     NAME @enum(value: "name")
     POPULARITY @enum(value: "questions_count")
     WATCH_COUNT @enum(value: "users_watching_count")

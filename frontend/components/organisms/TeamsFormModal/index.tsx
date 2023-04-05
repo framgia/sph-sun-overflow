@@ -6,6 +6,7 @@ import GET_ALL_TEAM_LEADERS from '@/helpers/graphql/queries/get_all_team_leaders
 import type { UserType } from '@/pages/questions/[slug]'
 import type { FetchResult } from '@apollo/client'
 import { useMutation, useQuery } from '@apollo/client'
+import { Input, Textarea } from '@material-tailwind/react'
 import { useRouter } from 'next/router'
 import { Controller, useForm } from 'react-hook-form'
 import { errorNotify, successNotify } from '../../../helpers/toast'
@@ -15,6 +16,7 @@ type FormProps = {
     initialData?: {
         id: number
         title: string
+        teamLeaderId: number
         description: string
     }
     isOpen: boolean
@@ -22,11 +24,17 @@ type FormProps = {
     refetch: () => void
 }
 
+type FormValues = {
+    teamName: string
+    teamLeader: number
+    teamDescription: string
+}
+
 const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps): JSX.Element => {
     const router = useRouter()
     const formTitle = initialData?.title ? 'Edit Team' : 'Add Team'
 
-    const { control } = useForm<{ teamLeader: number }>({})
+    const { handleSubmit, control } = useForm<FormValues>({})
     const { data } = useQuery(GET_ALL_TEAM_LEADERS)
     const [createTeam] = useMutation(CREATE_TEAM)
     const [updateTeam] = useMutation(UPDATE_TEAM)
@@ -38,25 +46,21 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
         })
     )
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-        const target = e.target as typeof e.target & {
-            teamName: { value: string }
-            teamLeader: { value: number }
-            teamDescription: { value: string }
-        }
+    const onSubmit = (data: FormValues): void => {
+        const { teamName, teamLeader, teamDescription } = data
 
-        const name = target.teamName.value
-        const description = target.teamDescription.value
-        const user_id = target.teamLeader.value
-
-        if (!(name && description)) {
+        if (!(teamName && teamLeader && teamDescription)) {
             errorNotify('Please input some data')
             return
         }
 
         if (initialData) {
-            const { title, description: init_desc } = initialData
-            if (title === name && init_desc === description) {
+            const { title, teamLeaderId, description: init_desc } = initialData
+            if (
+                title === teamName &&
+                teamLeaderId === +teamLeader &&
+                init_desc === teamDescription
+            ) {
                 errorNotify('No changes were made!')
                 closeModal()
                 return
@@ -65,9 +69,9 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
             updateTeam({
                 variables: {
                     id: initialData.id,
-                    name,
-                    description,
-                    user_id,
+                    name: teamName,
+                    description: teamDescription,
+                    user_id: teamLeader,
                 },
             })
                 .then(({ data }: FetchResult<{ updateTeam: { id: number; slug: string } }>) => {
@@ -84,9 +88,9 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
         } else {
             createTeam({
                 variables: {
-                    name,
-                    description,
-                    user_id,
+                    name: teamName,
+                    description: teamDescription,
+                    user_id: teamLeader,
                 },
             })
                 .then(({ data }: FetchResult<{ createTeam: { id: number; slug: string } }>) => {
@@ -112,41 +116,51 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
                 closeModal()
             }}
         >
-            <form className="flex w-full flex-col gap-4" onSubmit={onSubmit}>
-                <div className="flex flex-col gap-2">
-                    <input
-                        type="text"
-                        id="teamName"
-                        className="rounded-lg"
-                        placeholder="Name"
-                        defaultValue={initialData?.title ?? ''}
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <span className="font-bold">Team Leader</span>
-                    <Controller
-                        control={control}
-                        name="teamLeader"
-                        render={({ field: { onChange, value } }) => (
-                            <Dropdown
-                                name="teamLeader"
-                                label=""
-                                options={teamLeaders}
-                                onChange={onChange}
-                                value={value}
-                            />
-                        )}
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <textarea
-                        id="teamDescription"
-                        className="rounded-lg"
-                        placeholder="Briefly Describe the Team"
-                        defaultValue={initialData?.description ?? ''}
-                        rows={4}
-                    />
-                </div>
+            <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                    control={control}
+                    name="teamName"
+                    defaultValue={initialData?.title ?? ''}
+                    render={({ field: { onChange, value } }) => (
+                        <Input
+                            id="teamName"
+                            name="teamName"
+                            label="Name"
+                            value={value}
+                            onChange={onChange}
+                        />
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name="teamLeader"
+                    defaultValue={initialData?.teamLeaderId}
+                    render={({ field: { onChange, value } }) => (
+                        <Dropdown
+                            name="teamLeader"
+                            label="Team Leader"
+                            options={teamLeaders}
+                            onChange={onChange}
+                            value={value}
+                        />
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="teamDescription"
+                    defaultValue={initialData?.description ?? ''}
+                    render={({ field: { onChange, value } }) => (
+                        <Textarea
+                            id="teamDescription"
+                            name="teamDescription"
+                            label="Description"
+                            value={value}
+                            onChange={onChange}
+                            className="focus:ring-0"
+                        />
+                    )}
+                />
             </form>
         </Modal>
     )
