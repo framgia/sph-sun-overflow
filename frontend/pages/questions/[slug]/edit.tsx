@@ -1,8 +1,9 @@
 import QuestionForm from '@/components/organisms/QuestionForm'
+import GET_QUESTION_SKELETON from '@/helpers/graphql/queries/get_question_skeleton'
+import { useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
-import GET_QUESTION_SKELETON from '@/helpers/graphql/queries/get_question_skeleton'
+import { IoIosArrowBack } from 'react-icons/io'
 
 const EditQuestionFormPage = (): JSX.Element => {
     const router = useRouter()
@@ -14,13 +15,15 @@ const EditQuestionFormPage = (): JSX.Element => {
         },
     })
     return (
-        <div className="flex w-full flex-col content-center justify-center ">
-            <div className="flex shrink pb-6">
-                <div className="ml-10 pt-10 text-xl text-primary-gray">
-                    <Link href={`/questions/${router.query.slug as string}`}>{'< Go Back'}</Link>
-                </div>
+        <div className="flex flex-col bg-light-gray">
+            <div className="w-full">
+                <Link href={`/questions/${router.query.slug as string}`}>
+                    <div className="flex flex-row items-center text-2xl">
+                        <IoIosArrowBack size={24} /> Go Back
+                    </div>
+                </Link>
             </div>
-            <div className="ml-16 mr-16 w-full content-center lg:w-[80%]">
+            <div className="mt-[80px] flex w-full justify-center ">
                 {!loading && <QuestionForm initialState={data?.question} />}
             </div>
         </div>

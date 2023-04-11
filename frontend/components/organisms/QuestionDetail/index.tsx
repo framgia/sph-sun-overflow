@@ -63,7 +63,6 @@ const QuestionDetail = ({
     }
 
     const editLink = team_slug ? `/teams/${team_slug}/question/${slug}/edit` : `${slug}/edit`
-
     return (
         <Fragment>
             <div className="flex w-full flex-col">

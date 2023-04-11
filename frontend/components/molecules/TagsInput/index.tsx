@@ -1,12 +1,10 @@
-import { Fragment, useState, useEffect } from 'react'
-import { Combobox, Transition } from '@headlessui/react'
-import { HiCheck } from 'react-icons/hi2'
-import { removeItemViaId } from '@/utils'
-import Tag from '../../atoms/Tag'
-import { useQuery } from '@apollo/client'
-import { GET_TAG_SUGGESTIONS } from '@/helpers/graphql/queries/sidebar'
-import type { UseFormSetValue } from 'react-hook-form'
 import type { FormValues } from '@/components/organisms/QuestionForm'
+import { removeItemViaId } from '@/utils'
+import { Combobox, Transition } from '@headlessui/react'
+import { Chip } from '@material-tailwind/react'
+import { Fragment, useEffect, useState } from 'react'
+import type { UseFormSetValue } from 'react-hook-form'
+import { HiCheck } from 'react-icons/hi2'
 
 export type ITag = {
     id: number
@@ -17,6 +15,8 @@ export type ITag = {
 interface TagInputProps {
     setValue: UseFormSetValue<FormValues>
     value: ITag[]
+    suggestions: ITag[]
+    refetchSuggestions: (arg0: string) => void
 }
 
 const initialState = {
@@ -25,24 +25,18 @@ const initialState = {
     queryText: '',
 }
 
-const filterSuggest = (oldList: ITag[], newList: ITag[]): ITag[] => {
-    const tempSuggestions = [] as ITag[]
-    newList.forEach((tag) => {
-        if (!oldList.some((tag2) => tag2.id === tag.id)) {
-            tempSuggestions.push(tag)
-        }
-    })
-    return tempSuggestions
-}
-
-const TagsInput = ({ setValue, value }: TagInputProps): JSX.Element => {
+const TagsInput = ({
+    setValue,
+    value,
+    suggestions,
+    refetchSuggestions,
+}: TagInputProps): JSX.Element => {
     const [tagsSelected, setTagsSelected] = useState<ITag[]>(value)
-    const [tagSuggestions, setTagSuggestions] = useState<ITag[] | []>(value)
     const [queryText, setQueryText] = useState<string>(initialState.queryText)
 
-    const { data: tagData, loading: tagLoading } = useQuery(GET_TAG_SUGGESTIONS, {
-        variables: { queryString: `%${queryText}%` },
-    })
+    useEffect(() => {
+        refetchSuggestions(queryText)
+    }, [queryText])
 
     const deleteTag = (id: number): void => {
         const tempArr = removeItemViaId(tagsSelected, id)
@@ -50,31 +44,26 @@ const TagsInput = ({ setValue, value }: TagInputProps): JSX.Element => {
     }
 
     const disableInput = tagsSelected.length >= 5
-    const filteredTags =
-        queryText === ''
-            ? tagSuggestions
-            : tagSuggestions.filter((tag) =>
-                  tag.name
-                      .toLowerCase()
-                      .replace(/\s+/g, '')
-                      .includes(queryText.toLowerCase().replace(/\s+/g, ''))
-              )
+    const filteredTags = suggestions.filter(
+        (tag) => !tagsSelected.some((selectedTag) => selectedTag.id === tag.id)
+    )
 
     useEffect(() => {
         setValue('tags', tagsSelected)
     }, [tagsSelected])
 
     useEffect(() => {
-        if (!tagLoading) {
-            setTagSuggestions([
-                ...tagSuggestions,
-                ...filterSuggest(tagSuggestions, tagData.tagSuggest),
-            ])
-        }
-    }, [tagData])
+        const updatedSelectedTags = tagsSelected.map((selectedTag) => {
+            const matchingFetchedTag = suggestions.find(
+                (fetchedTag) => fetchedTag.id === selectedTag.id
+            )
+            return matchingFetchedTag ?? selectedTag
+        })
+        setTagsSelected(updatedSelectedTags)
+    }, [suggestions])
 
     return (
-        <div className="flex w-full flex-wrap rounded-lg border-2 border-gray-400 bg-white">
+        <div className="flex w-full flex-wrap rounded-lg border border-[#EEEEEE] bg-white focus-within:ring-2 focus-within:ring-blue-500 ">
             <Combobox
                 value={tagsSelected}
                 onChange={(e) => {
@@ -83,20 +72,32 @@ const TagsInput = ({ setValue, value }: TagInputProps): JSX.Element => {
                 multiple
                 disabled={disableInput}
             >
-                <span className="my-1 flex flex-row">
+                <div className="mx-1 mt-1 flex flex-row flex-wrap gap-x-0.5 gap-y-1 ">
                     {tagsSelected.map((tag, index) => {
                         const { name, id } = tag
-                        return <Tag key={index} name={name} tagId={id} deleteTag={deleteTag} />
+                        return (
+                            <Chip
+                                key={id}
+                                value={name}
+                                color={'red'}
+                                dismissible={{
+                                    onClose: () => {
+                                        deleteTag(id)
+                                    },
+                                }}
+                            />
+                        )
                     })}
-                </span>
+                    <Combobox.Input
+                        id="comboBoxInput"
+                        className="mx-2 w-full border-none  text-sm text-gray-900 focus:ring-0 sm:w-auto"
+                        onChange={(event) => {
+                            setQueryText(event.target.value)
+                        }}
+                        value={queryText}
+                    />
+                </div>
 
-                <Combobox.Input
-                    id="comboBoxInput"
-                    className="mx-2 w-0 grow border-none text-sm leading-5 text-gray-900 focus:ring-0"
-                    onChange={(event) => {
-                        setQueryText(event.target.value)
-                    }}
-                />
                 <div className="relative mt-1 w-full">
                     <Transition
                         as={Fragment}

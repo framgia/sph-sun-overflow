@@ -34,7 +34,6 @@ const QuestionDetailPage = (): JSX.Element => {
     if (query.check !== '') {
         path = query.check as string
     }
-
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTION, {
         variables: {
             slug: String(query['question-slug']),
@@ -123,6 +122,7 @@ const QuestionDetailPage = (): JSX.Element => {
                         vote_count={question.vote_count}
                         views_count={question.views_count}
                         tags={question.tags}
+                        team_slug={query.slug as string}
                         is_bookmarked={question.is_bookmarked}
                         user_vote={question.user_vote}
                         user={question.user}

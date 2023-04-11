@@ -1,6 +1,7 @@
 import QuestionForm from '@/components/organisms/QuestionForm'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { IoIosArrowBack } from 'react-icons/io'
 
 const QuestionFormPage = (): JSX.Element => {
     let path
@@ -9,13 +10,15 @@ const QuestionFormPage = (): JSX.Element => {
     else path = `/teams/${router.query.prev as string}`
 
     return (
-        <div className="flex w-full flex-col content-center justify-center ">
-            <div className="flex shrink pb-6">
-                <div className="ml-10 pt-10 text-xl text-primary-gray">
-                    <Link href={path}>{'< Go Back'}</Link>
-                </div>
+        <div className="flex w-full flex-col bg-light-gray">
+            <div className="w-full">
+                <Link href={path}>
+                    <div className="flex flex-row items-center text-2xl">
+                        <IoIosArrowBack size={24} /> Go Back
+                    </div>
+                </Link>
             </div>
-            <div className="ml-16 mr-16 w-full content-center lg:w-[80%]">
+            <div className="mt-[80px] flex w-full justify-center ">
                 <QuestionForm />
             </div>
         </div>

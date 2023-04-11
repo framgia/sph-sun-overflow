@@ -1,8 +1,8 @@
-import 'react-quill/dist/quill.snow.css'
 import dynamic from 'next/dynamic'
-import type { ControllerRenderProps } from 'react-hook-form'
 import type { ComponentType } from 'react'
+import type { ControllerRenderProps } from 'react-hook-form'
 import type { ReactQuillProps, Value } from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 type RTEProps = {
     value: Value
     onChange: ControllerRenderProps['onChange']
@@ -55,7 +55,7 @@ const RichTextEditor = ({
 
     switch (usage) {
         case 'description':
-            style = { height: '10rem' }
+            style = { height: '10rem', marginBottom: '2rem' }
             break
         case 'dashboard':
             style = { minHeight: '100%' }
