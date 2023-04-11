@@ -29,7 +29,7 @@ extend type Query {
         answerSort: [answerSort]
     ): Question @guard(with: ["api"])
     questions(
-        orderBy: _ @orderBy(columns: ["created_at"])
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at"])
         filter: filter @spread
     ): [Question!]!
         @guard(with: ["api"])
