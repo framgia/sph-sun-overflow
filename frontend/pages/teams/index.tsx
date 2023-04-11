@@ -99,9 +99,9 @@ const TeamsListPage = (): JSX.Element => {
                                 onChange={onChange}
                             />
                         </form>
+                        {isSearchResult && renderSearchResultHeader()}
                     </div>
                 </div>
-                {isSearchResult && renderSearchResultHeader()}
                 {teams?.length !== 0 ? (
                     <div className="mt-6 flex h-full w-full flex-col justify-between">
                         <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3">
