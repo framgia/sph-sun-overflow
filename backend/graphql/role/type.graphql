@@ -13,6 +13,7 @@ type Role {
 type Permission {
     id: ID!
     name: String!
+    categories: String!
     slug: String!
     description: String!
     created_at: String!
