@@ -15,6 +15,10 @@ final class UpdateTag
      */
     public function __invoke($_, array $args)
     {
+        if (strlen($args['name']) > 30) {
+            throw new CustomException('Please limit the title to less than 30 characters');
+        }
+
         try {
             $tag = Tag::findOrFail($args['id']);
 
