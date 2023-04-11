@@ -14,6 +14,8 @@ export const QTagsTeamSidebar = gql`
                     name
                     members {
                         user {
+                            first_name
+                            last_name
                             avatar
                         }
                     }

@@ -3,7 +3,7 @@ type Props = {
 }
 
 const PageHeader = ({ children }: Props): JSX.Element => {
-    return <div className="w-full px-5 text-3xl font-bold">{children}</div>
+    return <div className="w-full text-3xl font-bold text-gray-800">{children}</div>
 }
 
 export default PageHeader

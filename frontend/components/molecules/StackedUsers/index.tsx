@@ -1,5 +1,12 @@
+import Avatar from 'react-avatar'
 interface StackedUsersProps {
-    images: string[]
+    images: Array<{
+        user: {
+            first_name: string
+            last_name: string
+            avatar: string
+        }
+    }>
 }
 
 const StackedUsers = ({ images }: StackedUsersProps): JSX.Element => {
@@ -10,15 +17,20 @@ const StackedUsers = ({ images }: StackedUsersProps): JSX.Element => {
         images = images.slice(0, 4)
     }
     return (
-        <div className="hidden flex-row -space-x-7 lg:flex">
+        <div className="hidden flex-row -space-x-5 lg:flex">
             {images.length &&
-                images.map((imageUrl, index) => {
+                images.map((image, index) => {
                     return (
-                        <img
+                        <Avatar
                             key={index}
-                            className="h-[40px] w-[40px] rounded-full"
-                            src={imageUrl}
-                            alt="user photo"
+                            round={true}
+                            name={`${image.user.first_name} ${image.user.last_name}`}
+                            size="40"
+                            alt={image.user.first_name}
+                            src={image.user.avatar}
+                            maxInitials={1}
+                            textSizeRatio={2}
+                            className={`flex-0 aspect-square bg-gray-800 text-sm`}
                         />
                     )
                 })}
