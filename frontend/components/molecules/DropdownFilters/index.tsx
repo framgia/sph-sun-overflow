@@ -16,7 +16,7 @@ type FilterType = {
 }
 
 type FilterTextsType = {
-    DATE: { 1: string; 2: string }
+    DATE: { 1: string; 2: string; 3: string; 4: string }
     ANSWER: { 1: string; 2: string; 3: string }
     WATCHED: { 1: string; 2: string }
     POPULAR: { 1: string; 2: string }
@@ -38,7 +38,7 @@ type Props = {
 }
 
 const FilterTexts: FilterTextsType = {
-    DATE: { 1: 'Newest first', 2: 'Oldest first' },
+    DATE: { 1: 'Newest first', 2: 'Oldest first', 3: 'Most recent', 4: 'Least recent' },
     ANSWER: { 1: 'Answered', 2: 'Unanswered', 3: 'All Questions' },
     WATCHED: { 1: 'Most Watched', 2: 'Least Watched' },
     POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
@@ -90,6 +90,30 @@ const DropdownFilters = ({
                             orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
                         })
                         setSelectedDateFilter(FilterTexts.DATE[2])
+                    },
+                },
+                {
+                    id: 3,
+                    name: FilterTexts.DATE[3],
+                    onClick: () => {
+                        void refetch({
+                            first: 10,
+                            page: 1,
+                            orderBy: [{ column: 'UPDATED_AT', order: 'DESC' }],
+                        })
+                        setSelectedDateFilter(FilterTexts.DATE[3])
+                    },
+                },
+                {
+                    id: 4,
+                    name: FilterTexts.DATE[4],
+                    onClick: () => {
+                        void refetch({
+                            first: 10,
+                            page: 1,
+                            orderBy: [{ column: 'UPDATED_AT', order: 'ASC' }],
+                        })
+                        setSelectedDateFilter(FilterTexts.DATE[4])
                     },
                 },
             ],
