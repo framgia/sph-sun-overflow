@@ -35,7 +35,7 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
                     {({ open }) => (
                         <>
                             <Disclosure.Button
-                                className={`flex items-center space-x-2 py-2.5 pl-7 text-xl font-normal `}
+                                className={`flex w-full items-center space-x-2 py-2.5 pl-7 text-xl font-normal`}
                             >
                                 <SidebarIcon name={IconName} />
                                 <span className="pl-2">{Text}</span>
@@ -53,8 +53,8 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
                                                     className={`flex items-center space-x-2 py-2.5 pl-16 text-xl font-normal ${
                                                         isSelected(2, child.url)
                                                             ? selectedClass
-                                                            : ''
-                                                    } hover:bg-red-200 hover:text-white active:text-primary-red`}
+                                                            : 'hover:bg-red-200'
+                                                    }`}
                                                 >
                                                     <SidebarIcon name={child.IconName} />
                                                     <span className="pl-2">{child.Text}</span>
@@ -71,8 +71,8 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
                 <Link
                     href={url}
                     className={`flex items-center space-x-2 py-2.5 pl-7 text-xl font-normal ${
-                        isSelected(1, url) ? selectedClass : ''
-                    } hover:bg-red-200 hover:text-white active:text-primary-red`}
+                        isSelected(1, url) ? selectedClass : 'hover:bg-red-200 '
+                    }`}
                 >
                     <SidebarIcon name={IconName} />
                     <span className="pl-2">{Text}</span>
