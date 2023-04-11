@@ -5,7 +5,7 @@ import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
-import { Card, CardBody, CardFooter, CardHeader, Typography } from '@material-tailwind/react'
+import { Card, CardBody, CardFooter, Typography } from '@material-tailwind/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -107,25 +107,22 @@ const TeamsListPage = (): JSX.Element => {
                         <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3">
                             {teams?.map((team: TeamType) => (
                                 <Link key={team.id} href={`teams/${team.slug}`}>
-                                    <Card className="h-48 justify-end">
-                                        <CardHeader
-                                            floated={false}
-                                            color="transparent"
-                                            shadow={false}
-                                            className="mx-6 rounded-none"
-                                        >
-                                            <Typography variant="h5" className="text-gray-800">
+                                    <Card className="h-48 justify-between">
+                                        <CardBody className="justify-content-end items-center">
+                                            <Typography
+                                                variant="h5"
+                                                className="truncate text-gray-800"
+                                                title={`${team.name}`}
+                                            >
                                                 {team.name}
                                             </Typography>
-                                        </CardHeader>
-                                        <CardBody className="items-center pt-1">
-                                            <div className="leading-tight text-gray-600 line-clamp-3">
+                                            <div className="mt-2 leading-tight text-gray-600 line-clamp-3">
                                                 {team.description}
                                             </div>
                                         </CardBody>
-                                        <CardFooter className="flex self-center py-4 text-sm text-gray-500">
-                                            <div className="flex gap-2">
-                                                <BsPeopleFill className="text-xl" />
+                                        <CardFooter className="py-3 text-sm text-gray-500">
+                                            <div className="flex justify-center gap-2">
+                                                <BsPeopleFill className="text-base" />
                                                 {team.members_count}
                                             </div>
                                         </CardFooter>
