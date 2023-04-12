@@ -1,5 +1,5 @@
 import SidebarIcon from '@/components/atoms/SidebarIcon'
-import { Disclosure } from '@headlessui/react'
+import { Popover } from '@headlessui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { IoIosArrowDown } from 'react-icons/io'
@@ -31,19 +31,21 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
     return (
         <li className="sidebar-list">
             {subMenu ? (
-                <Disclosure>
+                <Popover>
                     {({ open }) => (
                         <>
-                            <Disclosure.Button
-                                className={`flex w-full items-center space-x-2 py-2.5 pl-7 text-xl font-normal`}
+                            <Popover.Button
+                                className={`flex w-full items-center space-x-2 py-2.5 pl-7 text-xl font-normal ${
+                                    open ? '' : 'hover:bg-red-200'
+                                }`}
                             >
                                 <SidebarIcon name={IconName} />
                                 <span className="pl-2">{Text}</span>
                                 <IoIosArrowDown
-                                    className={`${open ? 'rotate-180 transform' : ''} h-5 w-5 `}
+                                    className={`text-xl ${open ? 'rotate-180 transform' : ''}`}
                                 />
-                            </Disclosure.Button>
-                            <Disclosure.Panel>
+                            </Popover.Button>
+                            <Popover.Panel>
                                 <ul>
                                     {subMenu.map((child, index) => {
                                         return (
@@ -63,10 +65,10 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
                                         )
                                     })}
                                 </ul>
-                            </Disclosure.Panel>
+                            </Popover.Panel>
                         </>
                     )}
-                </Disclosure>
+                </Popover>
             ) : (
                 <Link
                     href={url}
