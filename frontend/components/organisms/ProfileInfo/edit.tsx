@@ -3,11 +3,11 @@ import Icons from '@/components/atoms/Icons'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import UPDATE_USER from '@/helpers/graphql/mutations/update_user'
 import { errorNotify, successNotify } from '@/helpers/toast'
+import type { ProfileType } from '@/pages/users/[slug]'
+import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
-import { useMutation } from '@apollo/client'
-import type { ProfileType } from '@/pages/users/[slug]'
 
 type Props = {
     user_id: number
@@ -112,7 +112,9 @@ const ProfileInfoEdit = ({
                 }, 3000)
             })
             .catch((e) => {
-                errorNotify('Please Complete the Input Fields!')
+                if (e.message === 'Internal server error')
+                    errorNotify('Please complete the input fields!')
+                else errorNotify(e.message)
             })
     }
 
