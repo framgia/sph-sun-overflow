@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
@@ -33,6 +34,14 @@ final class UpdateUser
     public function __invoke($_, array $args)
     {
         $user = Auth::user();
+
+        if (strlen($args['first_name']) > 30) {
+            throw new CustomException('Please limit the first name to less than 30 characters');
+        }
+
+        if (strlen($args['last_name']) > 30) {
+            throw new CustomException('Please limit the last name to less than 30 characters');
+        }
 
         $user->update([
             'first_name' => $args['first_name'],

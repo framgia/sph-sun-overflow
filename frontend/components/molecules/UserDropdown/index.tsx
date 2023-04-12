@@ -53,9 +53,12 @@ const UserDropdown = ({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1 ">
+                    <div className="py-3">
                         <Menu.Item>
-                            <span className="block px-4 py-2 text-sm font-bold text-gray-900 line-clamp-1">
+                            <span
+                                className="px-4 text-sm font-bold text-gray-900 line-clamp-1"
+                                title={`${first_name} ${last_name}`}
+                            >
                                 {`${first_name} ${last_name}`}
                             </span>
                         </Menu.Item>
