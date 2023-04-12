@@ -34,7 +34,12 @@ const CustomCombobox = ({
 }: ComboboxProps): JSX.Element => {
     const [selected, setSelected] = useState<any>(null)
 
-    const handleSubmit = (): void => {
+    const handleSubmit = (tempSelected: any): void => {
+        if (tempSelected) {
+            setValue(tempSelected)
+            setSelected(null)
+            return
+        }
         if (selected !== null) {
             setValue(selected)
             setSelected(null)
@@ -56,11 +61,16 @@ const CustomCombobox = ({
                             setQueryText(event.target.value)
                         }}
                         onKeyUp={(e: React.KeyboardEvent): void => {
-                            e.key === 'Enter' && handleSubmit()
+                            e.key === 'Enter' && handleSubmit(undefined)
                         }}
                     />
                     {hasBtn && (
-                        <div className={extraBtnClasses} onClick={handleSubmit}>
+                        <div
+                            className={extraBtnClasses}
+                            onClick={() => {
+                                handleSubmit(undefined)
+                            }}
+                        >
                             {btnName}
                         </div>
                     )}
@@ -84,7 +94,9 @@ const CustomCombobox = ({
                             ) : (
                                 suggestionProps.map((suggestion) => (
                                     <Combobox.Option
-                                        onClick={handleSubmit}
+                                        onClick={() => {
+                                            handleSubmit(suggestion)
+                                        }}
                                         key={suggestion.id}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${
