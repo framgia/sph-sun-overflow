@@ -31,7 +31,9 @@ const Pill = ({ tag }: PillProps): JSX.Element => {
                     {watchedTags.some((tempTag) => tempTag.name === tag.name) && (
                         <Icons name="pill_eye" />
                     )}
-                    <span>{tag.name}</span>
+                    <span className="line-clamp-1" title={tag.name}>
+                        {tag.name}
+                    </span>
                 </div>
             </PopoverHandler>
             <PopoverContent className="max-w-[22rem] bg-gray-200">
