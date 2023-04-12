@@ -1,6 +1,7 @@
+import { errorNotify } from '@/helpers/toast'
 import { Combobox, Transition } from '@headlessui/react'
 import type { Dispatch, SetStateAction } from 'react'
-import React, { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
 export interface ITag {
     id: number
@@ -38,14 +39,14 @@ const CustomCombobox = ({
             setValue(selected)
             setSelected(null)
         }
+        if (selected == null && queryText !== '') {
+            errorNotify(`${queryText} does not exist`)
+        }
     }
-    useEffect(() => {
-        handleSubmit()
-    }, [selected])
 
     return (
         <div className="flex w-full flex-wrap p-4">
-            <Combobox value={selected} onChange={setSelected}>
+            <Combobox value={selected} onChange={setSelected} nullable>
                 <div className="flex w-full py-2">
                     <Combobox.Input
                         id="comboBoxInput"
@@ -54,7 +55,7 @@ const CustomCombobox = ({
                         onChange={(event): void => {
                             setQueryText(event.target.value)
                         }}
-                        onKeyDown={(e: React.KeyboardEvent): void => {
+                        onKeyUp={(e: React.KeyboardEvent): void => {
                             e.key === 'Enter' && handleSubmit()
                         }}
                     />
@@ -83,6 +84,7 @@ const CustomCombobox = ({
                             ) : (
                                 suggestionProps.map((suggestion) => (
                                     <Combobox.Option
+                                        onClick={handleSubmit}
                                         key={suggestion.id}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${
