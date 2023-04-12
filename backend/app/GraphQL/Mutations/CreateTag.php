@@ -13,6 +13,10 @@ final class CreateTag
      */
     public function __invoke($_, array $args)
     {
+        if (strlen($args['name']) > 30) {
+            throw new CustomException('Please limit the title to less than 30 characters');
+        }
+
         if (Tag::where('name', $args['name'])->exists()) {
             throw new CustomException('Tag already exists.');
         }

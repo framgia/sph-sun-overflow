@@ -1,3 +1,4 @@
+import Pill from '@/components/molecules/Pill'
 import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
 import Paginate from '@/components/organisms/Paginate'
@@ -155,10 +156,15 @@ const TagsListPage = (): JSX.Element => {
                             return (
                                 <Link key={tag.id} href={`questions/tagged/${tag.slug}`}>
                                     <Card className="h-52 justify-between">
-                                        <CardBody className="">
-                                            <Typography variant="h5" className="mb-2">
-                                                {tag.name}
-                                            </Typography>
+                                        <CardBody>
+                                            <div
+                                                className="mb-3 w-fit"
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                }}
+                                            >
+                                                <Pill tag={tag} />
+                                            </div>
                                             <Typography className="line-clamp-3">
                                                 {tag.description}
                                             </Typography>
