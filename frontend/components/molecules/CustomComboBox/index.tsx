@@ -1,6 +1,6 @@
 import { Combobox, Transition } from '@headlessui/react'
 import type { Dispatch, SetStateAction } from 'react'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
 export interface ITag {
     id: number
@@ -11,7 +11,7 @@ export interface ITag {
 interface ComboboxProps {
     setValue: (value: any) => void
     hasBtn: boolean
-    btnName: string
+    btnName?: string
     placeholder: string
     extraInputClasses: string
     extraBtnClasses: string
@@ -39,6 +39,9 @@ const CustomCombobox = ({
             setSelected(null)
         }
     }
+    useEffect(() => {
+        handleSubmit()
+    }, [selected])
 
     return (
         <div className="flex w-full flex-wrap p-4">

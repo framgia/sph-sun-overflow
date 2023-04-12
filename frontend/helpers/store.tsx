@@ -1,6 +1,6 @@
-import { create } from 'zustand'
 import type { ITag } from '@/components/molecules/TagsInput'
 import type { StateCreator } from 'zustand'
+import { create } from 'zustand'
 
 export type UserTeamType = {
     id: number

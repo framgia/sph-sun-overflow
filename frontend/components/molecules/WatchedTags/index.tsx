@@ -2,7 +2,6 @@ import CustomCombobox from '@/components/molecules/CustomComboBox'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { GET_TAG_SUGGESTIONS, QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
-import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import Link from 'next/link'
@@ -16,15 +15,10 @@ type TTag = {
     slug: string
 }
 interface WatchedTagsProps {
-    loading: boolean
-    data: {
-        me: { watchedTags: TTag[] }
-    }
+    watchedTags: TTag[]
 }
 
-const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element => {
-    const watchedTags = useBoundStore((state) => state.watchedTags)
-
+const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
     const detectorRef = useRef<HTMLDivElement>(null)
     const [viewAdd, setViewAdd] = useState(false)
     const [queryText, setQueryText] = useState<string>('')
@@ -94,13 +88,8 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element =>
                 <HiPencil className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>
             <div className="rounded-br-xl rounded-bl-xl bg-white">
-                {loading && <div className="animate-spin"></div>}
                 <div className={`tags flex flex-wrap rounded-br-md rounded-bl-md bg-white p-4 `}>
-                    {loading && (
-                        <svg className="... mr-3 h-5 w-5 animate-spin" viewBox="0 0 24 24"></svg>
-                    )}
-                    {!loading &&
-                        watchedTags.length > 0 &&
+                    {watchedTags.length > 0 &&
                         watchedTags.map((tag, index) => {
                             return (
                                 <div
@@ -122,7 +111,7 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element =>
                                 </div>
                             )
                         })}
-                    {!loading && watchedTags.length === 0 && (
+                    {watchedTags.length === 0 && (
                         <div className="text-md w-full bg-white text-center font-medium">
                             No watched tags
                         </div>
@@ -131,10 +120,9 @@ const WatchedTags = ({ data, loading = true }: WatchedTagsProps): JSX.Element =>
                 <div className={`${isVisible} w-full p-1`}>
                     <CustomCombobox
                         setValue={handleSubmit}
-                        hasBtn={true}
-                        btnName="Add"
+                        hasBtn={false}
                         placeholder="Insert Tag"
-                        extraInputClasses=" rounded-tl-xl rounded-bl-xl border-[1px] border-r-0 border-black"
+                        extraInputClasses=" rounded-xl border border-black"
                         extraBtnClasses="flex border-[1px] border-black bg-primary-red text-white items-center h-full -mr-1 px-4 hover:bg-secondary-red cursor-pointer rounded-tr-xl rounded-br-xl "
                         suggestionProps={tagSuggestions}
                         queryText={queryText}

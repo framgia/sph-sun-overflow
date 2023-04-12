@@ -2,6 +2,7 @@ import TeamMemberSidebar from '@/components/molecules/TeamMembersSidebar'
 import TeamSidebar from '@/components/molecules/TeamSidebar'
 import WatchedTags from '@/components/molecules/WatchedTags'
 import { QMembersSidebar, QTagsTeamSidebar } from '@/helpers/graphql//queries/sidebar'
+import { useBoundStore } from '@/helpers/store'
 import { useQuery } from '@apollo/client'
 type TRightSidebarProps = {
     usage: null | 'teams' | 'users' | string
@@ -21,10 +22,11 @@ const RightSideBar = ({ usage, slug = '' }: TRightSidebarProps): JSX.Element => 
 }
 
 const TagsTeamSidebar = (): JSX.Element => {
+    const watchedTags = useBoundStore((state) => state.watchedTags)
     const { data, loading } = useQuery(QTagsTeamSidebar)
     return (
         <div className="flex w-full flex-col">
-            <WatchedTags data={data} loading={loading} />
+            <WatchedTags watchedTags={watchedTags} />
             <TeamSidebar data={data} loading={loading} />
         </div>
     )
