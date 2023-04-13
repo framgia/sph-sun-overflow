@@ -1,10 +1,10 @@
-input filter {
-    user_id: ID
+input answerFilter {
+    user_slug: String
 }
 
 extend type Query {
     answer(id: ID! @eq): Answer @guard(with: ["api"]) @find
-    answers(filter: filter @spread): [Answer!]!
+    answers(filter: answerFilter @spread): [Answer!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Answers")
 }
