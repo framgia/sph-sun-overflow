@@ -5,6 +5,7 @@ input filter {
     team: String
     is_public: Boolean
     user_id: ID
+    user_slug: String
 }
 
 enum ORDERBY {
