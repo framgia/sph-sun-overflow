@@ -1,6 +1,7 @@
+import { errorNotify } from '@/helpers/toast'
 import { Combobox, Transition } from '@headlessui/react'
 import type { Dispatch, SetStateAction } from 'react'
-import React, { Fragment, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
 export interface ITag {
     id: number
@@ -11,7 +12,7 @@ export interface ITag {
 interface ComboboxProps {
     setValue: (value: any) => void
     hasBtn: boolean
-    btnName: string
+    btnName?: string
     placeholder: string
     extraInputClasses: string
     extraBtnClasses: string
@@ -33,16 +34,24 @@ const CustomCombobox = ({
 }: ComboboxProps): JSX.Element => {
     const [selected, setSelected] = useState<any>(null)
 
-    const handleSubmit = (): void => {
+    const handleSubmit = (tempSelected: any): void => {
+        if (tempSelected) {
+            setValue(tempSelected)
+            setSelected(null)
+            return
+        }
         if (selected !== null) {
             setValue(selected)
             setSelected(null)
+        }
+        if (selected == null && queryText !== '') {
+            errorNotify(`${queryText} does not exist`)
         }
     }
 
     return (
         <div className="flex w-full flex-wrap p-4">
-            <Combobox value={selected} onChange={setSelected}>
+            <Combobox value={selected} onChange={setSelected} nullable>
                 <div className="flex w-full py-2">
                     <Combobox.Input
                         id="comboBoxInput"
@@ -51,12 +60,17 @@ const CustomCombobox = ({
                         onChange={(event): void => {
                             setQueryText(event.target.value)
                         }}
-                        onKeyDown={(e: React.KeyboardEvent): void => {
-                            e.key === 'Enter' && handleSubmit()
+                        onKeyUp={(e: React.KeyboardEvent): void => {
+                            e.key === 'Enter' && handleSubmit(undefined)
                         }}
                     />
                     {hasBtn && (
-                        <div className={extraBtnClasses} onClick={handleSubmit}>
+                        <div
+                            className={extraBtnClasses}
+                            onClick={() => {
+                                handleSubmit(undefined)
+                            }}
+                        >
                             {btnName}
                         </div>
                     )}
@@ -80,6 +94,9 @@ const CustomCombobox = ({
                             ) : (
                                 suggestionProps.map((suggestion) => (
                                     <Combobox.Option
+                                        onClick={() => {
+                                            handleSubmit(suggestion)
+                                        }}
                                         key={suggestion.id}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${
