@@ -4,6 +4,7 @@ import { getUserToken } from '@/helpers/localStorageHelper'
 import { useBoundStore } from '@/helpers/store'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
+import AdminWrapper from './AdminWrapper'
 
 type LayoutProps = {
     children: JSX.Element
@@ -30,7 +31,9 @@ const RouteWrapper = ({ children }: LayoutProps): JSX.Element => {
             data?.me.slug,
             data?.me.teams,
             data?.me.watchedTags,
-            data?.me.updated_at
+            data?.me.updated_at,
+            data?.me.role.name,
+            data?.me.role.permissions
         )
 
     if (loading) return <div className="pt-14">{loadingScreenShow()}</div>
@@ -38,7 +41,9 @@ const RouteWrapper = ({ children }: LayoutProps): JSX.Element => {
         void router.push('/login')
     } else if (!dataCheckIfNone && routeIfLoginPathCheck && getUserToken() !== '') {
         void router.push('/')
-    } else return children
+    } else {
+        return <AdminWrapper>{children}</AdminWrapper>
+    }
     return <></>
 }
 

@@ -23,6 +23,13 @@ const GET_AUTHENTICATED_USER = gql`
                 slug
             }
             updated_at
+            role {
+                name
+                permissions {
+                    name
+                    category
+                }
+            }
         }
     }
 `
