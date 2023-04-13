@@ -121,18 +121,20 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
                         </div>
                     )}
                 </div>
-                <div className={`${isVisible} w-full p-1`}>
-                    <CustomCombobox
-                        setValue={handleSubmit}
-                        hasBtn={false}
-                        placeholder="Insert Tag"
-                        extraInputClasses=" rounded-xl border border-black"
-                        extraBtnClasses="flex border-[1px] border-black bg-primary-red text-white items-center h-full -mr-1 px-4 hover:bg-secondary-red cursor-pointer rounded-tr-xl rounded-br-xl "
-                        suggestionProps={tagSuggestions}
-                        queryText={queryText}
-                        setQueryText={setQueryText}
-                    />
-                </div>
+                {canEdit && (
+                    <div className={` w-full p-1`}>
+                        <CustomCombobox
+                            setValue={handleSubmit}
+                            hasBtn={false}
+                            placeholder="Insert Tag"
+                            extraInputClasses=" rounded-xl border border-black"
+                            extraBtnClasses="flex border-[1px] border-black bg-primary-red text-white items-center h-full -mr-1 px-4 hover:bg-secondary-red cursor-pointer rounded-tr-xl rounded-br-xl "
+                            suggestionProps={tagSuggestions}
+                            queryText={queryText}
+                            setQueryText={setQueryText}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )
