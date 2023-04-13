@@ -68,7 +68,6 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
         }
     }
 
-    const isVisible = canEdit ? 'flex' : 'hidden'
     const toggleVisible = (): void => {
         setCanEdit(!canEdit)
     }
