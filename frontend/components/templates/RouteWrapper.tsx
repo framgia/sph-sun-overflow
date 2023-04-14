@@ -10,11 +10,12 @@ type LayoutProps = {
 }
 
 const RouteWrapper = ({ children }: LayoutProps): JSX.Element => {
+    const router = useRouter()
+    if (router.asPath.includes('check')) return children
+
     const { loading, error, data } = useQuery(GET_AUTHENTICATED_USER)
 
     const setUserID = useBoundStore((state) => state.setUserID)
-
-    const router = useRouter()
 
     const dataCheckIfNone = data?.me === null || data === undefined
     const errorCheck = error?.message === 'Unauthenticated.' || error === undefined
