@@ -1,11 +1,11 @@
 import Button from '@/components/atoms/Button'
+import { errorNotify } from '@/helpers/toast'
 import type { NextPage } from 'next'
-import { FcGoogle } from 'react-icons/fc'
+import { signIn } from 'next-auth/react'
 import Head from 'next/head'
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { errorNotify } from '@/helpers/toast'
+import { FcGoogle } from 'react-icons/fc'
 
 const Login: NextPage = () => {
     const router = useRouter()
@@ -35,7 +35,7 @@ const Login: NextPage = () => {
                                 usage="light"
                                 onClick={async () =>
                                     await signIn('google', {
-                                        callbackUrl: 'http://localhost:3000/login/check',
+                                        callbackUrl: '/login/check',
                                     })
                                 }
                             >
