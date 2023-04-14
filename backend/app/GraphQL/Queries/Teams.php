@@ -19,6 +19,14 @@ final class Teams
             return $query;
         }
 
+        if (isset($args['user_slug'])) {
+            $user_slug = $args['user_slug'];
+
+            return $query->whereHas('members', function ($queryMembers) use ($user_slug) {
+                $queryMembers->whereRelation('user', 'slug', $user_slug);
+            });
+        }
+
         $user_id = Auth::id();
 
         $query->where('user_id', $user_id);
