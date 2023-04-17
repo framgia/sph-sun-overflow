@@ -41,7 +41,7 @@ const DeleteRole = ({ id, refetchHandler }: Props): JSX.Element => {
                     setShowModal(true)
                 }}
             >
-                <Icons name="table_delete" additionalClass="fill-gray-500" />
+                <Icons name="trash" />
             </Button>
             <Modal
                 title="Delete Role"

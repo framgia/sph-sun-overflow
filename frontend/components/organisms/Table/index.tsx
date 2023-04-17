@@ -46,8 +46,8 @@ const Table = ({
     return (
         <div className="w-full place-self-center overflow-hidden rounded-md pt-4">
             <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
-                <table className="w-full text-center text-sm text-gray-500 dark:text-gray-400">
-                    <thead className="bg-gray-200 uppercase text-gray-800 ">
+                <table className="w-full text-left text-sm">
+                    <thead className="bg-red-200 font-semibold uppercase text-gray-900">
                         <tr>
                             {columns.map((column) => (
                                 <th
@@ -56,9 +56,7 @@ const Table = ({
                                     style={{
                                         width: column.width,
                                     }}
-                                    className={`px-6 py-3 ${
-                                        column.key === 'name' ? 'text-left' : ''
-                                    }`}
+                                    className="p-4"
                                 >
                                     {column.title}
                                 </th>
@@ -79,18 +77,13 @@ const Table = ({
                                             )
                                             if (column.key === 'action' && actions) {
                                                 return (
-                                                    <td key={key} className="px-6 py-4">
+                                                    <td key={key} className="p-4">
                                                         {actions(Number(data.key))}
                                                     </td>
                                                 )
                                             }
                                             return (
-                                                <td
-                                                    key={key}
-                                                    className={`whitespace-nowrap px-6 py-4  ${
-                                                        column.key === 'name' ? 'text-left' : ''
-                                                    } `}
-                                                >
+                                                <td key={key} className="whitespace-nowrap p-4">
                                                     {clickable !== undefined
                                                         ? renderClickable(
                                                               data[column.key],
@@ -106,7 +99,7 @@ const Table = ({
                             })
                         ) : (
                             <tr>
-                                <td colSpan={columns.length} className="px-6 py-4">
+                                <td colSpan={columns.length} className="p-4">
                                     {isEmptyString}
                                 </td>
                             </tr>

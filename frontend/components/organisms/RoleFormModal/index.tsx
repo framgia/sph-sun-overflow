@@ -1,29 +1,38 @@
-import Button from '@/components/atoms/Button'
+import Checkbox from '@/components/atoms/Checkbox'
+import InputField from '@/components/atoms/InputField'
+import TextArea from '@/components/atoms/TextArea'
+import Modal from '@/components/templates/Modal'
 import CREATE_ROLE from '@/helpers/graphql/mutations/create_role'
 import UPDATE_ROLE from '@/helpers/graphql/mutations/update_role'
 import GET_PERMISSIONS from '@/helpers/graphql/queries/get_permissions'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
-import { Checkbox, Input } from '@material-tailwind/react'
-import { useRouter } from 'next/router'
+import { groupBy } from 'lodash'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 export type PermissionType = {
     id: number
     name: string
+    slug: string
+    category: string
 }
 
 export type RoleType = {
     id: number | null
     name: string
     description: string
-    permissions: PermissionType[]
+    slug: string
+    permissions?: PermissionType[]
 }
 
 type Props = {
     role?: RoleType
+    isOpen: boolean
+    closeModal: () => void
+    refetch: () => void
+    view?: boolean
 }
 
 type FormValues = {
@@ -32,13 +41,16 @@ type FormValues = {
     permissions: number[]
 }
 
-const RoleForm = ({ role }: Props): JSX.Element => {
-    const router = useRouter()
-    const selectedPermissions: number[] = role
+const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Props): JSX.Element => {
+    const selectedPermissions: number[] = role?.permissions
         ? role?.permissions.map((value) => Number(value.id))
         : []
+
     const [permissionsForm, setPermissionsForm] = useState(selectedPermissions)
     const [formErrors, setFormErrors] = useState({ name: '', description: '', permissions: '' })
+    const [modalView, setModalView] = useState(view)
+
+    const formTitle = role?.name ? (modalView ? 'View Role' : 'Edit Role') : 'Add Role'
 
     const {
         data: { permissions } = {},
@@ -56,7 +68,6 @@ const RoleForm = ({ role }: Props): JSX.Element => {
 
     if (loading) return loadingScreenShow()
     if (error) {
-        void router.push('/manage/roles')
         return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
 
@@ -71,16 +82,42 @@ const RoleForm = ({ role }: Props): JSX.Element => {
     }
 
     const renderPermissionSelection = (): JSX.Element[] => {
-        return permissions.map(
-            (permission: PermissionType, index: number): JSX.Element => (
-                <Checkbox
-                    key={index}
-                    id={`permission-${permission.id}`}
-                    defaultChecked={selectedPermissions?.includes(Number(permission.id))}
-                    value={permission.id}
-                    label={permission.name}
-                    onChange={onChangeCheckbox}
-                />
+        const groupedPermissions = Object.entries(groupBy(permissions, 'category'))
+        return groupedPermissions.map(
+            (group): JSX.Element => (
+                <div className="space-y-1 p-2" key={group[0]}>
+                    <div className="text-sm font-medium capitalize">{group[0]}</div>
+                    {group[1].map(
+                        (permission: PermissionType): JSX.Element => (
+                            <Checkbox
+                                key={permission.id}
+                                id={`permission-${permission.id}`}
+                                defaultChecked={permissionsForm?.includes(Number(permission.id))}
+                                value={permission.id}
+                                label={`${permission.name}`}
+                                onChange={onChangeCheckbox}
+                            />
+                        )
+                    )}
+                </div>
+            )
+        )
+    }
+
+    const renderPermissionView = (rolePermissions: PermissionType[] | undefined): JSX.Element[] => {
+        const groupedPermissions = Object.entries(groupBy(rolePermissions, 'category'))
+        return groupedPermissions.map(
+            (group): JSX.Element => (
+                <div className="p-2" key={group[0]}>
+                    <div className="text-sm font-medium capitalize">{group[0]}</div>
+                    <ul className="ml-4 flex list-disc flex-col justify-start">
+                        {group[1].map(
+                            (permission): JSX.Element => (
+                                <li key={permission.id}>{permission.name}</li>
+                            )
+                        )}
+                    </ul>
+                </div>
             )
         )
     }
@@ -124,7 +161,6 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                     role?.description === data.description
                 ) {
                     errorNotify('No changes were made!')
-                    void router.push('/manage/roles')
                 } else {
                     updateRole({
                         variables: {
@@ -136,12 +172,14 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                     })
                         .then(() => {
                             successNotify('Successfully updated role!')
-                            setTimeout(() => {
-                                void router.push('/manage/roles')
-                            }, 1)
+                            refetch()
+                            setModalView(view)
                         })
                         .catch(() => {
                             errorNotify('There was an Error!')
+                        })
+                        .finally(() => {
+                            closeModal()
                         })
                 }
             } else {
@@ -154,12 +192,14 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                 })
                     .then(() => {
                         successNotify('Successfully created role!')
-                        setTimeout(() => {
-                            void router.push('/manage/roles')
-                        }, 1)
+                        refetch()
                     })
                     .catch(() => {
                         errorNotify('There was an Error!')
+                    })
+                    .finally(() => {
+                        closeModal()
+                        setPermissionsForm([])
                     })
             }
         }
@@ -168,37 +208,55 @@ const RoleForm = ({ role }: Props): JSX.Element => {
     }
 
     return (
-        <div className="flex w-4/5 flex-col gap-2 py-6">
-            <div className="flex shrink">
-                <div className="text-primary-gray">
-                    <Button
-                        usage="back-button"
-                        onClick={() => {
-                            void router.push('/manage/roles')
-                        }}
-                    >
-                        <span className="text-xl">{'<'} Go Back</span>
-                    </Button>
+        <Modal
+            title={formTitle}
+            submitLabel={modalView ? 'Edit Role' : formTitle}
+            isOpen={isOpen}
+            handleSubmit={
+                modalView
+                    ? () => {
+                          setModalView(false)
+                      }
+                    : handleSubmit(onSubmit)
+            }
+            handleClose={() => {
+                closeModal()
+            }}
+        >
+            {modalView ? (
+                <div className="flex w-full flex-col justify-start gap-4 font-medium">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-sm font-medium text-gray-900">Role Name</span>
+                        <span className="ml-2 text-gray-500">{role?.name}</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <span className="text-sm font-medium text-gray-900">Description</span>
+                        <span className="ml-2 text-gray-500">{role?.description}</span>
+                    </div>
+                    <div>
+                        <div className="text-neutral-800 text-sm font-semibold">
+                            Set Permissions
+                        </div>
+                        <div className="border-neutral-300 grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border p-2">
+                            {renderPermissionView(role?.permissions)}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className="mb-2 pt-2 text-2xl font-bold">{role ? 'Manage' : 'Add'} Role</div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="mb-4 flex w-full pr-36">
-                    <div className="w-96 pr-5">
+            ) : (
+                <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="w-full">
                         <Controller
                             control={control}
                             name="name"
                             defaultValue={role?.name ?? ''}
                             render={({ field: { onChange, value } }) => (
-                                <Input
+                                <InputField
                                     name="name"
                                     value={value}
-                                    size="lg"
-                                    color="gray"
-                                    error={formErrors.name.length > 0}
-                                    className="shadow-md"
                                     label="Name"
                                     onChange={onChange}
+                                    isValid={formErrors.name.length > 0}
+                                    error={formErrors.name}
                                 />
                             )}
                         />
@@ -206,48 +264,45 @@ const RoleForm = ({ role }: Props): JSX.Element => {
                             <span className="ml-2 text-sm text-primary-red">{formErrors.name}</span>
                         )}
                     </div>
-                    <div className="w-96 ">
+                    <div className="">
                         <Controller
                             control={control}
                             name="description"
                             defaultValue={role?.description ?? ''}
                             render={({ field: { onChange, value } }) => (
-                                <Input
+                                <TextArea
                                     name="description"
                                     value={value}
-                                    size="lg"
-                                    color="gray"
-                                    error={formErrors.description.length > 0}
-                                    className="shadow-md"
                                     label="Description"
                                     onChange={onChange}
+                                    isValid={formErrors.name.length > 0}
+                                    error={formErrors.name}
                                 />
                             )}
                         />
                         {formErrors.description.length > 0 && (
-                            <span className="ml-2 text-sm text-primary-red">
+                            <span className="text-sm text-primary-red">
                                 {formErrors.description}
                             </span>
                         )}
                     </div>
-                </div>
-                <div className="mt-12">
-                    <div className="mb-2 text-2xl font-bold">Set Permissions</div>
-                    {formErrors.permissions.length > 0 && (
-                        <span className="ml-2 mb-2 text-sm text-primary-red">
-                            {formErrors.permissions}
-                        </span>
-                    )}
-                    <div className="mb-4 grid w-full grid-cols-6">
-                        {renderPermissionSelection()}
+                    <div>
+                        <div className="text-neutral-800 text-sm font-semibold">
+                            Set Permissions
+                        </div>
+                        <div className="border-neutral-300 grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border p-2">
+                            {renderPermissionSelection()}
+                        </div>
+                        {formErrors.permissions.length > 0 && (
+                            <span className="mb-2 text-sm text-primary-red">
+                                {formErrors.permissions}
+                            </span>
+                        )}
                     </div>
-                </div>
-                <Button usage="primary" additionalClass="float-right mt-5 mr-16" type="submit">
-                    Save
-                </Button>
-            </form>
-        </div>
+                </form>
+            )}
+        </Modal>
     )
 }
 
-export default RoleForm
+export default RoleFormModal

@@ -8,15 +8,11 @@ const GET_ROLES_PAGINATE = gql`
                 name
                 slug
                 truncated_name
+                description
                 permissions {
+                    category
                     id
                     name
-                }
-                users {
-                    id
-                    first_name
-                    last_name
-                    avatar
                 }
             }
             paginatorInfo {
@@ -25,6 +21,7 @@ const GET_ROLES_PAGINATE = gql`
                 lastPage
                 hasMorePages
                 total
+                count
             }
         }
     }
