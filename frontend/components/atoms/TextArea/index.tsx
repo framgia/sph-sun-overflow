@@ -15,6 +15,7 @@ const TextArea = ({ name, label, value, isValid, error, onChange }: Props): JSX.
             </label>
             <textarea
                 id={name}
+                name={name}
                 rows={4}
                 value={value}
                 className="w-full rounded-md border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"

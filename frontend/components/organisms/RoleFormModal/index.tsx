@@ -5,7 +5,6 @@ import Modal from '@/components/templates/Modal'
 import CREATE_ROLE from '@/helpers/graphql/mutations/create_role'
 import UPDATE_ROLE from '@/helpers/graphql/mutations/update_role'
 import GET_PERMISSIONS from '@/helpers/graphql/queries/get_permissions'
-import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { groupBy } from 'lodash'
@@ -44,6 +43,17 @@ type FormValues = {
 const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Props): JSX.Element => {
     const [permissionsForm, setPermissionsForm] = useState<number[]>([])
     const [selectedPermissions, setSelectedPermissions] = useState<number[]>([])
+    const [name, setName] = useState(role?.name ?? '')
+    const [description, setDescription] = useState(role?.description ?? '')
+
+    const { handleSubmit, control, reset } = useForm<FormValues>({
+        defaultValues: {
+            name,
+            description,
+        },
+        mode: 'onSubmit',
+        reValidateMode: 'onSubmit',
+    })
 
     useEffect(() => {
         const selectedPermissions: number[] = role?.permissions
@@ -52,6 +62,15 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
 
         setSelectedPermissions(selectedPermissions)
         setPermissionsForm(selectedPermissions)
+        setName(role?.name ?? '')
+        setDescription(role?.description ?? '')
+
+        if (role) {
+            reset({
+                name,
+                description,
+            })
+        }
     }, [role])
 
     const [formErrors, setFormErrors] = useState({ name: '', description: '', permissions: '' })
@@ -59,21 +78,13 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
 
     const formTitle = role?.name ? (modalView ? 'View Role' : 'Edit Role') : 'Add Role'
 
-    const {
-        data: { permissions } = {},
-        loading,
-        error,
-    } = useQuery(GET_PERMISSIONS, { fetchPolicy: 'network-only' })
+    const { data: { permissions } = {}, error } = useQuery(GET_PERMISSIONS, {
+        fetchPolicy: 'network-only',
+    })
 
     const [createRole] = useMutation(CREATE_ROLE)
     const [updateRole] = useMutation(UPDATE_ROLE)
 
-    const { handleSubmit, control } = useForm<FormValues>({
-        mode: 'onSubmit',
-        reValidateMode: 'onSubmit',
-    })
-
-    if (loading) return loadingScreenShow()
     if (error) {
         return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
@@ -207,12 +218,18 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     .finally(() => {
                         closeModal()
                         setPermissionsForm([])
+                        reset({
+                            name: '',
+                            description: '',
+                        })
                     })
             }
         }
 
         setFormErrors(errorFields)
     }
+
+    console.log(role)
 
     return (
         <Modal
@@ -227,6 +244,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     : handleSubmit(onSubmit)
             }
             handleClose={() => {
+                setModalView(view)
                 closeModal()
             }}
         >
@@ -234,11 +252,11 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                 <div className="flex w-full flex-col justify-start gap-4 font-medium">
                     <div className="flex flex-col gap-1">
                         <span className="text-sm font-medium text-gray-900">Role Name</span>
-                        <span className="ml-2 text-gray-500">{role?.name}</span>
+                        <span className="ml-2 text-gray-500">{name}</span>
                     </div>
                     <div className="flex flex-col gap-1">
                         <span className="text-sm font-medium text-gray-900">Description</span>
-                        <span className="ml-2 text-gray-500">{role?.description}</span>
+                        <span className="ml-2 text-gray-500">{description}</span>
                     </div>
                     <div>
                         <div className="text-neutral-800 text-sm font-semibold">
@@ -255,7 +273,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         <Controller
                             control={control}
                             name="name"
-                            defaultValue={role?.name ?? ''}
+                            defaultValue={name}
                             render={({ field: { onChange, value } }) => (
                                 <InputField
                                     name="name"
@@ -275,7 +293,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         <Controller
                             control={control}
                             name="description"
-                            defaultValue={role?.description ?? ''}
+                            defaultValue={description}
                             render={({ field: { onChange, value } }) => (
                                 <TextArea
                                     name="description"
