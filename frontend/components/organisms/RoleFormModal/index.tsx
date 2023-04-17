@@ -9,7 +9,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { groupBy } from 'lodash'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 export type PermissionType = {
@@ -42,11 +42,18 @@ type FormValues = {
 }
 
 const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Props): JSX.Element => {
-    const selectedPermissions: number[] = role?.permissions
-        ? role?.permissions.map((value) => Number(value.id))
-        : []
+    const [permissionsForm, setPermissionsForm] = useState<number[]>([])
+    const [selectedPermissions, setSelectedPermissions] = useState<number[]>([])
 
-    const [permissionsForm, setPermissionsForm] = useState(selectedPermissions)
+    useEffect(() => {
+        const selectedPermissions: number[] = role?.permissions
+            ? role?.permissions.map((value) => Number(value.id))
+            : []
+
+        setSelectedPermissions(selectedPermissions)
+        setPermissionsForm(selectedPermissions)
+    }, [role])
+
     const [formErrors, setFormErrors] = useState({ name: '', description: '', permissions: '' })
     const [modalView, setModalView] = useState(view)
 
