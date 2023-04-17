@@ -21,7 +21,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'about_me' => '<p>'.fake()->paragraph().'</p>',
+            'about_me' => fake()->paragraph(),
         ];
     }
 }

@@ -8,6 +8,9 @@ const GET_USER = gql`
             last_name
             email
             avatar
+            role {
+                name
+            }
             answer_count
             reputation
             question_count
@@ -30,6 +33,11 @@ const GET_USER = gql`
                 humanized_created_at
                 vote_count
                 is_answered
+                tags {
+                    id
+                    name
+                    slug
+                }
             }
             top_answers {
                 id
@@ -49,6 +57,60 @@ const GET_USER = gql`
                 }
             }
             updated_at
+
+            bookmarked_questions {
+                bookmarkable {
+                    __typename
+                    ... on Question {
+                        id
+                        title
+                        content
+                        slug
+                        updated_at
+                        vote_count
+                    }
+                }
+            }
+            bookmarked_answers {
+                bookmarkable {
+                    __typename
+                    ... on Answer {
+                        id
+                        content
+                        question {
+                            slug
+                        }
+                        updated_at
+                        vote_count
+                    }
+                }
+            }
+            followers {
+                follower {
+                    id
+                    avatar
+                    first_name
+                    last_name
+                    slug
+                    is_following
+                    role {
+                        name
+                    }
+                }
+            }
+            following {
+                following {
+                    id
+                    avatar
+                    first_name
+                    last_name
+                    slug
+                    is_following
+                    role {
+                        name
+                    }
+                }
+            }
         }
     }
 `

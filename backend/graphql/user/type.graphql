@@ -19,10 +19,14 @@ type User {
     questions: [Question!]! @hasMany
     answers: [Answer!]! @hasMany
     comments: [Comment!]! @hasMany
-    bookmarks: [Bookmark!]! @hasMany(type: PAGINATOR, defaultCount: 5)
+    bookmarks: [Bookmark!]! @hasMany
     notifications: [UserNotification!]! @hasMany
     teams: [Member!]! @hasMany
     is_following: Boolean
     follower_count: Int!
     following_count: Int!
+    bookmarked_questions: [Bookmark!]!
+    bookmarked_answers: [Bookmark!]!
+    following: [UserRelation] @hasMany
+    followers: [UserRelation] @hasMany
 }

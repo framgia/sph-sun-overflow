@@ -16,6 +16,8 @@ type TUsage =
     | 'toggle-modal'
     | 'modal-cancel'
     | 'modal-submit'
+    | 'follow-modal'
+    | 'main-follow'
 type Props = {
     usage?: TUsage | string
     size?: 'regular' | 'large'
@@ -72,6 +74,14 @@ const getButtonClasses = (usage: string, size: string): string => {
             return 'items-center rounded-md bg-primary-red text-white px-4 text-sm hover:bg-secondary-red py-1'
         case 'question-form':
             return 'px-10 inline-flex items-center justify-center rounded-md bg-primary-red p-4 text-center text-sm text-white hover:bg-dark-red focus:outline-none focus:ring-1 focus:ring-red-700'
+        case 'follow-modal-follow':
+            return 'border-neutral-900 bg-primary-300 border rounded-md font-semibold text-xs text-neutral-900 w-20 h-7'
+        case 'follow-modal-following':
+            return 'border-neutral-900 border rounded-md font-semibold text-xs text-neutral-900 w-20 h-7'
+        case 'follow-modal-unfollow':
+            return 'border-primary-700 border rounded-md font-semibold text-xs text-primary-700 bg-neutral-white w-[84px] h-7'
+        case 'main-follow':
+            return 'w-full rounded border border-red-400 font-bold text-primary-900 text-sm px-4 py-2 h-9'
         default:
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
     }
