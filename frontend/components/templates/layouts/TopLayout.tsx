@@ -7,7 +7,7 @@ type Props = {
 const TopLayout = ({ children }: Props): JSX.Element => {
     return (
         <div className="relative h-screen">
-            <div className="fixed z-20 h-14 w-full border-b-2 border-neutral-200 drop-shadow-[0_2px_2px_rgba(0,0,0,0.05)]">
+            <div className="fixed z-20 h-14 w-full border-b-2 border-neutral-200 drop-shadow-xsm">
                 <Navbar />
             </div>
             <div className="fixed h-full w-full pt-14">{children}</div>
