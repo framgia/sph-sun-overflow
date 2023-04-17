@@ -37,7 +37,7 @@ const getButtonClasses = (usage: string, size: string): string => {
                 size === 'regular' ? 'h-8' : 'h-9'
             }`
         case 'grayed':
-            return `items-center font-semibold rounded px-4 py-2 border bg-white border-gray-900 text-xs text-neutral-900 capitalize focus:ring-1 focus:ring-gray-900 ${
+            return `items-center font-semibold rounded px-4 py-2 border bg-white border-neutral-900 text-xs text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
                 size === 'regular' ? 'h-8' : 'h-9'
             }`
         case 'primary':

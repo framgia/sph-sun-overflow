@@ -10,7 +10,7 @@ type Props = {
 const TextArea = ({ name, label, value, isValid, error, onChange }: Props): JSX.Element => {
     return (
         <div>
-            <label htmlFor={name} className="mb-2 text-sm font-medium capitalize text-gray-900">
+            <label htmlFor={name} className="mb-2 text-sm font-medium capitalize text-neutral-900">
                 {label}
             </label>
             <textarea
@@ -18,7 +18,7 @@ const TextArea = ({ name, label, value, isValid, error, onChange }: Props): JSX.
                 name={name}
                 rows={4}
                 value={value}
-                className="w-full rounded-md border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 focus:border-blue-500 focus:ring-blue-500"
                 placeholder={label}
                 onChange={onChange}
             />

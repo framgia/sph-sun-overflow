@@ -240,7 +240,7 @@ const RolesPage = (): JSX.Element => {
         <div className="flex w-full flex-col">
             <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-gray-800">User Roles</h1>
+                    <h1 className="text-3xl font-bold text-neutral-900">User Roles</h1>
                     <Button
                         usage="stroke"
                         size="large"

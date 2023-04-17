@@ -229,8 +229,6 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         setFormErrors(errorFields)
     }
 
-    console.log(role)
-
     return (
         <Modal
             title={formTitle}
@@ -262,7 +260,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         <div className="text-neutral-800 text-sm font-semibold">
                             Set Permissions
                         </div>
-                        <div className="border-neutral-300 grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border p-2">
+                        <div className="grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
                             {renderPermissionView(role?.permissions)}
                         </div>
                     </div>
@@ -315,7 +313,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         <div className="text-neutral-800 text-sm font-semibold">
                             Set Permissions
                         </div>
-                        <div className="border-neutral-300 grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border p-2">
+                        <div className="grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
                             {renderPermissionSelection()}
                         </div>
                         {formErrors.permissions.length > 0 && (
