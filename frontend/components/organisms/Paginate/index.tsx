@@ -1,6 +1,11 @@
-import Button from '@/components/atoms/Button'
-import Icons from '@/components/atoms/Icons'
-import React from 'react'
+import { Fragment, useState } from 'react'
+import {
+    HiOutlineChevronDoubleLeft,
+    HiOutlineChevronDoubleRight,
+    HiOutlineChevronLeft,
+    HiOutlineChevronRight,
+    HiOutlineDotsHorizontal,
+} from 'react-icons/hi'
 
 type Props = {
     currentPage: number
@@ -10,9 +15,12 @@ type Props = {
     onPageChange: (first: number, page: number) => void
 }
 
-type StyleType = {
-    isDisabled: boolean
-    additionalClass: string
+type PageItemType = {
+    isDisabled?: boolean
+    isShown?: boolean
+    type: string
+    icon?: JSX.Element
+    eventCallback?: () => void
 }
 
 const Paginate = ({
@@ -22,61 +30,179 @@ const Paginate = ({
     perPage = 10,
     onPageChange,
 }: Props): JSX.Element => {
-    const getDisabledStyle = (shouldApply: boolean): StyleType => {
-        return {
-            isDisabled: shouldApply,
-            additionalClass: shouldApply
-                ? 'bg-light-red hover:bg-light-red'
-                : 'bg-white hover:text-white active:outline active:outline-primary-red hover:bg-primary-red active:bg-primary-red active:text-white',
+    const numberToGenerate = lastPage <= 5 ? lastPage : 5
+
+    const [pageNumbers, setPageNumbers] = useState<number[]>(
+        Array.from(Array(numberToGenerate), (_, x) => x + 1)
+    )
+
+    const generatePageNumbers = (page: number): void => {
+        const pageNumbersCopy = JSON.parse(JSON.stringify(pageNumbers))
+
+        if (lastPage > 5) {
+            if (!pageNumbersCopy.includes(page)) {
+                if (page < currentPage) {
+                    pageNumbersCopy.pop()
+                    pageNumbersCopy.unshift(page)
+
+                    setPageNumbers(pageNumbersCopy)
+                } else if (page > currentPage) {
+                    pageNumbersCopy.shift()
+                    pageNumbersCopy.push(page)
+
+                    setPageNumbers(pageNumbersCopy)
+                }
+            }
         }
     }
 
-    const onClickStart = (event: React.MouseEvent): void => {
-        event.preventDefault()
+    const onClickStart = (): void => {
+        if (currentPage - 1 < 1) return
+
         onPageChange(perPage, 1)
+        if (lastPage > 5) {
+            setPageNumbers(Array.from(Array(5), (_, x) => x + 1))
+        }
     }
 
-    const onClickPrevious = (event: React.MouseEvent): void => {
-        event.preventDefault()
+    const onClickPrevious = (): void => {
+        if (currentPage - 1 < 1) return
+
         onPageChange(perPage, currentPage - 1)
+        generatePageNumbers(currentPage - 1)
     }
 
-    const onClickNext = (event: React.MouseEvent): void => {
-        event.preventDefault()
+    const onClickNext = (): void => {
+        if (currentPage + 1 > lastPage) return
+
         onPageChange(perPage, currentPage + 1)
+        generatePageNumbers(currentPage + 1)
     }
 
-    const onClickEnd = (event: React.MouseEvent): void => {
-        event.preventDefault()
+    const onClickEnd = (): void => {
+        if (currentPage + 1 > lastPage) return
+
         onPageChange(perPage, lastPage)
+
+        if (lastPage > 5) {
+            setPageNumbers(
+                Array.from({ length: lastPage - (lastPage - 5) + 1 }, (_, i) => i + (lastPage - 5))
+            )
+        }
+    }
+
+    const setPage = (page: number): void => {
+        if (page === currentPage) return
+
+        onPageChange(perPage, page)
+    }
+
+    const paginationItems: PageItemType[] = [
+        {
+            type: 'icon',
+            icon: <HiOutlineChevronDoubleLeft className="h-full w-full" />,
+            eventCallback: onClickStart,
+            isDisabled: currentPage === 1,
+        },
+        {
+            type: 'icon',
+            icon: <HiOutlineChevronLeft className="h-full w-full" />,
+            eventCallback: onClickPrevious,
+            isDisabled: currentPage === 1,
+        },
+        {
+            type: 'ellipsis',
+            icon: <HiOutlineDotsHorizontal className="text-sm" />,
+            isShown: pageNumbers[0] > 1,
+        },
+        {
+            type: 'number',
+        },
+        {
+            type: 'ellipsis',
+            icon: <HiOutlineDotsHorizontal className="text-sm" />,
+            isShown: pageNumbers[pageNumbers.length - 1] < lastPage,
+        },
+        {
+            type: 'icon',
+            icon: <HiOutlineChevronRight className="h-full w-full" />,
+            eventCallback: onClickNext,
+            isDisabled: currentPage === lastPage,
+        },
+        {
+            type: 'icon',
+            icon: <HiOutlineChevronDoubleRight className="h-full w-full" />,
+            eventCallback: onClickEnd,
+            isDisabled: currentPage === lastPage,
+        },
+    ]
+
+    const renderIconItem = (item: PageItemType): JSX.Element => {
+        return (
+            <li>
+                <div
+                    onClick={item.eventCallback}
+                    className={`ml-[4px] flex h-[24px] w-[24px] ${
+                        item.isDisabled
+                            ? 'cursor-not-allowed text-gray-500'
+                            : 'cursor-pointer hover:text-primary-red'
+                    } items-center justify-center rounded-md border border-transparent leading-tight hover:bg-gray-100  `}
+                >
+                    {item.icon}
+                </div>
+            </li>
+        )
+    }
+
+    const renderNumberItems = (item: PageItemType): JSX.Element[] => {
+        return pageNumbers.map((item) => (
+            <li key={item}>
+                <div
+                    className={` ml-[8px] flex h-[24px] w-[24px] cursor-pointer items-center justify-center rounded-md border border-transparent text-sm leading-tight  hover:border-primary-red  ${
+                        item === currentPage
+                            ? 'bg-primary-red text-white'
+                            : 'hover:text-primary-red'
+                    } `}
+                    onClick={() => {
+                        setPage(item)
+                    }}
+                >
+                    {item}
+                </div>
+            </li>
+        ))
+    }
+
+    const renderEllipsisItem = (item: PageItemType): JSX.Element => {
+        return (
+            <li>
+                <div
+                    className={`${
+                        !item.isShown
+                            ? 'hidden'
+                            : 'ml-[8px] flex h-[24px] w-[24px] items-center justify-center rounded-md border border-transparent leading-tight'
+                    } `}
+                >
+                    {item.icon}
+                </div>
+            </li>
+        )
     }
 
     return (
-        <div className="flex flex-row justify-center gap-1 py-5">
-            <Button
-                usage="paginate"
-                {...getDisabledStyle(currentPage === 1)}
-                onClick={onClickStart}
-            >
-                <Icons name="chevron_left_double" />
-            </Button>
-            <Button
-                usage="paginate"
-                {...getDisabledStyle(currentPage === 1)}
-                onClick={onClickPrevious}
-            >
-                <Icons name="chevron_left" />
-            </Button>
-            <span className="flex h-7 min-w-[50px] flex-row items-center justify-center rounded-full border border-primary-red px-3 font-semibold text-primary-red">
-                {currentPage}
-            </span>
-            <Button usage="paginate" {...getDisabledStyle(!hasMorePages)} onClick={onClickNext}>
-                <Icons name="chevron_right" />
-            </Button>
-            <Button usage="paginate" {...getDisabledStyle(!hasMorePages)} onClick={onClickEnd}>
-                <Icons name="chevron_right_double" />
-            </Button>
-        </div>
+        <nav aria-label="Page navigation example">
+            <ul className="flex justify-center text-lg font-semibold">
+                {paginationItems.map((item, index) => (
+                    <Fragment key={index}>
+                        {item.type === 'icon'
+                            ? renderIconItem(item)
+                            : item.type === 'number'
+                            ? renderNumberItems(item)
+                            : renderEllipsisItem(item)}
+                    </Fragment>
+                ))}
+            </ul>
+        </nav>
     )
 }
 
