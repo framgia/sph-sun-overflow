@@ -198,13 +198,13 @@ const RolesPage = (): JSX.Element => {
     }
 
     const getRolesActions = (key: number): JSX.Element | undefined => {
-        setSelectedRole(roles.find((role) => +role.id === key))
+        const role = roles.find((role) => +role.id === key)
 
-        if (selectedRole) {
+        if (role) {
             return (
                 <div className="flex flex-row gap-4">
                     <ViewRole
-                        role={selectedRole}
+                        role={role}
                         refetch={async () => {
                             await refetch({
                                 first: pageInfo.perPage,
@@ -213,7 +213,7 @@ const RolesPage = (): JSX.Element => {
                         }}
                     />
                     <EditRole
-                        role={selectedRole}
+                        role={role}
                         refetch={async () => {
                             await refetch({
                                 first: pageInfo.perPage,
@@ -223,7 +223,7 @@ const RolesPage = (): JSX.Element => {
                     />
                     <DeleteRole
                         id={key}
-                        name={String(selectedRole.name)}
+                        name={String(role.name)}
                         refetch={() => {
                             const { perPage, currentPage, count } = pageInfo
 
