@@ -57,8 +57,12 @@ const Paginate = ({
     }
 
     const onClickStart = (): void => {
+        if (currentPage - 1 < 1) return
+
         onPageChange(perPage, 1)
-        setPageNumbers(Array.from(Array(5), (_, x) => x + 1))
+        if (lastPage > 5) {
+            setPageNumbers(Array.from(Array(5), (_, x) => x + 1))
+        }
     }
 
     const onClickPrevious = (): void => {
@@ -76,10 +80,15 @@ const Paginate = ({
     }
 
     const onClickEnd = (): void => {
+        if (currentPage + 1 > lastPage) return
+
         onPageChange(perPage, lastPage)
-        setPageNumbers(
-            Array.from({ length: lastPage - (lastPage - 5) + 1 }, (_, i) => i + (lastPage - 5))
-        )
+
+        if (lastPage > 5) {
+            setPageNumbers(
+                Array.from({ length: lastPage - (lastPage - 5) + 1 }, (_, i) => i + (lastPage - 5))
+            )
+        }
     }
 
     const setPage = (page: number): void => {
