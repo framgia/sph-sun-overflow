@@ -20,7 +20,7 @@ interface WatchedTagsProps {
 
 const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
     const detectorRef = useRef<HTMLDivElement>(null)
-    const [viewAdd, setViewAdd] = useState(false)
+    const [canEdit, setCanEdit] = useState(false)
     const [queryText, setQueryText] = useState<string>('')
     const [tagSuggestions, setTagSuggestions] = useState<TTag[]>([])
 
@@ -63,14 +63,13 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
 
     const handleClickOutside = (event: MouseEvent): void => {
         if (detectorRef.current && !detectorRef.current.contains(event.target as Node)) {
-            setViewAdd(false)
+            setCanEdit(false)
             setQueryText('')
         }
     }
 
-    const isVisible = viewAdd ? 'flex' : 'hidden'
     const toggleVisible = (): void => {
-        setViewAdd(!viewAdd)
+        setCanEdit(!canEdit)
     }
 
     const handleSubmit = async (tagVal: any): Promise<void> => {
@@ -88,7 +87,9 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
                 <HiPencil className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>
             <div className="rounded-br-xl rounded-bl-xl bg-white">
-                <div className={`tags flex flex-wrap rounded-br-md rounded-bl-md bg-white p-4 `}>
+                <div
+                    className={`tags no-scrollbar flex max-h-36 flex-wrap overflow-y-scroll rounded-br-md rounded-bl-md bg-white p-4`}
+                >
                     {watchedTags.length > 0 &&
                         watchedTags.map((tag, index) => {
                             return (
@@ -102,12 +103,14 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
                                     >
                                         {tag.name}
                                     </Link>
-                                    <HiX
-                                        className="bg cursor-pointer rounded-xl text-white hover:bg-black"
-                                        onClick={async () => {
-                                            await removeWatchedTag(tag.id)
-                                        }}
-                                    />
+                                    {canEdit && (
+                                        <HiX
+                                            className="bg cursor-pointer rounded-xl text-white hover:bg-black"
+                                            onClick={async () => {
+                                                await removeWatchedTag(tag.id)
+                                            }}
+                                        />
+                                    )}
                                 </div>
                             )
                         })}
@@ -117,18 +120,20 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
                         </div>
                     )}
                 </div>
-                <div className={`${isVisible} w-full p-1`}>
-                    <CustomCombobox
-                        setValue={handleSubmit}
-                        hasBtn={false}
-                        placeholder="Insert Tag"
-                        extraInputClasses=" rounded-xl border border-black"
-                        extraBtnClasses="flex border-[1px] border-black bg-primary-red text-white items-center h-full -mr-1 px-4 hover:bg-secondary-red cursor-pointer rounded-tr-xl rounded-br-xl "
-                        suggestionProps={tagSuggestions}
-                        queryText={queryText}
-                        setQueryText={setQueryText}
-                    />
-                </div>
+                {canEdit && (
+                    <div className={` w-full p-1`}>
+                        <CustomCombobox
+                            setValue={handleSubmit}
+                            hasBtn={false}
+                            placeholder="Insert Tag"
+                            extraInputClasses=" rounded-xl border border-black"
+                            extraBtnClasses="flex border-[1px] border-black bg-primary-red text-white items-center h-full -mr-1 px-4 hover:bg-secondary-red cursor-pointer rounded-tr-xl rounded-br-xl "
+                            suggestionProps={tagSuggestions}
+                            queryText={queryText}
+                            setQueryText={setQueryText}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )
