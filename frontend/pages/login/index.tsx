@@ -18,7 +18,7 @@ const Login: NextPage = () => {
                 <title>Login Page</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="grid w-full place-items-center">
+            <div className="grid h-full w-full place-items-center">
                 <div>
                     <p className="login-welcome">Welcome !</p>
                     <div className="login-card">
