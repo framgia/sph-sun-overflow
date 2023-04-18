@@ -14,10 +14,10 @@ const Checkbox = ({ id, defaultChecked, value, label, onChange }: Props): JSX.El
                 id={id}
                 type="checkbox"
                 value={value}
-                className="h-4 w-4 rounded border-neutral-300 text-xs checked:text-[#373737] focus:ring-[#373737] active:ring-[#373737]"
+                className="h-3 w-3 rounded border-neutral-300 text-xs checked:text-[#5F5F5F] focus:ring-[#5F5F5F] active:ring-[#5F5F5F]"
                 onChange={onChange}
             />
-            <label htmlFor={id} className="text-xs text-neutral-900">
+            <label htmlFor={id} className="text-xs font-normal text-neutral-900">
                 {label}
             </label>
         </div>

@@ -1,4 +1,5 @@
 import Checkbox from '@/components/atoms/Checkbox'
+import Icons from '@/components/atoms/Icons'
 import InputField from '@/components/atoms/InputField'
 import TextArea from '@/components/atoms/TextArea'
 import Modal from '@/components/templates/Modal'
@@ -104,7 +105,9 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         return groupedPermissions.map(
             (group): JSX.Element => (
                 <div className="space-y-1 p-2" key={group[0]}>
-                    <div className="text-sm font-medium capitalize">{group[0]}</div>
+                    <div className="text-xs font-medium capitalize text-neutral-900">
+                        {group[0]}
+                    </div>
                     {group[1].map(
                         (permission: PermissionType): JSX.Element => (
                             <Checkbox
@@ -126,12 +129,20 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         const groupedPermissions = Object.entries(groupBy(rolePermissions, 'category'))
         return groupedPermissions.map(
             (group): JSX.Element => (
-                <div className="p-2" key={group[0]}>
-                    <div className="text-sm font-medium capitalize">{group[0]}</div>
-                    <ul className="ml-4 flex list-disc flex-col justify-start">
+                <div className="space-y-1 p-2" key={group[0]}>
+                    <div className="text-xs font-medium capitalize text-neutral-900">
+                        {group[0]}
+                    </div>
+                    <ul className="flex flex-col justify-start">
                         {group[1].map(
                             (permission): JSX.Element => (
-                                <li key={permission.id}>{permission.name}</li>
+                                <li
+                                    key={permission.id}
+                                    className="flex items-center space-x-1 text-xs font-normal text-neutral-900"
+                                >
+                                    <Icons name="dot" />
+                                    {permission.name}
+                                </li>
                             )
                         )}
                     </ul>
@@ -257,17 +268,15 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         <span className="ml-2 text-gray-500">{description}</span>
                     </div>
                     <div>
-                        <div className="text-neutral-800 text-sm font-semibold">
-                            Set Permissions
-                        </div>
-                        <div className="grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
+                        <div className="text-neutral-800 text-sm font-medium">Set Permissions</div>
+                        <div className="grid h-72 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
                             {renderPermissionView(role?.permissions)}
                         </div>
                     </div>
                 </div>
             ) : (
                 <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="w-full">
+                    <div>
                         <Controller
                             control={control}
                             name="name"
@@ -287,7 +296,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             <span className="ml-2 text-sm text-primary-red">{formErrors.name}</span>
                         )}
                     </div>
-                    <div className="">
+                    <div>
                         <Controller
                             control={control}
                             name="description"

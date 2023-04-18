@@ -29,15 +29,15 @@ type Props = {
 const getButtonClasses = (usage: string, size: string): string => {
     switch (usage) {
         case 'filled':
-            return `items-center font-semibold rounded px-4 py-2 bg-primary-red text-xs text-white capitalize focus:ring-1 focus:ring-red-600 focus:bg-red-600 ${
+            return `items-center font-semibold rounded px-4 py-2 bg-primary-900 text-sm text-white capitalize focus:ring-1 focus:ring-primary-900 focus:bg-primary-900 ${
                 size === 'regular' ? 'h-8' : 'h-9'
             }`
         case 'stroke':
-            return `items-center font-semibold rounded px-4 py-2 border bg-white border-primary-red text-xs text-primary-red capitalize focus:ring-1 focus:ring-primary-red ${
+            return `items-center font-semibold rounded px-4 py-2 border bg-neutral-white border-primary-900 text-sm text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 ${
                 size === 'regular' ? 'h-8' : 'h-9'
             }`
         case 'grayed':
-            return `items-center font-semibold rounded px-4 py-2 border bg-white border-neutral-900 text-xs text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
+            return `items-center font-semibold rounded px-4 py-2 border bg-neutral-white border-neutral-900 text-sm text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
                 size === 'regular' ? 'h-8' : 'h-9'
             }`
         case 'primary':

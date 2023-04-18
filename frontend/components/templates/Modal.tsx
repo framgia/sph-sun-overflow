@@ -59,7 +59,7 @@ const Modal = ({
                             leaveTo="opacity-0 scale-95"
                         >
                             <Dialog.Panel className="w-[500px] transform text-left align-middle shadow-xl transition-all">
-                                <div className="flex justify-between rounded-t-lg bg-red-200 p-4 text-neutral-900">
+                                <div className="flex justify-between rounded-t-lg bg-primary-300 p-4 text-neutral-900">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-md font-bold uppercase leading-6"
@@ -70,7 +70,7 @@ const Modal = ({
                                         <Icons name="close" size="24" />
                                     </Button>
                                 </div>
-                                <div className="flex flex-col rounded-b-lg bg-white">
+                                <div className="flex flex-col rounded-b-lg bg-neutral-white">
                                     <Dialog.Description
                                         id="modal-content"
                                         as="div"

@@ -47,7 +47,7 @@ const Table = ({
         <div className="w-full place-self-center overflow-hidden rounded-md pt-4">
             <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
                 <table className="w-full text-left text-sm">
-                    <thead className="bg-red-200 font-semibold uppercase text-gray-900">
+                    <thead className="bg-primary-200 font-semibold uppercase text-gray-900">
                         <tr>
                             {columns.map((column) => (
                                 <th
@@ -98,7 +98,7 @@ const Table = ({
                                 )
                             })
                         ) : (
-                            <tr>
+                            <tr className="bg-white">
                                 <td colSpan={columns.length} className="p-4">
                                     {isEmptyString}
                                 </td>

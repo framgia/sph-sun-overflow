@@ -43,6 +43,8 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
             return <HiOutlineTrash size={size} className="cursor-pointer" />
         case 'close':
             return <HiX size={size} className="cursor-pointer" />
+        case 'dot':
+            return <img src="/svg/Dot.svg" alt="Dot" className="text-[#5F5F5F]" />
         case 'square_edit':
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
         case 'vote_up':
