@@ -1,22 +1,15 @@
-import Pill from '../Pill'
+import type { TagType } from '@/pages/questions/[slug]'
+import Tag from '../Tag'
 
 type TagsProps = {
-    values: Array<{
-        id: number
-        slug?: string | null
-        name: string
-        description?: string | null
-        is_watched_by_user: boolean
-        count_tagged_questions?: number | null
-        count_watching_users?: number | null
-    }>
+    values: TagType[]
 }
 
 const Tags = ({ values }: TagsProps): JSX.Element => {
     return (
-        <div className="flex w-full justify-start gap-2">
+        <div className="flex flex-wrap gap-1">
             {values?.map((value) => {
-                return <Pill key={value.id} tag={value} />
+                return <Tag key={value.id} tag={value} />
             })}
         </div>
     )

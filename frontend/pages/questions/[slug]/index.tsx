@@ -4,13 +4,13 @@ import AnswerForm from '@/components/organisms/AnswerForm'
 import Comment from '@/components/organisms/Comment'
 import CommentForm from '@/components/organisms/CommentForm'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
+import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
-import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 
 export type UserType = {
     id?: number
@@ -34,8 +34,8 @@ export type TagType = {
     name: string
     description: string
     is_watched_by_user: boolean
-    count_tagged_questions: number
-    count_watching_users: number
+    count_tagged_questions?: number
+    count_watching_users?: number
 }
 
 export type AnswerType = {
