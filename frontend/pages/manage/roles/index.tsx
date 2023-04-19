@@ -237,7 +237,7 @@ const RolesPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col p-4">
+        <div className="flex flex-col items-center p-4">
             <div className="flex h-full flex-col py-4">
                 <div className="flex items-center justify-end">
                     <Button

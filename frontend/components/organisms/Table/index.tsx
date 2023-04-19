@@ -44,7 +44,7 @@ const Table = ({
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
-        <div className="w-full place-self-center overflow-hidden rounded-md pt-4">
+        <div className="max-w-[960px] place-self-center overflow-hidden rounded-md pt-4">
             <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
                 <table className="w-full text-left text-sm">
                     <thead className="bg-primary-200 font-semibold uppercase text-gray-900">
