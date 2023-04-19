@@ -1,20 +1,26 @@
-import React from 'react'
+import { Icons } from '@/components/atoms/Icons'
 
-type Props = {
+const { GridIcon, ListIcon } = Icons
+
+type ViewToggleProps = {
     view: string
 }
 
-const ViewToggle: React.FC<Props> = ({ view }) => {
+const ViewToggle = ({ view }: ViewToggleProps): JSX.Element => {
     const baseStyle = 'flex cursor-pointer gap-[2px] p-2 transition-all duration-300 ease-in-out'
 
     return (
         <div className="flex h-full divide-x divide-neutral-900 overflow-clip rounded-[5px] border border-neutral-900">
             <div className={`${baseStyle} ${view === 'Grid' ? 'bg-primary-200' : ''}`}>
-                <img className="pb-[1px]" src="/svg/Grid.svg" alt="Grid" />
+                <div className="m-auto pb-[1px]">
+                    <GridIcon />
+                </div>
                 {view === 'Grid' && <span>Grid View</span>}
             </div>
             <div className={`${baseStyle} ${view === 'List' ? 'bg-primary-200' : ''}`}>
-                <img className="pb-[1px]" src="/svg/List.svg" alt="List" />
+                <div className="m-auto pb-[1px]">
+                    <ListIcon />
+                </div>
                 {view === 'List' && <span>List View</span>}
             </div>
         </div>

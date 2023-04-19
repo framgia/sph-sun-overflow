@@ -1,16 +1,17 @@
-import React from 'react'
+import { Icons } from '@/components/atoms/Icons'
 
-type Props = {
-    name: string
-    iconPath: string
+const { LockIcon, UnlockIcon } = Icons
+
+type PrivacyProps = {
+    name: 'Public' | 'Private'
     additionalClass?: string
 }
 
-const Privacy: React.FC<Props> = ({ name, iconPath, additionalClass = '' }) => {
+const Privacy = ({ name, additionalClass = '' }: PrivacyProps): JSX.Element => {
     return (
         <div className={`flex items-center gap-1 text-sm font-semibold ${additionalClass}`}>
             <span>{name}</span>
-            <img src={iconPath} alt={name} />
+            <div>{name === 'Public' ? <UnlockIcon /> : <LockIcon />}</div>
         </div>
     )
 }

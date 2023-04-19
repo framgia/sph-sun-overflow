@@ -1,13 +1,16 @@
+import { Icons } from '@/components/atoms/Icons'
 import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
 
-const QuestionGridItem: React.FC = () => {
+const { UnlockIcon, ThumbUpIcon } = Icons
+
+const QuestionGridItem = (): JSX.Element => {
     return (
         <div className="flex flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
             <div className="flex justify-between">
                 <span className="text-base font-semibold">Title Content</span>
                 <div className="flex items-center">
-                    <img src="/svg/Unlock.svg" alt="Unlock" />
+                    <UnlockIcon />
                 </div>
             </div>
             <div className="flex gap-3">
@@ -20,7 +23,9 @@ const QuestionGridItem: React.FC = () => {
                         amet consectetur. Sed amet at id sit proin in.
                     </p>
                     <div className="flex w-fit gap-1 rounded-[4px] border border-primary-base px-1 py-[2px] text-primary-base">
-                        <img src="/svg/ThumbUp.svg" alt="ThumbUp" />
+                        <div>
+                            <ThumbUpIcon />
+                        </div>
                         <span className="text-xs font-bold">87%</span>
                     </div>
                 </div>

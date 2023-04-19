@@ -1,14 +1,13 @@
 import Privacy from '@/components/molecules/Privacy'
 import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
-import React from 'react'
 
-type Props = {
+type QuestionListItemProps = {
     id: number
     privacy: 'Public' | 'Private'
 }
 
-const QuestionListItem: React.FC<Props> = ({ id, privacy }) => {
+const QuestionListItem = ({ id, privacy }: QuestionListItemProps): JSX.Element => {
     return (
         <div className="border-b-2 border-y-neutral-200 p-2 text-neutral-900">
             <div className="flex  w-full items-start gap-4 ">
@@ -46,7 +45,6 @@ const QuestionListItem: React.FC<Props> = ({ id, privacy }) => {
                 <div className="flex w-[5.5rem] justify-end">
                     <Privacy
                         name={privacy}
-                        iconPath={`${privacy === 'Public' ? '/svg/Unlock.svg' : '/svg/Lock.svg'}`}
                         additionalClass={`${privacy === 'Public' ? 'text-neutral-disabled' : ''}`}
                     />
                 </div>

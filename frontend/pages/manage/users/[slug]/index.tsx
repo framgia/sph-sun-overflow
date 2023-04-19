@@ -1,3 +1,4 @@
+import { Icons } from '@/components/atoms/Icons'
 import TeamCard from '@/components/molecules/TeamCard'
 import ViewToggle from '@/components/molecules/ViewToggle'
 import QuestionGridItem from '@/components/organisms/QuestionGridItem'
@@ -8,6 +9,8 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+
+const { ChevronIcon, DotsIcon } = Icons
 
 interface UserType {
     id: number
@@ -81,12 +84,17 @@ const UserDetail = (): JSX.Element => {
                         <div onClick={toggleView}>
                             <ViewToggle view={view} />
                         </div>
-                        <div className="flex rounded-[5px] border border-neutral-900 p-2">
+                        <div className="flex gap-[2px] rounded-[5px] border border-neutral-900 p-2">
                             <span>Date</span>
-                            <img src="/svg/Chevron.svg" alt="Chevron" />
+                            <div className="m-auto">
+                                <ChevronIcon />
+                            </div>
                         </div>
                         <div className="flex rounded-[5px] border border-neutral-900 p-2">
-                            <span>Filter</span> <img src="/svg/Dots.svg" alt="Dots" />
+                            <span>Filter</span>
+                            <div className="m-auto">
+                                <DotsIcon />
+                            </div>
                         </div>
                     </div>
                 )}

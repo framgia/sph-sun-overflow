@@ -1,14 +1,20 @@
+import { Icons } from '@/components/atoms/Icons'
 import type { TagType } from '@/pages/questions/[slug]'
-import React from 'react'
+
+const { EyeIcon } = Icons
 
 type TagProps = {
     tag: TagType
 }
 
-const Tag: React.FC<TagProps> = ({ tag }) => {
+const Tag = ({ tag }: TagProps): JSX.Element => {
     return (
         <div className="flex gap-[0.15rem] rounded-xl bg-neutral-200 px-2 py-[0.15rem] text-xs">
-            {tag.is_watched_by_user && <img className="w-4" src="/svg/Eye.svg" alt="Eye" />}
+            {tag.is_watched_by_user && (
+                <div className="m-auto">
+                    <EyeIcon />
+                </div>
+            )}
             <span className="text-neutral-900 line-clamp-1" title={tag.name}>
                 {tag.name}
             </span>
