@@ -6,7 +6,7 @@ const { UnlockIcon, ThumbUpIcon } = CustomIcons
 
 const QuestionGridItem = (): JSX.Element => {
     return (
-        <div className="flex flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
+        <div className="flex min-h-[176px] flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
             <div className="flex justify-between">
                 <span className="text-base font-semibold">Title Content</span>
                 <div className="flex items-center">
@@ -15,7 +15,7 @@ const QuestionGridItem = (): JSX.Element => {
             </div>
             <div className="flex gap-3">
                 <div className="flex flex-col gap-2">
-                    <p className="text-sm line-clamp-3">
+                    <p className="text-[12px] leading-4 line-clamp-3">
                         Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in. Lorem
                         ipsum dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum
                         dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum dolor
@@ -29,7 +29,7 @@ const QuestionGridItem = (): JSX.Element => {
                         <span className="text-xs font-bold">87%</span>
                     </div>
                 </div>
-                <div className="flex min-w-fit flex-col items-end pt-1 text-xs font-light">
+                <div className="flex min-w-fit flex-col items-end text-xs font-light">
                     <span>10 Votes</span>
                     <span>5 Answers</span>
                     <span>29 Views</span>

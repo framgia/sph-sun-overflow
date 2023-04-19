@@ -9,13 +9,13 @@ type TagProps = {
 
 const Tag = ({ tag }: TagProps): JSX.Element => {
     return (
-        <div className="flex gap-[0.15rem] rounded-xl bg-neutral-200 px-2 py-[0.15rem] text-xs">
+        <div className="flex h-4 items-center gap-[2px] rounded-xl bg-neutral-200 px-1 py-[2px] text-[10px]">
             {tag.is_watched_by_user && (
-                <div className="m-auto">
+                <div className="">
                     <EyeIcon />
                 </div>
             )}
-            <span className="text-neutral-900 line-clamp-1" title={tag.name}>
+            <span className="text-neutral-900" title={tag.name}>
                 {tag.name}
             </span>
         </div>

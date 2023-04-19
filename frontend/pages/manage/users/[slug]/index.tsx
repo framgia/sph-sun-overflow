@@ -85,13 +85,13 @@ const UserDetail = (): JSX.Element => {
                             <ViewToggle view={view} />
                         </div>
                         <div className="flex gap-[2px] rounded-[5px] border border-neutral-900 p-2">
-                            <span>Date</span>
+                            <span>Newest First</span>
                             <div className="m-auto">
                                 <ChevronIcon />
                             </div>
                         </div>
                         <div className="flex rounded-[5px] border border-neutral-900 p-2">
-                            <span>Filter</span>
+                            <span>All Questions</span>
                             <div className="m-auto">
                                 <DotsIcon />
                             </div>
@@ -99,7 +99,7 @@ const UserDetail = (): JSX.Element => {
                     </div>
                 )}
                 {activeTab === 'Teams' ? (
-                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                         <TeamCard
                             name="Sun Overflow"
                             description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum

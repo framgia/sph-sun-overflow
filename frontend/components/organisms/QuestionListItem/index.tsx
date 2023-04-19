@@ -18,7 +18,7 @@ const QuestionListItem = ({ id, privacy }: QuestionListItemProps): JSX.Element =
                 </div>
                 <div className="flex h-32 w-full flex-col gap-2">
                     <span className="text-base font-semibold">Question Title</span>
-                    <p className="text-sm">
+                    <p className="text-[12px]">
                         Lorem ipsum dolor sit amet consectetur. Viverra mauris at dui platea ut
                         velit at in. Volutpat tristique varius aliquet faucibus mauris pellentesque
                         cursus.
