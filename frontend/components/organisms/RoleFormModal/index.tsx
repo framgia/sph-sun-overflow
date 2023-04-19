@@ -6,11 +6,11 @@ import Modal from '@/components/templates/Modal'
 import CREATE_ROLE from '@/helpers/graphql/mutations/create_role'
 import UPDATE_ROLE from '@/helpers/graphql/mutations/update_role'
 import GET_PERMISSIONS from '@/helpers/graphql/queries/get_permissions'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { groupBy } from 'lodash'
-import { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import React, { useEffect, useState } from 'react'
 
 export type PermissionType = {
     id: number
@@ -35,26 +35,11 @@ type Props = {
     view?: boolean
 }
 
-type FormValues = {
-    name: string
-    description: string
-    permissions: number[]
-}
-
 const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Props): JSX.Element => {
     const [permissionsForm, setPermissionsForm] = useState<number[]>([])
     const [selectedPermissions, setSelectedPermissions] = useState<number[]>([])
-    const [name, setName] = useState(role?.name ?? '')
-    const [description, setDescription] = useState(role?.description ?? '')
-
-    const { handleSubmit, control, reset } = useForm<FormValues>({
-        defaultValues: {
-            name,
-            description,
-        },
-        mode: 'onSubmit',
-        reValidateMode: 'onSubmit',
-    })
+    const [roleName, setRoleName] = useState(role?.name ?? '')
+    const [roleDescription, setRoleDescription] = useState(role?.description ?? '')
 
     useEffect(() => {
         const selectedPermissions: number[] = role?.permissions
@@ -63,29 +48,28 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
 
         setSelectedPermissions(selectedPermissions)
         setPermissionsForm(selectedPermissions)
-        setName(role?.name ?? '')
-        setDescription(role?.description ?? '')
-
-        if (role) {
-            reset({
-                name,
-                description,
-            })
-        }
-    }, [role])
+        setRoleName(role?.name ?? '')
+        setRoleDescription(role?.description ?? '')
+    }, [role, refetch])
 
     const [formErrors, setFormErrors] = useState({ name: '', description: '', permissions: '' })
     const [modalView, setModalView] = useState(view)
 
     const formTitle = role?.name ? (modalView ? 'View Role' : 'Edit Role') : 'Add Role'
+    const submitLabel = modalView ? 'Edit Role' : formTitle === 'Edit Role' ? 'Save' : formTitle
 
-    const { data: { permissions } = {}, error } = useQuery(GET_PERMISSIONS, {
+    const {
+        data: { permissions } = {},
+        loading,
+        error,
+    } = useQuery(GET_PERMISSIONS, {
         fetchPolicy: 'network-only',
     })
 
     const [createRole] = useMutation(CREATE_ROLE)
     const [updateRole] = useMutation(UPDATE_ROLE)
 
+    if (loading) loadingScreenShow()
     if (error) {
         return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
@@ -104,7 +88,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         const groupedPermissions = Object.entries(groupBy(permissions, 'category'))
         return groupedPermissions.map(
             (group): JSX.Element => (
-                <div className="space-y-1 p-2" key={group[0]}>
+                <div className="h-32 w-28 space-y-1 p-2" key={group[0]}>
                     <div className="text-xs font-medium capitalize text-neutral-900">
                         {group[0]}
                     </div>
@@ -129,7 +113,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         const groupedPermissions = Object.entries(groupBy(rolePermissions, 'category'))
         return groupedPermissions.map(
             (group): JSX.Element => (
-                <div className="space-y-1 p-2" key={group[0]}>
+                <div className="h-32 w-28 space-y-1 p-2" key={group[0]}>
                     <div className="text-xs font-medium capitalize text-neutral-900">
                         {group[0]}
                     </div>
@@ -138,7 +122,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             (permission): JSX.Element => (
                                 <li
                                     key={permission.id}
-                                    className="flex items-center space-x-1 text-xs font-normal text-neutral-900"
+                                    className="flex items-center space-x-1 text-center text-xs font-normal text-neutral-900"
                                 >
                                     <Icons name="dot" />
                                     {permission.name}
@@ -151,22 +135,27 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         )
     }
 
-    const onSubmit = async (data: FormValues): Promise<void> => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        const target = e.target as typeof e.target & {
+            name: { value: string }
+            description: { value: string }
+        }
+
+        const name = target.name.value
+        const description = target.description.value
+
         let valid = true
-        const dataFields = [
-            { key: 'name', display: 'Name' },
-            { key: 'description', display: 'Description' },
-        ]
         const errorFields = { name: '', description: '', permissions: '' }
 
-        dataFields.forEach((field) => {
-            const key = field.key as keyof typeof data
+        if (name === '') {
+            valid = false
+            errorFields.name = `Name must not be empty`
+        }
 
-            if (!data[key]) {
-                valid = false
-                errorFields[key] = `${field.display} must not be empty`
-            }
-        })
+        if (description === '') {
+            valid = false
+            errorFields.description = `Description must not be empty`
+        }
 
         if (permissionsForm.length === 0) {
             valid = false
@@ -186,16 +175,16 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                 if (
                     matchPermissions.length === permissionsForm.length &&
                     matchPermissions.length === selectedPermissions.length &&
-                    role?.name === data.name &&
-                    role?.description === data.description
+                    role.name === name &&
+                    role.description === description
                 ) {
                     errorNotify('No changes were made!')
                 } else {
                     updateRole({
                         variables: {
                             id: role.id,
-                            name: data.name,
-                            description: data.description,
+                            name,
+                            description,
                             permissions: permissionsForm,
                         },
                     })
@@ -203,36 +192,28 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             successNotify('Successfully updated role!')
                             refetch()
                             setModalView(view)
-                        })
-                        .catch(() => {
-                            errorNotify('There was an Error!')
-                        })
-                        .finally(() => {
                             closeModal()
+                        })
+                        .catch((e) => {
+                            errorNotify(e.message)
                         })
                 }
             } else {
                 createRole({
                     variables: {
-                        name: data.name,
-                        description: data.description,
+                        name,
+                        description,
                         permissions: permissionsForm,
                     },
                 })
                     .then(() => {
                         successNotify('Successfully created role!')
                         refetch()
-                    })
-                    .catch(() => {
-                        errorNotify('There was an Error!')
-                    })
-                    .finally(() => {
                         closeModal()
                         setPermissionsForm([])
-                        reset({
-                            name: '',
-                            description: '',
-                        })
+                    })
+                    .catch((e) => {
+                        errorNotify(e.message)
                     })
             }
         }
@@ -240,32 +221,39 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         setFormErrors(errorFields)
     }
 
+    const reset = (): void => {
+        setRoleName(role?.name ?? '')
+        setRoleDescription(role?.description ?? '')
+        setPermissionsForm(selectedPermissions ?? [])
+    }
+
     return (
         <Modal
             title={formTitle}
-            submitLabel={modalView ? 'Edit Role' : formTitle}
+            submitLabel={submitLabel}
             isOpen={isOpen}
+            handleClose={() => {
+                setModalView(view)
+                closeModal()
+                reset()
+            }}
             handleSubmit={
                 modalView
                     ? () => {
                           setModalView(false)
                       }
-                    : handleSubmit(onSubmit)
+                    : undefined
             }
-            handleClose={() => {
-                setModalView(view)
-                closeModal()
-            }}
         >
             {modalView ? (
                 <div className="flex w-full flex-col justify-start gap-4 font-medium">
                     <div className="flex flex-col gap-1">
                         <span className="text-sm font-medium text-gray-900">Role Name</span>
-                        <span className="ml-2 text-gray-500">{name}</span>
+                        <span className="ml-2 text-gray-500">{roleName}</span>
                     </div>
                     <div className="flex flex-col gap-1">
                         <span className="text-sm font-medium text-gray-900">Description</span>
-                        <span className="ml-2 text-gray-500">{description}</span>
+                        <span className="ml-2 text-gray-500">{roleDescription}</span>
                     </div>
                     <div>
                         <div className="text-neutral-800 text-sm font-medium">Set Permissions</div>
@@ -275,43 +263,34 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     </div>
                 </div>
             ) : (
-                <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex w-full flex-col gap-4" onSubmit={onSubmit}>
                     <div>
-                        <Controller
-                            control={control}
+                        <InputField
                             name="name"
-                            defaultValue={name}
-                            render={({ field: { onChange, value } }) => (
-                                <InputField
-                                    name="name"
-                                    value={value}
-                                    label="Name"
-                                    onChange={onChange}
-                                    isValid={formErrors.name.length > 0}
-                                    error={formErrors.name}
-                                />
-                            )}
+                            value={roleName}
+                            label="Role Name"
+                            onChange={(e) => {
+                                setRoleName(e.target.value)
+                            }}
+                            isValid={formErrors.name.length > 0}
+                            error={formErrors.name}
                         />
                         {formErrors.name.length > 0 && (
                             <span className="ml-2 text-sm text-primary-red">{formErrors.name}</span>
                         )}
                     </div>
                     <div>
-                        <Controller
-                            control={control}
+                        <TextArea
                             name="description"
-                            defaultValue={description}
-                            render={({ field: { onChange, value } }) => (
-                                <TextArea
-                                    name="description"
-                                    value={value}
-                                    label="Description"
-                                    onChange={onChange}
-                                    isValid={formErrors.name.length > 0}
-                                    error={formErrors.name}
-                                />
-                            )}
+                            value={roleDescription}
+                            label="Description"
+                            onChange={(e) => {
+                                setRoleDescription(e.target.value)
+                            }}
+                            isValid={formErrors.name.length > 0}
+                            error={formErrors.name}
                         />
+
                         {formErrors.description.length > 0 && (
                             <span className="text-sm text-primary-red">
                                 {formErrors.description}
@@ -319,10 +298,8 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         )}
                     </div>
                     <div>
-                        <div className="text-neutral-800 text-sm font-semibold">
-                            Set Permissions
-                        </div>
-                        <div className="grid h-64 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
+                        <div className="text-neutral-800 text-sm font-medium">Set Permissions</div>
+                        <div className="grid h-72 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
                             {renderPermissionSelection()}
                         </div>
                         {formErrors.permissions.length > 0 && (

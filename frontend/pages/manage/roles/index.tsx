@@ -12,11 +12,11 @@ import GET_ROLES_PAGINATE from '@/helpers/graphql/queries/get_roles_paginate'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const columns: ColumnType[] = [
     {
-        title: 'Name',
+        title: 'Role',
         key: 'name',
         width: 144,
     },
@@ -166,6 +166,13 @@ const RolesPage = (): JSX.Element => {
         fetchPolicy: 'network-only',
     })
 
+    useEffect(() => {
+        void refetch({
+            first: 10,
+            page: 1,
+        })
+    }, [refetch])
+
     if (loading) return loadingScreenShow()
     if (error) {
         errorNotify(`Error! ${error.message}`)
@@ -236,6 +243,17 @@ const RolesPage = (): JSX.Element => {
         await refetch({ first, page })
     }
 
+    const renderFooter = (): JSX.Element | null => {
+        if (pageInfo.lastPage > 1) {
+            return (
+                <div className="flex w-full items-center justify-center">
+                    <Paginate {...pageInfo} onPageChange={onPageChange} />
+                </div>
+            )
+        }
+        return null
+    }
+
     return (
         <div className="flex flex-col items-center p-4">
             <div className="flex h-full flex-col py-4">
@@ -254,12 +272,8 @@ const RolesPage = (): JSX.Element => {
                     columns={columns}
                     dataSource={getRolesDataTable(roles)}
                     actions={getRolesActions}
+                    footer={renderFooter()}
                 />
-                <div className="mt-auto">
-                    {pageInfo.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
-                    )}
-                </div>
             </div>
             <RoleFormModal
                 isOpen={showModal}

@@ -13,6 +13,7 @@ type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
     actions?: (key: number) => JSX.Element | undefined
+    footer?: JSX.Element | null
     isEmptyString?: string
     clickableArr?: ClickableType[]
 }
@@ -40,6 +41,7 @@ const Table = ({
     columns,
     dataSource,
     actions,
+    footer = null,
     isEmptyString = 'No members to show',
     clickableArr = [],
 }: TableProps): JSX.Element => {
@@ -47,7 +49,7 @@ const Table = ({
         <div className="max-w-[960px] place-self-center overflow-hidden rounded-md pt-4">
             <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
                 <table className="w-full text-left text-sm">
-                    <thead className="bg-primary-200 font-semibold uppercase text-gray-900">
+                    <thead className="bg-primary-200 font-semibold uppercase text-neutral-900">
                         <tr>
                             {columns.map((column) => (
                                 <th
@@ -69,7 +71,7 @@ const Table = ({
                                 return (
                                     <tr
                                         key={key}
-                                        className="cursor-default border-b bg-white text-gray-600 hover:bg-gray-50"
+                                        className="cursor-default border-b bg-white text-neutral-900 hover:bg-neutral-100"
                                     >
                                         {columns.map((column, key) => {
                                             const clickable = clickableArr.find(
@@ -106,6 +108,7 @@ const Table = ({
                         )}
                     </tbody>
                 </table>
+                {footer && <div className="cursor-default border-b bg-white p-4 ">{footer}</div>}
             </div>
         </div>
     )
