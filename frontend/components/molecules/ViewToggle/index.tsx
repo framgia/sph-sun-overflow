@@ -1,6 +1,6 @@
-import { Icons } from '@/components/atoms/Icons'
+import { CustomIcons } from '@/components/atoms/Icons'
 
-const { GridIcon, ListIcon } = Icons
+const { GridIcon, ListIcon } = CustomIcons
 
 type ViewToggleProps = {
     view: string

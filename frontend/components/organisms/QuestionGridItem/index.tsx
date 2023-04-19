@@ -1,8 +1,8 @@
-import { Icons } from '@/components/atoms/Icons'
+import { CustomIcons } from '@/components/atoms/Icons'
 import Tags from '@/components/molecules/Tags'
 import Link from 'next/link'
 
-const { UnlockIcon, ThumbUpIcon } = Icons
+const { UnlockIcon, ThumbUpIcon } = CustomIcons
 
 const QuestionGridItem = (): JSX.Element => {
     return (

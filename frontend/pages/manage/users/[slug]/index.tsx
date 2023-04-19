@@ -1,4 +1,4 @@
-import { Icons } from '@/components/atoms/Icons'
+import { CustomIcons } from '@/components/atoms/Icons'
 import TeamCard from '@/components/molecules/TeamCard'
 import ViewToggle from '@/components/molecules/ViewToggle'
 import QuestionGridItem from '@/components/organisms/QuestionGridItem'
@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-const { ChevronIcon, DotsIcon } = Icons
+const { ChevronIcon, DotsIcon } = CustomIcons
 
 interface UserType {
     id: number

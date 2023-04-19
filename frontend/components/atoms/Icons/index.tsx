@@ -31,7 +31,7 @@ type IconsProps = {
     additionalClass?: string
 }
 
-const OldIcons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Element => {
+const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Element => {
     switch (name) {
         case 'table_edit':
             return <MdModeEditOutline size={20} className="fill-blue-800" />
@@ -113,7 +113,7 @@ const OldIcons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.
     }
 }
 
-export const Icons = {
+export const CustomIcons = {
     ChevronIcon,
     DotsIcon,
     EyeIcon,
@@ -125,4 +125,4 @@ export const Icons = {
     UsersIcon,
 }
 
-export default OldIcons
+export default Icons

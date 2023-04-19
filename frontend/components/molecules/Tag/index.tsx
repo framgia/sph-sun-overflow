@@ -1,7 +1,7 @@
-import { Icons } from '@/components/atoms/Icons'
+import { CustomIcons } from '@/components/atoms/Icons'
 import type { TagType } from '@/pages/questions/[slug]'
 
-const { EyeIcon } = Icons
+const { EyeIcon } = CustomIcons
 
 type TagProps = {
     tag: TagType

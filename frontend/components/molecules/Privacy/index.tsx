@@ -1,6 +1,6 @@
-import { Icons } from '@/components/atoms/Icons'
+import { CustomIcons } from '@/components/atoms/Icons'
 
-const { LockIcon, UnlockIcon } = Icons
+const { LockIcon, UnlockIcon } = CustomIcons
 
 type PrivacyProps = {
     name: 'Public' | 'Private'
