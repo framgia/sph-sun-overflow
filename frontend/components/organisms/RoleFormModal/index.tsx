@@ -55,8 +55,8 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
     const [formErrors, setFormErrors] = useState({ name: '', description: '', permissions: '' })
     const [modalView, setModalView] = useState(view)
 
-    const formTitle = role?.name ? (modalView ? 'View Role' : 'Edit Role') : 'Add Role'
-    const submitLabel = modalView ? 'Edit Role' : formTitle === 'Edit Role' ? 'Save' : formTitle
+    const formTitle = role?.name ? (modalView ? 'View Role' : 'Edit Role') : 'Add New Role'
+    const submitLabel = modalView ? 'Edit Role' : formTitle === 'Edit Role' ? 'Save' : 'Add'
 
     const {
         data: { permissions } = {},
@@ -179,6 +179,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     role.description === description
                 ) {
                     errorNotify('No changes were made!')
+                    closeModal()
                 } else {
                     updateRole({
                         variables: {
