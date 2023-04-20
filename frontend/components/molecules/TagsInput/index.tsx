@@ -38,7 +38,9 @@ const TagsInput = ({
         const timeout = setTimeout(() => {
             refetchSuggestions(queryText)
         }, 1000)
-        return ()=>{clearTimeout(timeout)}
+        return () => {
+            clearTimeout(timeout)
+        }
     }, [queryText])
 
     const deleteTag = (id: number): void => {
