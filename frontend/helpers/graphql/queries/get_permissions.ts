@@ -6,6 +6,7 @@ const GET_PERMISSIONS = gql`
             id
             name
             slug
+            category
             description
             created_at
             updated_at

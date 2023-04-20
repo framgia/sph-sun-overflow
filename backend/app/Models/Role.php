@@ -13,7 +13,7 @@ class Role extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['truncated_name'];
+    protected $appends = ['truncated_name', 'truncated_description'];
 
     protected static function boot()
     {
@@ -41,5 +41,10 @@ class Role extends Model
     public function getTruncatedNameAttribute()
     {
         return Str::limit($this->name, 15, '...');
+    }
+
+    public function getTruncatedDescriptionAttribute()
+    {
+        return Str::limit($this->description, 75, '...');
     }
 }

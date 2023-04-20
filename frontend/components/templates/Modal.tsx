@@ -1,7 +1,7 @@
+import Button from '@/components/atoms/Button'
 import { Dialog, Transition } from '@headlessui/react'
-import { Button } from '@material-tailwind/react'
 import React, { Fragment } from 'react'
-import { HiX } from 'react-icons/hi'
+import Icons from '../atoms/Icons'
 
 type ModalProps = {
     title: string
@@ -58,40 +58,37 @@ const Modal = ({
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-full max-w-md transform text-left align-middle shadow-xl transition-all">
-                                <div className="flex justify-between rounded-t-lg bg-primary-red px-4 py-3">
+                            <Dialog.Panel className="w-[500px] transform text-left align-middle shadow-xl transition-all">
+                                <div className="flex justify-between rounded-t-lg bg-primary-300 p-4 text-neutral-900">
                                     <Dialog.Title
                                         as="h3"
-                                        className="text-md font-bold leading-6 text-white"
+                                        className="text-md font-bold uppercase leading-6"
                                     >
                                         {title}
                                     </Dialog.Title>
-                                    <HiX
-                                        className="cursor-pointer self-center text-lg text-white"
-                                        onClick={handleClose}
-                                    />
+                                    <Button usage="toggle-modal" onClick={handleClose}>
+                                        <Icons name="close" size="24" />
+                                    </Button>
                                 </div>
-                                <div className="flex flex-col rounded-b-lg bg-white">
-                                    <div className="flex justify-center p-4">
-                                        <Dialog.Description
-                                            id="modal-content"
-                                            as="div"
-                                            className="mt-2 w-full text-sm text-gray-800"
-                                        >
-                                            {children}
-                                        </Dialog.Description>
-                                    </div>
-                                    <div className="flex justify-end gap-2 px-4 pb-4 pt-3">
-                                        <Button size="sm" color="gray" onClick={handleClose}>
-                                            Cancel
-                                        </Button>
+                                <div className="flex flex-col rounded-b-lg bg-neutral-white">
+                                    <Dialog.Description
+                                        id="modal-content"
+                                        as="div"
+                                        className="flex w-full justify-start p-4 text-sm text-neutral-900"
+                                    >
+                                        {children}
+                                    </Dialog.Description>
+                                    <div className="flex gap-2 p-4">
                                         <Button
-                                            size="sm"
-                                            color="red"
-                                            className="bg-primary-red hover:bg-dark-red"
+                                            usage="stroke"
+                                            size="large"
+                                            additionalClass="w-36"
                                             onClick={onClickSubmit}
                                         >
                                             {submitLabel}
+                                        </Button>
+                                        <Button usage="grayed" size="large" onClick={handleClose}>
+                                            Cancel
                                         </Button>
                                     </div>
                                 </div>

@@ -16,7 +16,7 @@ const EditRole = ({ slug }: Props): JSX.Element => {
                     void router.push(`roles/${slug}/edit`)
                 }}
             >
-                <Icons name="table_edit" />
+                <Icons name="pencil" />
             </Button>
         </div>
     )

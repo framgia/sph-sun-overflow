@@ -18,6 +18,7 @@ type TUsage =
     | 'modal-submit'
 type Props = {
     usage?: TUsage | string
+    size?: 'regular' | 'large'
     type?: 'button' | 'submit' | 'reset'
     additionalClass?: string
     isDisabled?: boolean
@@ -25,8 +26,20 @@ type Props = {
     onClick?: React.MouseEventHandler
 }
 
-const getButtonClasses = (usage: string): string => {
+const getButtonClasses = (usage: string, size: string): string => {
     switch (usage) {
+        case 'filled':
+            return `items-center font-semibold rounded px-4 py-2 bg-primary-900 text-sm text-white capitalize focus:ring-1 focus:ring-primary-900 focus:bg-primary-900 ${
+                size === 'regular' ? 'h-8' : 'h-10'
+            }`
+        case 'stroke':
+            return `items-center font-semibold rounded px-4 py-2 border bg-neutral-white border-primary-900 text-sm text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 ${
+                size === 'regular' ? 'h-8' : 'h-10'
+            }`
+        case 'grayed':
+            return `items-center font-semibold rounded px-4 py-2 border bg-neutral-white border-neutral-900 text-sm text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
+                size === 'regular' ? 'h-8' : 'h-10'
+            }`
         case 'primary':
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
         case 'light':
@@ -67,6 +80,7 @@ const getButtonClasses = (usage: string): string => {
 const Button = ({
     usage = 'primary',
     type = 'submit',
+    size = 'regular',
     additionalClass = '',
     isDisabled = false,
     children,
@@ -77,7 +91,7 @@ const Button = ({
             onClick={onClick}
             disabled={isDisabled}
             type={type}
-            className={`${getButtonClasses(usage)} ${additionalClass}`}
+            className={`${getButtonClasses(usage, size)} ${additionalClass}`}
         >
             {children}
         </button>

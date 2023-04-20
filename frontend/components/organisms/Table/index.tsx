@@ -13,6 +13,7 @@ type TableProps = {
     columns: ColumnType[]
     dataSource: DataType[]
     actions?: (key: number) => JSX.Element | undefined
+    footer?: JSX.Element | null
     isEmptyString?: string
     clickableArr?: ClickableType[]
 }
@@ -40,14 +41,15 @@ const Table = ({
     columns,
     dataSource,
     actions,
+    footer = null,
     isEmptyString = 'No members to show',
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
-        <div className="w-full place-self-center overflow-hidden rounded-md pt-4">
+        <div className="max-w-[960px] place-self-center overflow-hidden rounded-md pt-4">
             <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
-                <table className="w-full text-center text-sm text-gray-500 dark:text-gray-400">
-                    <thead className="bg-gray-200 uppercase text-gray-800 ">
+                <table className="w-full text-left text-sm">
+                    <thead className="bg-primary-200 font-semibold uppercase text-neutral-900">
                         <tr>
                             {columns.map((column) => (
                                 <th
@@ -56,9 +58,7 @@ const Table = ({
                                     style={{
                                         width: column.width,
                                     }}
-                                    className={`px-6 py-3 ${
-                                        column.key === 'name' ? 'text-left' : ''
-                                    }`}
+                                    className="p-4"
                                 >
                                     {column.title}
                                 </th>
@@ -71,7 +71,7 @@ const Table = ({
                                 return (
                                     <tr
                                         key={key}
-                                        className="cursor-default border-b bg-white text-gray-600 hover:bg-gray-50"
+                                        className="cursor-default border-b bg-white text-neutral-900 hover:bg-neutral-100"
                                     >
                                         {columns.map((column, key) => {
                                             const clickable = clickableArr.find(
@@ -79,18 +79,13 @@ const Table = ({
                                             )
                                             if (column.key === 'action' && actions) {
                                                 return (
-                                                    <td key={key} className="px-6 py-4">
+                                                    <td key={key} className="p-4">
                                                         {actions(Number(data.key))}
                                                     </td>
                                                 )
                                             }
                                             return (
-                                                <td
-                                                    key={key}
-                                                    className={`whitespace-nowrap px-6 py-4  ${
-                                                        column.key === 'name' ? 'text-left' : ''
-                                                    } `}
-                                                >
+                                                <td key={key} className="whitespace-nowrap p-4">
                                                     {clickable !== undefined
                                                         ? renderClickable(
                                                               data[column.key],
@@ -105,14 +100,15 @@ const Table = ({
                                 )
                             })
                         ) : (
-                            <tr>
-                                <td colSpan={columns.length} className="px-6 py-4">
+                            <tr className="bg-white">
+                                <td colSpan={columns.length} className="p-4">
                                     {isEmptyString}
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
+                {footer && <div className="cursor-default border-b bg-white p-4 ">{footer}</div>}
             </div>
         </div>
     )

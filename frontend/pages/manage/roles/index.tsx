@@ -1,32 +1,32 @@
 import Button from '@/components/atoms/Button'
+import Icons from '@/components/atoms/Icons'
 import Paginate from '@/components/organisms/Paginate'
-import PermissionPills from '@/components/organisms/PermissionPills'
-import RolesActions from '@/components/organisms/RolesAction'
+import type { PermissionType } from '@/components/organisms/RoleFormModal'
+import RoleFormModal from '@/components/organisms/RoleFormModal'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
+import Modal from '@/components/templates/Modal'
 import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import DELETE_ROLE from '@/helpers/graphql/mutations/delete_role'
 import GET_ROLES_PAGINATE from '@/helpers/graphql/queries/get_roles_paginate'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { errorNotify } from '@/helpers/toast'
-import type { UserType } from '@/pages/questions/[slug]'
-import { useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation, useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
 
 const columns: ColumnType[] = [
     {
-        title: 'Name',
+        title: 'Role',
         key: 'name',
+        width: 144,
     },
     {
-        title: 'Permissions',
-        key: 'permissions',
+        title: 'Description',
+        key: 'description',
+        width: 500,
     },
     {
-        title: 'Users',
-        key: 'users',
-    },
-    {
-        title: '',
+        title: 'Actions',
         key: 'action',
         width: 20,
     },
@@ -37,12 +37,122 @@ type RolesType = {
     name: string
     slug: string
     truncated_name: string
-    permissions: Array<{ id: number; name: string }>
-    users: UserType[]
+    description: string
+    truncated_description: string
+    permissions?: PermissionType[]
+}
+
+const ViewRole = ({ role, refetch }: { role: RolesType; refetch: () => void }): JSX.Element => {
+    const [showModal, setShowModal] = useState(false)
+
+    return (
+        <div>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setShowModal(true)
+                }}
+            >
+                <Icons name="eye" />
+            </Button>
+            <RoleFormModal
+                role={role}
+                view={true}
+                isOpen={showModal}
+                closeModal={() => {
+                    setShowModal(false)
+                }}
+                refetch={refetch}
+            />
+        </div>
+    )
+}
+
+const EditRole = ({ role, refetch }: { role: RolesType; refetch: () => void }): JSX.Element => {
+    const [showModal, setShowModal] = useState(false)
+
+    return (
+        <div>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setShowModal(true)
+                }}
+            >
+                <Icons name="pencil" />
+            </Button>
+            <RoleFormModal
+                role={role}
+                view={false}
+                isOpen={showModal}
+                closeModal={() => {
+                    setShowModal(false)
+                }}
+                refetch={refetch}
+            />
+        </div>
+    )
+}
+
+const DeleteRole = ({
+    id,
+    name,
+    refetch,
+}: {
+    id: number
+    name: string
+    refetch: () => void
+}): JSX.Element => {
+    const [showModal, setShowModal] = useState(false)
+    const [deleteRole] = useMutation(DELETE_ROLE)
+
+    const onSubmit = (): void => {
+        if ([1, 2, 3].includes(+id)) {
+            errorNotify('You cannot delete this role!')
+            setShowModal(false)
+            return
+        }
+
+        deleteRole({ variables: { id } })
+            .then(() => {
+                successNotify('Role deleted successfully!')
+                refetch()
+                setShowModal(false)
+            })
+            .catch(() => {
+                errorNotify('There was an error removing the role!')
+            })
+    }
+
+    return (
+        <div>
+            <Button
+                usage="toggle-modal"
+                onClick={() => {
+                    setShowModal(true)
+                }}
+            >
+                <Icons name="trash" />
+            </Button>
+            <Modal
+                title="Delete Role"
+                isOpen={showModal}
+                handleClose={() => {
+                    setShowModal(false)
+                }}
+                handleSubmit={onSubmit}
+                submitLabel="Delete"
+            >
+                <span>
+                    Are you sure you wish to delete <span className="font-bold">{name}</span>?
+                </span>
+            </Modal>
+        </div>
+    )
 }
 
 const RolesPage = (): JSX.Element => {
-    const router = useRouter()
+    const [showModal, setShowModal] = useState(false)
 
     const {
         data: { rolesPaginate } = {},
@@ -56,6 +166,13 @@ const RolesPage = (): JSX.Element => {
         },
         fetchPolicy: 'network-only',
     })
+
+    useEffect(() => {
+        void refetch({
+            first: 10,
+            page: 1,
+        })
+    }, [refetch])
 
     if (loading) return loadingScreenShow()
     if (error) {
@@ -74,30 +191,51 @@ const RolesPage = (): JSX.Element => {
                 key: role.id,
                 name: role.truncated_name,
                 slug: role.slug,
-                permissions: <PermissionPills permissions={role.permissions} />,
-                users: role.users.length,
+                description: role.truncated_description,
             }
         })
     }
 
     const getRolesActions = (key: number): JSX.Element | undefined => {
-        const dataSource = getRolesDataTable(roles).find((role) => +role.key === key)
+        const role = roles.find((role) => +role.id === key)
 
-        if (dataSource) {
+        if (role) {
             return (
-                <RolesActions
-                    id={dataSource.key as number}
-                    slug={dataSource.slug as string}
-                    refetchHandler={(isDelete = false) => {
-                        void refetch({
-                            first: pageInfo.perPage,
-                            page:
-                                isDelete && roles.length === 1 && pageInfo.currentPage > 1
-                                    ? pageInfo.currentPage - 1
-                                    : pageInfo.currentPage,
-                        })
-                    }}
-                />
+                <div className="flex flex-row gap-4">
+                    <ViewRole
+                        role={role}
+                        refetch={async () => {
+                            await refetch({
+                                first: pageInfo.perPage,
+                                page: pageInfo.currentPage,
+                            })
+                        }}
+                    />
+                    <EditRole
+                        role={role}
+                        refetch={async () => {
+                            await refetch({
+                                first: pageInfo.perPage,
+                                page: pageInfo.currentPage,
+                            })
+                        }}
+                    />
+                    <DeleteRole
+                        id={key}
+                        name={String(role.name)}
+                        refetch={() => {
+                            const { perPage, currentPage, count } = pageInfo
+
+                            void refetch({
+                                first: perPage,
+                                page:
+                                    currentPage !== 1 && count === 1
+                                        ? currentPage - 1
+                                        : currentPage,
+                            })
+                        }}
+                    />
+                </div>
             )
         }
     }
@@ -106,14 +244,26 @@ const RolesPage = (): JSX.Element => {
         await refetch({ first, page })
     }
 
+    const renderFooter = (): JSX.Element | null => {
+        if (pageInfo.lastPage > 1) {
+            return (
+                <div className="flex w-full items-center justify-center">
+                    <Paginate {...pageInfo} onPageChange={onPageChange} />
+                </div>
+            )
+        }
+        return null
+    }
+
     return (
-        <div className="flex w-full flex-col">
-            <div className="flex h-full flex-col">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-gray-800">User Roles</h1>
+        <div className="flex flex-col items-center p-4">
+            <div className="flex h-full flex-col py-4">
+                <div className="flex items-center justify-end">
                     <Button
+                        usage="stroke"
+                        size="large"
                         onClick={() => {
-                            void router.push('/manage/roles/create')
+                            setShowModal(true)
                         }}
                     >
                         Add Role
@@ -123,13 +273,21 @@ const RolesPage = (): JSX.Element => {
                     columns={columns}
                     dataSource={getRolesDataTable(roles)}
                     actions={getRolesActions}
+                    footer={renderFooter()}
                 />
-                <div className="mt-auto">
-                    {pageInfo.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
-                    )}
-                </div>
             </div>
+            <RoleFormModal
+                isOpen={showModal}
+                closeModal={() => {
+                    setShowModal(false)
+                }}
+                refetch={async () => {
+                    await refetch({
+                        first: pageInfo.perPage,
+                        page: pageInfo.currentPage,
+                    })
+                }}
+            />
         </div>
     )
 }

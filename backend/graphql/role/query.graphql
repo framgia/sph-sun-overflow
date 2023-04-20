@@ -7,7 +7,7 @@ extend type Query {
         @guard(with: ["api"])
         @hasPermissions(requiredPermission: "view-role")
         @all
-    rolesPaginate: [Role!]
+    rolesPaginate(orderBy: _ @orderBy(columns: ["updated_at"])): [Role!]
         @guard(with: ["api"])
         @hasPermissions(requiredPermission: "view-role")
         @paginate
