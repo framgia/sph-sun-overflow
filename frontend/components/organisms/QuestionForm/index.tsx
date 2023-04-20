@@ -72,7 +72,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         control,
         setValue,
         watch,
-        formState: { errors },
+        formState: { errors, isSubmitting, isSubmitSuccessful },
     } = useForm<FormValues>({
         defaultValues: {
             title: title ? String(title) : '',
@@ -94,7 +94,6 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     const [createQuestion] = useMutation(CREATE_QUESTION)
     const [updateQuestion] = useMutation(UPDATE_QUESTION)
     const [selectedFilter, setSelectedFilter] = useState(initial_team_name)
-
     const {
         data,
         loading: tagLoading,
@@ -298,44 +297,53 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                         />
                     </div>
                 </div>
-                <div className="flex w-full flex-col">
-                    <label className="mb-2.5 w-full text-2xl">Privacy</label>
-                    <div className="flex flex-row ">
-                        <div className="mr-[30px]">
-                            <Controller
-                                control={control}
-                                name="team_id"
-                                render={({ field: { value } }) => {
-                                    const teams = transformTeams()
+                {tempTeams.length > 0 && (
+                    <div className="flex w-full flex-col">
+                        <label className="mb-2.5 w-full text-2xl">Privacy</label>
+                        <div className="flex flex-row ">
+                            <div className="mr-[30px]">
+                                <Controller
+                                    control={control}
+                                    name="team_id"
+                                    render={({ field: { value } }) => {
+                                        const teams = transformTeams()
 
-                                    return (
-                                        <SortDropdown
-                                            filters={teams}
-                                            selectedFilter={String(selectedFilter)}
-                                        />
-                                    )
-                                }}
-                            />
-                        </div>
-                        <div className="flex flex-row">
-                            <label htmlFor="isPublic" className="text-2xl font-bold">
-                                <HiGlobeAlt size={40} color="#333333" />
-                            </label>
-                            <div className="">
-                                <Checkbox
-                                    {...register('is_public')}
-                                    id="isPublic"
-                                    disabled={!hasTeam}
+                                        return (
+                                            <SortDropdown
+                                                filters={teams}
+                                                selectedFilter={String(selectedFilter)}
+                                            />
+                                        )
+                                    }}
                                 />
                             </div>
+                            {hasTeam && (
+                                <div className="flex flex-row">
+                                    <label htmlFor="isPublic" className="text-2xl font-bold">
+                                        <HiGlobeAlt size={40} color="#333333" />
+                                    </label>
+                                    <div className="">
+                                        <Checkbox
+                                            {...register('is_public')}
+                                            id="isPublic"
+                                            disabled={!hasTeam}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
-                </div>
+                )}
 
                 {!isObjectEmpty(errors) && <FormAlert errors={errors} />}
                 <div className="Submit w-full self-center py-4">
                     <div className="float-right">
-                        <Button usage="question-form" type="submit" onClick={undefined}>
+                        <Button
+                            usage="question-form"
+                            type="submit"
+                            onClick={undefined}
+                            isDisabled={isSubmitting || isSubmitSuccessful}
+                        >
                             {buttonText}
                         </Button>
                     </div>
