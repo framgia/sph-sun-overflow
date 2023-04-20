@@ -19,11 +19,11 @@ const LeftSideBar = (): JSX.Element => {
 
     const renderAdminLinks = (): TLink => {
         const allowedLinks = []
-        if (checkPermission('Tag')) {
+        if (checkPermission('User')) {
             allowedLinks.push({
-                IconName: 'Tags',
-                Text: 'Tags',
-                url: 'manage/tags',
+                IconName: 'Users',
+                Text: 'Users',
+                url: 'manage/users',
             })
         }
         if (checkPermission('Team')) {
@@ -33,7 +33,6 @@ const LeftSideBar = (): JSX.Element => {
                 url: 'manage/teams',
             })
         }
-
         if (checkPermission('Role')) {
             allowedLinks.push({
                 IconName: 'Roles',
@@ -41,11 +40,11 @@ const LeftSideBar = (): JSX.Element => {
                 url: 'manage/roles',
             })
         }
-        if (checkPermission('User')) {
+        if (checkPermission('Tag')) {
             allowedLinks.push({
-                IconName: 'Users',
-                Text: 'Users',
-                url: 'manage/users',
+                IconName: 'Tags',
+                Text: 'Tags',
+                url: 'manage/tags',
             })
         }
 
