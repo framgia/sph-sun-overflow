@@ -21,11 +21,11 @@ const columns: ColumnType[] = [
         key: 'name',
     },
     {
-        title: 'Questions Posted',
+        title: 'Questions',
         key: 'question_count',
     },
     {
-        title: 'Answers Posted',
+        title: 'Answers',
         key: 'answer_count',
     },
     {

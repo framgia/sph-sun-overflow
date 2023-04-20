@@ -142,7 +142,7 @@ const Paginate = ({
             <li className="flex items-center">
                 <div
                     onClick={item.eventCallback}
-                    className={` ml-[4px] flex h-[16px] w-[16px] ${
+                    className={` ml-1 flex h-4 w-4 ${
                         item.isDisabled
                             ? 'cursor-not-allowed text-gray-500'
                             : 'cursor-pointer hover:text-primary-red'
