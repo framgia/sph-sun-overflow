@@ -30,7 +30,7 @@ module.exports = withMT({
                     700: '#716666',
                     500: '#9F9191',
                     300: '#B8ABAB',
-                    200: '#DAD2D2',
+                    200: '#E9E2E2',
                     100: '#FDFBFB',
                 },
                 primary: {

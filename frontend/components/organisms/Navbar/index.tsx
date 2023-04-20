@@ -57,7 +57,7 @@ const Navbar = (): JSX.Element => {
     }
 
     return (
-        <nav className="h-full w-full border-b-2 border-neutral-200 bg-white drop-shadow-xsm">
+        <nav className="h-full w-full border-b border-neutral-200 bg-white drop-shadow-xsm">
             <div className="flex h-full w-full flex-row items-center justify-between px-8">
                 <Link
                     href="/questions"
