@@ -17,6 +17,7 @@ const GET_USERS_ADMIN = gql`
                 question_count
                 answer_count
                 role {
+                    id
                     name
                 }
                 slug

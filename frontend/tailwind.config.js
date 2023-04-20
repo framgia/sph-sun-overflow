@@ -40,7 +40,7 @@ module.exports = withMT({
                     300: '#EEB4AC',
                     200: '#F5D3CF',
                     100: '#FFF4F2',
-                    50: '#FFF9F9'
+                    50: '#FFF9F9',
                 },
             },
             dropShadow: {

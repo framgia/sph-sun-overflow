@@ -153,7 +153,6 @@ const DeleteRole = ({
 
 const RolesPage = (): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
-    const [selectedRole, setSelectedRole] = useState<RolesType>()
 
     const {
         data: { rolesPaginate } = {},

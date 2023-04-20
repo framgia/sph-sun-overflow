@@ -139,14 +139,14 @@ const Paginate = ({
 
     const renderIconItem = (item: PageItemType): JSX.Element => {
         return (
-            <li>
+            <li className="flex items-center">
                 <div
                     onClick={item.eventCallback}
-                    className={`ml-[4px] flex h-[24px] w-[24px] ${
+                    className={` ml-[4px] flex h-[16px] w-[16px] ${
                         item.isDisabled
                             ? 'cursor-not-allowed text-gray-500'
                             : 'cursor-pointer hover:text-primary-red'
-                    } items-center justify-center rounded-md border border-transparent leading-tight hover:bg-gray-100  `}
+                    } items-center justify-center rounded-md border border-transparent leading-tight  `}
                 >
                     {item.icon}
                 </div>
@@ -158,10 +158,10 @@ const Paginate = ({
         return pageNumbers.map((item) => (
             <li key={item}>
                 <div
-                    className={` ml-[8px] flex h-[24px] w-[24px] cursor-pointer items-center justify-center rounded-md border border-transparent text-sm leading-tight  hover:border-primary-red  ${
+                    className={` ml-[8px] flex h-[24px] w-[24px] cursor-pointer items-center justify-center rounded-md border border-transparent text-center text-xs leading-tight  hover:border-primary-red  ${
                         item === currentPage
                             ? 'bg-primary-red text-white'
-                            : 'hover:text-primary-red'
+                            : 'text-neutral-500 hover:text-primary-red'
                     } `}
                     onClick={() => {
                         setPage(item)

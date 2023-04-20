@@ -6,6 +6,7 @@ import Modal from '@/components/templates/Modal'
 import CREATE_ROLE from '@/helpers/graphql/mutations/create_role'
 import UPDATE_ROLE from '@/helpers/graphql/mutations/update_role'
 import GET_PERMISSIONS from '@/helpers/graphql/queries/get_permissions'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { groupBy } from 'lodash'
@@ -211,10 +212,6 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         refetch()
                         closeModal()
                         setPermissionsForm([])
-                        reset({
-                            name: '',
-                            description: '',
-                        })
                     })
                     .catch((e) => {
                         errorNotify(e.message)
