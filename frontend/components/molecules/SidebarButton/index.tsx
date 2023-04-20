@@ -28,11 +28,11 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
     }
 
     const getButtonClass = (isSelected: boolean, isMenu: boolean = false): string => {
-        const selectedMenuClass = 'bg-primary-300 text-neutral-disabled-50 rounded-b-none'
+        const selectedMenuClass = 'bg-primary-300 text-neutral-disabled rounded-b-none'
         const selectedClass = isMenu
             ? selectedMenuClass
             : 'bg-primary-300 text-neutral-900 border-primary-700 border-r-4'
-        const unselected = 'text-neutral-disabled-50 bg-primary-200 hover:bg-primary-300'
+        const unselected = 'text-neutral-disabled bg-primary-200 hover:bg-primary-300'
 
         return `w-full flex flex-row items-center text-sub gap-2.5 rounded-smd px-4 py-3 text-sm font-bold cursor-pointer ${
             isSelected ? selectedClass : unselected
@@ -41,7 +41,7 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
 
     const getMenuButtonClass = (isSelected: boolean): string => {
         const selectedClass = 'bg-primary-500 text-neutral-900 border-r-4 border-primary-700'
-        const unselected = 'text-neutral-disabled-50 bg-primary-300 hover:bg-primary-500'
+        const unselected = 'text-neutral-disabled bg-primary-300 hover:bg-primary-500'
 
         return `last:rounded-b-smd ${isSelected ? selectedClass : unselected}`
     }
