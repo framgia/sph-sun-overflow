@@ -54,7 +54,6 @@ type ProfileLayoutProps = {
 }
 
 const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JSX.Element => {
-    console.log(data)
     const renderActivities = (): JSX.Element => {
         return (
             <div className=" w-full space-y-4 bg-white pb-4 drop-shadow-md">

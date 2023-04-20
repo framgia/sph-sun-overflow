@@ -61,7 +61,6 @@ const SummaryCard = ({
         return <></>
     }
     const renderTags = (tags: MITag[] | undefined): JSX.Element => {
-        console.log(tags)
         if (tags) {
             return (
                 <div className="Tags flex flex-wrap gap-1.5 ">

@@ -12,7 +12,8 @@ class Answer extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['vote_count', 'humanized_created_at', 'is_created_by_user', 'user_vote', 'is_from_user' , 'upvote_percentage'];
+    protected $appends = ['vote_count', 'humanized_created_at', 'is_created_by_user',
+         'user_vote', 'is_from_user' , 'upvote_percentage'];
 
     public function user()
     {
