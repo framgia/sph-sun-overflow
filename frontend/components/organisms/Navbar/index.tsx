@@ -3,11 +3,11 @@ import { getUserToken } from '@/helpers/localStorageHelper'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify } from '@/helpers/toast'
 import { useLazyQuery } from '@apollo/client'
+import Image from 'next/image'
 import Link from 'next/link'
 import Pusher from 'pusher-js'
 import { useEffect, useState } from 'react'
 import NotificationDropdown from '../../molecules/NotificationDropdown'
-import SearchBar from '../../molecules/SearchBar'
 import type { UserProps } from '../../molecules/UserDropdown'
 import UserDropdown from '../../molecules/UserDropdown'
 
@@ -57,16 +57,32 @@ const Navbar = (): JSX.Element => {
     }
 
     return (
-        <nav className="z-10 h-[80px] w-full bg-white drop-shadow-md">
-            <div className="flex h-full w-full flex-wrap items-center justify-between">
-                <Link href="/questions" className="flex h-full items-center justify-center">
-                    <div className="ml-[60px] text-[32px] font-bold leading-[38px] tracking-tighter">
-                        <span className="text-primary-red">Sun* </span>
-                        <span className="text-primary-black">Overflow</span>
+        <nav className="h-full w-full border-b-2 border-neutral-200 bg-white drop-shadow-xsm">
+            <div className="flex h-full w-full flex-row items-center justify-between px-8">
+                <Link
+                    href="/questions"
+                    className="group relative flex flex-row items-center justify-center gap-px"
+                >
+                    <div className="z-10 flex h-11 w-11 items-center justify-center">
+                        <Image
+                            height="100"
+                            width="100"
+                            alt="Sun Bear Logo"
+                            src="/images/sun_logo.png"
+                            className="h-10 w-10 transition-all duration-200 group-hover:h-11 group-hover:w-11"
+                        />
                     </div>
+                    <div className="relative z-10 flex flex-col">
+                        <span className="absolute -top-[23px] text-2xl font-semibold text-primary-red transition-all duration-200 group-hover:text-white">
+                            Sun
+                        </span>
+                        <span className="absolute -bottom-[23px] font-semibold text-neutral-900">
+                            Overflow
+                        </span>
+                    </div>
+                    <div className="from-30% fixed left-14 h-10 w-0 bg-gradient-to-r from-primary-500 to-transparent transition-all duration-300 group-hover:h-11 group-hover:w-28"></div>
                 </Link>
-                <div className="flex items-center md:order-2">
-                    <SearchBar />
+                <div className="flex items-center gap-2 md:order-2">
                     {data && <NotificationDropdown notifications={data.userNotifications} />}
                     <UserDropdown
                         id={user.id}

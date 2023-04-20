@@ -20,6 +20,9 @@ module.exports = withMT({
                 'secondary-gray': '#e0e0e0',
                 'light-gray': '#f5f5f5',
                 'secondary-text': '#808080',
+                'logo-bgcyanlight': '#eef8fc',
+                'logo-bgcyan': '#C1D5DB',
+                'logo-bgred': '#EDDCDC',
                 neutral: {
                     white: '#FFFFFF',
                     disabled: '#33333380',
@@ -39,12 +42,16 @@ module.exports = withMT({
                     500: '#F49181',
                     300: '#EEB4AC',
                     200: '#F5D3CF',
+                    150: '#F4EDED',
                     100: '#FFF4F2',
-                    50: '#FFF9F9'
+                    50: '#FFF9F9',
                 },
             },
             dropShadow: {
                 xsm: '0 2px 2px rgba(0, 0, 0, 0.05)',
+            },
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
             },
         },
     },
