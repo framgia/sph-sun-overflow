@@ -15,6 +15,15 @@ import {
 import { HiCheck } from 'react-icons/hi2'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { MdModeEditOutline, MdOutlineModeEditOutline } from 'react-icons/md'
+import ChevronIcon from './Chevron'
+import DotsIcon from './Dots'
+import EyeIcon from './Eye'
+import GridIcon from './Grid'
+import ListIcon from './List'
+import LockIcon from './Lock'
+import ThumbUpIcon from './ThumbUp'
+import UnlockIcon from './Unlock'
+import UsersIcon from './Users'
 
 type IconsProps = {
     name: string
@@ -102,6 +111,18 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
         default:
             return <></>
     }
+}
+
+export const CustomIcons = {
+    ChevronIcon,
+    DotsIcon,
+    EyeIcon,
+    GridIcon,
+    ListIcon,
+    LockIcon,
+    ThumbUpIcon,
+    UnlockIcon,
+    UsersIcon,
 }
 
 export default Icons

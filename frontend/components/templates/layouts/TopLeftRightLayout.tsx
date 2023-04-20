@@ -7,7 +7,7 @@ type Props = {
 
 const TopLeftRightLayout = ({ children }: Props): JSX.Element => {
     return (
-        <div className="relative h-screen">
+        <div className="relative z-10 h-screen">
             <div className="fixed z-20 h-14 w-full border-b-2 border-neutral-200 drop-shadow-xsm">
                 <Navbar />
             </div>

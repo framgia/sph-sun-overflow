@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
-import type { UserType } from '../../../pages/questions/[slug]'
+import type { TagType, UserType } from '../../../pages/questions/[slug]'
 
 type QuestionDetailProps = {
     id: number
@@ -21,7 +21,7 @@ type QuestionDetailProps = {
     humanized_created_at: string
     views_count: number
     vote_count?: number
-    tags: Array<{ id: number; name: string; is_watched_by_user: boolean }>
+    tags: TagType[]
     user?: UserType
     is_bookmarked: boolean
     is_from_user: boolean

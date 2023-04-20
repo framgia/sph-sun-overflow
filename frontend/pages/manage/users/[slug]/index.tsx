@@ -1,11 +1,16 @@
-import PageStats from '@/components/atoms/PageStats'
+import { CustomIcons } from '@/components/atoms/Icons'
+import TeamCard from '@/components/molecules/TeamCard'
+import ViewToggle from '@/components/molecules/ViewToggle'
+import QuestionGridItem from '@/components/organisms/QuestionGridItem'
+import QuestionListItem from '@/components/organisms/QuestionListItem'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import Avatar from 'react-avatar'
+
+const { ChevronIcon, DotsIcon } = CustomIcons
 
 interface UserType {
     id: number
@@ -17,94 +22,138 @@ interface UserType {
     reputation: number
 }
 
-const tempUser: UserType = {
-    id: 1,
-    first_name: 'John',
-    last_name: 'Doe',
-    avatar: 'John Doe',
-    question_count: 10,
-    answer_count: 5,
-    reputation: 20,
+const getActiveTabClass = (status: boolean): string => {
+    return `-mb-[0.5px] p-[0.625rem] font-bold cursor-pointer hover:text-primary-base
+    ${status ? 'border-b-2 border-primary-base bg-primary-200' : ''}`
 }
 
-const getActiveTabClass = (status: boolean): string => {
-    return `min-w-[120px] text-center hover:cursor-pointer -mb-[1px] hover:text-primary-red px-6 active:border-red-400
-    ${status ? 'font-semibold border-b-2 border-primary-red bg-red-100' : ''}`
-}
+export type View = 'Grid' | 'List'
+type Tab = 'Questions' | 'Answers' | 'Teams'
 
 const UserDetail = (): JSX.Element => {
     const router = useRouter()
-    const [activeTab, setActiveTab] = useState('Questions')
+
+    const [view, setView] = useState<View>('List')
+
+    const [activeTab, setActiveTab] = useState<Tab>('Questions')
     const userQuery = useQuery<{ user: UserType }>(GET_USER, {
         variables: { slug: router.query.slug },
     })
-    const onClickQuestionsTab = (): void => {
-        setActiveTab('Questions')
-    }
-
-    const onClickAnswersTab = (): void => {
-        setActiveTab('Answers')
-    }
-
-    const onClickTeamsTab = (): void => {
-        setActiveTab('Teams')
-    }
 
     if (userQuery.loading) return loadingScreenShow()
     if (userQuery.error) {
         errorNotify(`Error! ${userQuery.error?.message ?? ''}`)
         return <></>
     }
-    const user: UserType = userQuery?.data?.user ?? tempUser
+
+    const toggleView = (): void => {
+        setView((prevView) => (prevView === 'List' ? 'Grid' : 'List'))
+    }
+
     return (
-        <div className="mx-10 mt-10 w-full flex-col">
-            <div className="flex">
-                <div className="flex w-full gap-8 p-2">
-                    <Avatar
-                        round={true}
-                        name={`${user.first_name} ${user.last_name}`}
-                        size="120"
-                        alt={user.first_name}
-                        src={user.avatar}
-                        maxInitials={1}
-                        textSizeRatio={2}
-                    />
-                    <div className="w-[90%] self-center truncate text-3xl font-medium">
-                        {`${user.first_name} ${user.last_name}`}
-                    </div>
-                </div>
-                <div className="mt-8 flex w-full justify-center gap-8 self-start">
-                    <PageStats label="Questions Asked" value={user.question_count} />
-                    <PageStats label="Questions Answered" value={user.answer_count} />
-                    <PageStats label="Votes Acquired" value={user.reputation} />
-                </div>
-            </div>
-            <div className="mt-10 flex h-3/5 flex-col">
-                <div className="flex h-7 w-full flex-row justify-start border-b-2 border-gray-300">
+        <div className="h-full rounded-[5px] border border-neutral-200 bg-white p-4 text-sm text-neutral-900">
+            <div className="flex h-full flex-col gap-4">
+                <div className="flex h-[37px] border-b-[0.5px] border-neutral-disabled">
                     <div
                         className={getActiveTabClass(activeTab === 'Questions')}
-                        onClick={onClickQuestionsTab}
+                        onClick={() => {
+                            setActiveTab('Questions')
+                        }}
                     >
                         Questions
                     </div>
                     <div
                         className={getActiveTabClass(activeTab === 'Answers')}
-                        onClick={onClickAnswersTab}
+                        onClick={() => {
+                            setActiveTab('Answers')
+                        }}
                     >
                         Answers
                     </div>
                     <div
                         className={getActiveTabClass(activeTab === 'Teams')}
-                        onClick={onClickTeamsTab}
+                        onClick={() => {
+                            setActiveTab('Teams')
+                        }}
                     >
                         Teams
                     </div>
                 </div>
-                <div className="flex w-full flex-row justify-center">
-                    <div className="w-full pt-8 text-center text-lg font-medium text-primary-gray">
-                        No {activeTab} to Show
+                {activeTab !== 'Teams' && (
+                    <div className="flex justify-end gap-1">
+                        <div onClick={toggleView}>
+                            <ViewToggle view={view} />
+                        </div>
+                        <div className="flex gap-[2px] rounded-[5px] border border-neutral-900 p-2">
+                            <span>Newest First</span>
+                            <div className="m-auto">
+                                <ChevronIcon />
+                            </div>
+                        </div>
+                        <div className="flex rounded-[5px] border border-neutral-900 p-2">
+                            <span>All Questions</span>
+                            <div className="m-auto">
+                                <DotsIcon />
+                            </div>
+                        </div>
                     </div>
-                </div>
+                )}
+                {activeTab === 'Teams' ? (
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                        <TeamCard
+                            name="Sun Overflow"
+                            description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum
+                    dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit
+                    amet consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit amet
+                    consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit amet
+                    consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit amet
+                    consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit amet
+                    consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit amet
+                    consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit amet
+                    consectetur. Sed amet at id sit proin in."
+                            usersCount={123}
+                        />
+                        <TeamCard
+                            name="MetaJobs"
+                            description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in."
+                            usersCount={444}
+                        />
+                        <TeamCard
+                            name="Meetsone"
+                            description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in."
+                            usersCount={55}
+                        />
+                        <TeamCard
+                            name="Zeon"
+                            description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in."
+                            usersCount={24}
+                        />
+                        <TeamCard
+                            name="OsakaMetro"
+                            description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in."
+                            usersCount={12}
+                        />
+                        <TeamCard
+                            name="Prrr"
+                            description="Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in."
+                            usersCount={100}
+                        />
+                    </div>
+                ) : view === 'List' ? (
+                    <div className="flex w-full flex-col justify-center gap-4">
+                        <QuestionListItem id={1} privacy="Public" />
+                        <QuestionListItem id={2} privacy="Private" />
+                        <QuestionListItem id={3} privacy="Private" />
+                    </div>
+                ) : (
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        <QuestionGridItem />
+                        <QuestionGridItem />
+                        <QuestionGridItem />
+                        <QuestionGridItem />
+                        <QuestionGridItem />
+                    </div>
+                )}
             </div>
         </div>
     )

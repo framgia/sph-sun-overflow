@@ -5,6 +5,9 @@ module.exports = withMT({
     content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Inter', 'Arial', 'sans-serif'],
+            },
             colors: {
                 'primary-red': '#ff2200',
                 'secondary-red': '#ff5500',
@@ -17,13 +20,19 @@ module.exports = withMT({
                 'secondary-gray': '#e0e0e0',
                 'light-gray': '#f5f5f5',
                 'secondary-text': '#808080',
+                primary: {
+                    200: '#f5d3cf',
+                    base: '#ff2200',
+                    blue: '#3b8cd7',
+                },
                 neutral: {
                     100: '#f5f5f5',
-                    200: '#e5e5e5',
+                    200: '#e9e2e2',
                     300: '#d4d4d4',
                     500: '#737373',
                     700: '#404040',
-                    900: '#171717',
+                    900: '#333333',
+                    disabled: '#33333380',
                 },
                 red: {
                     50: '#fef2f2',
