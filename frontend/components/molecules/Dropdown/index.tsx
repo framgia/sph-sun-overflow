@@ -1,5 +1,5 @@
-import { Option, Select } from '@material-tailwind/react'
 import type { ControllerRenderProps } from 'react-hook-form'
+import Select, { type CSSObjectWithLabel, type StylesConfig } from 'react-select'
 
 export type OptionType = {
     id: number
@@ -11,29 +11,54 @@ type FormProps = {
     label: string
     options: OptionType[]
     onChange: ControllerRenderProps['onChange']
-    value: number
+    value: unknown
     isError?: boolean
 }
 
+const selectStyles: StylesConfig<any, false, any> = {
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+        const design: CSSObjectWithLabel = {
+            ...styles,
+            // borderColor: '#F5D3CF',
+            backgroundColor: isSelected ? '#F5D3CF' : isFocused ? '#FFF4F2' : '',
+            color: '#333333',
+
+            ':active': {
+                ...styles[':active'],
+                backgroundColor: !isDisabled ? (isSelected ? '#EEB4AC' : '#F5D3CF') : undefined,
+            },
+        }
+
+        return design
+    },
+    control: (base, state) => {
+        const design: CSSObjectWithLabel = {
+            ...base,
+            borderColor: '#B8ABAB',
+            // Removes weird border around container
+            boxShadow: '',
+            '&:hover': {
+                // Overwrittes the different states of border
+                borderColor: '#B8ABAB',
+            },
+        }
+
+        return design
+    },
+}
+
 const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps): JSX.Element => {
+    console.log(value)
     return (
         <div className="w-full">
+            <div className="mb-2 text-sm font-medium capitalize text-neutral-900">{label}</div>
             <Select
-                id={name}
-                name={name}
+                options={options}
+                defaultValue={value}
+                isSearchable={false}
+                styles={selectStyles}
                 onChange={onChange}
-                label={label}
-                value={`${value}`}
-                color="red"
-            >
-                {options.map((option) => {
-                    return (
-                        <Option key={option.id} value={`${option.id}`}>
-                            {option.name}
-                        </Option>
-                    )
-                })}
-            </Select>
+            />
         </div>
     )
 }

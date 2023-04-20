@@ -21,11 +21,11 @@ const columns: ColumnType[] = [
         key: 'name',
     },
     {
-        title: 'Questions Posted',
+        title: 'Questions',
         key: 'question_count',
     },
     {
-        title: 'Answers Posted',
+        title: 'Answers',
         key: 'answer_count',
     },
     {
@@ -33,14 +33,14 @@ const columns: ColumnType[] = [
         key: 'role',
     },
     {
-        title: '',
+        title: 'Actions',
         key: 'action',
         width: 20,
     },
 ]
 
 type FormValues = {
-    role: number
+    role: RoleMapType
     userId: number
 }
 
@@ -55,6 +55,7 @@ type TUser = {
     }
     slug: string
 }
+type RoleMapType = { value: number; label: string }
 
 type TUserConverted = {
     id: number
@@ -80,11 +81,8 @@ const convertUserArr = (oldArr: TUser[]): TUserConverted[] => {
     })
 }
 
-const convertRoleStrToInt = (
-    roleArr: Array<{ id: number; name: string }>,
-    roleStr: string
-): number => {
-    return roleArr.find((role) => role.name === roleStr)?.id ?? 0
+const getRole = (roleArr: RoleMapType[], roleStr: string): RoleMapType => {
+    return roleArr.find((role) => role.label === roleStr) ?? { value: 0, label: '' }
 }
 
 const AdminUsers = (): JSX.Element => {
@@ -101,6 +99,13 @@ const AdminUsers = (): JSX.Element => {
     const rolesQuery = useQuery(GET_ROLES_SELECTION)
     const [assignRole] = useMutation(ASSIGN_ROLE)
     const roles = rolesQuery?.data?.roles ?? []
+    const mapRolesForSelection = roles.map((role: { id: number; name: string }) => {
+        return {
+            value: role.id,
+            label: role.name,
+        }
+    })
+
     const {
         control,
         handleSubmit,
@@ -110,7 +115,7 @@ const AdminUsers = (): JSX.Element => {
     } = useForm<FormValues>({
         defaultValues: {
             userId: 0,
-            role: 1,
+            role: { value: 0, label: '' },
         },
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
@@ -118,7 +123,7 @@ const AdminUsers = (): JSX.Element => {
 
     const closeEdit = (): void => {
         setIsOpenEdit(!isOpenEdit)
-        setValue('role', 1)
+        setValue('role', { value: 0, label: '' })
         setValue('userId', 0)
     }
 
@@ -150,12 +155,12 @@ const AdminUsers = (): JSX.Element => {
                 onClick={() => {
                     setIsOpenEdit(true)
                     reset({
-                        role: convertRoleStrToInt(roles, newUserArr[key].role),
+                        role: getRole(mapRolesForSelection, newUserArr[key].role),
                         userId: newUserArr[key].id,
                     })
                 }}
             >
-                <Icons name="table_edit" />
+                <Icons name="pencil" />
             </Button>
         )
     }
@@ -171,7 +176,7 @@ const AdminUsers = (): JSX.Element => {
             return
         }
         closeEdit()
-        await assignRole({ variables: { userId: data.userId, roleId: data.role } })
+        await assignRole({ variables: { userId: data.userId, roleId: data.role.value } })
             .then((data) => {
                 successNotify('Roles Successfully Changed')
             })
@@ -180,16 +185,26 @@ const AdminUsers = (): JSX.Element => {
             })
     }
 
-    return (
-        <div className="flex w-full flex-col">
-            <div className="flex h-full flex-col">
-                <div className="flex items-center">
-                    <h1 className="text-3xl font-bold text-gray-800">Users</h1>
+    const renderFooter = (): JSX.Element | null => {
+        if (paginatorInfo.lastPage > 1) {
+            return (
+                <div className="flex w-full items-center justify-center">
+                    <Paginate {...paginatorInfo} onPageChange={onPageChange} />
                 </div>
+            )
+        }
+
+        return null
+    }
+
+    return (
+        <div className="flex w-full flex-col p-4">
+            <div className="flex h-full flex-col py-4">
                 <Table
                     columns={columns}
                     dataSource={newUserArr}
                     actions={editAction}
+                    footer={renderFooter()}
                     clickableArr={clickableArr}
                 />
                 {isOpenEdit && (
@@ -200,17 +215,16 @@ const AdminUsers = (): JSX.Element => {
                         handleClose={closeEdit}
                         handleSubmit={handleSubmit(onSubmit)}
                     >
-                        <form>
+                        <form className="w-full">
                             <Controller
                                 control={control}
                                 name="role"
-                                defaultValue={1}
+                                defaultValue={{ value: 0, label: '' }}
                                 render={({ field: { onChange, value } }) => (
                                     <Dropdown
                                         key="role-select"
-                                        name="role"
-                                        label=""
-                                        options={roles}
+                                        label="Role"
+                                        options={mapRolesForSelection}
                                         onChange={onChange}
                                         value={value}
                                     />
@@ -218,10 +232,6 @@ const AdminUsers = (): JSX.Element => {
                             />
                         </form>
                     </Modal>
-                )}
-
-                {paginatorInfo.lastPage > 1 && (
-                    <Paginate {...paginatorInfo} onPageChange={onPageChange} />
                 )}
             </div>
         </div>
