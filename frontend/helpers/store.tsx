@@ -20,7 +20,28 @@ interface UserSlice {
     teams: UserTeamType[]
     watchedTags: ITag[]
     updated_at: string
+    role?: string
+    permissions?: Array<{
+        name: string
+        category: string
+    }>
     setUserID: (
+        user_id: number,
+        first_name: string,
+        last_name: string,
+        email: string,
+        avatar: string,
+        slug: string,
+        teams: UserTeamType[],
+        watchedTags: ITag[],
+        updated_at: string,
+        role: string,
+        permissions: Array<{
+            name: string
+            category: string
+        }>
+    ) => void
+    updateProfile: (
         user_id: number,
         first_name: string,
         last_name: string,
@@ -31,6 +52,7 @@ interface UserSlice {
         watchedTags: ITag[],
         updated_at: string
     ) => void
+
     setWatchedTags: (input: ITag[]) => void
 }
 
@@ -44,7 +66,36 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
     teams: [],
     watchedTags: [],
     updated_at: '',
+    role: '',
+    permissions: [],
     setUserID: (
+        user_id,
+        first_name,
+        last_name,
+        email,
+        avatar,
+        slug,
+        teams,
+        watchedTags,
+        updated_at,
+        role,
+        permissions
+    ) => {
+        set(() => ({
+            user_id,
+            first_name,
+            last_name,
+            email,
+            avatar,
+            slug,
+            teams,
+            watchedTags,
+            updated_at,
+            role,
+            permissions,
+        }))
+    },
+    updateProfile: (
         user_id,
         first_name,
         last_name,

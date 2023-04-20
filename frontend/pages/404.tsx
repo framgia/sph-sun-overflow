@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const PageNotFound = (): JSX.Element => {
     return (
-        <section className="flex w-full items-center justify-center bg-white">
+        <section className="flex h-full w-full items-center justify-center">
             <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
                 <div className="mx-auto max-w-screen-sm text-center">
                     <h1 className="mb-4 text-7xl font-extrabold tracking-tight text-primary-red lg:text-9xl">

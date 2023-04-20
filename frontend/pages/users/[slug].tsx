@@ -1,22 +1,22 @@
 import Button from '@/components/atoms/Button'
 import ProfileStats from '@/components/atoms/ProfileStats'
 import Activity from '@/components/molecules/Activity'
+import type { ITag } from '@/components/molecules/TagsInput'
+import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
+import ProfileInfo from '@/components/organisms/ProfileInfo'
+import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
+import { RightSideBar } from '@/components/organisms/Sidebar'
+import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
+import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
 import GET_USER from '@/helpers/graphql/queries/get_user'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { useBoundStore } from '@/helpers/store'
 import type { UserTeamType } from '@/helpers/store'
+import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { RightSideBar } from '@/components/organisms/Sidebar'
 import type { AnswerType, QuestionType, TagType, UserType } from '../questions/[slug]'
-import BookmarkTabContent from '@/components/organisms/BookmarkTabContent'
-import GET_BOOKMARKS from '@/helpers/graphql/queries/get_bookmarks'
-import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
-import ProfileInfo from '@/components/organisms/ProfileInfo'
-import ProfileInfoEdit from '@/components/organisms/ProfileInfo/edit'
-import type { ITag } from '@/components/molecules/TagsInput'
 
 export type ProfileType = {
     id: number
@@ -79,7 +79,7 @@ const getActiveTabClass = (status: boolean): string => {
 }
 const ProfilePage = (): JSX.Element => {
     const user_id = useBoundStore.getState().user_id
-    const setUserID = useBoundStore((state) => state.setUserID)
+    const updateProfile = useBoundStore((state) => state.updateProfile)
     const [isActiveTab, setIsActiveTab] = useState('Activity')
     const [isEditing, setIsEditing] = useState(false)
     const router = useRouter()
@@ -148,7 +148,7 @@ const ProfilePage = (): JSX.Element => {
     const profileRefetchHandler = (): void => {
         setIsEditing(false)
         void refetch()
-        setUserID(
+        updateProfile(
             profile.id,
             profile.first_name,
             profile.last_name,
