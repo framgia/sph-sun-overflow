@@ -36,7 +36,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                     ) : (
                         <TopLeftLayout>{children}</TopLeftLayout>
                     )}
-                    {!errorPageLayout.includes(router.pathname) && (
+                    {!errorPageLayout.includes(router.pathname) && !routeIfLoginPathCheck && (
                         <Image
                             height="380"
                             width="380"

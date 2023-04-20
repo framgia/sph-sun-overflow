@@ -11,11 +11,11 @@ const TopLeftLayout = ({ children }: Props): JSX.Element => {
             <div className="fixed z-10 h-16 w-full">
                 <Navbar />
             </div>
-            <div className="fixed flex h-full w-full flex-row pt-16">
-                <div className="fixed h-full w-full pl-64">
-                    <div className="p-4">{children}</div>
+            <div className="fixed flex h-full w-full flex-row">
+                <div className="fixed h-full w-full pl-64 pt-16">
+                    <div className="h-full w-full overflow-auto p-4">{children}</div>
                 </div>
-                <div className="fixed left-0 h-full w-64">
+                <div className="fixed left-0 h-full w-64 pt-16">
                     <LeftSideBar />
                 </div>
             </div>
