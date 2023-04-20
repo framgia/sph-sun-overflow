@@ -26,20 +26,18 @@ const UserDropdown = ({
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="mr-[60px] flex rounded-full bg-gray-800 text-sm active:ring-2 active:ring-red-500">
+                <Menu.Button className="flex rounded-full text-sm hover:text-primary-red active:text-primary-red">
                     <span className="sr-only">Open user menu</span>
                     <Avatar
                         round={true}
                         name={`${first_name} ${last_name}`}
-                        size="50"
+                        size="36"
                         alt={first_name}
                         src={
                             updated_at && updated_at.length > 0
                                 ? `${avatar}?${updated_at}`
                                 : `${avatar}`
                         }
-                        maxInitials={1}
-                        textSizeRatio={2}
                     />
                 </Menu.Button>
             </div>
@@ -68,7 +66,7 @@ const UserDropdown = ({
                             {({ active }) => (
                                 <Link
                                     className={`flex items-center px-4 py-2 text-sm text-gray-700  ${
-                                        active ? 'bg-red-100' : ''
+                                        active ? 'bg-primary-100' : ''
                                     }`}
                                     href={`/users/${slug}`}
                                 >
@@ -85,7 +83,7 @@ const UserDropdown = ({
                                         void signOut()
                                     }}
                                     className={`flex w-full items-center px-4 py-2 text-left text-sm text-gray-700 ${
-                                        active ? 'bg-red-100' : ''
+                                        active ? 'bg-primary-100' : ''
                                     }`}
                                 >
                                     <HiOutlineLogout className="mr-2" />

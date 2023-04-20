@@ -86,18 +86,14 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="relative mr-[37px] flex items-center rounded-full text-primary-black hover:text-red-500 active:text-red-500 ">
-                    <TbBell className="h-[36px] w-[36px]" />
+                <Menu.Button className="relative flex h-9 w-9 items-center justify-center rounded-full bg-primary-150 text-neutral-900 hover:bg-primary-200 active:bg-primary-200">
+                    <TbBell className="h-6 w-6" />
                     <span className="sr-only">Notifications</span>
-                    <div
-                        className={
-                            unread?.length > 0
-                                ? `absolute -top-2 -right-1 inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-current bg-red-500 text-xs font-bold text-white`
-                                : `hidden`
-                        }
-                    >
-                        {unread?.length}
-                    </div>
+                    {unread.length > 0 && (
+                        <div className="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-primary-red p-0.5 text-xs font-semibold text-white">
+                            {unread.length}
+                        </div>
+                    )}
                 </Menu.Button>
             </div>
             <Transition
@@ -143,7 +139,9 @@ const RenderNotifications = (notifications: NotificationProps[]): JSX.Element[] 
         <Menu.Item as="div" key={n.id}>
             <Link
                 href="/"
-                className={`flex px-4 py-3 hover:bg-red-100 ${n.is_read ? '' : 'bg-red-200'}`}
+                className={`flex px-4 py-3 hover:bg-primary-100 ${
+                    n.is_read ? '' : 'bg-primary-200'
+                }`}
                 onClick={(e) => {
                     e.preventDefault()
                     if (!n.is_read) {
