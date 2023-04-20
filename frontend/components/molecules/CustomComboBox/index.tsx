@@ -56,7 +56,7 @@ const CustomCombobox = ({
         return () => {
             clearTimeout(timeout)
         }
-    }, [queryText])
+    }, [debounceText])
 
     return (
         <div className="flex w-full flex-wrap p-4">
