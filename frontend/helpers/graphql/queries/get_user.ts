@@ -30,24 +30,27 @@ const GET_USER = gql`
                 slug
                 title
                 content
+                upvote_percentage
                 humanized_created_at
-                vote_count
                 is_answered
                 tags {
                     id
                     name
                     slug
+                    is_watched_by_user
                 }
+                updated_at
             }
             top_answers {
                 id
                 content
                 humanized_created_at
-                vote_count
                 is_correct
+                upvote_percentage
                 question {
                     slug
                 }
+                updated_at
             }
             teams {
                 id
@@ -67,7 +70,7 @@ const GET_USER = gql`
                         content
                         slug
                         updated_at
-                        vote_count
+                        upvote_percentage
                     }
                 }
             }
@@ -81,7 +84,7 @@ const GET_USER = gql`
                             slug
                         }
                         updated_at
-                        vote_count
+                        upvote_percentage
                     }
                 }
             }

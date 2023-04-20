@@ -13,6 +13,7 @@ type Answer {
     notifications: [UserNotification]! @morphMany
     comments: [Comment]! @morphMany
     votes: [Vote]! @morphMany
+    upvote_percentage: Float
     is_created_by_user: Boolean
     is_from_user: Boolean
 }

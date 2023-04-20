@@ -2,11 +2,11 @@ import { stripHtmlTags } from '@/utils'
 import { Chip } from '@material-tailwind/react'
 import Link from 'next/link'
 import { HiBookmark, HiEye } from 'react-icons/hi'
-import { ImArrowUp } from 'react-icons/im'
+import { HiOutlineHandThumbUp } from 'react-icons/hi2'
 import 'react-quill/dist/quill.bubble.css'
 import { type ITag } from '../TagsInput'
 
-type MITag = ITag & { isWatched: boolean }
+type MITag = ITag & { is_watched_by_user: boolean }
 type Metadata = {
     votes: number
     answers: number
@@ -20,7 +20,7 @@ type TProps = {
     date: string
     isBookmarked?: boolean
     metadata?: Metadata
-    vote_count: string
+    upvote_percentage: number
     slug: string
 }
 
@@ -31,7 +31,7 @@ const SummaryCard = ({
     date,
     isBookmarked = false,
     metadata,
-    vote_count,
+    upvote_percentage,
     slug,
 }: TProps): JSX.Element => {
     const renderHeader = (title: string | undefined): JSX.Element => {
@@ -61,23 +61,23 @@ const SummaryCard = ({
         return <></>
     }
     const renderTags = (tags: MITag[] | undefined): JSX.Element => {
+        console.log(tags)
         if (tags) {
             return (
-                <div className="Tags flex  flex-wrap gap-1.5 ">
+                <div className="Tags flex flex-wrap gap-1.5 ">
                     {tags.map((tag, index): JSX.Element => {
                         return (
                             <Chip
                                 key={index}
-                                color="gray"
                                 value={tag.name}
                                 icon={
-                                    tag.isWatched ? (
+                                    tag.is_watched_by_user ? (
                                         <div className="relative top-0.5 left-0.5">
                                             <HiEye size={16} />
                                         </div>
                                     ) : undefined
                                 }
-                                className="p-1 pl-2 text-[10px] text-primary-black"
+                                className="bg-primary-200 p-1 pl-2 text-[10px] text-primary-black"
                             />
                         )
                     })}
@@ -86,7 +86,7 @@ const SummaryCard = ({
         }
         return <></>
     }
-    const renderRating = (metadata: Metadata | undefined, rating: string): JSX.Element => {
+    const renderRating = (metadata: Metadata | undefined, rating: number): JSX.Element => {
         if (metadata) {
             return (
                 <div className="Rating flex ">
@@ -113,7 +113,7 @@ const SummaryCard = ({
     }
     const renderFooter = (
         metadata: Metadata | undefined,
-        vote_count: string,
+        upvote_percentage: number,
         date: string
     ): JSX.Element => {
         if (metadata) {
@@ -128,9 +128,9 @@ const SummaryCard = ({
             <div className="Footer flex justify-between ">
                 <div className="flex items-center justify-center gap-1 rounded-md border border-primary-red  px-1 text-[10px] font-bold leading-5 text-primary-red">
                     <div className="flex h-full items-center justify-center">
-                        <ImArrowUp />
+                        <HiOutlineHandThumbUp />
                     </div>
-                    <div>{vote_count ?? 0}</div>
+                    <div>{upvote_percentage.toFixed(0) ?? 0}</div>
                 </div>
                 <div className="text-[10px] leading-6">{date?.split(' ')[0] ?? ''}</div>
             </div>
@@ -151,10 +151,10 @@ const SummaryCard = ({
                             {renderMetaData(metadata)}
                         </div>
                     </div>
-                    {renderRating(metadata, vote_count)}
+                    {renderRating(metadata, upvote_percentage)}
                     {renderTags(tags)}
                 </div>
-                {renderFooter(metadata, vote_count, date)}
+                {renderFooter(metadata, upvote_percentage, date)}
             </div>
         </Link>
     )

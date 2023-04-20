@@ -2,7 +2,7 @@ import { omit } from 'lodash'
 import ProfileCard, { type ProfileCardProps } from '../molecules/ProfileCard'
 import SummaryCard from '../molecules/SummaryCard'
 import { type ITag } from '../molecules/TagsInput'
-type MITag = ITag & { isWatched: boolean }
+type MITag = ITag & { is_watched_by_user: boolean }
 
 type TSummaryCard = {
     id: number
@@ -10,7 +10,7 @@ type TSummaryCard = {
     content: string
     tags: MITag[]
     updated_at: string
-    vote_count: string
+    upvote_percentage: number
     slug: string
 }
 
@@ -54,6 +54,7 @@ type ProfileLayoutProps = {
 }
 
 const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JSX.Element => {
+    console.log(data)
     const renderActivities = (): JSX.Element => {
         return (
             <div className=" w-full space-y-4 bg-white pb-4 drop-shadow-md">
@@ -62,7 +63,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                     <div className="space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Top Questions</div>
                         {data.top_questions.length === 0 ? (
-                            <div className="py-2 text-center text-xl text-primary-gray">
+                            <div className="py-2 text-center text-primary-gray">
                                 No Top Questions to Show
                             </div>
                         ) : (
@@ -86,7 +87,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                     <div className="space-y-4 p-4">
                         <div className=" font-semibold leading-[145%]">Top Answers</div>
                         {data.top_answers.length === 0 ? (
-                            <div className="py-2 text-center text-xl text-primary-gray">
+                            <div className="py-2 text-center text-primary-gray">
                                 No Top Answers to Show
                             </div>
                         ) : (
@@ -119,9 +120,9 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                 <div className=" grid grid-cols-2 px-4">
                     <div className=" space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Questions</div>
-                        <div className="no-scrollbar max-h-[600px] overflow-y-scroll">
+                        <div className="no-scrollbar flex max-h-[600px] flex-col gap-4 overflow-y-scroll">
                             {data.bookmarked_questions.length === 0 && (
-                                <div className="py-2 text-center text-xl text-primary-gray">
+                                <div className="py-2 text-center text-primary-gray">
                                     No Bookmarked Questions
                                 </div>
                             )}
@@ -142,9 +143,9 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                     </div>
                     <div className="space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Answers</div>
-                        <div className="no-scrollbar max-h-[600px] overflow-y-scroll">
+                        <div className="no-scrollbar flex max-h-[600px] flex-col gap-4 overflow-y-scroll">
                             {data.bookmarked_answers.length === 0 && (
-                                <div className="py-2 text-center text-xl text-primary-gray">
+                                <div className="py-2 text-center text-primary-gray">
                                     No Bookmarked Answers
                                 </div>
                             )}
