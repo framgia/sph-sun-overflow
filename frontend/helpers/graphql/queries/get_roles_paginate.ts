@@ -8,6 +8,7 @@ const GET_ROLES_PAGINATE = gql`
                 name
                 slug
                 truncated_name
+                truncated_description
                 description
                 permissions {
                     category

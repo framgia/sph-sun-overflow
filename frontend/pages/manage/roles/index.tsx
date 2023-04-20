@@ -38,6 +38,7 @@ type RolesType = {
     slug: string
     truncated_name: string
     description: string
+    truncated_description: string
     permissions?: PermissionType[]
 }
 
@@ -190,7 +191,7 @@ const RolesPage = (): JSX.Element => {
                 key: role.id,
                 name: role.truncated_name,
                 slug: role.slug,
-                description: role.description,
+                description: role.truncated_description,
             }
         })
     }
