@@ -1,7 +1,7 @@
 import { errorNotify } from '@/helpers/toast'
 import { Combobox, Transition } from '@headlessui/react'
 import type { Dispatch, SetStateAction } from 'react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
 export interface ITag {
     id: number
@@ -33,6 +33,7 @@ const CustomCombobox = ({
     setQueryText,
 }: ComboboxProps): JSX.Element => {
     const [selected, setSelected] = useState<any>(null)
+    const [debounceText, setDebounceText] = useState<string>('')
 
     const handleSubmit = (tempSelected: any): void => {
         if (tempSelected) {
@@ -48,6 +49,14 @@ const CustomCombobox = ({
             errorNotify(`${queryText} does not exist`)
         }
     }
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setQueryText(debounceText)
+        }, 1000)
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [debounceText])
 
     return (
         <div className="flex w-full flex-wrap p-4">
@@ -58,7 +67,7 @@ const CustomCombobox = ({
                         placeholder={placeholder}
                         className={`w-0 grow text-sm leading-5 text-gray-900 focus:ring-0 ${extraInputClasses}`}
                         onChange={(event): void => {
-                            setQueryText(event.target.value)
+                            setDebounceText(event.target.value)
                         }}
                         onKeyUp={(e: React.KeyboardEvent): void => {
                             e.key === 'Enter' && handleSubmit(undefined)

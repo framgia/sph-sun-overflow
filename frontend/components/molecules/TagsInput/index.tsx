@@ -35,7 +35,12 @@ const TagsInput = ({
     const [queryText, setQueryText] = useState<string>(initialState.queryText)
 
     useEffect(() => {
-        refetchSuggestions(queryText)
+        const timeout = setTimeout(() => {
+            refetchSuggestions(queryText)
+        }, 1000)
+        return () => {
+            clearTimeout(timeout)
+        }
     }, [queryText])
 
     const deleteTag = (id: number): void => {
