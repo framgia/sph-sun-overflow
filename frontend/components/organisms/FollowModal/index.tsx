@@ -45,7 +45,16 @@ const FollowModal = ({
                     setIsOpen(false)
                 }}
             >
-                <div className="no-scrollbar flex h-96 w-full flex-col overflow-y-scroll">
+                <div className="no-scrollbar flex h-96 w-full flex-col overflow-y-scroll ">
+                    {tempArr.length === 0 && (
+                        <div className="flex h-full w-full items-center justify-center">
+                            <div className="py-2 text-center text-primary-gray">
+                                {title === 'Followers'
+                                    ? 'No users are following yet'
+                                    : 'You are not following any users'}
+                            </div>
+                        </div>
+                    )}
                     {tempArr.map((item, index): JSX.Element => {
                         return (
                             <FollowCard

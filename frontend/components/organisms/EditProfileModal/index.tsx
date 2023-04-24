@@ -8,7 +8,7 @@ import { convertBase64 } from '@/utils'
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import Avatar from 'react-avatar'
 import { Controller, useForm } from 'react-hook-form'
 import EditProfileSchema from './schema'
@@ -25,6 +25,7 @@ type TEditProfileProps = {
     avatar: string
     updated_at: string
 }
+const validAvatarTypes = ['image/png', 'image/gif', 'image/jpeg']
 
 const EditProfileModal = ({
     first_name: firstName,
@@ -48,6 +49,7 @@ const EditProfileModal = ({
         control,
         setValue,
         formState: { errors, isDirty },
+        watch,
         reset,
     } = useForm<FormValues>({
         defaultValues: {
@@ -60,6 +62,15 @@ const EditProfileModal = ({
         reValidateMode: 'onSubmit',
         resolver: yupResolver(EditProfileSchema),
     })
+    useEffect(() => {
+        reset({
+            firstName: firstName ?? '',
+            lastName: lastName ?? '',
+            aboutMe: aboutMe ?? '',
+            avatar: avatar ?? '',
+        })
+    }, [firstName, lastName, aboutMe, avatar])
+
     const checkAvatarIsUpdated = (newAvatar: string): boolean => {
         return newAvatar.includes('data:image/') && newAvatar.includes('base64')
     }
@@ -93,6 +104,10 @@ const EditProfileModal = ({
 
     const avatarOnChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         const file = e.target.files ? e.target.files[0] : avatar
+        if (file instanceof File && !validAvatarTypes.includes(file.type)) {
+            errorNotify('Not a valid File Type')
+            return
+        }
         let newAvatar = file
         if (typeof newAvatar === 'object') {
             newAvatar = await convertBase64(newAvatar)
@@ -126,7 +141,7 @@ const EditProfileModal = ({
                         <div className="flex w-full flex-col items-center align-middle">
                             <Avatar
                                 round
-                                src={avatar ? `${avatar}` : `${avatar}?${updatedAt ?? ''}`}
+                                src={watch('avatar')}
                                 maxInitials={1}
                                 textSizeRatio={2}
                                 className="object-cover"

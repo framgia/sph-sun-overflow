@@ -50,7 +50,7 @@ const FollowCard = ({ data, usage, toggleFollow }: TFollowCardProps): JSX.Elemen
         )
     }
     return (
-        <div className="flex w-full flex-row justify-between px-4 py-1">
+        <div className="flex w-full flex-row justify-between px-2 py-1">
             <div className="flex h-full flex-row items-center justify-center gap-2">
                 <Avatar size="40" name={`${first_name} ${last_name}`} src={avatar} round />
                 <div className="gap-1">
