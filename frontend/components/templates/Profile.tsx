@@ -28,12 +28,12 @@ export type TFollowInstance = {
 
 type ProfileQuestionData = {
     top_questions: TSummaryCard[]
-    top_answers: Array<TSummaryCard & { question: { slug: string } }>
+    top_answers: Array<TSummaryCard & { question: { slug: string; title: string } }>
     bookmarked_questions: Array<{
         bookmarkable: TSummaryCard
     }>
     bookmarked_answers: Array<{
-        bookmarkable: TSummaryCard & { question: { slug: string } }
+        bookmarkable: TSummaryCard & { question: { slug: string; title: string } }
     }>
 }
 
@@ -101,6 +101,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                                             {...answer}
                                             date={answer.updated_at}
                                             slug={answer.question.slug}
+                                            title={answer.question.title}
                                         />
                                     )
                                 })}
@@ -116,10 +117,10 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
         return (
             <div className="w-full space-y-4 bg-white  drop-shadow-md">
                 <div className="bg-primary-200  p-2 font-semibold leading-6">BOOKMARKS</div>
-                <div className=" grid grid-cols-2 px-4">
+                <div className="flex flex-row space-x-6">
                     <div className=" space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Questions</div>
-                        <div className="no-scrollbar flex max-h-[600px] flex-col gap-4 overflow-y-scroll">
+                        <div className="no-scrollbar flex max-h-[500px] flex-col gap-4 overflow-y-scroll">
                             {data.bookmarked_questions.length === 0 && (
                                 <div className="py-2 text-center text-primary-gray">
                                     No Bookmarked Questions
@@ -128,21 +129,23 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <SummaryCard
-                                            key={index}
-                                            {...question}
-                                            content={undefined}
-                                            date={question.updated_at}
-                                            isBookmarked={true}
-                                        />
+                                        <div className="w-96" key={index}>
+                                            <SummaryCard
+                                                {...question}
+                                                content={undefined}
+                                                date={question.updated_at}
+                                                isBookmarked={true}
+                                                bookmarkType="Question"
+                                            />
+                                        </div>
                                     )
                                 }
                             )}
                         </div>
                     </div>
-                    <div className="space-y-4 p-4">
+                    <div className="space-y-4  p-4">
                         <div className="font-semibold leading-[145%]">Answers</div>
-                        <div className="no-scrollbar flex max-h-[600px] flex-col gap-4 overflow-y-scroll">
+                        <div className="no-scrollbar flex max-h-[500px] flex-col space-y-4 overflow-y-scroll">
                             {data.bookmarked_answers.length === 0 && (
                                 <div className="py-2 text-center text-primary-gray">
                                     No Bookmarked Answers
@@ -151,13 +154,16 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <SummaryCard
-                                            key={index}
-                                            {...answer}
-                                            date={answer.updated_at}
-                                            slug={answer.question.slug}
-                                            isBookmarked={true}
-                                        />
+                                        <div className="w-96" key={index}>
+                                            <SummaryCard
+                                                key={index}
+                                                {...answer}
+                                                date={answer.updated_at}
+                                                slug={answer.question.slug}
+                                                isBookmarked={true}
+                                                bookmarkType="Answer"
+                                            />
+                                        </div>
                                     )
                                 }
                             )}
@@ -168,13 +174,13 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
         )
     }
     return (
-        <div className="flex flex-col gap-10 p-[56px] lg:flex-row ">
+        <div className="flex flex-row space-x-4">
             <ProfileCard
                 {...omit(data, ['top_questions', 'top_answers'])}
                 toggleFollow={toggleFollow}
                 isPublic={isPublic}
             />
-            <div className="w-full space-y-6 ">
+            <div className="w-full space-y-4 ">
                 {renderActivities()}
                 {renderBookmarks()}
             </div>

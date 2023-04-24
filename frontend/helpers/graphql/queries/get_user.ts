@@ -81,6 +81,7 @@ const GET_USER = gql`
                         id
                         content
                         question {
+                            title
                             slug
                         }
                         updated_at

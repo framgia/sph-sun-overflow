@@ -19,7 +19,7 @@ final class UpdateUser
         }
         [, $avatar] = explode(',', $avatar);
         $data = base64_decode($avatar);
-        $fileName = $email.'.png';
+        $fileName = $email.'_'.time().'.png';
         $storagePath = storage_path("app/public/$path/");
 
         if (! file_exists($storagePath)) {
@@ -41,6 +41,10 @@ final class UpdateUser
 
         if (strlen($args['last_name']) > 30) {
             throw new CustomException('Please limit the last name to less than 30 characters');
+        }
+
+        if (strlen($args['about_me']) > 250) {
+            throw new CustomException('Please limit the about me to less than 250 characters');
         }
 
         $user->update([

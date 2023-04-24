@@ -67,14 +67,16 @@ const ProfileCard = ({
     }
     return (
         <Fragment>
-            <div className="flex h-fit flex-col space-y-4 bg-white p-4 drop-shadow-md">
-                <div className="flex w-full flex-row gap-4 lg:w-[171px] lg:flex-col ">
-                    <div className="Avatar flex w-full flex-col items-center gap-1">
+            <div className="flex h-fit w-[235px] shrink-0 flex-col space-y-4 bg-white p-4 drop-shadow-md">
+                <div className="flex w-full flex-row gap-4 self-center lg:w-[171px] lg:flex-col">
+                    <div className="Avatar flex w-full flex-col items-center space-y-2">
                         <Avatar
                             round
                             name={`${first_name} ${last_name}`}
                             alt={first_name}
-                            src={avatar ? `${avatar}` : `${avatar}?${updated_at ?? ''}`}
+                            src={
+                                avatar ? `${avatar}?${updated_at}` : `${avatar}?${updated_at ?? ''}`
+                            }
                             maxInitials={1}
                             textSizeRatio={2}
                             size="120"
@@ -82,24 +84,24 @@ const ProfileCard = ({
                         />
                         <div className="w-full">
                             <div className="flex flex-row items-center justify-between">
-                                <div className="text-xl font-bold leading-[120%]">{`${first_name} ${last_name}`}</div>
+                                <div className="text-sm font-bold leading-[120%]">{`${first_name} ${last_name}`}</div>
                                 {!isPublic && (
                                     <EditProfileModal
                                         {...{ first_name, last_name, about_me, avatar, updated_at }}
                                     />
                                 )}
                             </div>
-                            <div className="text-xs leading-[125%]">{`${role.name}`}</div>
+                            <div className="pt-1 text-xs leading-[125%]">{`${role.name}`}</div>
                         </div>
                     </div>
                     <div className="AboutMe flex w-full flex-col gap-1">
-                        <div className="font-semibold leading-[120%]">About Me</div>
+                        <div className="text-sm font-semibold leading-[120%]">About Me</div>
                         <div className="text-xs leading-[150%] line-clamp-6 lg:line-clamp-3">
                             {about_me}
                         </div>
                     </div>
                     <div className="Stats space-y-1">
-                        <div className="text-base font-semibold leading-[120%]">Stats</div>
+                        <div className="text-sm font-semibold leading-[120%]">Stats</div>
                         <div className="flex flex-col text-xs leading-[150%]">
                             <span>Reputation: {reputation}</span>
                             <span>Questions: {question_count}</span>
@@ -126,7 +128,7 @@ const ProfileCard = ({
                             </div>
                         </div>
                         {isPublic && (
-                            <div className="w-full">
+                            <div className="w-[187px]">
                                 <Button usage="main-follow" onClick={onClickFollow}>
                                     {is_following ? 'Unfollow' : 'Follow'}
                                 </Button>
@@ -135,22 +137,20 @@ const ProfileCard = ({
                     </div>
                 </div>
             </div>
-            <div className="">
-                <FollowModal
-                    title="Followers"
-                    content={followers}
-                    isOpen={isOpenFollower}
-                    setIsOpen={handleFollower}
-                    toggleFollow={toggleFollow}
-                />
-                <FollowModal
-                    title="Following"
-                    content={following}
-                    isOpen={isOpenFollowing}
-                    setIsOpen={handleFollowing}
-                    toggleFollow={toggleFollow}
-                />
-            </div>
+            <FollowModal
+                title="Followers"
+                content={followers}
+                isOpen={isOpenFollower}
+                setIsOpen={handleFollower}
+                toggleFollow={toggleFollow}
+            />
+            <FollowModal
+                title="Following"
+                content={following}
+                isOpen={isOpenFollowing}
+                setIsOpen={handleFollowing}
+                toggleFollow={toggleFollow}
+            />
         </Fragment>
     )
 }

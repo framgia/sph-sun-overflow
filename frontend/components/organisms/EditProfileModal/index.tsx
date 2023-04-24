@@ -16,7 +16,7 @@ type FormValues = {
     firstName: string
     lastName: string
     aboutMe: string
-    avatar: string | File
+    avatar: string
 }
 type TEditProfileProps = {
     first_name: string
@@ -48,6 +48,7 @@ const EditProfileModal = ({
         control,
         setValue,
         formState: { errors, isDirty },
+        reset,
     } = useForm<FormValues>({
         defaultValues: {
             firstName: firstName ?? '',
@@ -59,11 +60,11 @@ const EditProfileModal = ({
         reValidateMode: 'onSubmit',
         resolver: yupResolver(EditProfileSchema),
     })
+    const checkAvatarIsUpdated = (newAvatar: string): boolean => {
+        return newAvatar.includes('data:image/') && newAvatar.includes('base64')
+    }
     const onSubmit = async (data: FormValues): Promise<void> => {
-        if (typeof data.avatar !== 'string') {
-            data.avatar = await convertBase64(data.avatar)
-        }
-        if (!isDirty) {
+        if (!isDirty && !checkAvatarIsUpdated(data.avatar)) {
             setIsOpen(false)
             errorNotify('Profile Not Updated!')
             return
@@ -71,13 +72,18 @@ const EditProfileModal = ({
         await updateUser({ variables: data })
             .then(() => {
                 successNotify('Profile updated successfully please wait for a while!')
-
                 setTimeout(() => {}, 3000)
             })
             .catch((e) => {
-                errorNotify(e)
+                errorNotify(e.message)
+                reset({
+                    firstName: firstName ?? '',
+                    lastName: lastName ?? '',
+                    aboutMe: aboutMe ?? '',
+                    avatar: avatar ?? '',
+                })
             })
-            .then(() => {
+            .finally(() => {
                 setIsOpen(false)
             })
     }
@@ -85,9 +91,13 @@ const EditProfileModal = ({
         document.getElementById('avatar')?.click()
     }
 
-    const avatarOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const avatarOnChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         const file = e.target.files ? e.target.files[0] : avatar
-        setValue('avatar', file)
+        let newAvatar = file
+        if (typeof newAvatar === 'object') {
+            newAvatar = await convertBase64(newAvatar)
+        }
+        setValue('avatar', newAvatar as string)
     }
 
     return (
@@ -179,7 +189,7 @@ const EditProfileModal = ({
                                         value={value}
                                         label="About Me"
                                         onChange={onChange}
-                                        isValid={errors.aboutMe !== undefined}
+                                        isValid={!('aboutMe' in errors)}
                                         error={errors.aboutMe?.message ?? ''}
                                         rows={3}
                                     />

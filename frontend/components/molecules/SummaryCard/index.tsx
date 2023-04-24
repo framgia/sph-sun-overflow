@@ -1,6 +1,11 @@
+import TOGGLE_BOOKMARK from '@/helpers/graphql/mutations/toggle_bookmark'
+import GET_USER from '@/helpers/graphql/queries/get_user'
+import { errorNotify, successNotify } from '@/helpers/toast'
 import { stripHtmlTags } from '@/utils'
+import { useMutation } from '@apollo/client'
 import { Chip } from '@material-tailwind/react'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React from 'react'
 import { HiBookmark, HiEye } from 'react-icons/hi'
 import { HiOutlineHandThumbUp } from 'react-icons/hi2'
 import 'react-quill/dist/quill.bubble.css'
@@ -14,6 +19,7 @@ type Metadata = {
     author: string
 }
 type TProps = {
+    id: number
     title?: string
     content?: string
     tags?: MITag[]
@@ -22,9 +28,11 @@ type TProps = {
     metadata?: Metadata
     upvote_percentage: number
     slug: string
+    bookmarkType?: 'Question' | 'Answer'
 }
 
 const SummaryCard = ({
+    id,
     title,
     content,
     tags,
@@ -33,7 +41,30 @@ const SummaryCard = ({
     metadata,
     upvote_percentage,
     slug,
+    bookmarkType = undefined,
 }: TProps): JSX.Element => {
+    const router = useRouter()
+    const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK, {
+        refetchQueries: [{ query: GET_USER, variables: { slug: router.query.slug } }],
+    })
+
+    const handleBookmark = async (): Promise<void> => {
+        if (bookmarkType) {
+            void toggleBookmark({
+                variables: {
+                    bookmarkable_id: id,
+                    bookmarkable_type: bookmarkType,
+                },
+            })
+                .then((e) => {
+                    successNotify('Removed Bookmark Successfully')
+                })
+                .catch((e) => {
+                    errorNotify('Something went wrong. Please try again later.')
+                })
+        }
+    }
+
     const renderHeader = (title: string | undefined): JSX.Element => {
         if (title) {
             return <div className="Title text-sm font-semibold line-clamp-3">{title}</div>
@@ -53,8 +84,15 @@ const SummaryCard = ({
     const renderBookmark = (isBookmarked: boolean): JSX.Element => {
         if (isBookmarked) {
             return (
-                <div className="Bookmark flex justify-end">
-                    <HiBookmark size={24} color="red" />
+                <div
+                    className=""
+                    onClick={(e) => {
+                        e.stopPropagation()
+                    }}
+                >
+                    <div className="Bookmark flex justify-end" onClick={handleBookmark}>
+                        <HiBookmark size={24} color="red" />
+                    </div>
                 </div>
             )
         }
@@ -127,7 +165,7 @@ const SummaryCard = ({
             <div className="Footer flex justify-between ">
                 <div className="flex items-center justify-center gap-1 rounded-md border border-primary-red  px-1 text-[10px] font-bold leading-5 text-primary-red">
                     <div className="flex h-full items-center justify-center">
-                        <HiOutlineHandThumbUp />
+                        <HiOutlineHandThumbUp size={13} />
                     </div>
                     <div>{upvote_percentage.toFixed(0) ?? 0}</div>
                 </div>
@@ -136,26 +174,34 @@ const SummaryCard = ({
         )
     }
 
+    const handleRedirect = async (e: React.MouseEvent): Promise<void> => {
+        e.stopPropagation()
+        void router.push(slug ? `/questions/${slug}` : '/404')
+    }
+
     return (
-        <Link href={slug ? `/questions/${slug}` : '/404'}>
-            <div className="flex flex-col gap-2 rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer ">
-                <div className="flex-grow">
-                    <div className="flex flex-shrink flex-row space-x-3">
-                        <div className="flex-grow">
-                            {renderHeader(title)}
-                            {renderContent(content)}
-                        </div>
-                        <div className="">
-                            {renderBookmark(isBookmarked)}
-                            {renderMetaData(metadata)}
-                        </div>
+        <div
+            className="flex flex-col gap-2 rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer "
+            onClick={async (e) => {
+                await handleRedirect(e)
+            }}
+        >
+            <div className="flex-grow">
+                <div className="flex flex-shrink flex-row space-x-3">
+                    <div className="flex-grow">
+                        {renderHeader(title)}
+                        {renderContent(content)}
                     </div>
-                    {renderRating(metadata, upvote_percentage)}
-                    {renderTags(tags)}
+                    <div className="">
+                        {renderBookmark(isBookmarked)}
+                        {renderMetaData(metadata)}
+                    </div>
                 </div>
-                {renderFooter(metadata, upvote_percentage, date)}
+                {renderRating(metadata, upvote_percentage)}
+                {renderTags(tags)}
             </div>
-        </Link>
+            {renderFooter(metadata, upvote_percentage, date)}
+        </div>
     )
 }
 export default SummaryCard
