@@ -15,29 +15,39 @@ export type RefetchType = {
     sort?: Array<{ column: string; order: string }>
 }
 
+export type OrderOption = Record<string, { column: string; order: string }>
+type FilterOption = Record<string, { answered: boolean }>
+
+export const orderByOptions: OrderOption = {
+    'Newest first': { column: 'CREATED_AT', order: 'DESC' },
+    'Oldest first': { column: 'CREATED_AT', order: 'ASC' },
+    'Most recent': { column: 'UPDATED_AT', order: 'DESC' },
+    'Least recent': { column: 'UPDATED_AT', order: 'ASC' },
+}
+
+export const answerFilterOption: FilterOption = {
+    Answered: { answered: true },
+    Unanswered: { answered: false },
+}
+
 const QuestionsPage = (): JSX.Element => {
     const router = useRouter()
     const [searchKey, setSearchKey] = useState('')
-
     const isSearchResult = router.asPath.includes('/questions?search=')
+    const order = orderByOptions[String(router.query.order ?? 'Newest first')]
+    const answerFilter = answerFilterOption[String(router.query.filter ?? '')]
+
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
             first: 10,
             page: 1,
-            filter: { keyword: searchKey, tag: '' },
-            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+            filter: { keyword: searchKey, tag: '', ...answerFilter },
+            orderBy: [order],
         },
     })
 
     useEffect(() => {
         setSearchKey(router.query.search as string)
-        refetch({
-            page: 1,
-            filter: { keyword: router.query.search as string, tag: '' },
-            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-        })
-            .then(() => {})
-            .catch(() => {})
     }, [router, searchKey, refetch])
 
     if (loading) return loadingScreenShow()

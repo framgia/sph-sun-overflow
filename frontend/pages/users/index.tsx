@@ -8,7 +8,7 @@ import GET_ROLES from '@/helpers/graphql/queries/get_roles'
 import GET_USERS from '@/helpers/graphql/queries/get_users'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -24,15 +24,25 @@ type RefetchType = {
     sort?: { reputation?: string | null }
 }
 
+const scoreFilterOptions: Record<string, string> = {
+    'Most Score': 'DESC',
+    'Least Score': 'ASC',
+}
+
 const UsersPage = (): JSX.Element => {
     const router = useRouter()
-    const initialRole: { id: number | null; label: string } = { id: null, label: 'Sort by Role' }
+    const roleFilter = String(router.query.role ?? '')
+    const scoreFilter = String(router.query.score ?? '')
+    const initialRole: { id: number | null; label: string } = {
+        id: null,
+        label: roleFilter || 'Sort by Role',
+    }
     const initialScore: { sort: string | null; label: string } = {
-        sort: null,
-        label: 'Sort by Score',
+        sort: scoreFilterOptions[scoreFilter] ?? null,
+        label: scoreFilter || 'Sort by Score',
     }
     const [isSearchResult, setIsSearchResult] = useState(false)
-    const [searchKey, setSearchKey] = useState('')
+    const [searchKey, setSearchKey] = useState(String(router.query.search ?? ''))
     const [term, setTerm] = useState('')
     const [selectedRole, setSelectedRole] = useState<{ id: number | null; label: string }>(
         initialRole
@@ -42,31 +52,27 @@ const UsersPage = (): JSX.Element => {
     )
 
     const rolesQuery = useQuery(GET_ROLES)
-    const userQuery = useQuery<any, RefetchType>(GET_USERS, {
-        variables: {
-            first: 12,
-            page: 1,
-            filter: { keyword: '', role_id: null },
-            sort: { reputation: null },
-        },
-    })
+    const [userQuery, { data, loading, error, refetch }] = useLazyQuery<any, RefetchType>(GET_USERS)
 
     useEffect(() => {
-        setSearchKey('')
-        setIsSearchResult(false)
-        void userQuery.refetch({
-            first: 12,
-            page: 1,
-            filter: { keyword: '', role_id: null },
-            sort: { reputation: null },
+        const roleObj: Role = rolesQuery.data?.roles.find(
+            (role: Role) => role.name === initialRole.label
+        )
+        setSelectedRole((prevRole) => ({ ...prevRole, id: roleObj?.id }))
+        void userQuery({
+            variables: {
+                first: 12,
+                page: 1,
+                filter: { keyword: searchKey, role_id: roleObj?.id },
+                sort: { reputation: initialScore.sort },
+            },
         })
-    }, [router, userQuery.refetch])
+    }, [rolesQuery])
 
-    if (rolesQuery.loading || userQuery.loading) return loadingScreenShow()
+    if (rolesQuery.loading || loading) return loadingScreenShow()
     if (rolesQuery.error)
         return <span>{errorNotify(`Error! ${rolesQuery.error?.message ?? ''}`)}</span>
-    if (userQuery.error)
-        return <span>{errorNotify(`Error! ${userQuery.error?.message ?? ''}`)}</span>
+    if (error) return <span>{errorNotify(`Error! ${error?.message ?? ''}`)}</span>
 
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         setSelectedRole(initialRole)
@@ -78,26 +84,34 @@ const UsersPage = (): JSX.Element => {
             search: { value: string }
         }
 
-        await userQuery.refetch({
+        await refetch({
             first: 12,
             page: 1,
-            filter: { keyword: target.search.value, role_id: null },
-            sort: { reputation: null },
+            filter: { keyword: target.search.value, role_id: selectedRole.id },
+            sort: { reputation: selectedScore.sort },
         })
 
         setSearchKey(target.search.value)
         setTerm(target.search.value)
         target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
+        void router.push({
+            pathname: router.pathname,
+            query: { ...router.query, search: target.search.value },
+        })
     }
 
     const roleFilters: FilterType[] = rolesQuery.data.roles.map((role: Role) => ({
         ...role,
         onClick: async () => {
-            await userQuery.refetch({
+            await refetch({
                 first: 12,
                 page: 1,
                 filter: { keyword: searchKey, role_id: role.id },
                 sort: { reputation: selectedScore.sort },
+            })
+            void router.push({
+                pathname: router.pathname,
+                query: { ...router.query, role: role.name },
             })
             setSelectedRole({ id: role.id, label: role.name })
         },
@@ -108,7 +122,7 @@ const UsersPage = (): JSX.Element => {
             id: 1,
             name: 'Most Score',
             onClick: async () => {
-                await userQuery.refetch({
+                await refetch({
                     first: 12,
                     page: 1,
                     filter: {
@@ -117,6 +131,10 @@ const UsersPage = (): JSX.Element => {
                     },
                     sort: { reputation: 'DESC' },
                 })
+                void router.push({
+                    pathname: router.pathname,
+                    query: { ...router.query, score: 'Most Score' },
+                })
                 setSelectedScore({ sort: 'DESC', label: 'Most Score' })
             },
         },
@@ -124,7 +142,7 @@ const UsersPage = (): JSX.Element => {
             id: 2,
             name: 'Least Score',
             onClick: async () => {
-                await userQuery.refetch({
+                await refetch({
                     first: 12,
                     page: 1,
                     filter: {
@@ -133,16 +151,20 @@ const UsersPage = (): JSX.Element => {
                     },
                     sort: { reputation: 'ASC' },
                 })
+                void router.push({
+                    pathname: router.pathname,
+                    query: { ...router.query, score: 'Least Score' },
+                })
                 setSelectedScore({ sort: 'ASC', label: 'Least Score' })
             },
         },
     ]
 
-    const userList: IUser[] = userQuery.data.users.data
-    const pageInfo: PaginatorInfo = userQuery.data.users.paginatorInfo
+    const userList: IUser[] = data?.users.data
+    const pageInfo: PaginatorInfo = data?.users.paginatorInfo
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
-        await userQuery.refetch({ first, page })
+        await refetch({ first, page })
     }
 
     const renderSearchResultHeader = (): JSX.Element => {
@@ -184,12 +206,12 @@ const UsersPage = (): JSX.Element => {
             {isSearchResult && renderSearchResultHeader()}
             <div className="my-4 flex h-full w-full flex-col">
                 <div className="grid grid-cols-3 justify-center gap-3">
-                    {userList.map((user: IUser) => (
+                    {userList?.map((user: IUser) => (
                         <UserCard user={user} key={user.id} />
                     ))}
                 </div>
                 <div className="mt-auto ">
-                    {pageInfo.lastPage > 1 && (
+                    {pageInfo?.lastPage > 1 && (
                         <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
                 </div>

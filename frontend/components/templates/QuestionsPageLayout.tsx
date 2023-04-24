@@ -69,13 +69,7 @@ const QuestionsPageLayout = ({
     const renderSortAndFilter = (): JSX.Element => {
         return (
             <div className="flex gap-2">
-                <DropdownFilters
-                    triggers={['DATE', 'ANSWER']}
-                    searchKey={searchKey}
-                    team={team}
-                    refetch={refetch}
-                    tag={selectedTag}
-                />
+                <DropdownFilters triggers={['DATE', 'ANSWER']} />
             </div>
         )
     }

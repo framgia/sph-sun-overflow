@@ -8,7 +8,7 @@ import { parseHTML } from '@/helpers/htmlParsing'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify } from '@/helpers/toast'
-import type { RefetchType } from '@/pages/questions'
+import { answerFilterOption, orderByOptions, type RefetchType } from '@/pages/questions'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -168,12 +168,14 @@ const Team = (): JSX.Element => {
 const QuestionsTab = (): JSX.Element => {
     const router = useRouter()
     const { slug } = router.query
+    const order = orderByOptions[String(router.query.order ?? 'Newest first')]
+    const answerFilter = answerFilterOption[String(router.query.filter ?? '')]
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
             first: 10,
             page: 1,
-            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-            filter: { team: slug as string },
+            orderBy: [order],
+            filter: { team: slug as string, ...answerFilter },
         },
     })
 

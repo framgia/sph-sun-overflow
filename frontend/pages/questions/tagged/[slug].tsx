@@ -5,11 +5,13 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { loadingScreenShow } from '../../../helpers/loaderSpinnerHelper'
 import { errorNotify } from '../../../helpers/toast'
-import type { RefetchType } from '../index'
+import { answerFilterOption, orderByOptions, type RefetchType } from '../index'
 
 const TagsPage = (): JSX.Element => {
     const router = useRouter()
     const [selectedTag, setSelectedTag] = useState(router.query.slug as string)
+    const order = orderByOptions[String(router.query.order ?? 'Newest first')]
+    const answerFilter = answerFilterOption[String(router.query.filter ?? '')]
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
             first: 10,
@@ -25,8 +27,8 @@ const TagsPage = (): JSX.Element => {
         void refetch({
             first: 10,
             page: 1,
-            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-            filter: { tag: selectedTag },
+            orderBy: [order],
+            filter: { tag: selectedTag, ...answerFilter },
         })
         setSelectedTag(slug as string)
     }, [router, selectedTag, refetch])

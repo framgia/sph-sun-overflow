@@ -8,6 +8,7 @@ import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
+import type { OrderOption } from '@/pages/questions/'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
@@ -93,10 +94,19 @@ type RefetchType = {
     answerSort?: Array<{ column: string; order: string }>
 }
 
+const filterOptions: OrderOption = {
+    'Highest Score': { column: 'VOTES', order: 'DESC' },
+    'Lowest Score': { column: 'VOTES', order: 'ASC' },
+    'Most Recent': { column: 'UPDATED_AT', order: 'DESC' },
+    'Least Recent': { column: 'UPDATED_AT', order: 'ASC' },
+}
+
 const QuestionDetailPage = (): JSX.Element => {
     const router = useRouter()
     const [comment, setComment] = useState(false)
-    const [selectedAnswerFilter, setSelectedAnswerFilter] = useState('Highest Score')
+    const [selectedAnswerFilter, setSelectedAnswerFilter] = useState(
+        String(router.query.answerFilter ?? 'Highest Score')
+    )
 
     const [answer, setAnswer] = useState<AnswerEditType>({ id: null, content: null })
 
@@ -106,9 +116,8 @@ const QuestionDetailPage = (): JSX.Element => {
         variables: {
             slug: String(query.slug),
             shouldAddViewCount: true,
-            answerSort: [{ column: 'VOTES', order: 'DESC' }],
+            answerSort: [filterOptions[selectedAnswerFilter]],
         },
-        fetchPolicy: 'network-only',
     })
 
     if (loading) return loadingScreenShow()
@@ -123,6 +132,13 @@ const QuestionDetailPage = (): JSX.Element => {
         void refetch({ shouldAddViewCount: false })
     }
 
+    const routerHandler = (answerFilter: string): void => {
+        void router.push({
+            pathname: router.pathname,
+            query: { ...router.query, answerFilter },
+        })
+    }
+
     const answerFilters: FilterType[][] = [
         [
             {
@@ -134,6 +150,7 @@ const QuestionDetailPage = (): JSX.Element => {
                         answerSort: [{ column: 'VOTES', order: 'DESC' }],
                     })
                     setSelectedAnswerFilter('Highest Score')
+                    routerHandler('Highest Score')
                 },
             },
             {
@@ -145,6 +162,7 @@ const QuestionDetailPage = (): JSX.Element => {
                         answerSort: [{ column: 'VOTES', order: 'ASC' }],
                     })
                     setSelectedAnswerFilter('Lowest Score')
+                    routerHandler('Lowest Score')
                 },
             },
         ],
@@ -155,9 +173,10 @@ const QuestionDetailPage = (): JSX.Element => {
                 onClick: () => {
                     void refetch({
                         shouldAddViewCount: false,
-                        answerSort: [{ column: 'CREATED_AT', order: 'DESC' }],
+                        answerSort: [{ column: 'UPDATED_AT', order: 'DESC' }],
                     })
                     setSelectedAnswerFilter('Most Recent')
+                    routerHandler('Most Recent')
                 },
             },
             {
@@ -166,9 +185,10 @@ const QuestionDetailPage = (): JSX.Element => {
                 onClick: () => {
                     void refetch({
                         shouldAddViewCount: false,
-                        answerSort: [{ column: 'CREATED_AT', order: 'ASC' }],
+                        answerSort: [{ column: 'UPDATED_AT', order: 'ASC' }],
                     })
                     setSelectedAnswerFilter('Least Recent')
+                    routerHandler('Least Recent')
                 },
             },
         ],

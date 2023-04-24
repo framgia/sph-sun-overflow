@@ -14,7 +14,7 @@ enum ORDERBY {
 }
 
 enum COLUMNS {
-    CREATED_AT @enum(value: "created_at")
+    UPDATED_AT @enum(value: "updated_at")
     VOTES @enum(value: "votes_sum_value")
 }
 
