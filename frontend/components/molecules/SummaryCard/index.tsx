@@ -91,7 +91,7 @@ const SummaryCard = ({
                     }}
                 >
                     <div className="Bookmark flex justify-end" onClick={handleBookmark}>
-                        <HiBookmark size={24} color="red" />
+                        <HiBookmark size={24} className="fill-green-500 hover:fill-red-500" />
                     </div>
                 </div>
             )
