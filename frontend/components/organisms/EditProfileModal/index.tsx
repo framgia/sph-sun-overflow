@@ -43,6 +43,12 @@ const EditProfileModal = ({
     const formTitle = 'Edit Profile'
     const handleClose = (): void => {
         setIsOpen(false)
+        reset({
+            firstName: firstName ?? '',
+            lastName: lastName ?? '',
+            aboutMe: aboutMe ?? '',
+            avatar: avatar ?? '',
+        })
     }
     const {
         handleSubmit,
