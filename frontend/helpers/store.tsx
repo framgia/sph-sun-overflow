@@ -41,17 +41,7 @@ interface UserSlice {
             category: string
         }>
     ) => void
-    updateProfile: (
-        user_id: number,
-        first_name: string,
-        last_name: string,
-        email: string,
-        avatar: string,
-        slug: string,
-        teams: UserTeamType[],
-        watchedTags: ITag[],
-        updated_at: string
-    ) => void
+    updateProfile: (first_name: string, last_name: string, avatar: string) => void
 
     setWatchedTags: (input: ITag[]) => void
 }
@@ -95,27 +85,12 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
             permissions,
         }))
     },
-    updateProfile: (
-        user_id,
-        first_name,
-        last_name,
-        email,
-        avatar,
-        slug,
-        teams,
-        watchedTags,
-        updated_at
-    ) => {
-        set(() => ({
-            user_id,
+    updateProfile: (first_name, last_name, avatar) => {
+        set((state) => ({
+            ...state,
             first_name,
             last_name,
-            email,
             avatar,
-            slug,
-            teams,
-            watchedTags,
-            updated_at,
         }))
     },
     setWatchedTags: (input: ITag[]) => {

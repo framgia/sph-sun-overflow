@@ -118,7 +118,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
             <div className="w-full space-y-4 bg-white  drop-shadow-md">
                 <div className="bg-primary-200  p-2 font-semibold leading-6">BOOKMARKS</div>
                 <div className="flex flex-row space-x-6">
-                    <div className=" space-y-4 p-4">
+                    <div className=" w-[439px] space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Questions</div>
                         <div className="no-scrollbar flex max-h-[500px] flex-col gap-4 overflow-y-scroll">
                             {data.bookmarked_questions.length === 0 && (
@@ -129,7 +129,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <div className="w-96" key={index}>
+                                        <div className="w-[406px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 content={undefined}
@@ -143,7 +143,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             )}
                         </div>
                     </div>
-                    <div className="space-y-4  p-4">
+                    <div className="w-[439px] space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Answers</div>
                         <div className="no-scrollbar flex max-h-[500px] flex-col space-y-4 overflow-y-scroll">
                             {data.bookmarked_answers.length === 0 && (
@@ -154,7 +154,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <div className="w-96" key={index}>
+                                        <div className="w-[406px]" key={index}>
                                             <SummaryCard
                                                 key={index}
                                                 {...answer}

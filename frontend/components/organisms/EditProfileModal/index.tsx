@@ -2,7 +2,9 @@ import InputField from '@/components/atoms/InputField'
 import TextArea from '@/components/atoms/TextArea'
 import Modal from '@/components/templates/Modal'
 import UPDATE_USER from '@/helpers/graphql/mutations/update_user'
+import GET_AUTHENTICATED_USER from '@/helpers/graphql/queries/get_authenticated_user'
 import GET_USER from '@/helpers/graphql/queries/get_user'
+import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { convertBase64 } from '@/utils'
 import { useMutation } from '@apollo/client'
@@ -35,9 +37,12 @@ const EditProfileModal = ({
     updated_at: updatedAt,
 }: TEditProfileProps): JSX.Element => {
     const router = useRouter()
-
+    const updateProfile = useBoundStore((state) => state.updateProfile)
     const [updateUser] = useMutation(UPDATE_USER, {
-        refetchQueries: [{ query: GET_USER, variables: { slug: router.query.slug } }],
+        refetchQueries: [
+            { query: GET_USER, variables: { slug: router.query.slug } },
+            { query: GET_AUTHENTICATED_USER },
+        ],
     })
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const formTitle = 'Edit Profile'
@@ -87,8 +92,10 @@ const EditProfileModal = ({
             return
         }
         await updateUser({ variables: data })
-            .then(() => {
+            .then((data) => {
                 successNotify('Profile updated successfully please wait for a while!')
+                const { first_name, last_name, avatar } = data.data.updateUser
+                updateProfile(first_name, last_name, avatar)
                 setTimeout(() => {}, 3000)
             })
             .catch((e) => {

@@ -181,12 +181,12 @@ const SummaryCard = ({
 
     return (
         <div
-            className="flex flex-col gap-2 rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer "
+            className={`flex flex-col gap-2 rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer`}
             onClick={async (e) => {
                 await handleRedirect(e)
             }}
         >
-            <div className="flex-grow">
+            <div className="">
                 <div className="flex flex-shrink flex-row space-x-3">
                     <div className="flex-grow">
                         {renderHeader(title)}
