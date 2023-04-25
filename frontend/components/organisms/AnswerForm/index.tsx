@@ -50,10 +50,13 @@ const AnswerForm = ({
         reValidateMode: 'onSubmit',
     })
 
+    const errorElement = document.querySelector('.ql-container') as HTMLDivElement
     useEffect(() => {
         if (answer.content) {
             reset({ content: answer.content })
+            errorElement.classList.remove('error-form-element')
         }
+        setAddAnswerError('')
     }, [answer.content])
 
     const onSubmit = (data: FormValues): void => {
@@ -108,23 +111,18 @@ const AnswerForm = ({
 
     const onEditSubmit = (data: FormValues): void => {
         if (!isDirty) {
-            errorNotify('Error: No changes were made')
+            errorNotify('No changes were made')
             reset()
             onEdit({ id: null, content: null })
             const qlEditor = document.querySelector('.quill .ql-editor') as HTMLDivElement
             qlEditor.innerHTML = ''
+            errorElement.classList.remove('error-form-element')
             return
         }
         setIsDisableSubmit(true)
-        const errorElement = document.querySelector('.ql-container') as HTMLDivElement
-
         const pattern = /<img[^>]+>/
         const check_image = pattern.test(data.content)
-        if (
-            data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 &&
-            !check_image &&
-            answer.content === null
-        ) {
+        if (data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0 && !check_image) {
             errorElement.classList.add('error-form-element')
             setAddAnswerError('No answer Input')
             setTimeout(() => {

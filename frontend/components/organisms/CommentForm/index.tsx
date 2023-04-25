@@ -1,12 +1,12 @@
-import { useForm } from 'react-hook-form'
-import { isObjectEmpty } from '@/utils'
-import { useState } from 'react'
-import FormAlert from '../../molecules/FormAlert'
-import Button from '../../atoms/Button'
-import { errorNotify, successNotify } from '@/helpers/toast'
 import CREATE_COMMENT from '@/helpers/graphql/mutations/create_comment'
 import UPDATE_COMMENT from '@/helpers/graphql/mutations/update_comment'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { isObjectEmpty } from '@/utils'
 import { useMutation } from '@apollo/client'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import Button from '../../atoms/Button'
+import FormAlert from '../../molecules/FormAlert'
 
 export type FormValues = {
     comment: string
@@ -40,7 +40,7 @@ const CommentForm = ({
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isDirty },
     } = useForm<FormValues>({
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
@@ -54,6 +54,12 @@ const CommentForm = ({
             if (data.comment.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
                 setCommentError('No comment Input')
                 setIsDisableSubmit(false)
+                return
+            }
+
+            if (!isDirty) {
+                errorNotify('No changes were made')
+                setComment(false)
                 return
             }
 
