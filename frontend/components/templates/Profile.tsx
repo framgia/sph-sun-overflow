@@ -1,7 +1,9 @@
 import { omit } from 'lodash'
+import { Fragment, useState } from 'react'
 import ProfileCard, { type ProfileCardProps } from '../molecules/ProfileCard'
 import SummaryCard from '../molecules/SummaryCard'
 import { type ITag } from '../molecules/TagsInput'
+import FollowModal from '../organisms/FollowModal'
 type MITag = ITag & { is_watched_by_user: boolean }
 
 type TSummaryCard = {
@@ -55,6 +57,16 @@ type ProfileLayoutProps = {
 
 const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JSX.Element => {
     console.log(data)
+    const [isOpenFollower, setIsOpenFollower] = useState<boolean>(false)
+    const [isOpenFollowing, setIsOpenFollowing] = useState<boolean>(false)
+
+    const handleFollower = (input: boolean): void => {
+        setIsOpenFollower(input)
+    }
+    const handleFollowing = (input: boolean): void => {
+        setIsOpenFollowing(input)
+    }
+
     const renderActivities = (): JSX.Element => {
         return (
             <div className=" w-full space-y-4 bg-white pb-4 drop-shadow-md">
@@ -175,17 +187,35 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
         )
     }
     return (
-        <div className=" flex flex-col space-y-4 xl:flex-row xl:space-x-4">
-            <ProfileCard
-                {...omit(data, ['top_questions', 'top_answers'])}
-                toggleFollow={toggleFollow}
-                isPublic={isPublic}
-            />
-            <div className="w-full space-y-4  ">
-                {renderActivities()}
-                {renderBookmarks()}
+        <Fragment>
+            <div className=" flex flex-col space-y-4 xl:flex-row xl:space-x-4">
+                <ProfileCard
+                    {...omit(data, ['top_questions', 'top_answers'])}
+                    toggleFollow={toggleFollow}
+                    isPublic={isPublic}
+                    handleFollower={handleFollower}
+                    handleFollowing={handleFollowing}
+                />
+                <div className="w-full space-y-4  ">
+                    {renderActivities()}
+                    {renderBookmarks()}
+                </div>
             </div>
-        </div>
+            <FollowModal
+                title="Followers"
+                content={data.followers}
+                isOpen={isOpenFollower}
+                setIsOpen={handleFollower}
+                toggleFollow={toggleFollow}
+            />
+            <FollowModal
+                title="Following"
+                content={data.following}
+                isOpen={isOpenFollowing}
+                setIsOpen={handleFollowing}
+                toggleFollow={toggleFollow}
+            />
+        </Fragment>
     )
 }
 export default ProfileLayout

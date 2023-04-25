@@ -1,8 +1,7 @@
 import Button from '@/components/atoms/Button'
 import EditProfileModal from '@/components/organisms/EditProfileModal'
-import FollowModal from '@/components/organisms/FollowModal'
 import type { TFollowInstance } from '@/components/templates/Profile'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import Avatar from 'react-avatar'
 
 export type ProfileCardProps = {
@@ -21,6 +20,8 @@ export type ProfileCardProps = {
         name: string
     }
     toggleFollow: (input: { variables: { userId: number } }) => void
+    handleFollower?: (input: boolean) => void
+    handleFollowing?: (input: boolean) => void
     id: number
     isPublic: boolean
     followers: Array<{
@@ -47,23 +48,17 @@ const ProfileCard = ({
     followers,
     following,
     role,
-    toggleFollow,
     isPublic,
+    toggleFollow,
+    handleFollower,
+    handleFollowing,
 }: ProfileCardProps): JSX.Element => {
-    const [isOpenFollower, setIsOpenFollower] = useState<boolean>(false)
-    const [isOpenFollowing, setIsOpenFollowing] = useState<boolean>(false)
     const onClickFollow = (): void => {
         toggleFollow({
             variables: {
                 userId: id,
             },
         })
-    }
-    const handleFollower = (input: boolean): void => {
-        setIsOpenFollower(input)
-    }
-    const handleFollowing = (input: boolean): void => {
-        setIsOpenFollowing(input)
     }
     return (
         <Fragment>
@@ -111,17 +106,17 @@ const ProfileCard = ({
                     <div className="flex min-w-[100px] flex-col space-y-3 md:justify-between">
                         <div className="flex flex-col justify-between text-xs leading-5 xl:flex-row">
                             <div
-                                className="cursor-pointer"
+                                className={`${handleFollowing ? 'cursor-pointer' : ''}`}
                                 onClick={() => {
-                                    handleFollowing(true)
+                                    handleFollowing?.(true)
                                 }}
                             >
                                 <span className="font-bold">{following_count}</span> Following
                             </div>
                             <div
-                                className="cursor-pointer"
+                                className={`${handleFollower ? 'cursor-pointer' : ''}`}
                                 onClick={() => {
-                                    handleFollower(true)
+                                    handleFollower?.(true)
                                 }}
                             >
                                 <span className="font-bold">{follower_count}</span> Followers
@@ -137,20 +132,6 @@ const ProfileCard = ({
                     </div>
                 </div>
             </div>
-            <FollowModal
-                title="Followers"
-                content={followers}
-                isOpen={isOpenFollower}
-                setIsOpen={handleFollower}
-                toggleFollow={toggleFollow}
-            />
-            <FollowModal
-                title="Following"
-                content={following}
-                isOpen={isOpenFollowing}
-                setIsOpen={handleFollowing}
-                toggleFollow={toggleFollow}
-            />
         </Fragment>
     )
 }
