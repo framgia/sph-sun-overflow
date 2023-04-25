@@ -67,7 +67,7 @@ const SummaryCard = ({
 
     const renderHeader = (title: string | undefined): JSX.Element => {
         if (title) {
-            return <div className="Title text-sm font-semibold line-clamp-3">{title}</div>
+            return <div className="Title font-semibold line-clamp-3">{title}</div>
         }
         return <></>
     }
