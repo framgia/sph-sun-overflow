@@ -67,7 +67,7 @@ const SummaryCard = ({
 
     const renderHeader = (title: string | undefined): JSX.Element => {
         if (title) {
-            return <div className="Title font-semibold line-clamp-3">{title}</div>
+            return <div className="Title break-all font-semibold line-clamp-3">{title}</div>
         }
         return <></>
     }
@@ -75,9 +75,9 @@ const SummaryCard = ({
         const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-4'
         if (content) {
             return (
-                <div className={`text-xs leading-[120%] ${lineClamp}`}>
+                <p className={`text-xs leading-[120%] ${lineClamp} break-all`}>
                     {stripHtmlTags(content)}
-                </div>
+                </p>
             )
         }
         return <></>
@@ -175,7 +175,7 @@ const SummaryCard = ({
         >
             <div className="space-y-2">
                 <div className="flex flex-shrink flex-row space-x-3">
-                    <div className="flex flex-grow flex-col gap-2 overflow-auto">
+                    <div className="flex flex-grow flex-col gap-2">
                         {renderHeader(title)}
                         {renderContent(content, isBookmarked)}
                         {renderRating(metadata, upvote_percentage)}

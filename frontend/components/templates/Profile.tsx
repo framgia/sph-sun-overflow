@@ -90,12 +90,11 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_questions.map((question, index) => {
                                     return (
-                                        <div className="max-h-52 w-[288px]" key={index}>
+                                        <div className="w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 key={index}
                                                 date={question.updated_at}
-                                                isBookmarked={false}
                                             />
                                         </div>
                                     )
