@@ -66,8 +66,9 @@ const SummaryCard = ({
     }
 
     const renderHeader = (title: string | undefined): JSX.Element => {
+        const fontStyle = isBookmarked ? '' : 'font-semibold'
         if (title) {
-            return <div className={`Title h-12 break-all font-semibold line-clamp-2`}>{title}</div>
+            return <div className={`Title h-12 break-all line-clamp-2 ${fontStyle}`}>{title}</div>
         }
         return <></>
     }
