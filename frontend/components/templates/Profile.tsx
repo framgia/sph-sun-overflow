@@ -90,7 +90,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_questions.map((question, index) => {
                                     return (
-                                        <div className="max-w-[288px]" key={index}>
+                                        <div className="w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 key={index}
@@ -111,12 +111,12 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             </div>
                         ) : (
                             <div
-                                className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4
+                                className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3
                             "
                             >
                                 {data.top_answers.map((answer, index) => {
                                     return (
-                                        <div className="max-w-[288px]" key={index}>
+                                        <div className="w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...answer}
                                                 date={answer.updated_at}
