@@ -122,7 +122,11 @@ const TagsListPage = (): JSX.Element => {
         ],
     ]
 
-    const onChange = (value: string): void => {
+    const onSearchInputChange = (value: string): void => {
+        if (value === '') {
+            void refetch({ first: 6, page: 1, name: '%%' })
+            setTerm('')
+        }
         setSearchKey(value)
     }
 
@@ -138,7 +142,7 @@ const TagsListPage = (): JSX.Element => {
                             <SearchInput
                                 placeholder="Search tag"
                                 value={searchKey}
-                                onChange={onChange}
+                                onChange={onSearchInputChange}
                             />
                         </form>
                     </div>
