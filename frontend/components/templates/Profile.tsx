@@ -141,7 +141,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                 <div className="flex flex-col gap-4 lg:flex-row">
                     <div className=" w-[439px] space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Questions</div>
-                        <div className="no-scrollbar flex max-h-[500px] flex-col gap-4 overflow-y-scroll">
+                        <div className="no-scrollbar flex max-h-[500px] flex-col space-y-4 overflow-y-scroll">
                             {data.bookmarked_questions.length === 0 && (
                                 <div className="py-2 text-center text-primary-gray">
                                     No Bookmarked Questions
