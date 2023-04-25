@@ -37,6 +37,7 @@ const GET_USER = gql`
                     id
                     name
                     slug
+                    description
                     is_watched_by_user
                 }
                 updated_at

@@ -3,12 +3,12 @@ import GET_USER from '@/helpers/graphql/queries/get_user'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { stripHtmlTags } from '@/utils'
 import { useMutation } from '@apollo/client'
-import { Chip } from '@material-tailwind/react'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { HiBookmark, HiOutlineEye } from 'react-icons/hi'
+import { HiBookmark } from 'react-icons/hi'
 import { HiOutlineHandThumbUp } from 'react-icons/hi2'
 import 'react-quill/dist/quill.bubble.css'
+import Tags from '../Tags'
 import { type ITag } from '../TagsInput'
 
 type MITag = ITag & { is_watched_by_user: boolean }
@@ -102,24 +102,7 @@ const SummaryCard = ({
         if (tags) {
             return (
                 <div className="Tags flex flex-wrap gap-1.5 ">
-                    {tags.map((tag, index): JSX.Element => {
-                        return (
-                            <Chip
-                                key={index}
-                                value={tag.name}
-                                icon={
-                                    tag.is_watched_by_user ? (
-                                        <div className="relative top-0.5 left-0.5">
-                                            <HiOutlineEye size={16} color="#333333" />
-                                        </div>
-                                    ) : undefined
-                                }
-                                className={`bg-neutral-200 p-1 text-[10px] text-neutral-900 ${
-                                    tag.is_watched_by_user ? 'pl-2' : ''
-                                }`}
-                            />
-                        )
-                    })}
+                    <Tags values={tags} />
                 </div>
             )
         }
@@ -193,7 +176,7 @@ const SummaryCard = ({
         >
             <div className="space-y-4">
                 <div className="flex flex-shrink flex-row space-x-3">
-                    <div className="flex flex-grow flex-col overflow-auto">
+                    <div className="flex flex-grow flex-col gap-4 overflow-auto">
                         {renderHeader(title)}
                         {renderContent(content)}
                         {renderRating(upvote_percentage, isBookmarked)}
