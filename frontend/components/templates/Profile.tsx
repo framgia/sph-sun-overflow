@@ -130,7 +130,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <div className="max- w-[406px]" key={index}>
+                                        <div className="max-w-[406px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 content={undefined}
