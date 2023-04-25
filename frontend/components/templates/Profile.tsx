@@ -74,7 +74,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
 
     const renderActivities = (): JSX.Element => {
         return (
-            <div className=" w-full space-y-4 bg-white pb-4 drop-shadow-md">
+            <div className=" w-full space-y-4  bg-white pb-4 drop-shadow-md">
                 <div className="bg-primary-200  p-2 font-semibold leading-6">ACTIVITY</div>
                 <div className="space-y-4 px-2">
                     <div className="space-y-4 p-4">
@@ -85,12 +85,12 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             </div>
                         ) : (
                             <div
-                                className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3
+                                className="flex flex-row flex-wrap gap-4
                             "
                             >
                                 {data.top_questions.map((question, index) => {
                                     return (
-                                        <div className="w-[288px]" key={index}>
+                                        <div className="max-h-52 w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 key={index}
@@ -111,12 +111,12 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             </div>
                         ) : (
                             <div
-                                className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3
+                                className="flex flex-row flex-wrap justify-items-stretch gap-4
                             "
                             >
                                 {data.top_answers.map((answer, index) => {
                                     return (
-                                        <div className="w-[288px]" key={index}>
+                                        <div className="max-h-40 w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...answer}
                                                 date={answer.updated_at}
@@ -150,7 +150,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <div className="max-w-[396px]" key={index}>
+                                        <div className="max-h-24 max-w-[396px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 content={undefined}
@@ -175,7 +175,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <div className="max-w-[396px]" key={index}>
+                                        <div className="max-h-[92px] max-w-[396px]" key={index}>
                                             <SummaryCard
                                                 key={index}
                                                 {...answer}
@@ -183,6 +183,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                                                 slug={answer.question.slug}
                                                 isBookmarked={true}
                                                 bookmarkType="Answer"
+                                                title={answer.question.title}
                                             />
                                         </div>
                                     )
@@ -205,7 +206,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                     handleFollowing={handleFollowing}
                     handleEditModal={handleEdit}
                 />
-                <div className="w-full space-y-4  ">
+                <div className="flex flex-shrink flex-col space-y-4">
                     {renderActivities()}
                     {renderBookmarks()}
                 </div>

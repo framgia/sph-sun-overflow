@@ -71,10 +71,11 @@ const SummaryCard = ({
         }
         return <></>
     }
-    const renderContent = (content: string | undefined): JSX.Element => {
+    const renderContent = (content: string | undefined, isBookmarked: boolean): JSX.Element => {
+        const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-4'
         if (content) {
             return (
-                <div className="min-h-[32px] overflow-auto text-xs leading-[120%] line-clamp-4">
+                <div className={`text-xs leading-[120%] ${lineClamp}`}>
                     {stripHtmlTags(content)}
                 </div>
             )
@@ -108,8 +109,12 @@ const SummaryCard = ({
         }
         return <></>
     }
-    const renderRating = (upvote_percentage: number, isBookmarked: boolean): JSX.Element => {
-        if (!isBookmarked) {
+
+    const renderRating = (
+        metadata: Metadata | undefined,
+        upvote_percentage: number
+    ): JSX.Element => {
+        if (metadata) {
             return (
                 <div className="flex max-w-[50px] flex-row items-center justify-center gap-1 rounded-md  border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
                     <div className="flex h-full items-center justify-center">
@@ -134,11 +139,7 @@ const SummaryCard = ({
         }
         return <></>
     }
-    const renderFooter = (
-        metadata: Metadata | undefined,
-        date: string,
-        isBookmarked: boolean
-    ): JSX.Element => {
+    const renderFooter = (metadata: Metadata | undefined, date: string): JSX.Element => {
         if (metadata) {
             return (
                 <div className="Footer flex justify-between ">
@@ -148,15 +149,13 @@ const SummaryCard = ({
             )
         }
         return (
-            <div className={`Footer flex ${isBookmarked ? 'justify-between' : 'justify-end'} `}>
-                {isBookmarked && (
-                    <div className="flex max-w-[50px] flex-row items-center justify-center gap-1 rounded-md  border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
-                        <div className="flex h-full items-center justify-center">
-                            <HiOutlineHandThumbUp size={13} />
-                        </div>
-                        <div>{`${upvote_percentage.toFixed(0) ?? 0}%`}</div>
+            <div className={`Footer flex justify-between`}>
+                <div className="flex max-w-[50px] flex-row items-center justify-center gap-1 rounded-md  border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
+                    <div className="flex h-full items-center justify-center">
+                        <HiOutlineHandThumbUp size={13} />
                     </div>
-                )}
+                    <div>{`${upvote_percentage.toFixed(0) ?? 0}%`}</div>
+                </div>
                 <div className="text-[10px] leading-6">{date?.split(' ')[0] ?? ''}</div>
             </div>
         )
@@ -174,21 +173,21 @@ const SummaryCard = ({
                 await handleRedirect(e)
             }}
         >
-            <div className="space-y-4">
+            <div className="space-y-2">
                 <div className="flex flex-shrink flex-row space-x-3">
-                    <div className="flex flex-grow flex-col gap-4 overflow-auto">
+                    <div className="flex flex-grow flex-col gap-2 overflow-auto">
                         {renderHeader(title)}
-                        {renderContent(content)}
-                        {renderRating(upvote_percentage, isBookmarked)}
+                        {renderContent(content, isBookmarked)}
+                        {renderRating(metadata, upvote_percentage)}
                     </div>
                     <div className="">
                         {renderBookmark(isBookmarked)}
                         {renderMetaData(metadata)}
                     </div>
                 </div>
-                <div className="">
+                <div className={`${tags ? 'space-y-4' : ''}`}>
                     {renderTags(tags)}
-                    {renderFooter(metadata, date, isBookmarked)}
+                    {renderFooter(metadata, date)}
                 </div>
             </div>
         </div>
