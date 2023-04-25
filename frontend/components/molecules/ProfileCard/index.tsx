@@ -1,5 +1,4 @@
 import Button from '@/components/atoms/Button'
-import EditProfileModal from '@/components/organisms/EditProfileModal'
 import { Fragment } from 'react'
 import Avatar from 'react-avatar'
 
@@ -21,6 +20,7 @@ export type ProfileCardProps = {
     toggleFollow: (input: { variables: { userId: number } }) => void
     handleFollower?: (input: boolean) => void
     handleFollowing?: (input: boolean) => void
+    handleEditModal?: (input: boolean) => void
     id: number
     isPublic: boolean
 }
@@ -43,6 +43,7 @@ const ProfileCard = ({
     toggleFollow,
     handleFollower,
     handleFollowing,
+    handleEditModal,
 }: ProfileCardProps): JSX.Element => {
     const onClickFollow = (): void => {
         toggleFollow({
@@ -72,9 +73,17 @@ const ProfileCard = ({
                             <div className="flex flex-row items-center justify-between">
                                 <div className="text-sm font-bold leading-[120%]">{`${first_name} ${last_name}`}</div>
                                 {!isPublic && (
-                                    <EditProfileModal
-                                        {...{ first_name, last_name, about_me, avatar, updated_at }}
-                                    />
+                                    // <EditProfileModal
+                                    //     {...{ first_name, last_name, about_me, avatar, updated_at }}
+                                    // />
+                                    <div
+                                        className="h-4 cursor-pointer text-xs font-semibold leading-[120%] text-neutral-900 hover:underline"
+                                        onClick={() => {
+                                            handleEditModal?.(true)
+                                        }}
+                                    >
+                                        Edit
+                                    </div>
                                 )}
                             </div>
                             <div className="pt-1 text-xs leading-[125%]">{`${role.name}`}</div>

@@ -10,7 +10,7 @@ import { convertBase64 } from '@/utils'
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import Avatar from 'react-avatar'
 import { Controller, useForm } from 'react-hook-form'
 import EditProfileSchema from './schema'
@@ -26,6 +26,8 @@ type TEditProfileProps = {
     about_me: string
     avatar: string
     updated_at: string
+    isOpen: boolean
+    setIsOpen: (input: boolean) => void
 }
 const validAvatarTypes = ['image/png', 'image/gif', 'image/jpeg']
 
@@ -35,6 +37,8 @@ const EditProfileModal = ({
     about_me: aboutMe,
     avatar,
     updated_at: updatedAt,
+    isOpen,
+    setIsOpen,
 }: TEditProfileProps): JSX.Element => {
     const router = useRouter()
     const updateProfile = useBoundStore((state) => state.updateProfile)
@@ -44,7 +48,6 @@ const EditProfileModal = ({
             { query: GET_AUTHENTICATED_USER },
         ],
     })
-    const [isOpen, setIsOpen] = useState<boolean>(false)
     const formTitle = 'Edit Profile'
     const handleClose = (): void => {
         setIsOpen(false)
@@ -130,14 +133,6 @@ const EditProfileModal = ({
 
     return (
         <Fragment>
-            <div
-                className="h-4 cursor-pointer text-xs font-semibold leading-[120%] text-neutral-900 hover:underline"
-                onClick={() => {
-                    setIsOpen(true)
-                }}
-            >
-                Edit
-            </div>
             <Modal
                 title={formTitle}
                 submitLabel="Save Profile"

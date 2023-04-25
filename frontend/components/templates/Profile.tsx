@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react'
 import ProfileCard, { type ProfileCardProps } from '../molecules/ProfileCard'
 import SummaryCard from '../molecules/SummaryCard'
 import { type ITag } from '../molecules/TagsInput'
+import EditProfileModal from '../organisms/EditProfileModal'
 import FollowModal from '../organisms/FollowModal'
 type MITag = ITag & { is_watched_by_user: boolean }
 
@@ -59,12 +60,16 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
     console.log(data)
     const [isOpenFollower, setIsOpenFollower] = useState<boolean>(false)
     const [isOpenFollowing, setIsOpenFollowing] = useState<boolean>(false)
+    const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
 
     const handleFollower = (input: boolean): void => {
         setIsOpenFollower(input)
     }
     const handleFollowing = (input: boolean): void => {
         setIsOpenFollowing(input)
+    }
+    const handleEdit = (input: boolean): void => {
+        setIsOpenEdit(input)
     }
 
     const renderActivities = (): JSX.Element => {
@@ -198,6 +203,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                     isPublic={isPublic}
                     handleFollower={handleFollower}
                     handleFollowing={handleFollowing}
+                    handleEditModal={handleEdit}
                 />
                 <div className="w-full space-y-4  ">
                     {renderActivities()}
@@ -217,6 +223,15 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                 isOpen={isOpenFollowing}
                 setIsOpen={handleFollowing}
                 toggleFollow={toggleFollow}
+            />
+            <EditProfileModal
+                first_name={data.first_name}
+                last_name={data.last_name}
+                about_me={data.about_me}
+                avatar={data.avatar}
+                updated_at={data.updated_at}
+                isOpen={isOpenEdit}
+                setIsOpen={handleEdit}
             />
         </Fragment>
     )
