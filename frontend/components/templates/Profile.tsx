@@ -85,12 +85,14 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_questions.map((question, index) => {
                                     return (
-                                        <SummaryCard
-                                            {...question}
-                                            key={index}
-                                            date={question.updated_at}
-                                            isBookmarked={false}
-                                        />
+                                        <div className="max-w-[288px]" key={index}>
+                                            <SummaryCard
+                                                {...question}
+                                                key={index}
+                                                date={question.updated_at}
+                                                isBookmarked={false}
+                                            />
+                                        </div>
                                     )
                                 })}
                             </div>
@@ -109,13 +111,14 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_answers.map((answer, index) => {
                                     return (
-                                        <SummaryCard
-                                            key={index}
-                                            {...answer}
-                                            date={answer.updated_at}
-                                            slug={answer.question.slug}
-                                            title={answer.question.title}
-                                        />
+                                        <div className="max-w-[288px]" key={index}>
+                                            <SummaryCard
+                                                {...answer}
+                                                date={answer.updated_at}
+                                                slug={answer.question.slug}
+                                                title={answer.question.title}
+                                            />
+                                        </div>
                                     )
                                 })}
                             </div>
@@ -142,7 +145,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <div className="max-w-[406px]" key={index}>
+                                        <div className="max-w-[396px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 content={undefined}
@@ -167,7 +170,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <div className="max-w-[406px]" key={index}>
+                                        <div className="max-w-[396px]" key={index}>
                                             <SummaryCard
                                                 key={index}
                                                 {...answer}
@@ -188,7 +191,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
     }
     return (
         <Fragment>
-            <div className=" flex flex-col space-y-4 xl:flex-row xl:space-x-4">
+            <div className=" flex flex-col space-y-4 xl:flex-row xl:space-y-0 xl:space-x-4">
                 <ProfileCard
                     {...omit(data, ['top_questions', 'top_answers'])}
                     toggleFollow={toggleFollow}

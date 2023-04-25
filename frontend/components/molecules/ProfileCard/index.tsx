@@ -1,6 +1,5 @@
 import Button from '@/components/atoms/Button'
 import EditProfileModal from '@/components/organisms/EditProfileModal'
-import type { TFollowInstance } from '@/components/templates/Profile'
 import { Fragment } from 'react'
 import Avatar from 'react-avatar'
 
@@ -24,12 +23,6 @@ export type ProfileCardProps = {
     handleFollowing?: (input: boolean) => void
     id: number
     isPublic: boolean
-    followers: Array<{
-        follower: TFollowInstance
-    }>
-    following: Array<{
-        following: TFollowInstance
-    }>
 }
 
 const ProfileCard = ({
@@ -45,8 +38,6 @@ const ProfileCard = ({
     following_count,
     updated_at,
     is_following,
-    followers,
-    following,
     role,
     isPublic,
     toggleFollow,
