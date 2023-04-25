@@ -54,6 +54,7 @@ type ProfileLayoutProps = {
 }
 
 const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JSX.Element => {
+    console.log(data)
     const renderActivities = (): JSX.Element => {
         return (
             <div className=" w-full space-y-4 bg-white pb-4 drop-shadow-md">
@@ -67,7 +68,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             </div>
                         ) : (
                             <div
-                                className="grid grid-cols-2 gap-4 lg:grid-cols-3
+                                className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3
                             "
                             >
                                 {data.top_questions.map((question, index) => {
@@ -91,7 +92,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             </div>
                         ) : (
                             <div
-                                className="grid grid-cols-3 gap-4 lg:grid-cols-4
+                                className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4
                             "
                             >
                                 {data.top_answers.map((answer, index) => {
@@ -115,9 +116,9 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
     const renderBookmarks = (): JSX.Element => {
         if (isPublic) return <></>
         return (
-            <div className="w-full space-y-4 bg-white  drop-shadow-md">
+            <div className="w-full space-y-4 bg-white drop-shadow-md">
                 <div className="bg-primary-200  p-2 font-semibold leading-6">BOOKMARKS</div>
-                <div className="flex flex-row space-x-6">
+                <div className="flex flex-col gap-4 lg:flex-row">
                     <div className=" w-[439px] space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Questions</div>
                         <div className="no-scrollbar flex max-h-[500px] flex-col gap-4 overflow-y-scroll">
@@ -129,7 +130,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <div className="w-[406px]" key={index}>
+                                        <div className="max- w-[406px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 content={undefined}
@@ -154,7 +155,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <div className="w-[406px]" key={index}>
+                                        <div className="max-w-[406px]" key={index}>
                                             <SummaryCard
                                                 key={index}
                                                 {...answer}
@@ -174,13 +175,13 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
         )
     }
     return (
-        <div className="flex flex-row space-x-4">
+        <div className=" flex flex-col space-y-4 xl:flex-row xl:space-x-4">
             <ProfileCard
                 {...omit(data, ['top_questions', 'top_answers'])}
                 toggleFollow={toggleFollow}
                 isPublic={isPublic}
             />
-            <div className="w-full space-y-4 ">
+            <div className="w-full space-y-4  ">
                 {renderActivities()}
                 {renderBookmarks()}
             </div>

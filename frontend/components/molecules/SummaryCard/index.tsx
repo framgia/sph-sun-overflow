@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client'
 import { Chip } from '@material-tailwind/react'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { HiBookmark, HiEye } from 'react-icons/hi'
+import { HiBookmark, HiOutlineEye } from 'react-icons/hi'
 import { HiOutlineHandThumbUp } from 'react-icons/hi2'
 import 'react-quill/dist/quill.bubble.css'
 import { type ITag } from '../TagsInput'
@@ -74,7 +74,7 @@ const SummaryCard = ({
     const renderContent = (content: string | undefined): JSX.Element => {
         if (content) {
             return (
-                <div className="Content min-h-[32px] text-xs leading-[120%] line-clamp-3">
+                <div className="min-h-[32px] overflow-auto text-xs leading-[120%] line-clamp-4">
                     {stripHtmlTags(content)}
                 </div>
             )
@@ -110,11 +110,13 @@ const SummaryCard = ({
                                 icon={
                                     tag.is_watched_by_user ? (
                                         <div className="relative top-0.5 left-0.5">
-                                            <HiEye size={16} />
+                                            <HiOutlineEye size={16} color="#333333" />
                                         </div>
                                     ) : undefined
                                 }
-                                className="bg-primary-200 p-1 pl-2 text-[10px] text-primary-black"
+                                className={`bg-neutral-200 p-1 text-[10px] text-neutral-900 ${
+                                    tag.is_watched_by_user ? 'pl-2' : ''
+                                }`}
                             />
                         )
                     })}
@@ -123,13 +125,14 @@ const SummaryCard = ({
         }
         return <></>
     }
-    const renderRating = (metadata: Metadata | undefined, rating: number): JSX.Element => {
-        if (metadata) {
+    const renderRating = (upvote_percentage: number, isBookmarked: boolean): JSX.Element => {
+        if (!isBookmarked) {
             return (
-                <div className="Rating flex ">
-                    <div className="flex items-center justify-center rounded-md border border-primary-red  px-1 text-[10px] font-bold leading-5 text-primary-red">
-                        {rating}
+                <div className="flex max-w-[50px] flex-row items-center justify-center gap-1 rounded-md  border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
+                    <div className="flex h-full items-center justify-center">
+                        <HiOutlineHandThumbUp size={13} />
                     </div>
+                    <div>{`${upvote_percentage.toFixed(0) ?? 0}%`}</div>
                 </div>
             )
         }
@@ -150,25 +153,27 @@ const SummaryCard = ({
     }
     const renderFooter = (
         metadata: Metadata | undefined,
-        upvote_percentage: number,
-        date: string
+        date: string,
+        isBookmarked: boolean
     ): JSX.Element => {
         if (metadata) {
             return (
                 <div className="Footer flex justify-between ">
                     <div className="text-[10px] leading-6">Author: {metadata.author}</div>
-                    <div className="text-[10px] leading-6">{date}</div>
+                    <div className="text-[10px] leading-6">{date?.split(' ')[0] ?? ''}</div>
                 </div>
             )
         }
         return (
-            <div className="Footer flex justify-between ">
-                <div className="flex items-center justify-center gap-1 rounded-md border border-primary-red  px-1 text-[10px] font-bold leading-5 text-primary-red">
-                    <div className="flex h-full items-center justify-center">
-                        <HiOutlineHandThumbUp size={13} />
+            <div className={`Footer flex ${isBookmarked ? 'justify-between' : 'justify-end'} `}>
+                {isBookmarked && (
+                    <div className="flex max-w-[50px] flex-row items-center justify-center gap-1 rounded-md  border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
+                        <div className="flex h-full items-center justify-center">
+                            <HiOutlineHandThumbUp size={13} />
+                        </div>
+                        <div>{`${upvote_percentage.toFixed(0) ?? 0}%`}</div>
                     </div>
-                    <div>{upvote_percentage.toFixed(0) ?? 0}</div>
-                </div>
+                )}
                 <div className="text-[10px] leading-6">{date?.split(' ')[0] ?? ''}</div>
             </div>
         )
@@ -181,26 +186,28 @@ const SummaryCard = ({
 
     return (
         <div
-            className={`flex flex-col gap-2 rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer`}
+            className={`flex flex-col rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer`}
             onClick={async (e) => {
                 await handleRedirect(e)
             }}
         >
-            <div className="">
+            <div className="space-y-4">
                 <div className="flex flex-shrink flex-row space-x-3">
-                    <div className="flex-grow">
+                    <div className="flex flex-grow flex-col overflow-auto">
                         {renderHeader(title)}
                         {renderContent(content)}
+                        {renderRating(upvote_percentage, isBookmarked)}
                     </div>
                     <div className="">
                         {renderBookmark(isBookmarked)}
                         {renderMetaData(metadata)}
                     </div>
                 </div>
-                {renderRating(metadata, upvote_percentage)}
-                {renderTags(tags)}
+                <div className="">
+                    {renderTags(tags)}
+                    {renderFooter(metadata, date, isBookmarked)}
+                </div>
             </div>
-            {renderFooter(metadata, upvote_percentage, date)}
         </div>
     )
 }

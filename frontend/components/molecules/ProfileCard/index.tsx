@@ -67,8 +67,8 @@ const ProfileCard = ({
     }
     return (
         <Fragment>
-            <div className="flex h-fit w-[235px] shrink-0 flex-col space-y-4 bg-white p-4 drop-shadow-md">
-                <div className="flex w-full flex-row gap-4 self-center lg:w-[171px] lg:flex-col">
+            <div className="flex h-fit w-full shrink-0 flex-col space-y-4 bg-white p-4 drop-shadow-md xl:w-[235px]">
+                <div className="flex w-full flex-row gap-4 self-center xl:w-[171px] xl:flex-col">
                     <div className="Avatar flex w-full flex-col items-center space-y-2">
                         <Avatar
                             round
@@ -96,7 +96,7 @@ const ProfileCard = ({
                     </div>
                     <div className="AboutMe flex w-full flex-col gap-1">
                         <div className="text-sm font-semibold leading-[120%]">About Me</div>
-                        <div className="text-xs leading-[150%] line-clamp-6 lg:line-clamp-3">
+                        <div className="text-xs leading-[150%] line-clamp-6 xl:line-clamp-3">
                             {about_me}
                         </div>
                     </div>
@@ -109,7 +109,7 @@ const ProfileCard = ({
                         </div>
                     </div>
                     <div className="flex min-w-[100px] flex-col space-y-3 md:justify-between">
-                        <div className="flex flex-col justify-between text-xs leading-5 lg:flex-row">
+                        <div className="flex flex-col justify-between text-xs leading-5 xl:flex-row">
                             <div
                                 className="cursor-pointer"
                                 onClick={() => {
