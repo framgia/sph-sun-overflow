@@ -115,7 +115,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_answers.map((answer, index) => {
                                     return (
-                                        <div className="max-h-40 w-[288px]" key={index}>
+                                        <div className="w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...answer}
                                                 date={answer.updated_at}
@@ -137,8 +137,8 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
         return (
             <div className="w-full space-y-4 bg-white drop-shadow-md">
                 <div className="bg-primary-200  p-2 font-semibold leading-6">BOOKMARKS</div>
-                <div className="flex flex-col gap-4 lg:flex-row">
-                    <div className=" w-[439px] space-y-4 p-4">
+                <div className="flex flex-col gap-4 p-4 lg:flex-row">
+                    <div className="space-y-4">
                         <div className="font-semibold leading-[145%]">Questions</div>
                         <div className="no-scrollbar flex max-h-[500px] flex-col space-y-4 overflow-y-scroll">
                             {data.bookmarked_questions.length === 0 && (
@@ -163,7 +163,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             )}
                         </div>
                     </div>
-                    <div className="w-[439px] space-y-4 p-4">
+                    <div className="space-y-4">
                         <div className="font-semibold leading-[145%]">Answers</div>
                         <div className="no-scrollbar flex max-h-[500px] flex-col space-y-4 overflow-y-scroll">
                             {data.bookmarked_answers.length === 0 && (
@@ -174,7 +174,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <div className="max-h-[92px] max-w-[396px]" key={index}>
+                                        <div className="max-w-[396px]" key={index}>
                                             <SummaryCard
                                                 key={index}
                                                 {...answer}
