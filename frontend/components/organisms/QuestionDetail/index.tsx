@@ -63,6 +63,7 @@ const QuestionDetail = ({
     }
 
     const editLink = team_slug ? `/teams/${team_slug}/question/${slug}/edit` : `${slug}/edit`
+
     return (
         <Fragment>
             <div className="flex w-full flex-col">
@@ -126,18 +127,22 @@ const QuestionDetail = ({
                                         >
                                             Share
                                         </Link>
-                                        <Link
-                                            href="#"
-                                            className="text-xs text-blue-600 hover:underline"
-                                        >
-                                            Close
-                                        </Link>
-                                        <Link
-                                            href="#"
-                                            className="text-xs text-blue-600 hover:underline"
-                                        >
-                                            Delete
-                                        </Link>
+                                        {is_from_user && (
+                                            <>
+                                                <Link
+                                                    href="#"
+                                                    className="text-xs text-blue-600 hover:underline"
+                                                >
+                                                    Close
+                                                </Link>
+                                                <Link
+                                                    href="#"
+                                                    className="text-xs text-blue-600 hover:underline"
+                                                >
+                                                    Delete
+                                                </Link>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex min-w-fit flex-row">
