@@ -28,10 +28,11 @@ final class Teams
         }
 
         $user_id = Auth::id();
-
-        $query->where('user_id', $user_id);
-        $query->orWhereHas('members', function ($queryMembers) use ($user_id) {
-            $queryMembers->where('user_id', $user_id);
+        $query->where(function ($queryLikeness) use ($user_id) {
+            $queryLikeness->where('user_id', $user_id);
+            $queryLikeness->orWhereHas('members', function ($queryMembers) use ($user_id) {
+                $queryMembers->where('user_id', $user_id);
+            });
         });
 
         return $query;

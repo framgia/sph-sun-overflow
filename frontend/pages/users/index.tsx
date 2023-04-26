@@ -90,6 +90,20 @@ const UsersPage = (): JSX.Element => {
         target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
     }
 
+    const onSearchInputChange = (value: string): void => {
+        if (value === '') {
+            void userQuery.refetch({
+                first: 12,
+                page: 1,
+                filter: { keyword: '', role_id: null },
+                sort: { reputation: null },
+            })
+            setTerm('')
+            setIsSearchResult(false)
+        }
+        setSearchKey(value)
+    }
+
     const roleFilters: FilterType[] = rolesQuery.data.roles.map((role: Role) => ({
         ...role,
         onClick: async () => {
@@ -157,10 +171,6 @@ const UsersPage = (): JSX.Element => {
         )
     }
 
-    const onChange = (value: string): void => {
-        setSearchKey(value)
-    }
-
     return (
         <div className="flex flex-col">
             <div className="w-full">
@@ -172,7 +182,7 @@ const UsersPage = (): JSX.Element => {
                         <SearchInput
                             placeholder="Search user"
                             value={searchKey}
-                            onChange={onChange}
+                            onChange={onSearchInputChange}
                         />
                     </form>
                 </div>

@@ -66,7 +66,16 @@ const TeamsListPage = (): JSX.Element => {
         target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
     }
 
-    const onChange = (value: string): void => {
+    const onSearchInputChange = (value: string): void => {
+        if (value === '') {
+            void userQuery.refetch({
+                first: 6,
+                page: 1,
+                name: `%%`,
+            })
+            setTerm('')
+            setIsSearchResult(false)
+        }
         setSearchKey(value)
     }
 
@@ -78,8 +87,8 @@ const TeamsListPage = (): JSX.Element => {
         return (
             <div className="w-80">
                 <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                    {`${pageInfo.total} search ${
-                        pageInfo.total !== 1 ? `results` : `result`
+                    {`${pageInfo?.total} search ${
+                        pageInfo?.total !== 1 ? `results` : `result`
                     } for "${term}"`}
                 </div>
             </div>
@@ -91,12 +100,12 @@ const TeamsListPage = (): JSX.Element => {
             <PageHeader>Teams</PageHeader>
             <div className="flex h-full w-full flex-col">
                 <div className="flex w-full flex-row">
-                    <div className="ml-auto">
+                    <div>
                         <form onSubmit={handleSearchSubmit}>
                             <SearchInput
                                 placeholder="Search team"
                                 value={searchKey}
-                                onChange={onChange}
+                                onChange={onSearchInputChange}
                             />
                         </form>
                         {isSearchResult && renderSearchResultHeader()}
