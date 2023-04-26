@@ -26,7 +26,6 @@ const UserDetail = (): JSX.Element => {
     const activeTab = (router.query.tab ?? 'Questions') as Tab
     const order = orderByOptions[String(router.query.order ?? 'Newest first')]
     const answerFilter = answerFilterOption[String(router.query.filter ?? '')]
-
     const {
         userData,
         userQuestions,
@@ -40,6 +39,11 @@ const UserDetail = (): JSX.Element => {
     } = useTabData(activeTab, view)
 
     if (loading) return loadingScreenShow()
+    if (userData.user === null) {
+        errorNotify('User does not exist')
+        void router.replace('/manage/users')
+        return loadingScreenShow()
+    }
     if (error) {
         return <>{errorNotify(`Error! ${error?.message ?? ''}`)}</>
     }
