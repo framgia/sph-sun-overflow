@@ -6,10 +6,12 @@ import Icons from '../atoms/Icons'
 type ModalProps = {
     title: string
     children: JSX.Element | string
-    submitLabel: string
+    submitLabel?: string
     isOpen: boolean
     handleSubmit?: () => void
     handleClose: () => void
+    footerAlign?: 'left' | 'center' | 'right'
+    flipFooter?: boolean
 }
 
 const Modal = ({
@@ -19,6 +21,8 @@ const Modal = ({
     isOpen,
     handleSubmit,
     handleClose,
+    footerAlign = 'left',
+    flipFooter = false,
 }: ModalProps): JSX.Element => {
     const onClickSubmit = (event: React.MouseEvent): void => {
         event.preventDefault()
@@ -31,7 +35,12 @@ const Modal = ({
             modalElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
         }
     }
-
+    const footerOptions = (): string => {
+        if (footerAlign === 'center') return 'justify-center'
+        if (footerAlign === 'right') return 'justify-end'
+        return ''
+    }
+    const flipButtons = flipFooter ? 'order-last' : ''
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-30" onClose={handleClose}>
@@ -70,27 +79,33 @@ const Modal = ({
                                         <Icons name="close" size="24" />
                                     </Button>
                                 </div>
-                                <div className="flex flex-col rounded-b-lg bg-neutral-white">
+                                <div className="flex flex-col rounded-b-lg bg-white">
                                     <Dialog.Description
                                         id="modal-content"
                                         as="div"
-                                        className="flex w-full justify-start p-4 text-sm text-neutral-900"
+                                        className="flex w-full justify-start p-4 text-sm text-gray-800"
                                     >
                                         {children}
                                     </Dialog.Description>
-                                    <div className="flex gap-2 p-4">
-                                        <Button
-                                            usage="stroke"
-                                            size="large"
-                                            additionalClass="w-36"
-                                            onClick={onClickSubmit}
-                                        >
-                                            {submitLabel}
-                                        </Button>
-                                        <Button usage="grayed" size="large" onClick={handleClose}>
-                                            Cancel
-                                        </Button>
-                                    </div>
+                                    {submitLabel && (
+                                        <div className={`flex gap-2 p-4 ${footerOptions()}`}>
+                                            <Button
+                                                usage="stroke"
+                                                size="large"
+                                                additionalClass={`w-36 ${flipButtons}`}
+                                                onClick={onClickSubmit}
+                                            >
+                                                {submitLabel}
+                                            </Button>
+                                            <Button
+                                                usage="grayed"
+                                                size="large"
+                                                onClick={handleClose}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

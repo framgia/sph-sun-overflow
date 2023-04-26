@@ -16,3 +16,26 @@ export function capitalize(tempStr: string | undefined): string | undefined {
     }
     return undefined
 }
+
+export async function convertBase64(file: File): Promise<string> {
+    return await new Promise((resolve, reject) => {
+        const fileReader = new FileReader()
+
+        fileReader.readAsDataURL(file)
+        fileReader.onload = () => {
+            resolve(fileReader.result as string)
+        }
+
+        fileReader.onerror = (error) => {
+            reject(error)
+        }
+    })
+}
+
+export function stripHtmlTags(str: string): string {
+    return str
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+        .replace(/<\/?(p|br|strong)[^>]*>/gi, '')
+        .replace(/&[a-z]+;/gi, '')
+}

@@ -22,7 +22,8 @@ class Question extends Model
 
     protected $with = ['answers'];
 
-    protected $appends = ['vote_count', 'humanized_created_at', 'is_from_user', 'user_vote', 'is_answered'];
+    protected $appends = ['vote_count', 'upvote_percentage',
+        'humanized_created_at', 'is_from_user', 'user_vote', 'is_answered'];
 
     protected static function boot()
     {
@@ -86,6 +87,16 @@ class Question extends Model
     public function getUserVoteAttribute()
     {
         return $this->votes()->where('user_id', auth()->id())->first()->value ?? 0;
+    }
+
+    public function getUpvotePercentageAttribute()
+    {
+        $totalVotes = $this->votes()->count();
+        if ($totalVotes) {
+            return ($this->votes()->where('value', 1)->sum('value') / $totalVotes) * 100;
+        }
+
+        return 0;
     }
 
     public function getHumanizedCreatedAtAttribute()

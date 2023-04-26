@@ -15,12 +15,12 @@ const Navbar = (): JSX.Element => {
     const [pushNotifs, setPushNotifs] = useState(false)
 
     const user: UserProps = {
-        id: useBoundStore.getState().user_id,
-        first_name: useBoundStore.getState().first_name,
-        last_name: useBoundStore.getState().last_name,
-        avatar: useBoundStore.getState().avatar,
-        slug: useBoundStore.getState().slug,
-        updated_at: useBoundStore.getState().updated_at,
+        id: useBoundStore((state) => state.user_id),
+        first_name: useBoundStore((state) => state.first_name),
+        last_name: useBoundStore((state) => state.last_name),
+        avatar: useBoundStore((state) => state.avatar),
+        slug: useBoundStore((state) => state.slug),
+        updated_at: useBoundStore((state) => state.updated_at),
     }
 
     const [getNotifications, { data, error }] = useLazyQuery(GET_NOTIFICATIONS, {

@@ -10,6 +10,7 @@ type Question {
     updated_at: String
     deleted_at: String
     vote_count: Int
+    upvote_percentage: Float
     views_count: Int
     user_vote: Int
     is_bookmarked: Boolean
