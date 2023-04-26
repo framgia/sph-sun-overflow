@@ -70,7 +70,9 @@ const SummaryCard = ({
         const lineClamp =
             bookmarkType && bookmarkType === 'Answer' ? 'line-clamp-1' : 'line-clamp-2'
         if (title) {
-            return <div className={`Title break-all ${fontStyle} ${lineClamp}`}>{title}</div>
+            return (
+                <div className={`Title break-all text-sm ${fontStyle} ${lineClamp}`}>{title}</div>
+            )
         }
         return <></>
     }
@@ -175,7 +177,7 @@ const SummaryCard = ({
 
     return (
         <div
-            className={`flex h-full w-full flex-col justify-evenly gap-4 rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer`}
+            className={`flex h-full w-full flex-col place-content-evenly gap-4 rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer`}
             onClick={async (e) => {
                 await handleRedirect(e)
             }}
