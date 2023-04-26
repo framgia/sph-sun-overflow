@@ -76,7 +76,7 @@ const SummaryCard = ({
         const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-3'
         if (content) {
             return (
-                <div className="flex flex-grow">
+                <div className="">
                     <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
                         {stripHtmlTags(content)}
                     </p>
@@ -153,7 +153,7 @@ const SummaryCard = ({
         }
         return (
             <div className={`Footer flex justify-between`}>
-                <div className="flex max-w-[50px] flex-row items-center justify-center gap-1 rounded-md  border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
+                <div className="flex h-5 max-w-[50px] flex-row items-center justify-center gap-1  rounded-md border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
                     <div className="flex h-full items-center justify-center">
                         <HiOutlineHandThumbUp size={13} />
                     </div>
@@ -183,7 +183,8 @@ const SummaryCard = ({
                     {renderBookmark(isBookmarked)} {renderMetaData(metadata)}
                 </div>
             </div>
-            {renderContent(content, isBookmarked)}
+
+            <div className="flex flex-grow">{renderContent(content, isBookmarked)}</div>
             {renderRating(metadata, upvote_percentage)}
             <div className={`${tags && tags.length > 0 ? 'space-y-1' : ''}`}>
                 {renderTags(tags)}
