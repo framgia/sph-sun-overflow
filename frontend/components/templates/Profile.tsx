@@ -90,7 +90,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_questions.map((question, index) => {
                                     return (
-                                        <div className="w-[288px]" key={index}>
+                                        <div className="h-[201px] w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 key={index}
@@ -115,7 +115,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             >
                                 {data.top_answers.map((answer, index) => {
                                     return (
-                                        <div className="w-[288px]" key={index}>
+                                        <div className="h-[113px] w-[288px]" key={index}>
                                             <SummaryCard
                                                 {...answer}
                                                 date={answer.updated_at}
@@ -149,7 +149,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_questions.map(
                                 ({ bookmarkable: question }, index): JSX.Element => {
                                     return (
-                                        <div className="max-h-24 max-w-[396px]" key={index}>
+                                        <div className="h-[97px] w-[396px]" key={index}>
                                             <SummaryCard
                                                 {...question}
                                                 content={undefined}
@@ -174,7 +174,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                             {data.bookmarked_answers.map(
                                 ({ bookmarkable: answer }, index): JSX.Element => {
                                     return (
-                                        <div className="max-w-[396px]" key={index}>
+                                        <div className="h-[97px] w-[396px]" key={index}>
                                             <SummaryCard
                                                 key={index}
                                                 {...answer}

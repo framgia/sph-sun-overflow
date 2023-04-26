@@ -68,16 +68,15 @@ const SummaryCard = ({
     const renderHeader = (title: string | undefined): JSX.Element => {
         const fontStyle = isBookmarked ? '' : 'font-semibold'
         if (title) {
-            return <div className={`Title h-12 break-all line-clamp-2 ${fontStyle}`}>{title}</div>
+            return <div className={`Title break-all line-clamp-2 ${fontStyle}`}>{title}</div>
         }
         return <></>
     }
     const renderContent = (content: string | undefined, isBookmarked: boolean): JSX.Element => {
-        const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-4'
-        const contentHeight = isBookmarked ? 'h-4' : 'h-16'
+        const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-3'
         if (content) {
             return (
-                <div className={contentHeight}>
+                <div className="flex flex-grow">
                     <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
                         {stripHtmlTags(content)}
                     </p>
@@ -106,7 +105,7 @@ const SummaryCard = ({
     const renderTags = (tags: MITag[] | undefined): JSX.Element => {
         if (tags) {
             return (
-                <div className="Tags h-4 gap-1.5 overflow-hidden">
+                <div className="Tags gap-1.5">
                     <Tags values={tags} />
                 </div>
             )
@@ -172,27 +171,23 @@ const SummaryCard = ({
 
     return (
         <div
-            className={`flex flex-col rounded-md border border-primary-gray bg-white p-2 hover:cursor-pointer`}
+            className={`flex h-full w-full flex-col justify-evenly gap-4 rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer`}
             onClick={async (e) => {
                 await handleRedirect(e)
             }}
         >
-            <div className="space-y-2">
-                <div className="flex flex-shrink flex-row space-x-3">
-                    <div className="flex flex-grow flex-col gap-2">
-                        {renderHeader(title)}
-                        {renderContent(content, isBookmarked)}
-                        {renderRating(metadata, upvote_percentage)}
-                    </div>
-                    <div className="">
-                        {renderBookmark(isBookmarked)}
-                        {renderMetaData(metadata)}
-                    </div>
+            <div className="flex flex-row">
+                <div className="flex flex-grow">{renderHeader(title)}</div>
+
+                <div className="">
+                    {renderBookmark(isBookmarked)} {renderMetaData(metadata)}
                 </div>
-                <div className={`${tags ? 'space-y-4' : ''}`}>
-                    {renderTags(tags)}
-                    {renderFooter(metadata, date)}
-                </div>
+            </div>
+            {renderContent(content, isBookmarked)}
+            {renderRating(metadata, upvote_percentage)}
+            <div className={`${tags && tags.length > 0 ? 'space-y-1' : ''}`}>
+                {renderTags(tags)}
+                {renderFooter(metadata, date)}
             </div>
         </div>
     )
