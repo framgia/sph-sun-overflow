@@ -175,7 +175,9 @@ const SummaryCard = ({
 
     return (
         <div
-            className={`flex h-full w-full flex-col gap-2 rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer`}
+            className={`flex h-full w-full flex-col  rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer ${
+                isBookmarked ? 'gap-2' : 'gap-4'
+            }`}
             onClick={async (e) => {
                 await handleRedirect(e)
             }}
