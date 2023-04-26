@@ -99,7 +99,7 @@ const SummaryCard = ({
                     }}
                 >
                     <div className="Bookmark flex justify-end" onClick={handleBookmark}>
-                        <HiBookmark size={24} className="fill-green-500 hover:fill-red-500" />
+                        <HiBookmark size={16} className="fill-green-500 hover:fill-red-500" />
                     </div>
                 </div>
             )
@@ -181,11 +181,12 @@ const SummaryCard = ({
             }}
         >
             {title && (
-                <div className="flex flex-row">
+                <div className="flex flex-row align-middle">
                     <div className="flex flex-grow">{renderHeader(title)}</div>
 
                     <div className="">
-                        {renderBookmark(isBookmarked)} {renderMetaData(metadata)}
+                        {renderBookmark(isBookmarked)}
+                        {renderMetaData(metadata)}
                     </div>
                 </div>
             )}
