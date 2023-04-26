@@ -80,12 +80,10 @@ const SummaryCard = ({
         const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-3'
         if (content) {
             return (
-                <div className="flex flex-grow">
-                    <div className="">
-                        <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
-                            {stripHtmlTags(content)}
-                        </p>
-                    </div>
+                <div className="">
+                    <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
+                        {stripHtmlTags(content)}
+                    </p>
                 </div>
             )
         }
@@ -177,7 +175,7 @@ const SummaryCard = ({
 
     return (
         <div
-            className={`flex h-full w-full flex-col place-content-evenly gap-4 rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer`}
+            className={`flex h-full w-full flex-col gap-2 rounded-[5px] border border-primary-gray bg-white p-2 hover:cursor-pointer`}
             onClick={async (e) => {
                 await handleRedirect(e)
             }}
@@ -195,7 +193,7 @@ const SummaryCard = ({
 
             {renderContent(content, isBookmarked)}
             {renderRating(metadata, upvote_percentage)}
-            <div className={`${tags && tags.length > 0 ? 'space-y-1' : ''}`}>
+            <div className={`${tags && tags.length > 0 ? 'space-y-1' : ''} mt-auto`}>
                 {renderTags(tags)}
                 {renderFooter(metadata, date)}
             </div>
