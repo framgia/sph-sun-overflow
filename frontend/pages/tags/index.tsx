@@ -8,35 +8,36 @@ import { useQuery } from '@apollo/client'
 import { Card, CardBody, CardFooter, Typography } from '@material-tailwind/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
 import { errorNotify } from '../../helpers/toast'
 import type { TagType } from '../questions/[slug]'
-import type { RefetchType } from '../questions/index'
+import type { OrderOption, RefetchType } from '../questions/index'
+
+const filterOptions: OrderOption = {
+    'Most Popular': { column: 'POPULARITY', order: 'DESC' },
+    'Least Popular': { column: 'POPULARITY', order: 'ASC' },
+    'Most Watched': { column: 'WATCH_COUNT', order: 'DESC' },
+    'Least Watched': { column: 'WATCH_COUNT', order: 'ASC' },
+    'Newest First': { column: 'CREATED_AT', order: 'DESC' },
+    'Oldest First': { column: 'CREATED_AT', order: 'ASC' },
+}
 
 const TagsListPage = (): JSX.Element => {
     const router = useRouter()
-    const [selectedFilter, setSelectedFilter] = useState('Most Popular')
-    const [searchKey, setSearchKey] = useState('')
+    const [selectedFilter, setSelectedFilter] = useState(
+        String(router.query.filter ?? 'Most Popular')
+    )
+    const [searchKey, setSearchKey] = useState(String(router.query.search ?? ''))
     const [term, setTerm] = useState('')
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_TAGS, {
         variables: {
             first: 6,
             page: 1,
-            sort: [{ column: 'POPULARITY', order: 'DESC' }],
+            name: `%${String(router.query.search ?? '')}%`,
+            sort: [filterOptions[String(router.query.filter ?? 'Most Popular')]],
         },
     })
-
-    useEffect(() => {
-        void refetch({
-            first: 6,
-            page: 1,
-            name: '%%',
-            sort: [{ column: 'POPULARITY', order: 'DESC' }],
-        })
-        setSearchKey('')
-        setTerm('')
-    }, [router, refetch])
 
     if (loading) return loadingScreenShow()
     if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
@@ -49,6 +50,13 @@ const TagsListPage = (): JSX.Element => {
         await refetch({ first, page })
     }
 
+    const routerHandler = (filter: string, search: string): void => {
+        void router.push({
+            pathname: router.pathname,
+            query: { ...router.query, filter, search },
+        })
+    }
+
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
 
@@ -56,13 +64,9 @@ const TagsListPage = (): JSX.Element => {
             search: { value: string }
         }
 
-        await refetch({ first: 6, page: 1, name: `%${target.search.value}%` })
         setSearchKey(target.search.value)
         setTerm(target.search.value)
-    }
-
-    const refetchHandler = async (column: string, order: string): Promise<void> => {
-        await refetch({ first: 6, page: 1, name: `%${searchKey}%`, sort: [{ column, order }] })
+        routerHandler(selectedFilter, target.search.value)
     }
 
     const tagFilters: FilterType[][] = [
@@ -71,16 +75,16 @@ const TagsListPage = (): JSX.Element => {
                 id: 1,
                 name: 'Most Popular',
                 onClick: async () => {
-                    await refetchHandler('POPULARITY', 'DESC')
                     setSelectedFilter('Most Popular')
+                    routerHandler('Most Popular', searchKey)
                 },
             },
             {
                 id: 2,
                 name: 'Least Popular',
                 onClick: async () => {
-                    await refetchHandler('POPULARITY', 'ASC')
                     setSelectedFilter('Least Popular')
+                    routerHandler('Least Popular', searchKey)
                 },
             },
         ],
@@ -89,16 +93,16 @@ const TagsListPage = (): JSX.Element => {
                 id: 1,
                 name: 'Most Watched',
                 onClick: async () => {
-                    await refetchHandler('WATCH_COUNT', 'DESC')
                     setSelectedFilter('Most Watched')
+                    routerHandler('Most Watched', searchKey)
                 },
             },
             {
                 id: 2,
                 name: 'Least Watched',
                 onClick: async () => {
-                    await refetchHandler('WATCH_COUNT', 'ASC')
                     setSelectedFilter('Least Watched')
+                    routerHandler('Least Watched', searchKey)
                 },
             },
         ],
@@ -107,16 +111,16 @@ const TagsListPage = (): JSX.Element => {
                 id: 1,
                 name: 'Newest First',
                 onClick: async () => {
-                    await refetchHandler('CREATED_AT', 'ASC')
                     setSelectedFilter('Newest First')
+                    routerHandler('Most Popular', searchKey)
                 },
             },
             {
                 id: 2,
                 name: 'Oldest First',
                 onClick: async () => {
-                    await refetchHandler('CREATED_AT', 'DESC')
                     setSelectedFilter('Oldest First')
+                    routerHandler('Most Popular', searchKey)
                 },
             },
         ],

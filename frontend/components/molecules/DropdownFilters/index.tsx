@@ -1,10 +1,7 @@
-import type { ApolloQueryResult } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import type { RefetchType } from '../../../pages/questions/index'
 import SortDropdown from '../SortDropdown'
 
-type TriggerType = 'DATE' | 'ANSWER' | 'WATCHED' | 'POPULAR'
+type TriggerType = 'DATE' | 'ANSWER'
 
 type FilterType = {
     state: string
@@ -18,181 +15,90 @@ type FilterType = {
 type FilterTextsType = {
     DATE: { 1: string; 2: string; 3: string; 4: string }
     ANSWER: { 1: string; 2: string; 3: string }
-    WATCHED: { 1: string; 2: string }
-    POPULAR: { 1: string; 2: string }
 }
 
 type FilterListsType = {
     DATE: FilterType
     ANSWER: FilterType
-    WATCHED: FilterType
-    POPULAR: FilterType
 }
 
 type Props = {
     triggers: TriggerType[]
-    searchKey?: string
-    tag?: string
-    team?: string
-    refetch: ({ first, page, orderBy, filter }: RefetchType) => Promise<ApolloQueryResult<any>>
 }
 
-const FilterTexts: FilterTextsType = {
+const filterTexts: FilterTextsType = {
     DATE: { 1: 'Newest first', 2: 'Oldest first', 3: 'Most recent', 4: 'Least recent' },
-    ANSWER: { 1: 'Answered', 2: 'Unanswered', 3: 'All Questions' },
-    WATCHED: { 1: 'Most Watched', 2: 'Least Watched' },
-    POPULAR: { 1: 'Most Popular', 2: 'Least Popular' },
+    ANSWER: { 1: 'All Questions', 2: 'Answered', 3: 'Unanswered' },
 }
 
-const DropdownFilters = ({
-    triggers,
-    searchKey = '',
-    tag = '',
-    team = '',
-    refetch,
-}: Props): JSX.Element => {
+const DropdownFilters = ({ triggers }: Props): JSX.Element => {
     const router = useRouter()
-    const [selectedDateFilter, setSelectedDateFilter] = useState(FilterTexts.DATE[1])
-    const [selectedAnswerFilter, setSelectedAnswerFilter] = useState(FilterTexts.ANSWER[1])
-    const [selectedWatchedFilter, setSelectedWatchedFilter] = useState(FilterTexts.WATCHED[1])
-    const [selectedPopularFilter, setSelectedPopularFilter] = useState(FilterTexts.POPULAR[1])
 
-    useEffect(() => {
-        setSelectedDateFilter(FilterTexts.DATE[1])
-        setSelectedAnswerFilter(FilterTexts.ANSWER[3])
-        setSelectedWatchedFilter(FilterTexts.WATCHED[1])
-        setSelectedPopularFilter(FilterTexts.POPULAR[1])
-    }, [router])
+    const routerHandler = (order: string, filter: string): void => {
+        void router.push({
+            pathname: router.pathname,
+            query: { ...router.query, order, filter },
+        })
+    }
 
-    const FilterLists: FilterListsType = {
+    const order = String(router.query.order ?? filterTexts.DATE[1])
+    const filter = String(router.query.filter ?? filterTexts.ANSWER[1])
+    const filterLists: FilterListsType = {
         DATE: {
-            state: selectedDateFilter,
+            state: order,
             filters: [
                 {
                     id: 1,
-                    name: FilterTexts.DATE[1],
+                    name: filterTexts.DATE[1],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
-                        })
-                        setSelectedDateFilter(FilterTexts.DATE[1])
+                        routerHandler(filterTexts.DATE[1], filter)
                     },
                 },
                 {
                     id: 2,
-                    name: FilterTexts.DATE[2],
+                    name: filterTexts.DATE[2],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            orderBy: [{ column: 'CREATED_AT', order: 'ASC' }],
-                        })
-                        setSelectedDateFilter(FilterTexts.DATE[2])
+                        routerHandler(filterTexts.DATE[2], filter)
                     },
                 },
                 {
                     id: 3,
-                    name: FilterTexts.DATE[3],
+                    name: filterTexts.DATE[3],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            orderBy: [{ column: 'UPDATED_AT', order: 'DESC' }],
-                        })
-                        setSelectedDateFilter(FilterTexts.DATE[3])
+                        routerHandler(filterTexts.DATE[3], filter)
                     },
                 },
                 {
                     id: 4,
-                    name: FilterTexts.DATE[4],
+                    name: filterTexts.DATE[4],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            orderBy: [{ column: 'UPDATED_AT', order: 'ASC' }],
-                        })
-                        setSelectedDateFilter(FilterTexts.DATE[4])
+                        routerHandler(filterTexts.DATE[4], filter)
                     },
                 },
             ],
         },
         ANSWER: {
-            state: selectedAnswerFilter,
+            state: filter,
             filters: [
                 {
                     id: 1,
-                    name: FilterTexts.ANSWER[1],
+                    name: filterTexts.ANSWER[1],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            filter: { keyword: searchKey, answered: true, tag, team },
-                        })
-                        setSelectedAnswerFilter(FilterTexts.ANSWER[1])
+                        routerHandler(order, filterTexts.ANSWER[1])
                     },
                 },
                 {
                     id: 2,
-                    name: FilterTexts.ANSWER[2],
+                    name: filterTexts.ANSWER[2],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            filter: { keyword: searchKey, answered: false, tag, team },
-                        })
-                        setSelectedAnswerFilter(FilterTexts.ANSWER[2])
+                        routerHandler(order, filterTexts.ANSWER[2])
                     },
                 },
                 {
                     id: 3,
-                    name: FilterTexts.ANSWER[3],
+                    name: filterTexts.ANSWER[3],
                     onClick: () => {
-                        void refetch({
-                            first: 10,
-                            page: 1,
-                            filter: { keyword: searchKey, tag, team },
-                        })
-                        setSelectedAnswerFilter(FilterTexts.ANSWER[3])
-                    },
-                },
-            ],
-        },
-        WATCHED: {
-            state: selectedWatchedFilter,
-            filters: [
-                {
-                    id: 1,
-                    name: FilterTexts.WATCHED[1],
-                    onClick: () => {
-                        setSelectedWatchedFilter(FilterTexts.WATCHED[1])
-                    },
-                },
-                {
-                    id: 2,
-                    name: FilterTexts.WATCHED[2],
-                    onClick: () => {
-                        setSelectedWatchedFilter(FilterTexts.WATCHED[2])
-                    },
-                },
-            ],
-        },
-        POPULAR: {
-            state: selectedPopularFilter,
-            filters: [
-                {
-                    id: 1,
-                    name: FilterTexts.POPULAR[1],
-                    onClick: () => {
-                        setSelectedPopularFilter(FilterTexts.POPULAR[1])
-                    },
-                },
-                {
-                    id: 2,
-                    name: FilterTexts.POPULAR[2],
-                    onClick: () => {
-                        setSelectedPopularFilter(FilterTexts.POPULAR[2])
+                        routerHandler(order, filterTexts.ANSWER[3])
                     },
                 },
             ],
@@ -205,8 +111,8 @@ const DropdownFilters = ({
                 return (
                     <div key={index} className="min-w-[8rem]">
                         <SortDropdown
-                            filters={FilterLists[trigger].filters}
-                            selectedFilter={FilterLists[trigger].state}
+                            filters={filterLists[trigger].filters}
+                            selectedFilter={filterLists[trigger].state}
                         />
                     </div>
                 )
