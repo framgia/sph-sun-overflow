@@ -67,8 +67,10 @@ const SummaryCard = ({
 
     const renderHeader = (title: string | undefined): JSX.Element => {
         const fontStyle = isBookmarked ? '' : 'font-semibold'
+        const lineClamp =
+            bookmarkType && bookmarkType === 'Answer' ? 'line-clamp-1' : 'line-clamp-2'
         if (title) {
-            return <div className={`Title break-all line-clamp-2 ${fontStyle}`}>{title}</div>
+            return <div className={`Title break-all ${fontStyle} ${lineClamp}`}>{title}</div>
         }
         return <></>
     }
@@ -147,14 +149,14 @@ const SummaryCard = ({
     const renderFooter = (metadata: Metadata | undefined, date: string): JSX.Element => {
         if (metadata) {
             return (
-                <div className="Footer flex justify-between ">
+                <div className="Footer flex h-5 justify-between">
                     <div className="text-[10px] leading-6">Author: {metadata.author}</div>
                     <div className="text-[10px] leading-6">{date?.split(' ')[0] ?? ''}</div>
                 </div>
             )
         }
         return (
-            <div className={`Footer flex justify-between`}>
+            <div className={`Footer flex h-5 justify-between`}>
                 <div className="flex h-5 max-w-[50px] flex-row items-center justify-center gap-1  rounded-md border border-primary-red px-1 text-[10px] font-bold leading-5 text-primary-red">
                     <div className="flex h-full items-center justify-center">
                         <HiOutlineHandThumbUp size={13} />
@@ -178,13 +180,15 @@ const SummaryCard = ({
                 await handleRedirect(e)
             }}
         >
-            <div className="flex flex-row">
-                <div className="flex flex-grow">{renderHeader(title)}</div>
+            {title && (
+                <div className="flex flex-row">
+                    <div className="flex flex-grow">{renderHeader(title)}</div>
 
-                <div className="">
-                    {renderBookmark(isBookmarked)} {renderMetaData(metadata)}
+                    <div className="">
+                        {renderBookmark(isBookmarked)} {renderMetaData(metadata)}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {renderContent(content, isBookmarked)}
             {renderRating(metadata, upvote_percentage)}
