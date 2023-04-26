@@ -121,7 +121,12 @@ const QuestionDetailPage = (): JSX.Element => {
     })
 
     if (loading) return loadingScreenShow()
-    else if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
+    if (error) {
+        errorNotify('Question not Found')
+        void router.replace('/404')
+        return loadingScreenShow()
+    }
+    console.log(data)
     const question: QuestionType = {
         ...data.question,
     }

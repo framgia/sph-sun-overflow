@@ -59,7 +59,16 @@ const Team = (): JSX.Element => {
     }, [router, refetch])
 
     if (loading) return loadingScreenShow()
-    else if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
+    if (error) {
+        errorNotify(`Error! ${error.message}`)
+        void router.push('/404')
+        return loadingScreenShow()
+    }
+    if (data.team === null) {
+        errorNotify(`Team does not exist`)
+        void router.push('/404')
+        return loadingScreenShow()
+    }
 
     const getActiveTabClass = (status: boolean): string => {
         if (status) {

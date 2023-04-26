@@ -74,13 +74,13 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
 
     const renderActivities = (): JSX.Element => {
         return (
-            <div className=" w-full space-y-4  bg-white pb-4 drop-shadow-md">
+            <div className="flex w-full flex-grow flex-col space-y-4  bg-white pb-4 drop-shadow-md">
                 <div className="bg-primary-200  p-2 font-semibold leading-6">ACTIVITY</div>
                 <div className="space-y-4 px-2">
                     <div className="space-y-4 p-4">
                         <div className="font-semibold leading-[145%]">Top Questions</div>
                         {data.top_questions.length === 0 ? (
-                            <div className="py-2 text-center text-primary-gray">
+                            <div className="w-full py-2 text-center text-primary-gray">
                                 No Top Questions to Show
                             </div>
                         ) : (
@@ -205,7 +205,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
                     handleFollowing={handleFollowing}
                     handleEditModal={handleEdit}
                 />
-                <div className="flex flex-shrink flex-col space-y-4">
+                <div className="flex w-full flex-col space-y-4">
                     {renderActivities()}
                     {renderBookmarks()}
                 </div>
