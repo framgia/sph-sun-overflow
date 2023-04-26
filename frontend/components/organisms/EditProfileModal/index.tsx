@@ -120,6 +120,10 @@ const EditProfileModal = ({
 
     const avatarOnChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         const file = e.target.files ? e.target.files[0] : avatar
+        if (file instanceof File && file.size > 5 * 1024 * 1024) {
+            errorNotify('Selected file is too large. Please select a file under 5MB')
+            return
+        }
         if (file instanceof File && !validAvatarTypes.includes(file.type)) {
             errorNotify('Not a valid File Type')
             return
