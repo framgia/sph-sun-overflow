@@ -41,13 +41,18 @@ const InputField = ({
                 id={name}
                 name={name}
                 value={value}
+<<<<<<< HEAD
                 className={`${
                     additionalClass ?? ''
                 } w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 placeholder-neutral-disabled focus:border-blue-500 focus:ring-blue-500`}
                 placeholder={placeholder ?? ''}
+=======
+                className="w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 focus:border-primary-blue focus:ring-primary-blue"
+                placeholder={label}
+>>>>>>> f7b7966 ([Overflow-478] Refactor Admin Teams Page)
                 onChange={onChange}
             />
-            {!isValid && <span className="ml-2 text-xs text-primary-red">{error}</span>}
+            {!isValid && <span className="ml-2 text-xs text-primary-900">{error}</span>}
         </div>
     )
 }

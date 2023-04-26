@@ -19,6 +19,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import BackButton from '../atoms/BackButton'
+import type { RoleType } from '../organisms/RoleFormModal'
 
 interface IMember {
     id: number
@@ -34,8 +35,8 @@ interface IMember {
 }
 
 type FormValues = {
-    user: number
-    role: number
+    user: OptionType
+    role: OptionType
 }
 
 const columns: ColumnType[] = [
@@ -124,13 +125,13 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
     }
 
     const users: OptionType[] = usersData.data?.allUsers.map((user: UserType) => ({
-        id: user.id,
-        name: `${user.first_name ?? ''} ${user.last_name ?? ''}`,
+        value: user.id,
+        label: `${user.first_name ?? ''} ${user.last_name ?? ''}`,
     }))
 
-    const roles: OptionType[] = teamRoles.data?.teamRoles.map((role: OptionType) => ({
-        id: role.id,
-        name: role.name,
+    const roles: OptionType[] = teamRoles.data?.teamRoles.map((role: RoleType) => ({
+        value: role.id,
+        label: role.name,
     }))
 
     const openModal = (modal: string): void => {
@@ -242,7 +243,7 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                                     <Controller
                                         control={control}
                                         name="user"
-                                        defaultValue={users.length && users[0].id}
+                                        defaultValue={{ value: 0, label: '' }}
                                         render={({ field: { onChange, value } }) => (
                                             <Dropdown
                                                 key="user-select"
@@ -265,7 +266,7 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                                     <Controller
                                         control={control}
                                         name="role"
-                                        defaultValue={roles[0].id}
+                                        defaultValue={{ value: 0, label: '' }}
                                         render={({ field: { onChange, value } }) => (
                                             <Dropdown
                                                 key="role-select"

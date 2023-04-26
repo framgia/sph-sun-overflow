@@ -1,13 +1,16 @@
+import InputField from '@/components/atoms/InputField'
+import TextArea from '@/components/atoms/TextArea'
 import Dropdown from '@/components/molecules/Dropdown'
 import Modal from '@/components/templates/Modal'
 import CREATE_TEAM from '@/helpers/graphql/mutations/create_team'
 import UPDATE_TEAM from '@/helpers/graphql/mutations/update_team'
 import GET_ALL_TEAM_LEADERS from '@/helpers/graphql/queries/get_all_team_leaders'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import type { UserType } from '@/pages/questions/[slug]'
 import type { FetchResult } from '@apollo/client'
 import { useMutation, useQuery } from '@apollo/client'
-import { Input, Textarea } from '@material-tailwind/react'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { errorNotify, successNotify } from '../../../helpers/toast'
 import type { OptionType } from '../../molecules/Dropdown/index'
@@ -17,6 +20,7 @@ type FormProps = {
         id: number
         title: string
         teamLeaderId: number
+        teamLeaderName: string
         description: string
     }
     isOpen: boolean
@@ -26,85 +30,134 @@ type FormProps = {
 
 type FormValues = {
     teamName: string
-    teamLeader: number
+    teamLeader: OptionType
     teamDescription: string
 }
 
 const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps): JSX.Element => {
     const router = useRouter()
+    const [formErrors, setFormErrors] = useState({
+        teamName: '',
+        teamLeader: '',
+        teamDescription: '',
+    })
     const formTitle = initialData?.title ? 'Edit Team' : 'Add Team'
 
-    const { handleSubmit, control } = useForm<FormValues>({})
-    const { data } = useQuery(GET_ALL_TEAM_LEADERS)
+    const { data, loading, error } = useQuery(GET_ALL_TEAM_LEADERS)
     const [createTeam] = useMutation(CREATE_TEAM)
     const [updateTeam] = useMutation(UPDATE_TEAM)
 
     const teamLeaders: OptionType[] = data?.teamLeaders.map(
-        ({ id, first_name, last_name }: UserType) => ({
-            id,
-            name: `${first_name ?? ''} ${last_name ?? ''}`,
-        })
+        ({ id, first_name, last_name }: UserType) =>
+            ({
+                value: id,
+                label: `${first_name ?? ''} ${last_name ?? ''}`,
+            } ?? [])
     )
+
+    const initialTeamLeader = {
+        value: initialData?.teamLeaderId ?? 0,
+        label: initialData?.teamLeaderName ?? '',
+    }
+
+    const { handleSubmit, control, reset } = useForm<FormValues>({
+        defaultValues: {
+            teamName: initialData?.title ?? '',
+            teamLeader: initialTeamLeader,
+            teamDescription: initialData?.description ?? '',
+        },
+    })
+
+    useEffect(() => {
+        reset({
+            teamName: initialData?.title ?? '',
+            teamLeader: initialTeamLeader,
+            teamDescription: initialData?.description ?? '',
+        })
+    }, [initialData])
+
+    if (loading) return loadingScreenShow()
+    if (error) {
+        return <>{errorNotify(`Error ${error.message}`)}</>
+    }
 
     const onSubmit = (data: FormValues): void => {
         const { teamName, teamLeader, teamDescription } = data
 
-        if (!(teamName && teamLeader && teamDescription)) {
-            errorNotify('Please input some data')
-            return
-        }
+        let valid = true
+        const dataFields = [
+            { key: 'teamName', display: 'Team Name' },
+            { key: 'teamLeader', display: 'Team Leader' },
+            { key: 'teamDescription', display: 'Team Description' },
+        ]
 
-        if (initialData) {
-            const { title, teamLeaderId, description: init_desc } = initialData
-            if (
-                title === teamName &&
-                teamLeaderId === +teamLeader &&
-                init_desc === teamDescription
-            ) {
-                errorNotify('No changes were made!')
-                closeModal()
-                return
+        const errorFields = { teamName: '', teamLeader: '', teamDescription: '' }
+
+        dataFields.forEach((field) => {
+            const key = field.key as keyof typeof data
+
+            if (!data[key] || (key === 'teamLeader' && data.teamLeader.value === 0)) {
+                valid = false
+                errorFields[key] = `${field.display} must not be empty`
             }
+        })
 
-            updateTeam({
-                variables: {
-                    id: initialData.id,
-                    name: teamName,
-                    description: teamDescription,
-                    user_id: teamLeader,
-                },
-            })
-                .then(({ data }: FetchResult<{ updateTeam: { id: number; slug: string } }>) => {
-                    successNotify('Team updated successfully')
-                    refetch()
-                    void router.push(`teams/${data?.updateTeam.slug ?? ''}`)
-                })
-                .catch(() => {
-                    errorNotify('Error updating team')
-                })
-                .finally(() => {
+        if (valid) {
+            if (initialData) {
+                const { title, teamLeaderId, description: init_desc } = initialData
+                if (
+                    title === teamName &&
+                    teamLeaderId === +teamLeader.value &&
+                    init_desc === teamDescription
+                ) {
+                    errorNotify('No changes were made!')
                     closeModal()
+                    return
+                }
+
+                updateTeam({
+                    variables: {
+                        id: initialData.id,
+                        name: teamName,
+                        description: teamDescription,
+                        user_id: teamLeader.value,
+                    },
                 })
-        } else {
-            createTeam({
-                variables: {
-                    name: teamName,
-                    description: teamDescription,
-                    user_id: teamLeader,
-                },
-            })
-                .then(({ data }: FetchResult<{ createTeam: { id: number; slug: string } }>) => {
-                    successNotify('Team created successfully')
-                    refetch()
-                    void router.push(`teams/${data?.createTeam.slug ?? ''}`)
+                    .then(({ data }: FetchResult<{ updateTeam: { id: number; slug: string } }>) => {
+                        successNotify('Team updated successfully')
+                        refetch()
+                        void router.push(`teams/${data?.updateTeam.slug ?? ''}`)
+                    })
+                    .catch(() => {
+                        errorNotify('Error updating team')
+                    })
+                    .finally(() => {
+                        closeModal()
+                        reset()
+                    })
+            } else {
+                createTeam({
+                    variables: {
+                        name: teamName,
+                        description: teamDescription,
+                        user_id: teamLeader.value,
+                    },
                 })
-                .catch(() => {
-                    errorNotify('Error creating team')
-                })
-                .finally(() => {
-                    closeModal()
-                })
+                    .then(({ data }: FetchResult<{ createTeam: { id: number; slug: string } }>) => {
+                        successNotify('Team created successfully')
+                        refetch()
+                        void router.push(`teams/${data?.createTeam.slug ?? ''}`)
+                    })
+                    .catch(() => {
+                        errorNotify('Error creating team')
+                    })
+                    .finally(() => {
+                        closeModal()
+                        reset()
+                    })
+            }
         }
+        setFormErrors(errorFields)
     }
 
     return (
@@ -114,53 +167,70 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
             isOpen={isOpen}
             handleClose={() => {
                 closeModal()
+                reset({
+                    teamName: initialData?.title ?? '',
+                    teamLeader: initialTeamLeader,
+                    teamDescription: initialData?.description ?? '',
+                })
+                setFormErrors({ teamName: '', teamLeader: '', teamDescription: '' })
             }}
         >
             <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-                <Controller
-                    control={control}
-                    name="teamName"
-                    defaultValue={initialData?.title ?? ''}
-                    render={({ field: { onChange, value } }) => (
-                        <Input
-                            id="teamName"
-                            name="teamName"
-                            label="Name"
-                            value={value}
-                            onChange={onChange}
-                        />
+                <div>
+                    <Controller
+                        control={control}
+                        name="teamName"
+                        defaultValue={initialData?.title ?? ''}
+                        render={({ field: { onChange, value } }) => (
+                            <InputField
+                                name="teamName"
+                                label="Team Name"
+                                value={value}
+                                onChange={onChange}
+                                isValid={formErrors.teamName.length === 0}
+                                error={formErrors.teamName}
+                            />
+                        )}
+                    />
+                </div>
+                <div>
+                    <Controller
+                        control={control}
+                        name="teamLeader"
+                        defaultValue={initialTeamLeader}
+                        render={({ field: { onChange, value } }) => (
+                            <Dropdown
+                                name="teamLeader"
+                                label="Team Leader"
+                                options={teamLeaders}
+                                onChange={onChange}
+                                value={value}
+                            />
+                        )}
+                    />
+                    {formErrors.teamLeader.length > 0 && (
+                        <span className="ml-2 text-xs text-primary-900">
+                            {formErrors.teamLeader}
+                        </span>
                     )}
-                />
-                <Controller
-                    control={control}
-                    name="teamLeader"
-                    defaultValue={initialData?.teamLeaderId}
-                    render={({ field: { onChange, value } }) => (
-                        <Dropdown
-                            name="teamLeader"
-                            label="Team Leader"
-                            options={teamLeaders}
-                            onChange={onChange}
-                            value={value}
-                        />
-                    )}
-                />
-
-                <Controller
-                    control={control}
-                    name="teamDescription"
-                    defaultValue={initialData?.description ?? ''}
-                    render={({ field: { onChange, value } }) => (
-                        <Textarea
-                            id="teamDescription"
-                            name="teamDescription"
-                            label="Description"
-                            value={value}
-                            onChange={onChange}
-                            className="focus:ring-0"
-                        />
-                    )}
-                />
+                </div>
+                <div>
+                    <Controller
+                        control={control}
+                        name="teamDescription"
+                        defaultValue={initialData?.description ?? ''}
+                        render={({ field: { onChange, value } }) => (
+                            <TextArea
+                                name="teamDescription"
+                                value={value}
+                                label="Team Description"
+                                onChange={onChange}
+                                isValid={formErrors.teamDescription.length === 0}
+                                error={formErrors.teamDescription}
+                            />
+                        )}
+                    />
+                </div>
             </form>
         </Modal>
     )

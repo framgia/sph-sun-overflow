@@ -22,7 +22,11 @@ type TeamType = {
     members_count: string
     truncated_name: string
     truncated_description: string
-    teamLeader: { id: number }
+    teamLeader: {
+        id: number
+        first_name: string
+        last_name: string
+    }
 }
 
 type TeamsQuery = {
@@ -36,40 +40,43 @@ const columns: ColumnType[] = [
     {
         title: 'Team Name',
         key: 'name',
+        width: 240,
     },
     {
         title: 'Description',
         key: 'description',
+        width: 500,
     },
     {
         title: 'Members',
         key: 'members_count',
+        width: 96,
     },
     {
-        title: '',
+        title: 'Actions',
         key: 'action',
-        width: 20,
+        width: 96,
     },
 ]
 
 const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void }): JSX.Element => {
     const [showModal, setShowModal] = useState(false)
-
     return (
-        <div>
+        <>
             <Button
                 usage="toggle-modal"
                 onClick={() => {
                     setShowModal(true)
                 }}
             >
-                <Icons name="table_edit" />
+                <Icons name="pencil" size="18" />
             </Button>
             <TeamsFormModal
                 initialData={{
                     id: team?.key as number,
                     title: team?.full_name as string,
                     teamLeaderId: team?.teamLeaderId as number,
+                    teamLeaderName: team?.teamLeaderName as string,
                     description: team?.full_description as string,
                 }}
                 isOpen={showModal}
@@ -78,7 +85,7 @@ const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void })
                 }}
                 refetch={refetch}
             />
-        </div>
+        </>
     )
 }
 const DeleteAction = ({
@@ -108,14 +115,14 @@ const DeleteAction = ({
     }
 
     return (
-        <div>
+        <>
             <Button
                 usage="toggle-modal"
                 onClick={() => {
                     setShowModal(true)
                 }}
             >
-                <Icons name="table_delete" additionalClass="fill-gray-500" />
+                <Icons name="trash" size="18" />
             </Button>
             <Modal
                 title="Delete Team"
@@ -130,7 +137,7 @@ const DeleteAction = ({
                     Are you sure you wish to delete <span className="font-bold">{name}</span>?
                 </span>
             </Modal>
-        </div>
+        </>
     )
 }
 
@@ -191,13 +198,14 @@ const AdminTeams = (): JSX.Element => {
                 description,
                 truncated_description,
                 members_count,
-                teamLeader: { id: teamLeaderId },
+                teamLeader: { id: teamLeaderId, first_name, last_name },
             } = team
             return {
                 key: id,
                 slug,
                 members_count,
                 teamLeaderId: +teamLeaderId,
+                teamLeaderName: `${first_name} ${last_name}`,
                 name: truncated_name,
                 description: truncated_description,
                 full_name: name,
@@ -210,7 +218,7 @@ const AdminTeams = (): JSX.Element => {
         const team = getTeamDataTable(teamArr).find((team) => +team.key === key)
 
         return (
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row items-center gap-4">
                 <EditAction
                     team={team}
                     refetch={async () => {
@@ -237,30 +245,39 @@ const AdminTeams = (): JSX.Element => {
         )
     }
 
-    return (
-        <div className="flex flex-col">
-            <div className="flex w-full flex-row items-center justify-between">
-                <h1 className="text-3xl font-bold text-gray-800">Teams</h1>
-                <Button
-                    type="button"
-                    additionalClass="px-6 py-3"
-                    onClick={() => {
-                        setShowModal(true)
-                    }}
-                >
-                    New Team
-                </Button>
-            </div>
+    const renderFooter = (): JSX.Element | null => {
+        if (paginatorInfo.lastPage > 1) {
+            return (
+                <div className="flex w-full items-center justify-center">
+                    <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+                </div>
+            )
+        }
+        return null
+    }
 
-            <Table
-                columns={columns}
-                dataSource={getTeamDataTable(teamArr)}
-                isEmptyString="No Teams to Show"
-                actions={renderTeamsActions}
-                clickableArr={clickableArr}
-            />
-            <div className="mt-auto">
-                <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+    return (
+        <div className="flex flex-col items-center">
+            <div className="flex h-full flex-col gap-4">
+                <div className="flex items-center justify-end">
+                    <Button
+                        usage="stroke"
+                        size="large"
+                        onClick={() => {
+                            setShowModal(true)
+                        }}
+                    >
+                        Add Team
+                    </Button>
+                </div>
+                <Table
+                    columns={columns}
+                    dataSource={getTeamDataTable(teamArr)}
+                    isEmptyString="No Teams to Show"
+                    actions={renderTeamsActions}
+                    clickableArr={clickableArr}
+                    footer={renderFooter()}
+                />
             </div>
             <TeamsFormModal
                 isOpen={showModal}

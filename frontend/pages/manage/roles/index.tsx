@@ -18,7 +18,7 @@ const columns: ColumnType[] = [
     {
         title: 'Role',
         key: 'name',
-        width: 144,
+        width: 240,
     },
     {
         title: 'Description',
@@ -28,7 +28,7 @@ const columns: ColumnType[] = [
     {
         title: 'Actions',
         key: 'action',
-        width: 20,
+        width: 128,
     },
 ]
 
@@ -46,14 +46,14 @@ const ViewRole = ({ role, refetch }: { role: RolesType; refetch: () => void }): 
     const [showModal, setShowModal] = useState(false)
 
     return (
-        <div>
+        <>
             <Button
                 usage="toggle-modal"
                 onClick={() => {
                     setShowModal(true)
                 }}
             >
-                <Icons name="eye" />
+                <Icons name="eye" size="18" />
             </Button>
             <RoleFormModal
                 role={role}
@@ -64,7 +64,7 @@ const ViewRole = ({ role, refetch }: { role: RolesType; refetch: () => void }): 
                 }}
                 refetch={refetch}
             />
-        </div>
+        </>
     )
 }
 
@@ -72,14 +72,14 @@ const EditRole = ({ role, refetch }: { role: RolesType; refetch: () => void }): 
     const [showModal, setShowModal] = useState(false)
 
     return (
-        <div>
+        <>
             <Button
                 usage="toggle-modal"
                 onClick={() => {
                     setShowModal(true)
                 }}
             >
-                <Icons name="pencil" />
+                <Icons name="pencil" size="18" />
             </Button>
             <RoleFormModal
                 role={role}
@@ -90,7 +90,7 @@ const EditRole = ({ role, refetch }: { role: RolesType; refetch: () => void }): 
                 }}
                 refetch={refetch}
             />
-        </div>
+        </>
     )
 }
 
@@ -125,14 +125,14 @@ const DeleteRole = ({
     }
 
     return (
-        <div>
+        <>
             <Button
                 usage="toggle-modal"
                 onClick={() => {
                     setShowModal(true)
                 }}
             >
-                <Icons name="trash" />
+                <Icons name="trash" size="18" />
             </Button>
             <Modal
                 title="Delete Role"
@@ -147,7 +147,7 @@ const DeleteRole = ({
                     Are you sure you wish to delete <span className="font-bold">{name}</span>?
                 </span>
             </Modal>
-        </div>
+        </>
     )
 }
 
@@ -201,7 +201,7 @@ const RolesPage = (): JSX.Element => {
 
         if (role) {
             return (
-                <div className="flex flex-row gap-4">
+                <div className="flex flex-row items-center gap-4">
                     <ViewRole
                         role={role}
                         refetch={async () => {
@@ -256,8 +256,8 @@ const RolesPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col items-center p-4">
-            <div className="flex h-full flex-col py-4">
+        <div className="flex flex-col items-center">
+            <div className="flex h-full flex-col gap-4">
                 <div className="flex items-center justify-end">
                     <Button
                         usage="stroke"

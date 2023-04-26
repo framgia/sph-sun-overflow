@@ -27,11 +27,11 @@ const TextArea = ({
                 name={name}
                 rows={rows}
                 value={value}
-                className="w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 focus:border-primary-blue focus:ring-primary-blue"
                 placeholder={label}
                 onChange={onChange}
             />
-            {!isValid && <span className="ml-2 text-xs text-primary-red">{error}</span>}
+            {!isValid && <span className="ml-2 text-xs text-primary-900">{error}</span>}
         </div>
     )
 }
