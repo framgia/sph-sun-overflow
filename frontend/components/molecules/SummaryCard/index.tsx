@@ -76,10 +76,12 @@ const SummaryCard = ({
         const lineClamp = isBookmarked ? 'line-clamp-1' : 'line-clamp-3'
         if (content) {
             return (
-                <div className="">
-                    <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
-                        {stripHtmlTags(content)}
-                    </p>
+                <div className="flex flex-grow">
+                    <div className="">
+                        <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
+                            {stripHtmlTags(content)}
+                        </p>
+                    </div>
                 </div>
             )
         }
@@ -184,7 +186,7 @@ const SummaryCard = ({
                 </div>
             </div>
 
-            <div className="flex flex-grow">{renderContent(content, isBookmarked)}</div>
+            {renderContent(content, isBookmarked)}
             {renderRating(metadata, upvote_percentage)}
             <div className={`${tags && tags.length > 0 ? 'space-y-1' : ''}`}>
                 {renderTags(tags)}
