@@ -35,6 +35,7 @@ const getActiveTabClass = (status: boolean): string => {
 const TeamDetail = (): JSX.Element => {
     const router = useRouter()
     const [activeTab, setActiveTab] = useState<string>('Questions')
+    const [verified, setVerified] = useState<boolean>(false)
 
     const { slug } = router.query
     const questionsApi = useQuery<any, RefetchType>(GET_QUESTIONS, {
@@ -48,12 +49,19 @@ const TeamDetail = (): JSX.Element => {
 
     const { data, loading, error } = useQuery(GET_TEAM, {
         variables: { slug },
+        async onCompleted(data) {
+            if (data.team === null) {
+                errorNotify('Team does not exist')
+                await router.replace('/manage/teams')
+            }
+            setVerified(true)
+        },
     })
 
     const team: TeamType = data?.team
     const teamLeader: UserType = team?.teamLeader
 
-    if (loading || questionsApi.loading) return loadingScreenShow()
+    if (loading || questionsApi.loading || !verified) return loadingScreenShow()
     if (error) {
         return <span>{errorNotify(`Error! ${error.message}`)}</span>
     }
