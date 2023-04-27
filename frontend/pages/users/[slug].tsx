@@ -24,12 +24,12 @@ const Profile = (): JSX.Element => {
     if (error) {
         errorNotify(`Error! ${error.message}`)
         void router.push('/404')
-        return <></>
+        return loadingScreenShow()
     }
     if (data.user === null) {
         errorNotify(`User does not exist`)
         void router.push('/404')
-        return <></>
+        return loadingScreenShow()
     }
 
     const isPublic = userSlug !== router.query.slug
