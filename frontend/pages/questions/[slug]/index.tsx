@@ -126,7 +126,6 @@ const QuestionDetailPage = (): JSX.Element => {
         void router.replace('/404')
         return loadingScreenShow()
     }
-    console.log(data)
     const question: QuestionType = {
         ...data.question,
     }

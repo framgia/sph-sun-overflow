@@ -57,7 +57,6 @@ type ProfileLayoutProps = {
 }
 
 const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JSX.Element => {
-    console.log(data)
     const [isOpenFollower, setIsOpenFollower] = useState<boolean>(false)
     const [isOpenFollowing, setIsOpenFollowing] = useState<boolean>(false)
     const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
