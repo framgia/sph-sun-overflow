@@ -1,7 +1,7 @@
 import Icons from '@/components/atoms/Icons'
 import { useBoundStore } from '@/helpers/store'
 import { Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react'
-import Tooltips from '../Tooltip'
+import Tooltips from '../TagPopover'
 
 type PillProps = {
     tag: {

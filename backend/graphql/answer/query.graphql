@@ -4,7 +4,10 @@ input answerFilter {
 
 extend type Query {
     answer(id: ID! @eq): Answer @guard(with: ["api"]) @find
-    answers(filter: answerFilter @spread): [Answer!]!
+    answers(
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at"])
+        filter: answerFilter @spread
+    ): [Answer!]!
         @guard(with: ["api"])
         @paginate(builder: "App\\GraphQL\\Queries\\Answers")
 }

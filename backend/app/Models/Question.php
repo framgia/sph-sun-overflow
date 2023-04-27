@@ -84,11 +84,6 @@ class Question extends Model
         return $this->votes()->sum('value');
     }
 
-    public function getUserVoteAttribute()
-    {
-        return $this->votes()->where('user_id', auth()->id())->first()->value ?? 0;
-    }
-
     public function getUpvotePercentageAttribute()
     {
         $totalVotes = $this->votes()->count();
@@ -97,6 +92,11 @@ class Question extends Model
         }
 
         return 0;
+    }
+
+    public function getUserVoteAttribute()
+    {
+        return $this->votes()->where('user_id', auth()->id())->first()->value ?? 0;
     }
 
     public function getHumanizedCreatedAtAttribute()

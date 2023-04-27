@@ -26,7 +26,7 @@ class User extends Authenticatable
     protected $appends = [
         'question_count', 'answer_count', 'top_questions', 'top_answers',
         'is_following', 'follower_count', 'following_count', 'bookmarked_questions',
-        'bookmarked_answers'
+        'bookmarked_answers',
     ];
 
     /**
@@ -162,7 +162,11 @@ class User extends Authenticatable
 
     public function getIsFollowingAttribute()
     {
-        return Auth::user()->following()->where('following_id', $this->id)->exists();
+        if (Auth::user()) {
+            return Auth::user()->following()->where('following_id', $this->id)->exists();
+        } else {
+            return false;
+        }
     }
 
     public function getFollowerCountAttribute()
@@ -179,6 +183,7 @@ class User extends Authenticatable
     {
         return $this->bookmarks()->where('bookmarkable_type', Question::class)->get();
     }
+
     public function getBookmarkedAnswersAttribute()
     {
         return $this->bookmarks()->where('bookmarkable_type', Answer::class)->get();

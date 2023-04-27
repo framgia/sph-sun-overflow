@@ -1,7 +1,9 @@
+import { CustomIcons } from '@/components/atoms/Icons'
 import { useRouter } from 'next/router'
 import SortDropdown from '../SortDropdown'
 
 type TriggerType = 'DATE' | 'ANSWER'
+const { DotsIcon } = CustomIcons
 
 type FilterType = {
     state: string
@@ -106,11 +108,18 @@ const DropdownFilters = ({ triggers }: Props): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-1">
             {triggers.map((trigger, index) => {
                 return (
-                    <div key={index} className="min-w-[8rem]">
+                    <div key={index}>
                         <SortDropdown
+                            icon={
+                                trigger === 'ANSWER' ? (
+                                    <div className="m-auto">
+                                        <DotsIcon />
+                                    </div>
+                                ) : null
+                            }
                             filters={filterLists[trigger].filters}
                             selectedFilter={filterLists[trigger].state}
                         />

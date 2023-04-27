@@ -55,7 +55,7 @@ final class Questions
                 if (isset($args['is_public'])) {
                     $query->where('is_public', $args['is_public']);
                 }
-            } else {
+            } elseif (! $args['isAdmin']) {
                 $query->where('is_public', true);
             }
 

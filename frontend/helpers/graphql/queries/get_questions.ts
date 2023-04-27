@@ -4,10 +4,17 @@ const GET_QUESTIONS = gql`
     query Questions(
         $first: Int!
         $page: Int!
+        $isAdmin: Boolean
         $filter: filter
         $orderBy: [QueryQuestionsOrderByOrderByClause!]
     ) {
-        questions(first: $first, page: $page, filter: $filter, orderBy: $orderBy) {
+        questions(
+            first: $first
+            page: $page
+            isAdmin: $isAdmin
+            filter: $filter
+            orderBy: $orderBy
+        ) {
             paginatorInfo {
                 perPage
                 currentPage
@@ -22,6 +29,7 @@ const GET_QUESTIONS = gql`
                 created_at
                 slug
                 vote_count
+                upvote_percentage
                 views_count
                 humanized_created_at
                 is_from_user

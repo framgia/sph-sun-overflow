@@ -6,6 +6,7 @@ type Answer {
     updated_at: String
     humanized_created_at: String
     vote_count: Int
+    upvote_percentage: Float
     user_vote: Int
     is_bookmarked: Boolean
     user: User! @belongsTo

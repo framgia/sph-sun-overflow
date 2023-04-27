@@ -8,9 +8,8 @@ import {
 } from 'react-icons/hi'
 
 type Props = {
-    currentPage: number
-    lastPage: number
-    hasMorePages: boolean
+    currentPage?: number
+    lastPage?: number
     perPage?: number
     onPageChange: (first: number, page: number) => void
 }
@@ -24,9 +23,8 @@ type PageItemType = {
 }
 
 const Paginate = ({
-    currentPage,
-    lastPage,
-    hasMorePages,
+    currentPage = 1,
+    lastPage = 1,
     perPage = 10,
     onPageChange,
 }: Props): JSX.Element => {
