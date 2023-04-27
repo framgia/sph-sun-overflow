@@ -10,7 +10,13 @@ export type RefetchType = {
     first: number
     page: number
     name?: string
-    filter?: { keyword?: string; answered?: boolean; tag?: string; team?: string }
+    filter?: {
+        keyword?: string
+        answered?: boolean
+        tag?: string
+        team?: string
+        user_slug?: string
+    }
     orderBy?: Array<{ column: string; order: string }>
     sort?: Array<{ column: string; order: string }>
 }

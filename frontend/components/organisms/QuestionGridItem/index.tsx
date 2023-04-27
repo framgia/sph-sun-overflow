@@ -1,95 +1,78 @@
 import { CustomIcons } from '@/components/atoms/Icons'
 import Tags from '@/components/molecules/Tags'
+import { parseHTML } from '@/helpers/htmlParsing'
+import type { TagType, UserType } from '@/pages/questions/[slug]'
 import Link from 'next/link'
 
-const { UnlockIcon, ThumbUpIcon } = CustomIcons
+const { LockIcon, ThumbUpIcon, UnlockIcon } = CustomIcons
 
-const QuestionGridItem = (): JSX.Element => {
+type QuestionGridItemProps = {
+    slug: string
+    title: string
+    content: string
+    voteCount: number
+    upvotePercentage: number
+    answerCount: number
+    viewCount: number
+    isPublic: boolean
+    tags: TagType[]
+    author: UserType
+    createdAt: string
+}
+
+const QuestionGridItem = ({
+    slug,
+    title,
+    content,
+    voteCount,
+    upvotePercentage,
+    answerCount,
+    viewCount,
+    isPublic,
+    tags,
+    author,
+    createdAt,
+}: QuestionGridItemProps): JSX.Element => {
     return (
-        <div className="flex min-h-[176px] flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
+        <div className="flex min-h-[166px] flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
             <div className="flex justify-between">
-                <span className="text-base font-semibold">Title Content</span>
-                <div className="flex items-center">
-                    <UnlockIcon />
-                </div>
+                <span
+                    className="w-fit truncate text-sm font-semibold hover:text-primary-base"
+                    title={title}
+                >
+                    <Link href={`/questions/${slug}`}>{title}</Link>
+                </span>
+
+                <div className="flex items-center">{isPublic ? <UnlockIcon /> : <LockIcon />}</div>
             </div>
-            <div className="flex gap-3">
-                <div className="flex flex-col gap-2">
-                    <p className="text-[12px] leading-4 line-clamp-3">
-                        Lorem ipsum dolor sit amet consectetur. Sed amet at id sit proin in. Lorem
-                        ipsum dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum
-                        dolor sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum dolor
-                        sit amet consectetur. Sed amet at id sit proin in. Lorem ipsum dolor sit
-                        amet consectetur. Sed amet at id sit proin in.
+            <div className="flex flex-1 gap-3">
+                <div className="flex flex-1 flex-col gap-2">
+                    <p className="break-all text-[12px] leading-4 line-clamp-3">
+                        {parseHTML(content)}
                     </p>
-                    <div className="flex w-fit gap-1 rounded-[4px] border border-primary-base px-1 py-[2px] text-primary-base">
+                    <div className="mt-auto flex w-fit gap-1 rounded-[4px] border border-primary-base px-1 py-[2px] text-primary-base">
                         <div>
                             <ThumbUpIcon />
                         </div>
-                        <span className="text-xs font-bold">87%</span>
+                        <span className="text-xs font-bold">{upvotePercentage.toFixed()}%</span>
                     </div>
                 </div>
                 <div className="flex min-w-fit flex-col items-end text-xs font-light">
-                    <span>10 Votes</span>
-                    <span>5 Answers</span>
-                    <span>29 Views</span>
+                    <span>{voteCount} Votes</span>
+                    <span>{answerCount} Answers</span>
+                    <span>{viewCount} Views</span>
                 </div>
             </div>
-            <div className="flex flex-col gap-1">
-                <Tags
-                    values={[
-                        {
-                            id: 1,
-                            slug: 'javascript',
-                            name: 'JavaScript',
-                            description: 'JavaScript questions',
-                            is_watched_by_user: true,
-                        },
-                        {
-                            id: 2,
-                            slug: 'typeScript',
-                            name: 'TypeScript',
-                            description: 'TypeScript questions',
-                            is_watched_by_user: false,
-                        },
-                        {
-                            id: 3,
-                            slug: 'javascript',
-                            name: 'JavaScript',
-                            description: 'JavaScript questions',
-                            is_watched_by_user: true,
-                        },
-                        {
-                            id: 4,
-                            slug: 'typeScript',
-                            name: 'TypeScript',
-                            description: 'TypeScript questions',
-                            is_watched_by_user: false,
-                        },
-                        {
-                            id: 5,
-                            slug: 'javascript',
-                            name: 'JavaScript',
-                            description: 'JavaScript questions',
-                            is_watched_by_user: true,
-                        },
-                        {
-                            id: 6,
-                            slug: 'typeScript',
-                            name: 'TypeScript',
-                            description: 'TypeScript questions',
-                            is_watched_by_user: false,
-                        },
-                    ]}
-                />
+            <div className="mt-auto flex flex-col gap-1">
+                <Tags values={tags} />
                 <div className="flex justify-between text-xs">
                     <span>
-                        Author:{' '}
-                        <Link href="#" className="text-primary-blue">
-                            John Doe
+                        {`Author: `}
+                        <Link href={`/users/${String(author.slug)}`} className="text-primary-blue">
+                            {author.first_name} {author.last_name}
                         </Link>
                     </span>
-                    <time>2022-12-02</time>
+                    <time>{new Date(createdAt).toISOString().substring(0, 10)}</time>
                 </div>
             </div>
         </div>

@@ -52,13 +52,15 @@ export type AnswerType = {
     user: UserType
     is_from_user: boolean
     comments: CommentType[]
-    question: { slug: string }
+    question: QuestionType
 }
 
 export type TeamType = {
     id: number
     name: string
     slug?: string
+    description: string
+    members_count: number
 }
 
 export type QuestionType = {
@@ -68,6 +70,7 @@ export type QuestionType = {
     content: string
     created_at: string
     vote_count: number
+    upvote_percentage: number
     views_count: number
     humanized_created_at: string
     is_public: boolean

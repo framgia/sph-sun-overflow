@@ -22,6 +22,7 @@ const GET_QUESTIONS = gql`
                 created_at
                 slug
                 vote_count
+                upvote_percentage
                 views_count
                 humanized_created_at
                 is_from_user

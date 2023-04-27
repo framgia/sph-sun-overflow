@@ -23,6 +23,7 @@ export type ProfileCardProps = {
     handleEditModal?: (input: boolean) => void
     id: number
     isPublic: boolean
+    isAdmin?: boolean
 }
 
 const ProfileCard = ({
@@ -40,6 +41,7 @@ const ProfileCard = ({
     is_following,
     role,
     isPublic,
+    isAdmin = false,
     toggleFollow,
     handleFollower,
     handleFollowing,
@@ -73,9 +75,6 @@ const ProfileCard = ({
                             <div className="flex flex-row items-center justify-between">
                                 <div className="text-sm font-bold leading-[120%]">{`${first_name} ${last_name}`}</div>
                                 {!isPublic && (
-                                    // <EditProfileModal
-                                    //     {...{ first_name, last_name, about_me, avatar, updated_at }}
-                                    // />
                                     <div
                                         className="h-4 cursor-pointer text-xs font-semibold leading-[120%] text-neutral-900 hover:underline"
                                         onClick={() => {
@@ -122,7 +121,7 @@ const ProfileCard = ({
                                 <span className="font-bold">{follower_count}</span> Followers
                             </div>
                         </div>
-                        {isPublic && (
+                        {!isAdmin && isPublic && (
                             <div className="w-[187px]">
                                 <Button usage="main-follow" onClick={onClickFollow}>
                                     {is_following ? 'Unfollow' : 'Follow'}

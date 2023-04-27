@@ -162,7 +162,11 @@ class User extends Authenticatable
 
     public function getIsFollowingAttribute()
     {
-        return Auth::user()->following()->where('following_id', $this->id)->exists();
+        if (Auth::user()) {
+            return Auth::user()->following()->where('following_id', $this->id)->exists();
+        } else {
+            return false;
+        }
     }
 
     public function getFollowerCountAttribute()
