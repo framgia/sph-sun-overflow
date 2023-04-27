@@ -33,28 +33,16 @@ type Props = {
 const getButtonClasses = (usage: string, size: string): string => {
     switch (usage) {
         case 'filled':
-            return `items-center font-semibold rounded-[5px] px-4 bg-primary-900 text-white capitalize focus:ring-1 focus:ring-primary-900 focus:bg-primary-900 ${
-                size === 'regular'
-                    ? 'font-normal text-xs h-7'
-                    : size === 'medium'
-                    ? 'text-sm h-9 font-semibold'
-                    : 'text-sm h-10 font-semibold'
+            return `items-center rounded-[5px] px-4 bg-primary-900 text-white capitalize focus:ring-1 focus:ring-primary-900 focus:bg-primary-900 ${
+                size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'stroke':
-            return `items-center font-semibold rounded-[5px] px-4 border bg-neutral-white border-primary-900 text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 ${
-                size === 'regular'
-                    ? 'font-normal text-xs h-7'
-                    : size === 'medium'
-                    ? 'text-sm h-9 font-semibold'
-                    : 'text-sm h-10 font-semibold'
+            return `items-center rounded-[5px] px-4 border bg-neutral-white border-primary-900 text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 ${
+                size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'grayed':
-            return `items-center font-semibold rounded-[5px] px-4 border bg-neutral-white border-neutral-900 text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
-                size === 'regular'
-                    ? 'font-normal text-xs h-7'
-                    : size === 'medium'
-                    ? 'text-sm h-9 font-semibold'
-                    : 'text-sm h-10 font-semibold'
+            return `items-center rounded-[5px] px-4 border bg-neutral-white border-neutral-900 text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
+                size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'primary':
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'

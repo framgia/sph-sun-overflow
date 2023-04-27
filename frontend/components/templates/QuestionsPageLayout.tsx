@@ -154,23 +154,16 @@ const QuestionsPageLayout = ({
                         return (
                             <QuestionList
                                 key={question.id}
-                                id={question.id}
                                 title={question.title}
-                                slug={team}
-                                question_slug={question.slug}
-                                page_slug={page_slug}
-                                previous_page_slug={previous_page_slug}
+                                slug={question.slug}
                                 content={question.content}
-                                created_at={question.created_at}
-                                humanized_created_at={question.humanized_created_at}
-                                vote_count={question.vote_count}
-                                answer_count={question.answers.length}
-                                view_count={question.views_count}
+                                createdAt={question.created_at}
+                                voteCount={question.vote_count}
+                                answerCount={question.answers.length}
+                                viewCount={question.views_count}
                                 tags={question.tags}
-                                user={question.user}
-                                team_name={question.team?.name ?? ''}
-                                team_slug={question.team?.slug ?? ''}
-                                is_public={question.is_public}
+                                author={question.user}
+                                isPublic={question.is_public}
                             />
                         )
                     })}

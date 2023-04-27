@@ -1,152 +1,66 @@
-import Icons from '@/components/atoms/Icons'
-import Author from '@/components/molecules/Author'
-import Bookmark from '@/components/molecules/Bookmark'
+import Privacy from '@/components/molecules/Privacy'
 import Tags from '@/components/molecules/Tags'
+import { parseHTML } from '@/helpers/htmlParsing'
+import type { TagType, UserType } from '@/pages/questions/[slug]'
 import Link from 'next/link'
-import 'react-quill/dist/quill.snow.css'
-import { parseHTML } from '../../../helpers/htmlParsing'
-import type { TagType, UserType } from '../../../pages/questions/[slug]'
 
-type Props = {
-    id?: number
-    title?: string
-    slug?: string
-    content?: string
-    vote_count?: number
-    answer_count?: number
-    view_count?: number
-    created_at?: string
-    humanized_created_at?: string
+type QuestionListItemProps = {
+    slug: string
+    title: string
+    content: string
+    voteCount: number
+    answerCount: number
+    viewCount: number
+    isPublic: boolean
     tags: TagType[]
-    user?: UserType
-    bookmarkType?: 'Question' | 'Answer'
-    page_slug?: string
-    previous_page_slug?: string
-    question_slug?: string
-    refetch?: () => void
-    team_name?: string
-    team_slug?: string
-    is_public?: boolean
+    author: UserType
+    createdAt: string
 }
 
-const QuestionList = ({
-    id = 0,
+const QuestionListItem = ({
+    slug,
     title,
-    slug = '',
-    question_slug = '',
     content,
-    vote_count,
-    answer_count,
-    view_count,
-    created_at,
-    humanized_created_at,
+    voteCount,
+    answerCount,
+    viewCount,
+    isPublic,
     tags,
-    user,
-    bookmarkType,
-    previous_page_slug,
-    page_slug,
-    team_name,
-    team_slug,
-    is_public,
-}: Props): JSX.Element => {
-    const renderTeamQuestionDetailHeader = (): JSX.Element => {
-        return (
-            <Link
-                href={{
-                    pathname: `/teams/${slug}/question/${question_slug}`,
-                    query: { check: previous_page_slug },
-                }}
-                as={`/teams/${slug}/question/${question_slug}`}
-                className="text-lg text-blue-600 hover:text-blue-400"
-            >
-                {title}
-            </Link>
-        )
-    }
-
-    const renderQuestionDetailHeader = (): JSX.Element => {
-        return (
-            <Link
-                href={`/questions/${question_slug}`}
-                className="text-lg text-blue-600 hover:text-blue-400"
-            >
-                {title}
-            </Link>
-        )
-    }
-
+    author,
+    createdAt,
+}: QuestionListItemProps): JSX.Element => {
     return (
-        <div className="flex w-full flex-row p-5">
-            <div className="flex w-[15%] flex-col">
-                <div className="text-sm">
-                    {vote_count} {vote_count !== 1 ? 'Votes' : 'Vote'}
+        <div className="border-b-2 border-y-neutral-200 p-2 text-neutral-900">
+            <div className="flex  w-full items-start gap-4 ">
+                <div className="flex min-w-fit flex-col items-end pt-1 text-xs font-light">
+                    <span>{voteCount} Votes</span>
+                    <span>{answerCount} Answers</span>
+                    <span>{viewCount} Views</span>
                 </div>
-                <div className="text-sm">
-                    {answer_count} {answer_count !== 1 ? 'Answers' : 'Answer'}
+                <div className="flex h-32 w-full flex-col gap-2">
+                    <span className="w-fit truncate text-base font-semibold hover:text-primary-base">
+                        <Link href={`/questions/${slug}`}>{title}</Link>
+                    </span>
+                    <p className="text-[12px] line-clamp-2">{parseHTML(content)}</p>
+                    <Tags values={tags} />
                 </div>
-                <div className="text-sm">
-                    {view_count} {view_count !== 1 ? 'Views' : 'View'}
+                <div className="flex w-[5.5rem] justify-end">
+                    <Privacy
+                        name={isPublic ? 'Public' : 'Private'}
+                        additionalClass={`${isPublic ? 'text-neutral-disabled' : ''}`}
+                    />
                 </div>
             </div>
-            <div className="flex w-[85%] flex-col gap-4">
-                <div>
-                    <div className="flex justify-end">
-                        {bookmarkType === 'Question' && (
-                            <Bookmark
-                                bookmarkable_id={id}
-                                bookmarkable_type={bookmarkType}
-                                refetchHandler={() => {}}
-                                is_bookmarked
-                            />
-                        )}
-                    </div>
-                    <div className="flex w-full justify-between ">
-                        {page_slug === 'teams'
-                            ? renderTeamQuestionDetailHeader()
-                            : renderQuestionDetailHeader()}
-                        {slug && (
-                            <div className="flex items-center gap-2">
-                                <span>{is_public ? 'Public' : 'Private'} </span>
-                                <Icons name={is_public ? 'public' : 'private'} />
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div className="ql-snow flex w-full flex-col gap-1">
-                    <div className="ql-editor question-parsed-content w-full">
-                        <span className="line-clamp-2">{parseHTML(content)}</span>
-                    </div>
-                    <div className="mt-[-0.8rem] flex flex-col gap-2">
-                        <div className="w-full">
-                            <Tags values={tags} />
-                        </div>
-                        <div className="flex flex-row justify-end">
-                            <div className="flex flex-col">
-                                <Author
-                                    author={`${user?.first_name ?? ''} ${user?.last_name ?? ''}`}
-                                    moment={humanized_created_at}
-                                    slug={user?.slug}
-                                />
-                                {team_name && (
-                                    <div className="ml-4 flex justify-end gap-1 text-primary-gray">
-                                        From Team:
-                                        <Link
-                                            href={`/teams/${team_slug ?? ''}`}
-                                            className="text-blue-600 hover:text-blue-400"
-                                        >
-                                            <div className="max-w-[170px] truncate">
-                                                {team_name}
-                                            </div>
-                                        </Link>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="flex justify-end text-xs">
+                <span>
+                    <Link href={`/users/${String(author?.slug)}`} className="text-primary-blue">
+                        {author?.first_name} {author?.last_name}
+                    </Link>
+                    {` asked ${createdAt}`}
+                </span>
             </div>
         </div>
     )
 }
 
-export default QuestionList
+export default QuestionListItem
