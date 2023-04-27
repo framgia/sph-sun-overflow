@@ -35,6 +35,7 @@ const GET_QUESTIONS = gql`
                 is_from_user
                 is_answered
                 is_public
+                upvote_percentage
                 team {
                     id
                     name

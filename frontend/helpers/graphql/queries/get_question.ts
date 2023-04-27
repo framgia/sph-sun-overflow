@@ -11,6 +11,7 @@ const GET_QUESTION = gql`
             vote_count
             views_count
             is_bookmarked
+            upvote_percentage
             humanized_created_at
             is_from_user
             is_answered

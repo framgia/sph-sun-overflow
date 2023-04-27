@@ -8,7 +8,7 @@ export type OptionType = {
 
 type FormProps = {
     name?: string
-    label: string
+    label?: string
     options: OptionType[]
     onChange: ControllerRenderProps['onChange']
     value: unknown
@@ -50,7 +50,9 @@ const selectStyles: StylesConfig<any, false, any> = {
 const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps): JSX.Element => {
     return (
         <div className="w-full">
-            <div className="mb-2 text-sm font-medium capitalize text-neutral-900">{label}</div>
+            {label && (
+                <div className="mb-2 text-sm font-medium capitalize text-neutral-900">{label}</div>
+            )}
             <Select
                 options={options}
                 defaultValue={value}

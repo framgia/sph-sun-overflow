@@ -35,3 +35,43 @@ input:-webkit-autofill:active {
 .Content > * > * {
     display: flex;
 }
+
+/* FOR QUESTION LIST */
+@media (min-width: 1360px) {
+    .question-list-search-input {
+        @apply w-96;
+    }
+}
+
+@media (min-width: 1220px) {
+    .question-list-header {
+        @apply flex h-16 justify-between;
+    }
+}
+
+@media (min-width: 1290px) and (max-width: 1360px) {
+    .question-list-search-input {
+        @apply flex w-80;
+    }
+}
+
+@media (min-width: 1260px) and (max-width: 1290px) {
+    .question-list-search-input {
+        @apply w-72;
+    }
+}
+
+@media (min-width: 1220px) and (max-width: 1260px) {
+    .question-list-search-input {
+        @apply w-64;
+    }
+}
+
+@media (min-width: 800px) and (max-width: 1220px) {
+    .question-list-filters {
+        @apply mt-4 w-full;
+    }
+    .question-list-header {
+        @apply h-24;
+    }
+}

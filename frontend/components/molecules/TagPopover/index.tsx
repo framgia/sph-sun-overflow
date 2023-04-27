@@ -1,7 +1,5 @@
 import Button from '@/components/atoms/Button'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
-import GET_ANSWERS from '@/helpers/graphql/queries/get_answers'
-import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
@@ -24,17 +22,11 @@ type TagType = {
 const TagPopover = ({ tag }: TagType): JSX.Element => {
     const router = useRouter()
     const manageUsersSelectedTab = (router.query.tab ?? 'Questions') as Tab
+
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
         refetchQueries: [
+            manageUsersSelectedTab === 'Questions' ? 'Questions' : 'Answers',
             { query: QTagsSidebar },
-            {
-                query: manageUsersSelectedTab === 'Questions' ? GET_QUESTIONS : GET_ANSWERS,
-                variables: {
-                    first: 5,
-                    page: 1,
-                    filter: { user_slug: router.query.slug as string },
-                },
-            },
         ],
         onCompleted: (data) => {
             if (data.addWatchedTag === 'Successfully added the tag') {
@@ -46,15 +38,8 @@ const TagPopover = ({ tag }: TagType): JSX.Element => {
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
         refetchQueries: [
+            manageUsersSelectedTab === 'Questions' ? 'Questions' : 'Answers',
             { query: QTagsSidebar },
-            {
-                query: manageUsersSelectedTab === 'Questions' ? GET_QUESTIONS : GET_ANSWERS,
-                variables: {
-                    first: 5,
-                    page: 1,
-                    filter: { user_slug: router.query.slug as string },
-                },
-            },
         ],
 
         onCompleted: (data) => {

@@ -28,7 +28,7 @@ const SortDropdown = ({
                             <div
                                 className={`${
                                     active ? 'bg-primary-200' : 'bg-white-100'
-                                } w-full py-2 px-4 text-sm text-primary-black`}
+                                } w-full break-all py-2 px-4 text-sm text-primary-black`}
                                 onClick={newFilter.onClick}
                             >
                                 {newFilter.name}
@@ -52,7 +52,7 @@ const SortDropdown = ({
                                     <div
                                         className={`${
                                             active ? 'bg-light-red' : 'bg-white-100'
-                                        } w-full py-2 px-4 text-sm text-primary-black`}
+                                        } w-full break-all py-2 px-4 text-sm text-primary-black`}
                                         onClick={newFilter.onClick}
                                     >
                                         {newFilter.name}
@@ -70,7 +70,7 @@ const SortDropdown = ({
         <div className="flex items-center ">
             <Menu as="div" className="relative inline-block w-full text-left">
                 <div>
-                    <Menu.Button className="flex justify-end rounded-[5px] border border-neutral-500 p-2 text-sm text-neutral-900">
+                    <Menu.Button className="flex h-9 justify-end rounded-[5px] border border-neutral-500 p-2 text-sm text-neutral-900">
                         <span className="">{selectedFilter}</span>
                         {!icon ? (
                             <div className="m-auto">
@@ -90,7 +90,7 @@ const SortDropdown = ({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute left-0 z-10 mt-1 w-44 divide-y divide-neutral-200 rounded-[5px] border border-neutral-200 bg-white shadow">
+                    <Menu.Items className="absolute left-0 z-10 mt-1 w-36 divide-y divide-neutral-200 rounded-[5px] border border-neutral-200 bg-white shadow">
                         {grouped ? renderGroupedFilters() : renderFilters()}
                     </Menu.Items>
                 </Transition>
