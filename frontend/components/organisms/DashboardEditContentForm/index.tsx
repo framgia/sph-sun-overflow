@@ -1,6 +1,6 @@
 import Button from '@/components/atoms/Button'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
-import { successNotify, errorNotify } from '@/helpers/toast'
+import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -39,7 +39,7 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
 
         setInputError({ ...inputError, content: '' })
         if (data.content === content) {
-            errorNotify('No changes. Dashboard not updated')
+            errorNotify('No changes were made')
             toggleEdit()
             return
         }
@@ -69,43 +69,32 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
     }, [inputError, errorElement])
 
     return (
-        <div className="flex w-full flex-col gap-6 py-6">
-            <div className="flex shrink">
-                <div className="text-primary-gray">
-                    <Button usage="back-button" onClick={toggleEdit}>
-                        <span className="text-base">{'<'} Go Back</span>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex w-full flex-col content-center gap-2">
+                <label htmlFor="contentInput" className="text-sm font-medium text-neutral-900">
+                    Dashboard Content
+                </label>
+                <Controller
+                    control={control}
+                    name="content"
+                    render={({ field: { onChange, value } }) => (
+                        <RichTextEditor
+                            onChange={onChange}
+                            value={value}
+                            usage="dashboard"
+                            id="contentInput"
+                        />
+                    )}
+                />
+                <div className="text-xs text-primary-900">{inputError.content}</div>
+                <div className="flex flex-row justify-end gap-2">
+                    <Button usage="grayed" onClick={toggleEdit}>
+                        Cancel
                     </Button>
+                    <Button usage="stroke">Save</Button>
                 </div>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex w-full flex-col content-center gap-2 pl-5">
-                    <div className="text-2xl">Edit Content</div>
-                    <div className="flex flex-col">
-                        <div className="flex w-full flex-1 flex-col gap-1 pb-12">
-                            <label htmlFor="contentInput" className="text-xl font-bold">
-                                Content
-                            </label>
-                            <Controller
-                                control={control}
-                                name="content"
-                                render={({ field: { onChange, value } }) => (
-                                    <RichTextEditor
-                                        onChange={onChange}
-                                        value={value}
-                                        usage="dashboard"
-                                        id="contentInput"
-                                    />
-                                )}
-                            />
-                            <div className="text-sm text-primary-red">{inputError.content}</div>
-                        </div>
-                    </div>
-                    <div className="mt-[-3rem] flex flex-row justify-end">
-                        <Button usage="primary">Update Content</Button>
-                    </div>
-                </div>
-            </form>
-        </div>
+        </form>
     )
 }
 

@@ -67,7 +67,7 @@ const SortDropdown = ({
     }
 
     return (
-        <div className="flex items-center ">
+        <div className="flex items-center">
             <Menu as="div" className="relative inline-block w-full text-left">
                 <div>
                     <Menu.Button className="flex h-9 justify-end rounded-[5px] border border-neutral-500 p-2 text-sm text-neutral-900">

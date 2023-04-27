@@ -28,7 +28,7 @@ const GET_TEAM = gql`
                     slug
                     first_name
                     last_name
-                    reputation
+                    avatar
                 }
                 teamRole {
                     name

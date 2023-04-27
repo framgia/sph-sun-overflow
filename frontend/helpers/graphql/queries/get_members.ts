@@ -24,6 +24,11 @@ const GET_MEMBERS = gql`
                     id
                     first_name
                     last_name
+                    avatar
+                    role {
+                        id
+                        name
+                    }
                 }
             }
         }

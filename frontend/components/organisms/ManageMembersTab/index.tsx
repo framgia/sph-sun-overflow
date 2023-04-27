@@ -1,81 +1,68 @@
+import Button from '@/components/atoms/Button'
 import type { OptionType } from '@/components/molecules/Dropdown'
 import Dropdown from '@/components/molecules/Dropdown'
-import ManageMembersActions from '@/components/organisms/ManageMembersActions'
-import Paginate from '@/components/organisms/Paginate'
-import type { ColumnType, DataType } from '@/components/organisms/Table'
-import Table from '@/components/organisms/Table'
+import TeamUserCard from '@/components/molecules/TeamUserCard'
 import Modal from '@/components/templates/Modal'
 import ADD_MEMBER from '@/helpers/graphql/mutations/add_member'
 import GET_ALL_USERS from '@/helpers/graphql/queries/get_all_users'
 import GET_MEMBERS from '@/helpers/graphql/queries/get_members'
-import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import GET_TEAM_ROLES from '@/helpers/graphql/queries/get_team_roles'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { type UserType } from '@/pages/questions/[slug]'
 import { useMutation, useQuery } from '@apollo/client'
-import { Button } from '@material-tailwind/react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import BackButton from '../atoms/BackButton'
-import type { RoleType } from '../organisms/RoleFormModal'
+import Paginate from '../Paginate'
 
-interface IMember {
+type RoleType = {
     id: number
-    teamRole: {
-        id: number
-        name: string
-    }
-    user: {
-        id: number
-        first_name: string
-        last_name: string
-    }
+    name: string
+}
+
+type UserType = {
+    id: number
+    first_name: string
+    last_name: string
+    avatar: string
+    role?: RoleType
+}
+
+type MemberType = {
+    id: number
+    user: UserType
+    teamRole: RoleType
+}
+
+interface Team {
+    id: number
+    name: string
+    teamLeader: UserType
 }
 
 type FormValues = {
-    user: OptionType
-    role: OptionType
+    user: { value: number; label: string }
+    role: { value: number; label: string }
 }
-
-const columns: ColumnType[] = [
-    {
-        title: 'Name',
-        key: 'name',
-    },
-    {
-        title: 'Role',
-        key: 'role',
-    },
-    {
-        title: '',
-        key: 'action',
-        width: 20,
-    },
-]
 
 type Props = {
-    isForAdmin?: boolean
+    team: Team
+    isUserTeamLeader: boolean
 }
 
-const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
+const ManageMembersTab = ({ team, isUserTeamLeader }: Props): JSX.Element => {
     const router = useRouter()
-    const [activeModal, setActiveModal] = useState('')
+    const [showModal, setShowModal] = useState(false)
     const [dropdownErrors, setDropdownErrors] = useState({ user: '', role: '' })
-    const [isOpen, setIsOpen] = useState(false)
-    const { data: { team } = {} } = useQuery(GET_TEAM, {
-        variables: {
-            slug: router.query.slug,
-        },
-    })
+
     const { data, loading, error, refetch } = useQuery(GET_MEMBERS, {
         variables: {
             teamSlug: router.query.slug,
-            first: 5,
+            first: 15,
             page: 0,
         },
     })
+
     const usersData = useQuery(GET_ALL_USERS, {
         variables: {
             filter: {
@@ -88,40 +75,19 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
 
     const [addMember] = useMutation(ADD_MEMBER)
 
-    const { handleSubmit, reset, control } = useForm<FormValues>({
+    const { handleSubmit, reset, setValue, control } = useForm<FormValues>({
+        defaultValues: {
+            user: { value: 0, label: '' },
+            role: { value: 0, label: '' },
+        },
         mode: 'onSubmit',
         reValidateMode: 'onSubmit',
     })
 
-    useEffect(() => {
-        if (data) {
-            void usersData.refetch({ filter: { team: team?.id } })
-            void teamRoles.refetch()
-        }
-    }, [data, team, usersData, teamRoles])
-
     if (loading) return loadingScreenShow()
     if (error) {
-        void router.push(`/teams/${router.query.slug as string}`)
-        return <span>{errorNotify(`Error! ${error.message}`)}</span>
-    }
-
-    const { paginatorInfo, data: memberList } = data.teamMembers
-
-    const onPageChange = async (first: number, page: number): Promise<void> => {
-        await refetch({ teamSlug: router.query.slug, first, page })
-    }
-
-    const parseGetMembers = (memberList: IMember[]): DataType[] => {
-        const tableList: DataType[] = memberList.map((member) => {
-            return {
-                key: member.id,
-                user_id: member.user.id,
-                name: `${member.user.first_name} ${member.user.last_name}`,
-                role: member.teamRole?.name,
-            }
-        })
-        return tableList
+        errorNotify(`Error! ${error.message}`)
+        return <div></div>
     }
 
     const users: OptionType[] = usersData.data?.allUsers.map((user: UserType) => ({
@@ -134,43 +100,10 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
         label: role.name,
     }))
 
-    const openModal = (modal: string): void => {
-        setActiveModal(modal)
-        setIsOpen(true)
-    }
+    const { paginatorInfo, data: memberList } = data.teamMembers
 
-    const closeModal = (modal: string): void => {
-        setActiveModal(modal)
-        setIsOpen(false)
-    }
-
-    const getManageMemberActions = (key: number): JSX.Element | undefined => {
-        const dataSource = parseGetMembers(memberList).find((member) => Number(member.key) === key)
-
-        if (dataSource) {
-            return (
-                <ManageMembersActions
-                    id={Number(dataSource.key)}
-                    user_id={Number(dataSource.user_id)}
-                    team_id={team.id}
-                    name={String(dataSource.name)}
-                    role={String(dataSource.role)}
-                    roles={roles}
-                    refetchHandler={refetchHandler}
-                />
-            )
-        }
-    }
-
-    const refetchHandler = async (isDelete = false): Promise<void> => {
-        await refetch({
-            teamSlug: router.query.slug,
-            first: paginatorInfo.perPage,
-            page:
-                isDelete && memberList.length === 1 && paginatorInfo.currentPage > 1
-                    ? paginatorInfo.currentPage - 1
-                    : paginatorInfo.currentPage,
-        })
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await refetch({ teamSlug: router.query.slug, first, page })
     }
 
     const onSubmit = (data: FormValues): void => {
@@ -179,6 +112,7 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
             { key: 'user', display: 'User' },
             { key: 'role', display: 'Role' },
         ]
+
         const errorFields = { user: '', role: '' }
 
         dataFields.forEach((field) => {
@@ -193,53 +127,68 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
         if (valid) {
             addMember({
                 variables: {
-                    user_id: data.user,
-                    team_role_id: data.role,
+                    user_id: data.user.value,
+                    team_role_id: data.role.value,
                     team_id: team.id,
                 },
             })
                 .then(() => {
                     reset()
-                    void refetchHandler()
-                    closeModal('add')
+                    setShowModal(false)
                     successNotify('Successfully added member!')
+
+                    const { perPage, lastPage, currentPage } = paginatorInfo
+                    void refetch({
+                        page:
+                            memberList.length === perPage && lastPage === currentPage
+                                ? (lastPage as number) + 1
+                                : lastPage,
+                    })
+
+                    void usersData.refetch({ filter: { team: team?.id } })
                 })
                 .catch(() => {
                     errorNotify('There was an Error!')
                 })
         }
-
         setDropdownErrors(errorFields)
     }
 
     return (
-        <div className="flex h-full w-full flex-col">
-            {!isForAdmin && <BackButton path={`/teams/${router.query.slug as string}`} />}
-            <div className="mt-4 flex items-center justify-between">
-                {!isForAdmin && <h1 className="text-3xl font-bold text-gray-800">{team?.name}</h1>}
-                <Button
-                    size="md"
-                    color="red"
-                    className="bg-primary-red hover:bg-dark-red"
-                    onClick={() => {
-                        openModal('add')
-                    }}
-                >
-                    Add Member
-                </Button>
-                {activeModal === 'add' && isOpen && (
+        <div className="flex w-full flex-col gap-4">
+            {isUserTeamLeader && (
+                <div className="flex justify-end">
+                    <Button
+                        usage="stroke"
+                        size="large"
+                        onClick={() => {
+                            setShowModal(true)
+                            reset({
+                                role: { value: roles[0].value, label: roles[0].label },
+                                user: { value: users[0].value, label: users[0].label },
+                            })
+                        }}
+                    >
+                        Add member
+                    </Button>
                     <Modal
                         title="Add Member"
                         submitLabel="Add"
-                        isOpen={isOpen}
+                        isOpen={showModal}
                         handleSubmit={handleSubmit(onSubmit)}
                         handleClose={() => {
-                            closeModal('add')
+                            setShowModal(false)
+                            setValue('role', { value: 0, label: '' })
+                            setValue('user', { value: 0, label: '' })
                         }}
                     >
-                        <form onSubmit={handleSubmit(onSubmit)} id="add-member-form">
-                            <div className="flex w-full justify-center gap-2">
-                                <div className="flex flex-col">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            id="add-member-form"
+                            className="w-full"
+                        >
+                            <div className="flex justify-center gap-2">
+                                <div className="flex w-full flex-col">
                                     <Controller
                                         control={control}
                                         name="user"
@@ -247,12 +196,10 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                                         render={({ field: { onChange, value } }) => (
                                             <Dropdown
                                                 key="user-select"
-                                                name="user"
                                                 label="Select User"
                                                 options={users}
                                                 onChange={onChange}
                                                 value={value}
-                                                isError={dropdownErrors.user.length > 0}
                                             />
                                         )}
                                     />
@@ -262,7 +209,7 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                                         </span>
                                     )}
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex w-full flex-col">
                                     <Controller
                                         control={control}
                                         name="role"
@@ -270,12 +217,10 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                                         render={({ field: { onChange, value } }) => (
                                             <Dropdown
                                                 key="role-select"
-                                                name="role"
                                                 label="Select Role"
                                                 options={roles}
                                                 onChange={onChange}
                                                 value={value}
-                                                isError={dropdownErrors.role.length > 0}
                                             />
                                         )}
                                     />
@@ -288,22 +233,51 @@ const MemberManage = ({ isForAdmin = false }: Props): JSX.Element => {
                             </div>
                         </form>
                     </Modal>
-                )}
+                </div>
+            )}
+            <div className="grid grid-flow-row gap-4 lg:grid-cols-3 xl:grid-cols-5">
+                {memberList.map((member: MemberType, index: number) => {
+                    return (
+                        <TeamUserCard
+                            key={index}
+                            id={member.id}
+                            userId={member.user.id}
+                            name={`${member.user.first_name} ${member.user.last_name}`}
+                            role={member.teamRole?.name ?? ''}
+                            avatar={member.user?.avatar}
+                            isLeader={member.user.id === team.teamLeader.id}
+                            hasActions={isUserTeamLeader}
+                            roles={roles}
+                            teamId={team.id}
+                            refetch={async () => {
+                                const { perPage, currentPage } = paginatorInfo
+                                await refetch({
+                                    first: perPage,
+                                    page: currentPage,
+                                })
+                            }}
+                            deleteRefetch={async () => {
+                                const { perPage, currentPage } = paginatorInfo
+                                await refetch({
+                                    first: perPage,
+                                    page:
+                                        memberList.length === 1 && currentPage > 1
+                                            ? currentPage - 1
+                                            : currentPage,
+                                })
+                                void usersData.refetch({ filter: { team: team?.id } })
+                            }}
+                        />
+                    )
+                })}
             </div>
-
-            <Table
-                columns={columns}
-                dataSource={parseGetMembers(memberList)}
-                actions={getManageMemberActions}
-            />
-
-            <div className="mt-auto">
-                {paginatorInfo.lastPage > 1 && (
+            {paginatorInfo.lastPage > 1 && (
+                <div className="px-2.5 py-4">
                     <Paginate {...paginatorInfo} onPageChange={onPageChange} />
-                )}
-            </div>
+                </div>
+            )}
         </div>
     )
 }
 
-export default MemberManage
+export default ManageMembersTab
