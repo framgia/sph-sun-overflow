@@ -15,7 +15,7 @@ const EditQuestionFormPage = (): JSX.Element => {
         },
     })
     return (
-        <div className="flex flex-col bg-light-gray">
+        <div className="flex flex-col">
             <div className="w-full">
                 <Link
                     href={`/teams/${query.slug as string}/question/${

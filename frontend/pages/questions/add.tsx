@@ -10,7 +10,7 @@ const QuestionFormPage = (): JSX.Element => {
     else path = `/teams/${router.query.prev as string}`
 
     return (
-        <div className="flex w-full flex-col bg-light-gray">
+        <div className="flex w-full flex-col">
             <div className="w-full">
                 <Link href={path}>
                     <div className="flex flex-row items-center text-2xl">
