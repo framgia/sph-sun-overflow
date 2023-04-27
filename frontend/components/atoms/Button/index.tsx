@@ -18,6 +18,8 @@ type TUsage =
     | 'modal-submit'
     | 'follow-modal'
     | 'main-follow'
+    | 'send'
+    | 'primary-regular'
 type Props = {
     usage?: TUsage | string
     size?: 'regular' | 'large' | 'medium'
@@ -82,6 +84,10 @@ const getButtonClasses = (usage: string, size: string): string => {
             return 'border-primary-700 border rounded-md font-semibold text-xs text-primary-700 bg-neutral-white w-[84px] h-7'
         case 'main-follow':
             return 'w-full rounded border border-red-400 font-bold text-primary-900 text-sm px-4 py-2 h-9'
+        case 'send':
+            return 'absolute inset-y-0 right-2 flex cursor-pointer items-center text-neutral-disabled hover:text-primary-base'
+        case 'primary-regular':
+            return 'flex items-center h-7 rounded-smd border px-[17px] py-2 text-center text-xs focus:ring-1 text-primary-base border-primary-base focus:ring-primary-base focus:text-neutral-white focus:bg-primary-base hover:ring-0 hover:text-neutral-white hover:bg-primary-base'
         default:
             return 'items-center rounded-lg border-2 px-5 py-2.5 text-center text-sm font-medium focus:ring-1 text-red-700 border-red-500 focus:ring-red-600 hover:bg-rose-200'
     }

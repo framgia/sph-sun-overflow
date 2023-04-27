@@ -1,16 +1,18 @@
-import Icons from '@/components/atoms/Icons'
-import Avatar from '@/components/molecules/Avatar'
+import LinkAction from '@/components/atoms/LinkAction'
 import Bookmark from '@/components/molecules/Bookmark'
+import Privacy from '@/components/molecules/Privacy'
+import QuestionAuthor from '@/components/molecules/QuestionAuthor'
 import Tags from '@/components/molecules/Tags'
+import UserActions from '@/components/molecules/UserActions'
 import Votes from '@/components/molecules/Votes'
+import ContentCard from '@/components/templates/ContentCard'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { useMutation } from '@apollo/client'
-import Link from 'next/link'
-import { Fragment } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
-import type { TagType, UserType } from '../../../pages/questions/[slug]'
+import type { CommentType, TagType, UserType } from '../../../pages/questions/[slug]'
+import Comments from '../Comments'
 
 type QuestionDetailProps = {
     id: number
@@ -30,6 +32,7 @@ type QuestionDetailProps = {
     refetchHandler: () => void
     is_public: boolean
     team_name?: string
+    comments: CommentType[]
 }
 
 const QuestionDetail = ({
@@ -50,6 +53,7 @@ const QuestionDetail = ({
     refetchHandler,
     is_public,
     team_name,
+    comments,
 }: QuestionDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
 
@@ -65,100 +69,62 @@ const QuestionDetail = ({
     const editLink = team_slug ? `/teams/${team_slug}/question/${slug}/edit` : `${slug}/edit`
 
     return (
-        <Fragment>
-            <div className="flex w-full flex-col">
-                <div className="relative flex w-full flex-col gap-3">
-                    {is_from_user && (
-                        <Link href={editLink} className="absolute top-0 right-0 cursor-pointer">
-                            <Icons name="square_edit" />
-                        </Link>
-                    )}
-                    <div className="w-full text-2xl font-bold">{title}</div>
-                    <div className="flex w-full flex-row gap-3 text-xs font-semibold">
-                        <div className="flex gap-1">
-                            <span>Asked</span>
-                            <span className="text-gray-500">{humanized_created_at}</span>
-                        </div>
-                        <div className="flex gap-1">
-                            <span>Viewed</span>
-                            <span className="text-gray-500">
-                                {views_count} {views_count > 1 ? 'times' : 'time'}
-                            </span>
-                        </div>
-
-                        {team_name && (
-                            <div className="flex gap-1">
-                                <span>From Team </span>
-                                <span className="text-gray-500">{team_name}</span>
+        <ContentCard header="Question">
+            <div className="flex w-full flex-row gap-4 p-4">
+                <div className="flex flex-col items-center gap-1">
+                    <Votes
+                        count={vote_count ?? 0}
+                        user_vote={user_vote}
+                        voteHandler={voteHandler}
+                    />
+                    <Bookmark
+                        is_bookmarked={is_bookmarked}
+                        bookmarkable_id={id}
+                        bookmarkable_type={'Question'}
+                        refetchHandler={refetchHandler}
+                    />
+                </div>
+                <div className="flex grow flex-col gap-4">
+                    <div className="ql-snow flex w-full flex-col gap-1">
+                        <div className="flex w-full flex-row justify-between gap-2">
+                            <span className="text-sm font-semibold text-neutral-900">{title}</span>
+                            <div className="flex flex-row items-center gap-2">
+                                {is_from_user && (
+                                    <UserActions>
+                                        {/* <LinkAction href="#" icon="share" title="Share" /> */}
+                                        <LinkAction href={editLink} icon="pencil" title="Edit" />
+                                        {/* <LinkAction href="#" icon="trash" title="Delete" /> */}
+                                    </UserActions>
+                                )}
+                                <Privacy name={is_public ? 'Public' : 'Private'} />
                             </div>
-                        )}
-
-                        <Icons name={is_public ? 'public' : 'private'} />
+                        </div>
+                        <div className="ql-editor remove-padding break-all text-xs text-neutral-900">
+                            {parseHTML(content)}
+                        </div>
+                        <div className="w-full">
+                            <Tags values={tags} />
+                        </div>
+                        <div>
+                            <QuestionAuthor
+                                slug={user?.slug}
+                                author={`${user?.first_name ?? ''} ${user?.last_name ?? ''}`}
+                                moment={humanized_created_at}
+                                views_count={views_count}
+                            />
+                        </div>
                     </div>
-                    <div className="relative flex w-full flex-row justify-between">
-                        <div className="absolute flex w-14 flex-col items-start">
-                            <div className="flex flex-col items-center gap-2">
-                                <Votes
-                                    count={vote_count ?? 0}
-                                    user_vote={user_vote}
-                                    voteHandler={voteHandler}
-                                />
-                                <Bookmark
-                                    is_bookmarked={is_bookmarked}
-                                    bookmarkable_id={id}
-                                    bookmarkable_type={'Question'}
-                                    refetchHandler={refetchHandler}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex w-full flex-col justify-between gap-3 pl-14">
-                            <div className="ql-snow flex w-full flex-col gap-3">
-                                <div className="ql-editor w-full">{parseHTML(content)}</div>
-                                <div className="w-full px-4">
-                                    <Tags values={tags} />
-                                </div>
-                            </div>
-                            <div className="flex w-full flex-row justify-between">
-                                <div className="flex items-end justify-start">
-                                    <div className="flex items-center gap-3 px-4">
-                                        <Link
-                                            href="#"
-                                            className="text-xs text-blue-600 hover:underline"
-                                        >
-                                            Share
-                                        </Link>
-                                        {is_from_user && (
-                                            <>
-                                                <Link
-                                                    href="#"
-                                                    className="text-xs text-blue-600 hover:underline"
-                                                >
-                                                    Close
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="text-xs text-blue-600 hover:underline"
-                                                >
-                                                    Delete
-                                                </Link>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex min-w-fit flex-row">
-                                    <Avatar
-                                        first_name={user?.first_name}
-                                        last_name={user?.last_name}
-                                        avatar={user?.avatar ?? ''}
-                                        slug={user?.slug}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="flex w-full flex-col gap-4 pl-9">
+                        <Comments
+                            id={id}
+                            comments={comments}
+                            commentableType="Question"
+                            refetchHandler={refetchHandler}
+                        />
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </ContentCard>
     )
 }
 

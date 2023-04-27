@@ -16,10 +16,12 @@ const Votes = ({ count, user_vote, voteHandler }: VotesProps): JSX.Element => {
             >
                 <Icons
                     name="vote_up"
-                    additionalClass={user_vote === 1 ? ' text-secondary-red' : ''}
+                    additionalClass={
+                        user_vote === 1 ? 'text-primary-base' : 'text-neutral-disabled'
+                    }
                 />
             </div>
-            <span className="text-lg">{count}</span>
+            <span className="flex h-5 items-center font-semibold text-primary-base">{count}</span>
             <div
                 onClick={() => {
                     voteHandler(-1)
@@ -27,7 +29,9 @@ const Votes = ({ count, user_vote, voteHandler }: VotesProps): JSX.Element => {
             >
                 <Icons
                     name="vote_down"
-                    additionalClass={user_vote === -1 ? ' text-secondary-red' : ''}
+                    additionalClass={
+                        user_vote === -1 ? 'text-primary-base' : 'text-neutral-disabled'
+                    }
                 />
             </div>
         </div>

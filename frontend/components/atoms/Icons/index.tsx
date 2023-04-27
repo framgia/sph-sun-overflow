@@ -1,20 +1,23 @@
 import { FaLock, FaLockOpen } from 'react-icons/fa'
 import {
     HiBookmark,
+    HiCheckCircle,
     HiChevronDoubleLeft,
     HiChevronDoubleRight,
-    HiChevronDown,
     HiChevronLeft,
     HiChevronRight,
     HiEye,
     HiOutlineEye,
     HiOutlinePencilAlt,
+    HiOutlineShare,
     HiOutlineTrash,
+    HiPaperAirplane,
     HiPencilAlt,
     HiSearch,
     HiX,
+    HiXCircle,
 } from 'react-icons/hi'
-import { HiCheck } from 'react-icons/hi2'
+import { HiCheck, HiChevronDown, HiChevronUp } from 'react-icons/hi2'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
 import ChevronIcon from './Chevron'
@@ -36,11 +39,13 @@ type IconsProps = {
 const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Element => {
     switch (name) {
         case 'pencil':
-            return <HiOutlinePencilAlt size={size} className="cursor-pointer" />
+            return (
+                <HiOutlinePencilAlt size={size} className={`cursor-pointer ${additionalClass}`} />
+            )
         case 'eye':
             return <HiOutlineEye size={size} className="cursor-pointer" />
         case 'trash':
-            return <HiOutlineTrash size={size} className="cursor-pointer" />
+            return <HiOutlineTrash size={size} className={`cursor-pointer ${additionalClass}`} />
         case 'close':
             return <HiX size={size} className="cursor-pointer" />
         case 'dot':
@@ -48,35 +53,21 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
         case 'square_edit':
             return <HiPencilAlt size="28" className="cursor-pointer fill-primary-red" />
         case 'vote_up':
-            return (
-                <IoMdArrowDropup
-                    viewBox="120 260 260 100"
-                    size="20"
-                    className={`cursor-pointer ${additionalClass}`}
-                />
-            )
+            return <HiChevronUp size="16" className={`cursor-pointer ${additionalClass}`} />
         case 'vote_down':
-            return (
-                <IoMdArrowDropdown
-                    viewBox="120 140 260 100"
-                    size="20"
-                    className={`cursor-pointer ${additionalClass}`}
-                />
-            )
+            return <HiChevronDown size="16" className={`cursor-pointer ${additionalClass}`} />
         case 'bookmark_outline':
             return (
                 <HiBookmark
-                    viewBox="3 1 13 17"
-                    style={{ height: '30', width: '20' }}
-                    className="cursor-pointer fill-white stroke-black stroke-[0.07rem] hover:fill-green-500 hover:stroke-green-500"
+                    size="16"
+                    className="cursor-pointer fill-white stroke-neutral-900 stroke-2 hover:fill-primary-base hover:stroke-primary-base"
                 />
             )
         case 'bookmark_fill':
             return (
                 <HiBookmark
-                    viewBox="3 1 13 17"
-                    style={{ height: '30', width: '20' }}
-                    className="cursor-pointer fill-green-500 hover:fill-red-500"
+                    size="16"
+                    className="cursor-pointer fill-primary-base stroke-primary-base stroke-2"
                 />
             )
         case 'pill_eye':
@@ -85,7 +76,10 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
             return <HiCheck size="25" className="fill-green-500" />
         case 'check_outline':
             return <HiCheck size="25" className="fill-white stroke-black stroke-1" />
-
+        case 'check_circle_fill':
+            return <HiCheckCircle size={size} className={`cursor-pointer ${additionalClass}`} />
+        case 'x_circle_fill':
+            return <HiXCircle size={size} className={`cursor-pointer ${additionalClass}`} />
         case 'cross_fill':
             return <HiX size="25" className="fill-red-500" />
         case 'edit':
@@ -116,6 +110,15 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
             return <FaLock />
         case 'public':
             return <FaLockOpen />
+        case 'share':
+            return <HiOutlineShare size={size} className={`cursor-pointer ${additionalClass}`} />
+        case 'send':
+            return (
+                <HiPaperAirplane
+                    size={size}
+                    className={`rotate-90 cursor-pointer ${additionalClass}`}
+                />
+            )
         default:
             return <></>
     }

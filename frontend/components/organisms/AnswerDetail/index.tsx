@@ -1,22 +1,21 @@
-import 'react-quill/dist/quill.snow.css'
-import Icons from '@/components/atoms/Icons'
-import Avatar from '@/components/molecules/Avatar'
-import Bookmark from '@/components/molecules/Bookmark'
-import Votes from '@/components/molecules/Votes'
-import Link from 'next/link'
-import { Fragment, useState } from 'react'
+import ClickAction from '@/components/atoms/ClickAction'
 import AcceptAnswer from '@/components/molecules/AcceptAnswer'
-import { parseHTML } from '@/helpers/htmlParsing'
-import type { UserType, CommentType, AnswerEditType } from '../../../pages/questions/[slug]'
-import Comment from '@/components/organisms/Comment'
+import AnswerAuthor from '@/components/molecules/AnswerAuthor'
+import Bookmark from '@/components/molecules/Bookmark'
+import UserActions from '@/components/molecules/UserActions'
+import Votes from '@/components/molecules/Votes'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
+import { parseHTML } from '@/helpers/htmlParsing'
 import { useMutation } from '@apollo/client'
+import { useState } from 'react'
+import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
-import CommentForm from '../CommentForm'
+import type { CommentType, UserType } from '../../../pages/questions/[slug]'
+import AnswerForm from '../AnswerForm'
+import Comments from '../Comments'
 
 type AnswerDetailProps = {
     id: number
-    onEdit: React.Dispatch<React.SetStateAction<AnswerEditType>>
     content: string
     created_at: string
     vote_count: number
@@ -33,9 +32,8 @@ type AnswerDetailProps = {
     refetchHandler: () => void
 }
 
-const Answer = ({
+const AnswerDetail = ({
     id,
-    onEdit,
     content,
     created_at,
     vote_count,
@@ -52,7 +50,7 @@ const Answer = ({
     refetchHandler,
 }: AnswerDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
-    const [comment, setComment] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
 
     const voteHandler = async (value: number): Promise<void> => {
         if (answer_is_from_user) {
@@ -64,117 +62,77 @@ const Answer = ({
     }
 
     return (
-        <Fragment>
-            <div className="flex w-full flex-col gap-2 divide-y-2 divide-primary-gray pt-3">
-                <div id={`answer-${id}`} className="flex w-full flex-row">
-                    <div className="flex w-14 flex-col items-start gap-2">
-                        <Votes
-                            count={vote_count ?? 0}
-                            user_vote={user_vote}
-                            voteHandler={voteHandler}
+        <div id={`answer-${id}`} className={`flex w-full flex-row gap-4 p-4`}>
+            <div id="left-vote" className="flex flex-col items-center gap-1">
+                <Votes count={vote_count ?? 0} user_vote={user_vote} voteHandler={voteHandler} />
+                <Bookmark
+                    is_bookmarked={is_bookmarked}
+                    bookmarkable_id={id}
+                    bookmarkable_type={'Answer'}
+                    refetchHandler={refetchHandler}
+                />
+                <AcceptAnswer
+                    is_correct={is_correct}
+                    answer_id={id}
+                    question_id={question_id}
+                    is_from_user={question_is_from_user}
+                    is_answered={is_answered}
+                    refetchHandler={refetchHandler}
+                />
+            </div>
+            <div className={`flex grow flex-col gap-4`}>
+                <div className={`${!isEdit ? 'ql-snow' : ''}} flex w-full flex-col gap-1`}>
+                    <div className="flex w-full flex-row justify-between gap-2">
+                        <AnswerAuthor
+                            slug={user?.slug}
+                            author={`${user?.first_name ?? ''} ${user?.last_name ?? ''}`}
+                            moment={created_at}
                         />
-                        <Bookmark
-                            is_bookmarked={is_bookmarked}
-                            bookmarkable_id={id}
-                            bookmarkable_type={'Answer'}
-                            refetchHandler={refetchHandler}
-                        />
-                        <AcceptAnswer
-                            is_correct={is_correct}
-                            answer_id={id}
-                            question_id={question_id}
-                            is_from_user={question_is_from_user}
-                            is_answered={is_answered}
-                            refetchHandler={refetchHandler}
-                        />
-                    </div>
-                    <div className=" flex w-full flex-col justify-between">
-                        <div className="ql-snow">
-                            <div className="ql-editor mt-2 pr-2 text-justify">
-                                {parseHTML(content)}
-                            </div>
-                        </div>
-                        <div className="flex w-full flex-row justify-between">
-                            <div className="flex justify-start">
-                                <div className="mt-2 flex items-start">
-                                    {is_created_by_user && (
-                                        <Link
-                                            href="#answer-form"
-                                            className="flex gap-1 decoration-red-500 underline-offset-2 hover:underline"
-                                            onClick={() => {
-                                                onEdit({ id, content })
-                                            }}
-                                        >
-                                            <Icons name={'edit'} />
-                                            <span className="text-xs text-primary-red">
-                                                Edit Answer
-                                            </span>
-                                        </Link>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex min-w-fit flex-col">
-                                <div className="mb-0.5 flex w-full flex-row pl-1 text-xs">
-                                    <div className="flex justify-start gap-1">
-                                        <span>answered</span>
-                                        <span className="text-gray-500"> {created_at}</span>
-                                    </div>
-                                </div>
-                                <Avatar
-                                    first_name={user.first_name}
-                                    last_name={user.last_name}
-                                    avatar={user.avatar ?? ''}
-                                    slug={user.slug}
-                                />
-                            </div>
+                        <div className="flex flex-row items-center gap-2">
+                            {answer_is_from_user && (
+                                <UserActions>
+                                    {/* <LinkAction href="#" icon="share" title="Share" /> */}
+                                    <ClickAction
+                                        icon="pencil"
+                                        title="Edit"
+                                        onClick={() => {
+                                            setIsEdit(!isEdit)
+                                        }}
+                                    />
+                                    {/* <LinkAction href="#" icon="trash" title="Delete" /> */}
+                                </UserActions>
+                            )}
                         </div>
                     </div>
-                </div>
-                <div className="flex flex-col">
-                    <div className="flex flex-col divide-y divide-primary-gray">
-                        {comments.map((comment) => (
-                            <Comment
-                                key={comment.id}
-                                id={comment.id}
-                                text={comment.content}
-                                author={`${comment.user.first_name ?? ''} ${
-                                    comment.user.last_name ?? ''
-                                }`}
-                                time={comment.updated_at}
-                                action={
-                                    comment.updated_at === comment.created_at
-                                        ? 'added a'
-                                        : 'updated his/her'
-                                }
-                                userId={comment.user.id}
-                                slug={comment.user.slug}
+                    <div
+                        className={`${
+                            !isEdit ? 'ql-editor' : ''
+                        } remove-padding break-all text-xs text-neutral-900`}
+                    >
+                        {isEdit ? (
+                            <AnswerForm
+                                question_id={question_id}
+                                id={id}
+                                onEdit={setIsEdit}
+                                content={content}
                                 refetchHandler={refetchHandler}
                             />
-                        ))}
-                    </div>
-
-                    <div className="flex flex-col gap-3 divide-y divide-primary-gray pt-5">
-                        <div
-                            className="w-full cursor-pointer px-2 text-blue-500 hover:text-blue-400"
-                            onClick={() => {
-                                setComment(!comment)
-                            }}
-                        >
-                            Add comment
-                        </div>
-                        {comment && (
-                            <CommentForm
-                                commentableId={id}
-                                commentableType="Answer"
-                                refetchHandler={refetchHandler}
-                                setComment={setComment}
-                            />
+                        ) : (
+                            parseHTML(content)
                         )}
                     </div>
                 </div>
+                <div className="flex w-full flex-col gap-4 pl-9">
+                    <Comments
+                        id={id}
+                        comments={comments}
+                        commentableType="Answer"
+                        refetchHandler={refetchHandler}
+                    />
+                </div>
             </div>
-        </Fragment>
+        </div>
     )
 }
 
-export default Answer
+export default AnswerDetail

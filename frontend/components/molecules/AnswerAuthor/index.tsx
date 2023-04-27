@@ -5,8 +5,7 @@ type Props = {
     moment?: string
     slug?: string
 }
-
-const Author = ({ author, moment, slug = '' }: Props): JSX.Element => {
+const AnswerAuthor = ({ author, moment, slug = '' }: Props): JSX.Element => {
     return (
         <div className="flex flex-row items-center gap-1 text-xs">
             <Link href={`/users/${slug}`}>
@@ -14,9 +13,10 @@ const Author = ({ author, moment, slug = '' }: Props): JSX.Element => {
                     {author}
                 </span>
             </Link>
+            <span className="text-neutral-900">answered</span>
             <span className="text-neutral-disabled">{moment}</span>
         </div>
     )
 }
 
-export default Author
+export default AnswerAuthor
