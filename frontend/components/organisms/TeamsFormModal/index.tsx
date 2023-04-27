@@ -9,7 +9,6 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import type { UserType } from '@/pages/questions/[slug]'
 import type { FetchResult } from '@apollo/client'
 import { useMutation, useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { errorNotify, successNotify } from '../../../helpers/toast'
@@ -35,7 +34,6 @@ type FormValues = {
 }
 
 const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps): JSX.Element => {
-    const router = useRouter()
     const [formErrors, setFormErrors] = useState({
         teamName: '',
         teamLeader: '',
@@ -50,7 +48,7 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
     const teamLeaders: OptionType[] = data?.teamLeaders.map(
         ({ id, first_name, last_name }: UserType) =>
             ({
-                value: id,
+                value: id ? +id : 0,
                 label: `${first_name ?? ''} ${last_name ?? ''}`,
             } ?? [])
     )
@@ -126,7 +124,6 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
                     .then(({ data }: FetchResult<{ updateTeam: { id: number; slug: string } }>) => {
                         successNotify('Team updated successfully')
                         refetch()
-                        void router.push(`teams/${data?.updateTeam.slug ?? ''}`)
                     })
                     .catch(() => {
                         errorNotify('Error updating team')
@@ -146,7 +143,6 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
                     .then(({ data }: FetchResult<{ createTeam: { id: number; slug: string } }>) => {
                         successNotify('Team created successfully')
                         refetch()
-                        void router.push(`teams/${data?.createTeam.slug ?? ''}`)
                     })
                     .catch(() => {
                         errorNotify('Error creating team')
