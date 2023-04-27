@@ -54,6 +54,9 @@ const TagsInput = ({
     )
 
     useEffect(() => {
+        if (tagsSelected.length > 5) {
+            setTagsSelected(tagsSelected.slice(0, 5))
+        }
         setValue('tags', tagsSelected)
     }, [tagsSelected])
 
