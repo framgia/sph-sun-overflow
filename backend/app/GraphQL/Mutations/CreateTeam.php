@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use App\Exceptions\CustomException;
+use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
@@ -23,6 +24,12 @@ final class CreateTeam
                 'name' => $args['name'],
                 'description' => $args['description'],
                 'user_id' => $user->id,
+            ]);
+
+            Member::create([
+                'user_id' => $user->id,
+                'team_role_id' => 1,
+                'team_id' => $team->id,
             ]);
 
             return $team;
