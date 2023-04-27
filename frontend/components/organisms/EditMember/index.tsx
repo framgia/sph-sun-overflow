@@ -35,7 +35,7 @@ const EditMember = ({
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [dropdownErrors, setDropdownErrors] = useState({ role: '' })
     const [updateMember] = useMutation(UPDATE_MEMBER)
-    const defaultRoleId = roles?.find((r) => r.name === role)?.id
+    const defaultRoleId = roles?.find((r) => r.label === role)?.value
 
     const { handleSubmit, reset, control } = useForm<FormValues>({
         mode: 'onSubmit',

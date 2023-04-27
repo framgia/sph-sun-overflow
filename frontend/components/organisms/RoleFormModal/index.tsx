@@ -237,6 +237,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                 setModalView(view)
                 closeModal()
                 reset()
+                setFormErrors({ name: '', description: '', permissions: '' })
             }}
             handleSubmit={
                 modalView
@@ -273,12 +274,9 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             onChange={(e) => {
                                 setRoleName(e.target.value)
                             }}
-                            isValid={formErrors.name.length > 0}
+                            isValid={formErrors.name.length === 0}
                             error={formErrors.name}
                         />
-                        {formErrors.name.length > 0 && (
-                            <span className="ml-2 text-sm text-primary-red">{formErrors.name}</span>
-                        )}
                     </div>
                     <div>
                         <TextArea
@@ -288,15 +286,9 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             onChange={(e) => {
                                 setRoleDescription(e.target.value)
                             }}
-                            isValid={formErrors.name.length > 0}
-                            error={formErrors.name}
+                            isValid={formErrors.description.length === 0}
+                            error={formErrors.description}
                         />
-
-                        {formErrors.description.length > 0 && (
-                            <span className="text-sm text-primary-red">
-                                {formErrors.description}
-                            </span>
-                        )}
                     </div>
                     <div>
                         <div className="text-neutral-800 text-sm font-medium">Set Permissions</div>
@@ -304,7 +296,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             {renderPermissionSelection()}
                         </div>
                         {formErrors.permissions.length > 0 && (
-                            <span className="mb-2 text-sm text-primary-red">
+                            <span className="mb-2 text-xs text-primary-900">
                                 {formErrors.permissions}
                             </span>
                         )}

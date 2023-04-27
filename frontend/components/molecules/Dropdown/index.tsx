@@ -2,8 +2,8 @@ import type { ControllerRenderProps } from 'react-hook-form'
 import Select, { type CSSObjectWithLabel, type StylesConfig } from 'react-select'
 
 export type OptionType = {
-    id: number
-    name: string
+    value: number
+    label: string
 }
 
 type FormProps = {

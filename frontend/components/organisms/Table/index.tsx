@@ -29,7 +29,7 @@ const renderClickable = (
     }
     return (
         <span
-            className="text-l cursor-pointer text-left font-semibold text-gray-800 hover:text-primary-red"
+            className="cursor-pointer text-left text-xs font-semibold text-neutral-900 hover:text-primary-900"
             onClick={handleClick}
         >
             {text}
@@ -46,10 +46,10 @@ const Table = ({
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
-        <div className="max-w-[960px] place-self-center overflow-hidden rounded-md pt-4">
+        <div className="max-w-[960px] place-self-center overflow-hidden rounded-md">
             <div className="relative overflow-x-auto border-2 shadow-md sm:rounded-lg">
-                <table className="w-full text-left text-sm">
-                    <thead className="bg-primary-200 font-semibold uppercase text-neutral-900">
+                <table className="w-full text-left">
+                    <thead className="bg-primary-200 uppercase text-neutral-900">
                         <tr>
                             {columns.map((column) => (
                                 <th
@@ -58,7 +58,7 @@ const Table = ({
                                     style={{
                                         width: column.width,
                                     }}
-                                    className="p-4"
+                                    className="space-x-4 p-4 text-sm font-semibold"
                                 >
                                     {column.title}
                                 </th>
@@ -79,20 +79,24 @@ const Table = ({
                                             )
                                             if (column.key === 'action' && actions) {
                                                 return (
-                                                    <td key={key} className="p-4">
+                                                    <td key={key} className="items-center p-4">
                                                         {actions(Number(data.key))}
                                                     </td>
                                                 )
                                             }
                                             return (
                                                 <td key={key} className="whitespace-nowrap p-4">
-                                                    {clickable !== undefined
-                                                        ? renderClickable(
-                                                              data[column.key],
-                                                              clickable,
-                                                              data.slug as string
-                                                          )
-                                                        : data[column.key]}
+                                                    {clickable !== undefined ? (
+                                                        renderClickable(
+                                                            data[column.key],
+                                                            clickable,
+                                                            data.slug as string
+                                                        )
+                                                    ) : (
+                                                        <span className="text-left text-xs font-normal text-neutral-900">
+                                                            {data[column.key]}
+                                                        </span>
+                                                    )}
                                                 </td>
                                             )
                                         })}

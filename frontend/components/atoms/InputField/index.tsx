@@ -47,7 +47,7 @@ const InputField = ({
                 placeholder={placeholder ?? ''}
                 onChange={onChange}
             />
-            {!isValid && <span className="ml-2 text-xs text-primary-red">{error}</span>}
+            {!isValid && <span className="ml-2 text-xs text-primary-900">{error}</span>}
         </div>
     )
 }

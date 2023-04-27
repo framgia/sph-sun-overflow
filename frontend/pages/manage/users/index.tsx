@@ -160,7 +160,7 @@ const AdminUsers = (): JSX.Element => {
                     })
                 }}
             >
-                <Icons name="pencil" />
+                <Icons name="pencil" size="18" />
             </Button>
         )
     }
@@ -198,8 +198,8 @@ const AdminUsers = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col p-4">
-            <div className="flex h-full flex-col py-4">
+        <div className="flex w-full flex-col">
+            <div className="flex h-full flex-col gap-4">
                 <Table
                     columns={columns}
                     dataSource={newUserArr}
