@@ -1,10 +1,13 @@
-import Link from 'next/link'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
+import ClickAction from '@/components/atoms/ClickAction'
+import Icons from '@/components/atoms/Icons'
+import Author from '@/components/molecules/Author'
+import UserActions from '@/components/molecules/UserActions'
+import { useState } from 'react'
 import { useBoundStore } from '../../../helpers/store'
 import CommentForm from '../CommentForm'
-import { useState } from 'react'
 
 dayjs().format()
 
@@ -35,35 +38,25 @@ const Comment = ({
     const currentUserId = useBoundStore.getState().user_id
 
     return (
-        <div className="group flex flex-wrap gap-2 px-2 py-4">
-            <span className="mr-4">{text}</span>
-            <span>
-                <Link href={`/users/${slug ?? ''}`} className="text-blue-500 hover:text-blue-400">
-                    {author}
-                </Link>
-            </span>
-            <span className="text-primary-gray">
-                {action} comment {dayjs(time).fromNow()}
-            </span>
-            {currentUserId === userId && (
-                <div className="invisible ml-2 flex gap-2 group-hover:visible">
-                    <span>
-                        <div
-                            onClick={() => {
-                                setComment(!comment)
-                            }}
-                            className="cursor-pointer text-blue-500 hover:text-blue-400"
-                        >
-                            Edit
-                        </div>
-                    </span>
-                    <span>
-                        <Link href="#" className="text-primary-red hover:text-secondary-red">
-                            Delete
-                        </Link>
-                    </span>
-                </div>
-            )}
+        <div className="group flex w-full flex-col flex-wrap gap-1">
+            <div className="flex w-full items-center">
+                <span className="break-all text-xs font-light text-neutral-900">{text}</span>
+                {currentUserId === userId && (
+                    <div className="invisible group-hover:visible">
+                        <UserActions>
+                            <ClickAction
+                                icon="pencil"
+                                title="Edit"
+                                onClick={(): void => {
+                                    setComment(!comment)
+                                }}
+                            />
+                            {/* <LinkAction href="#" icon="trash" title="Delete" /> */}
+                        </UserActions>
+                    </div>
+                )}
+            </div>
+            <Author slug={slug} author={author} moment={dayjs(time).fromNow()} />
             {comment && (
                 <CommentForm
                     id={id}
@@ -71,7 +64,7 @@ const Comment = ({
                     refetchHandler={refetchHandler}
                     setComment={setComment}
                 >
-                    Update Comment
+                    <Icons name="send" size="16" />
                 </CommentForm>
             )}
         </div>

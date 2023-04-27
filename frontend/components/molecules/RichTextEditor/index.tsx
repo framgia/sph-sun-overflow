@@ -8,6 +8,7 @@ type RTEProps = {
     onChange: ControllerRenderProps['onChange']
     id: string | undefined
     usage: string | undefined
+    placeholder?: string
 }
 
 const modules = {
@@ -50,18 +51,19 @@ const RichTextEditor = ({
     onChange,
     id = undefined,
     usage = 'default',
+    placeholder,
 }: RTEProps): JSX.Element => {
     let style
 
     switch (usage) {
         case 'description':
-            style = { height: '10rem', marginBottom: '2rem' }
+            style = { height: '168px' }
             break
         case 'dashboard':
             style = { minHeight: '100%' }
             break
         case 'content':
-            style = { width: '100%' }
+            style = { width: '100%', height: '168px' }
             break
         case 'about_me':
             style = { width: '100%' }
@@ -76,6 +78,7 @@ const RichTextEditor = ({
             modules={modules}
             formats={formats}
             onChange={onChange}
+            placeholder={placeholder}
             value={value}
             id={id}
             style={style}

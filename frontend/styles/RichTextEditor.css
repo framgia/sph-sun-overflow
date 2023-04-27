@@ -1,27 +1,42 @@
 .quill .ql-container.ql-snow {
     background-color: white;
-    border-radius: 0 0 1em 1em;
-    border-color: #eeeeee;
-    border-width: 2px;
+    border-radius: 0 0 5px 5px;
+    border-color: #33333380;
+    border-width: 1px;
+    height: 128px;
 }
 
 .quill .ql-toolbar.ql-snow {
     background-color: white;
-    border-radius: 1em 1em 0 0;
-    border-color: #eeeeee;
-    border-width: 2px;
+    border-radius: 5px 5px 0 0;
+    border-color: #33333380;
+    border-width: 1px;
+    height: 40px;
+    vertical-align: middle !important;
+    display: flex;
 }
 
 .ql-snow .ql-fill {
-    fill: #adadad !important;
+    fill: #33333380 !important;
     stroke: none;
 }
 .ql-toolbar .ql-picker-label,
 .ql-toolbar .ql-picker-options {
-    color: #adadad !important;
+    color: #33333380 !important;
 }
 
 .ql-toolbar .ql-stroke:not(.ql-color-label) {
     fill: none;
-    stroke: #adadad !important;
+    stroke: #33333380 !important;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+    font-style: normal;
+    color: #33333380;
+}
+
+.ql-tooltip {
+    border-radius: 5px;
+    left: 40% !important;
+    top: 0 !important;
 }

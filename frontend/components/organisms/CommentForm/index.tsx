@@ -1,3 +1,5 @@
+import Icons from '@/components/atoms/Icons'
+import errorMessages from '@/helpers/errorMessages'
 import CREATE_COMMENT from '@/helpers/graphql/mutations/create_comment'
 import UPDATE_COMMENT from '@/helpers/graphql/mutations/update_comment'
 import { errorNotify, successNotify } from '@/helpers/toast'
@@ -17,7 +19,7 @@ type CommentFormProps = {
     commentableId?: number
     commentableType?: string
     refetchHandler: () => void
-    children?: string
+    children?: string | JSX.Element
     content?: string
     setComment: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -52,13 +54,13 @@ const CommentForm = ({
 
         if (data.comment !== undefined) {
             if (data.comment.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
-                setCommentError('No comment Input')
+                setCommentError(errorMessages('comment-empty'))
                 setIsDisableSubmit(false)
                 return
             }
 
             if (!isDirty) {
-                errorNotify('No changes were made')
+                errorNotify(errorMessages('no-change'))
                 setComment(false)
                 return
             }
@@ -79,7 +81,7 @@ const CommentForm = ({
                         refetchHandler()
                     })
                     .catch(() => {
-                        errorNotify('There was an Error!')
+                        errorNotify(errorMessages())
                         setIsDisableSubmit(false)
                     })
 
@@ -102,45 +104,35 @@ const CommentForm = ({
                     refetchHandler()
                 })
                 .catch(() => {
-                    errorNotify('There was an Error!')
+                    errorNotify(errorMessages())
                     setIsDisableSubmit(false)
                 })
 
             return
         }
-        setCommentError('No comment Input')
+        setCommentError(errorMessages('comment-empty'))
         setIsDisableSubmit(false)
     }
 
     return (
         <div className="w-full">
             <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-                <div className="w-full self-center pt-3 pb-2 ">
+                <div className="relative flex w-full items-center">
                     <textarea
-                        className={`${
+                        className={`hide-scrollbar h-[52px] w-full resize-none overflow-y-scroll rounded-smd border border-neutral-disabled bg-white p-2 pr-8 text-xs placeholder:text-xs placeholder:text-neutral-disabled ${
                             commentError.length > 0 ? 'error-form-element' : ''
-                        } h-32 w-full border-2 border-gray-400 bg-white`}
+                        }`}
                         {...register('comment', {})}
+                        placeholder="Write a comment..."
                     />
-                    {commentError.length > 0 && (
-                        <div className="text-sm text-primary-red">{commentError}</div>
-                    )}
+                    <Button usage="send" type="submit" isDisabled={isDisableSubmit}>
+                        <Icons name="send" size="16" />
+                    </Button>
                 </div>
+                {commentError.length > 0 && (
+                    <div className="px-1 text-xs font-light text-primary-red">{commentError}</div>
+                )}
                 {!isObjectEmpty(errors) && <FormAlert errors={errors} />}
-                <div className="Submit w-full self-center ">
-                    <div className="float-right">
-                        <Button
-                            usage="primary"
-                            type="submit"
-                            additionalClass={`px-10 ${
-                                isDisableSubmit ? 'bg-light-red hover:bg-light-red' : 'bg-white'
-                            }`}
-                            isDisabled={isDisableSubmit}
-                        >
-                            {children}
-                        </Button>
-                    </div>
-                </div>
             </form>
         </div>
     )

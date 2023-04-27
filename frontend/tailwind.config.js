@@ -56,6 +56,9 @@ module.exports = withMT({
             borderRadius: {
                 smd: '5px',
             },
+            height: {
+                13: '52px',
+            },
         },
     },
     plugins: [require('@tailwindcss/forms'), require('@tailwindcss/line-clamp')],

@@ -9,7 +9,11 @@ type PrivacyProps = {
 
 const Privacy = ({ name, additionalClass = '' }: PrivacyProps): JSX.Element => {
     return (
-        <div className={`flex items-center gap-1 text-xs font-semibold ${additionalClass}`}>
+        <div
+            className={`flex items-center gap-1 text-xs font-semibold ${
+                name === 'Public' ? 'text-neutral-disabled' : 'text-neutral-900'
+            } ${additionalClass}`}
+        >
             <span>{name}</span>
             <div>{name === 'Public' ? <UnlockIcon /> : <LockIcon />}</div>
         </div>

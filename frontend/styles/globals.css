@@ -7,8 +7,17 @@
     @apply flex w-full items-center justify-center;
 }
 
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .error-form-element {
-    border: 2px solid red !important;
+    border: 1px solid #ff2200 !important;
 }
 
 input:-webkit-autofill,
@@ -74,4 +83,8 @@ input:-webkit-autofill:active {
     .question-list-header {
         @apply h-24;
     }
+}
+
+.remove-padding {
+    padding: 0px !important;
 }
