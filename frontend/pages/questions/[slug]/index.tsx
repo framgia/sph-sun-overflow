@@ -44,6 +44,7 @@ export type AnswerType = {
     content: string
     created_at: string
     vote_count: number
+    upvote_percentage: number
     humanized_created_at: string
     is_bookmarked: boolean
     is_correct: boolean

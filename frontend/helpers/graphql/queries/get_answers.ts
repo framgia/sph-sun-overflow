@@ -18,6 +18,7 @@ const GET_ANSWERS = gql`
             data {
                 id
                 content
+                upvote_percentage
                 created_at
                 updated_at
                 user {

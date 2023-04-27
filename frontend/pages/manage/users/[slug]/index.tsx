@@ -89,9 +89,20 @@ const UserDetail = (): JSX.Element => {
         })
     }
 
-    const renderEmptyList = (): JSX.Element => {
+    const renderEmptyList = (): JSX.Element | null => {
+        switch (activeTab) {
+            case 'Questions':
+                if (userQuestions?.data.length) return null
+                break
+            case 'Answers':
+                if (userAnswers?.data.length) return null
+                break
+            case 'Teams':
+                if (userTeams?.data.length) return null
+        }
+
         return (
-            <div className="flex justify-center">
+            <div className="flex justify-center py-2 text-neutral-500">
                 <span>No {activeTab} to Show</span>
             </div>
         )
@@ -137,10 +148,8 @@ const UserDetail = (): JSX.Element => {
                     key: question.id,
                     slug: question.slug,
                     title: question.title,
-                    content: question.content,
+                    content: answer.content,
                     voteCount: question.vote_count,
-                    answerCount: question.answers?.length,
-                    viewCount: question.views_count,
                     isPublic: question.is_public,
                     tags: question.tags,
                     author: question.user,
@@ -153,7 +162,7 @@ const UserDetail = (): JSX.Element => {
                 ) : (
                     <QuestionGridItem
                         {...questionProps}
-                        upvotePercentage={question.upvote_percentage}
+                        upvotePercentage={answer.upvote_percentage}
                         createdAt={question.created_at}
                     />
                 )
@@ -221,9 +230,9 @@ const UserDetail = (): JSX.Element => {
                             </div>
                         </div>
                     )}
+                    {renderEmptyList()}
                     {activeTab === 'Teams' ? (
                         <div>
-                            {!userTeams && renderEmptyList()}
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                                 {userTeams?.data.map((team) => {
                                     return (
@@ -240,7 +249,6 @@ const UserDetail = (): JSX.Element => {
                         </div>
                     ) : view === 'List' ? (
                         <div>
-                            {!userQuestions && !userAnswers && renderEmptyList()}
                             <div className="flex w-full flex-col justify-center gap-4">
                                 {activeTab === 'Questions'
                                     ? renderUserQuestions()
@@ -249,7 +257,6 @@ const UserDetail = (): JSX.Element => {
                         </div>
                     ) : (
                         <div>
-                            {!userQuestions && !userAnswers && renderEmptyList()}
                             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                                 {activeTab === 'Questions'
                                     ? renderUserQuestions()

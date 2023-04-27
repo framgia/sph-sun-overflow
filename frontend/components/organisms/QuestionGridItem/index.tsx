@@ -12,8 +12,8 @@ type QuestionGridItemProps = {
     content: string
     voteCount: number
     upvotePercentage: number
-    answerCount: number
-    viewCount: number
+    answerCount?: number
+    viewCount?: number
     isPublic: boolean
     tags: TagType[]
     author: UserType
@@ -50,22 +50,32 @@ const QuestionGridItem = ({
                     <p className="break-all text-[12px] leading-4 line-clamp-3">
                         {parseHTML(content)}
                     </p>
-                    <div className="mt-auto flex w-fit gap-1 rounded-[4px] border border-primary-base px-1 py-[2px] text-primary-base">
-                        <div>
+                    <div className="mt-auto flex h-5 w-fit gap-[1px] rounded-[4px] border border-primary-base px-1 text-primary-base">
+                        <div className="m-auto">
                             <ThumbUpIcon />
                         </div>
-                        <span className="text-xs font-bold">{upvotePercentage.toFixed()}%</span>
+                        <span className="text-[10px] font-bold">{upvotePercentage.toFixed()}%</span>
                     </div>
                 </div>
-                <div className="flex min-w-fit flex-col items-end text-xs font-light">
-                    <span>{voteCount} Votes</span>
-                    <span>{answerCount} Answers</span>
-                    <span>{viewCount} Views</span>
+                <div className="flex min-w-fit flex-col items-end gap-1 text-xs font-light">
+                    <span>
+                        {voteCount} {voteCount === 1 ? 'Vote' : 'Votes'}
+                    </span>
+                    {answerCount !== undefined && (
+                        <span>
+                            {answerCount} {answerCount === 1 ? 'Answer' : 'Answers'}
+                        </span>
+                    )}
+                    {viewCount !== undefined && (
+                        <span>
+                            {viewCount} {viewCount === 1 ? 'View' : 'Views'}
+                        </span>
+                    )}
                 </div>
             </div>
             <div className="mt-auto flex flex-col gap-1">
                 <Tags values={tags} />
-                <div className="flex justify-between text-xs">
+                <div className="flex justify-between text-[10px]">
                     <span>
                         {`Author: `}
                         <Link href={`/users/${String(author.slug)}`} className="text-primary-blue">

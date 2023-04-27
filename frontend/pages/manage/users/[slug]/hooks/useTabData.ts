@@ -81,6 +81,7 @@ const useTabData = (activeTab: Tab, view: View) => {
                 variables: {
                     first: view === 'List' ? 5 : 12,
                     page: 1,
+                    isAdmin: true,
                     filter: { user_slug: router.query.slug as string, ...answerFilter },
                     orderBy: [order],
                 },

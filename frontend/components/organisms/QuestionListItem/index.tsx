@@ -9,8 +9,8 @@ type QuestionListItemProps = {
     title: string
     content: string
     voteCount: number
-    answerCount: number
-    viewCount: number
+    answerCount?: number
+    viewCount?: number
     isPublic: boolean
     tags: TagType[]
     author: UserType
@@ -32,10 +32,20 @@ const QuestionListItem = ({
     return (
         <div className="border-b-2 border-y-neutral-200 p-2 text-neutral-900">
             <div className="flex w-full items-start gap-4 ">
-                <div className="flex min-w-fit flex-col items-end pt-1 text-xs font-light">
-                    <span>{voteCount} Votes</span>
-                    <span>{answerCount} Answers</span>
-                    <span>{viewCount} Views</span>
+                <div className="flex min-w-fit flex-col items-end gap-1 pt-1 text-xs font-light">
+                    <span>
+                        {voteCount} {voteCount === 1 ? 'Vote' : 'Votes'}
+                    </span>
+                    {answerCount !== undefined && (
+                        <span>
+                            {answerCount} {answerCount === 1 ? 'Answer' : 'Answers'}
+                        </span>
+                    )}
+                    {viewCount !== undefined && (
+                        <span>
+                            {viewCount} {viewCount === 1 ? 'View' : 'Views'}
+                        </span>
+                    )}
                 </div>
                 <div className="flex h-32 w-9/12 flex-col gap-2 xl:w-full">
                     <span className="truncate text-sm font-semibold hover:text-primary-base">
@@ -51,7 +61,7 @@ const QuestionListItem = ({
                     />
                 </div>
             </div>
-            <div className="flex justify-end text-xs">
+            <div className="flex justify-end text-[10px]">
                 <span>
                     <Link href={`/users/${String(author.slug)}`} className="text-primary-blue">
                         {author.first_name} {author.last_name}

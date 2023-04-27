@@ -17,6 +17,7 @@ export type RefetchType = {
         team?: string
         user_slug?: string
     }
+    isAdmin?: boolean
     orderBy?: Array<{ column: string; order: string }>
     sort?: Array<{ column: string; order: string }>
 }
