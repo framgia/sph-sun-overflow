@@ -1,7 +1,15 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import QuestionsPage from './questions'
 
 export default function Home(): JSX.Element {
+    const { push } = useRouter()
+
+    useEffect(() => {
+        void push('/questions')
+    }, [])
+
     return (
         <>
             <Head>

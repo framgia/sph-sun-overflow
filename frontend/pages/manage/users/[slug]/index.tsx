@@ -218,8 +218,13 @@ const UserDetail = (): JSX.Element => {
                     </div>
                     {activeTab !== 'Teams' && (
                         <div className="flex justify-end gap-1">
-                            <div onClick={toggleView}>
-                                <ViewToggle view={view} />
+                            <div>
+                                <ViewToggle
+                                    view={view}
+                                    onClick={() => {
+                                        toggleView()
+                                    }}
+                                />
                             </div>
                             <div className="">
                                 <DropdownFilters

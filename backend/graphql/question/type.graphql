@@ -15,6 +15,7 @@ type Question {
     user_vote: Int
     is_bookmarked: Boolean
     is_from_user: Boolean
+    upvote_percentage: Float
     user: User! @belongsTo
     answers: [Answer!]!
     comments: [Comment]! @morphMany

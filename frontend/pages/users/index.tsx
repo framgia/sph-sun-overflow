@@ -102,11 +102,13 @@ const UsersPage = (): JSX.Element => {
 
     const onSearchInputChange = (value: string): void => {
         if (value === '') {
-            void refetch({
-                first: 12,
-                page: 1,
-                filter: { keyword: '', role_id: null },
-                sort: { reputation: null },
+            void userQuery({
+                variables: {
+                    first: 12,
+                    page: 1,
+                    filter: { keyword: '', role_id: null },
+                    sort: { reputation: null },
+                },
             })
             setTerm('')
             setIsSearchResult(false)
