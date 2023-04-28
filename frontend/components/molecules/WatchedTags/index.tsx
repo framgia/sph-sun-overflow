@@ -82,7 +82,7 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
 
     return (
         <div className="z-10 mb-0 drop-shadow-md" ref={detectorRef}>
-            <div className="flex w-full justify-between rounded-tr-md rounded-tl-md bg-primary-red p-2.5 text-white drop-shadow-md">
+            <div className="flex w-full justify-between rounded-tr-md rounded-tl-md bg-primary-200 p-2.5 text-white drop-shadow-md">
                 <span className="align-left text-md">Watched Tags</span>
                 <HiPencil className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>

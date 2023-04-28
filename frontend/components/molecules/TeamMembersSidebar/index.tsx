@@ -55,7 +55,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element 
 
     return (
         <div className="p-1 drop-shadow-md">
-            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-[#E8E8E8] p-4 drop-shadow-md">
+            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-primary-200 p-4 drop-shadow-md">
                 <span className="text-xl font-medium">Members</span>
                 {data?.team?.is_team_leader && (
                     <Link
@@ -74,7 +74,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element 
                     </div>
                 </div>
             ) : (
-                <div className="tags h-[49vh]  overflow-y-auto  overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
+                <div className="tags h-[49vh] overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
                     {members.map((member, index) => {
                         return <UserTab user={member} key={index} usage="TeamMembers" />
                     })}
