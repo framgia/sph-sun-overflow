@@ -90,7 +90,7 @@ const SortDropdown = ({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute left-0 z-10 mt-1 w-36 divide-y divide-neutral-200 rounded-[5px] border border-neutral-200 bg-white shadow">
+                    <Menu.Items className="absolute right-0 z-10 mt-1 w-36 divide-y divide-neutral-200 rounded-[5px] border border-neutral-200 bg-white shadow">
                         {grouped ? renderGroupedFilters() : renderFilters()}
                     </Menu.Items>
                 </Transition>

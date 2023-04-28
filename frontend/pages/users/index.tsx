@@ -75,9 +75,6 @@ const UsersPage = (): JSX.Element => {
     if (error) return <span>{errorNotify(`Error! ${error?.message ?? ''}`)}</span>
 
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        setSelectedRole(initialRole)
-        setSelectedScore(initialScore)
-
         e.preventDefault()
 
         const target = e.target as typeof e.target & {
@@ -196,37 +193,37 @@ const UsersPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4 rounded-md border border-neutral-200 bg-white p-4">
             <div className="w-full">
-                <div className="text-3xl font-bold text-gray-800">Users</div>
+                <div className="text-xl font-semibold leading-[120%] text-neutral-900">
+                    All Users
+                </div>
             </div>
-            <div className="mt-4 flex w-full flex-row">
+            <div className="flex w-full flex-row">
                 <div className="mr-auto">
                     <form onSubmit={handleSearchSubmit}>
                         <SearchInput
-                            placeholder="Search user"
+                            placeholder="Search"
                             value={searchKey}
                             onChange={onSearchInputChange}
                         />
                     </form>
+                    {isSearchResult && renderSearchResultHeader()}
                 </div>
-                <div className="flex flex-row justify-end gap-2">
+                <div className="flex flex-row justify-end gap-1">
                     <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
                     <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                 </div>
             </div>
-            {isSearchResult && renderSearchResultHeader()}
-            <div className="my-4 flex h-full w-full flex-col">
-                <div className="grid grid-cols-3 justify-center gap-3">
+            <div className="flex h-full w-full flex-col">
+                <div className="grid grid-cols-3 justify-center gap-4">
                     {userList?.map((user: IUser) => (
                         <UserCard user={user} key={user.id} />
                     ))}
                 </div>
-                <div className="mt-auto ">
-                    {pageInfo?.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
-                    )}
-                </div>
+            </div>
+            <div className="px-2.5 py-4 ">
+                {pageInfo?.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
             </div>
         </div>
     )

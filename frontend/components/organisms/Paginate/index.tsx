@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
     HiOutlineChevronDoubleLeft,
     HiOutlineChevronDoubleRight,
@@ -33,6 +33,11 @@ const Paginate = ({
     const [pageNumbers, setPageNumbers] = useState<number[]>(
         Array.from(Array(numberToGenerate), (_, x) => x + 1)
     )
+
+    // Not sure if proper fix
+    useEffect(() => {
+        setPageNumbers(Array.from(Array(numberToGenerate), (_, x) => x + 1))
+    }, [numberToGenerate])
 
     const generatePageNumbers = (page: number): void => {
         const pageNumbersCopy = JSON.parse(JSON.stringify(pageNumbers))

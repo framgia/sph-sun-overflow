@@ -1,6 +1,4 @@
-import { Input } from '@material-tailwind/react'
-import React from 'react'
-import { HiSearch } from 'react-icons/hi'
+import Icons from '@/components/atoms/Icons'
 
 type Props = {
     placeholder?: string
@@ -11,20 +9,22 @@ type Props = {
 
 const SearchInput = ({ placeholder, usage = 'Default', value, onChange }: Props): JSX.Element => {
     return (
-        <div className="w-[310px]">
-            <Input
-                size="md"
-                className="!bg-white placeholder-shown:border-gray-300 placeholder-shown:border-t-gray-300"
-                label={placeholder}
-                icon={<HiSearch className="text-lg" />}
-                name="search"
-                color="red"
-                value={value}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    onChange(e.target.value)
-                }}
-                autoComplete="off"
-            />
+        <div className="relative">
+            <div className="flex items-center justify-start gap-1.5">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
+                    <Icons name="search" additionalClass="text-neutral-disabled" />
+                </div>
+                <input
+                    type="text"
+                    name="search"
+                    className="h-10 w-[400px] rounded-[5px] border border-neutral-disabled bg-white p-2 pl-8 text-sm text-neutral-900 focus:border-primary-blue focus:ring-primary-blue"
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange(e.target.value)
+                    }}
+                />
+            </div>
         </div>
     )
 }

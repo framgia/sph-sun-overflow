@@ -9,11 +9,11 @@ import {
     HiEye,
     HiOutlineEye,
     HiOutlinePencilAlt,
+    HiOutlineSearch,
     HiOutlineShare,
     HiOutlineTrash,
     HiPaperAirplane,
     HiPencilAlt,
-    HiSearch,
     HiX,
     HiXCircle,
 } from 'react-icons/hi'
@@ -102,8 +102,8 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
             return <HiChevronRight />
         case 'chevron_right_double':
             return <HiChevronDoubleRight />
-        case 'search_input_icon':
-            return <HiSearch size="26" />
+        case 'search':
+            return <HiOutlineSearch size={size} className={`${additionalClass}`} />
         case 'x-plain':
             return <HiX size={size} className={`${additionalClass}`} />
         case 'private':

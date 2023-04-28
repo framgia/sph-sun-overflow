@@ -48,11 +48,11 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
 
     return (
         <div className="mt-4 rounded-br-md rounded-bl-md  drop-shadow-md">
-            <div className="flex w-full justify-between rounded-tr-md rounded-tl-md bg-primary-red p-2.5 text-white drop-shadow-md">
-                <span className="text-md">My Teams</span>
+            <div className="flex h-12 w-full items-center justify-between rounded-tr-md rounded-tl-md bg-primary-200 p-2.5 text-neutral-900 drop-shadow-md">
+                <div className="h-fit text-sm font-semibold">My Teams</div>
             </div>
             <div
-                className={`flex max-h-[384px] flex-wrap rounded-br-md rounded-bl-md bg-white ${
+                className={`hide-scrollbar flex max-h-[384px] flex-wrap rounded-br-md rounded-bl-md bg-white ${
                     teams.length > 0 ? 'overflow-y-auto' : ''
                 }`}
             >
@@ -98,11 +98,11 @@ const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
         extractAvatars()
         return (
             <Link
-                className="flex h-20 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-red-50"
+                className="flex h-20 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-neutral-white px-2 last:rounded-br-md last:rounded-bl-md last:border-b-0 hover:bg-red-50"
                 href={`/teams/${team.slug}`}
             >
                 <div className="ml-2 flex flex-col overflow-hidden align-middle">
-                    <div className="text-md w-36 overflow-hidden text-ellipsis text-gray-800 line-clamp-2">
+                    <div className="w-36 overflow-hidden text-ellipsis text-sm text-gray-800 line-clamp-2">
                         {team.name}
                     </div>
                     <div className="text-md align-center hidden text-gray-600 md:text-sm lg:flex">
@@ -110,7 +110,7 @@ const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
                     </div>
                 </div>
                 <div className="hidden h-full items-center align-middle xl:flex">
-                    <StackedUsers images={extractAvatars()} />
+                    <StackedUsers images={extractAvatars()} memberCount={team.members.length} />
                 </div>
             </Link>
         )

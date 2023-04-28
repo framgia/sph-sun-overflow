@@ -82,7 +82,6 @@ const Team = (): JSX.Element => {
         return loadingScreenShow()
     }
     if (data.team === null) {
-        errorNotify(`Team does not exist`)
         void router.push('/404')
         return loadingScreenShow()
     }

@@ -6,7 +6,7 @@ import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { HiPencil, HiX } from 'react-icons/hi'
+import { HiOutlinePencilAlt, HiX } from 'react-icons/hi'
 
 type TTag = {
     id: number
@@ -82,9 +82,11 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
 
     return (
         <div className="z-10 mb-0 drop-shadow-md" ref={detectorRef}>
-            <div className="flex w-full justify-between rounded-tr-md rounded-tl-md bg-primary-red p-2.5 text-white drop-shadow-md">
-                <span className="align-left text-md">Watched Tags</span>
-                <HiPencil className="cursor-pointer text-xl" onClick={toggleVisible} />
+            <div className="flex h-12 w-full items-center justify-between rounded-tr-md rounded-tl-md bg-primary-200 p-2.5 text-neutral-900 drop-shadow-md">
+                <span className="align-left h-fit align-middle text-sm font-semibold">
+                    Watched Tags
+                </span>
+                <HiOutlinePencilAlt className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>
             <div className="rounded-br-xl rounded-bl-xl bg-white">
                 <div
