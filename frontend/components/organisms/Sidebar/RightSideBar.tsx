@@ -1,23 +1,13 @@
-import TeamMemberSidebar from '@/components/molecules/TeamMembersSidebar'
 import TeamSidebar from '@/components/molecules/TeamSidebar'
 import WatchedTags from '@/components/molecules/WatchedTags'
-import { QMembersSidebar, QTagsTeamSidebar } from '@/helpers/graphql//queries/sidebar'
+import { QTagsTeamSidebar } from '@/helpers/graphql//queries/sidebar'
 import { useBoundStore } from '@/helpers/store'
 import { useQuery } from '@apollo/client'
 type TRightSidebarProps = {
-    usage: null | 'teams' | 'users' | string
-    slug?: string
+    usage: string
 }
 
-interface Teamslug {
-    slug: string
-}
-
-const RightSideBar = ({ usage, slug = '' }: TRightSidebarProps): JSX.Element => {
-    if (usage === 'team') {
-        return <MembersSidebar slug={slug} />
-    }
-
+const RightSideBar = ({ usage }: TRightSidebarProps): JSX.Element => {
     return <TagsTeamSidebar />
 }
 
@@ -28,19 +18,6 @@ const TagsTeamSidebar = (): JSX.Element => {
         <div className="flex w-full flex-col">
             <WatchedTags watchedTags={watchedTags} />
             <TeamSidebar data={data} loading={loading} />
-        </div>
-    )
-}
-
-const MembersSidebar = ({ slug }: Teamslug): JSX.Element => {
-    const { data, loading } = useQuery(QMembersSidebar, {
-        variables: {
-            slug,
-        },
-    })
-    return (
-        <div className="flex w-full flex-col">
-            <TeamMemberSidebar data={data} loading={loading} />
         </div>
     )
 }

@@ -55,7 +55,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element 
 
     return (
         <div className="p-1 drop-shadow-md">
-            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-primary-200 p-4 drop-shadow-md">
+            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-primary-200 p-4 text-neutral-900 drop-shadow-md">
                 <span className="text-xl font-medium">Members</span>
                 {data?.team?.is_team_leader && (
                     <Link

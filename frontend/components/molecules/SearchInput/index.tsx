@@ -17,7 +17,7 @@ const SearchInput = ({ placeholder, usage = 'Default', value, onChange }: Props)
                 <input
                     type="text"
                     name="search"
-                    className="h-10 w-[400px] rounded-[5px] border border-neutral-disabled bg-white p-2 pl-8 text-sm font-bold text-neutral-disabled focus:border-primary-blue focus:ring-primary-blue"
+                    className="h-10 w-[400px] rounded-[5px] border border-neutral-disabled bg-white p-2 pl-8 text-sm text-neutral-900 focus:border-primary-blue focus:ring-primary-blue"
                     placeholder={placeholder}
                     value={value}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
