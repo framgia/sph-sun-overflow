@@ -74,6 +74,7 @@ const AnswerForm = ({
                 })
                     .then(() => {
                         reset({ content: '' })
+                        refetchHandler()
                         successNotify('Answer Successfully Added!')
                     })
                     .catch(() => {
@@ -82,8 +83,6 @@ const AnswerForm = ({
 
                 setAddAnswerError('')
                 getErrorElement().classList.remove('error-form-element')
-
-                refetchHandler()
 
                 setTimeout(() => {
                     setIsDisableSubmit(false)
@@ -129,7 +128,10 @@ const AnswerForm = ({
                     reset({ content: '' })
                     const check = data.content.replace(/<(.|\n)*?>/g, '').trim().length === 0
                     if (check) errorNotify(errorMessages('answer-not-update'))
-                    else successNotify('Answer Successfully Updated!')
+                    else {
+                        successNotify('Answer Successfully Updated!')
+                        refetchHandler()
+                    }
                 })
                 .catch(() => {
                     errorNotify(errorMessages())
@@ -137,8 +139,6 @@ const AnswerForm = ({
 
             setAddAnswerError('')
             getErrorElement(id).classList.remove('error-form-element')
-
-            refetchHandler()
 
             onEdit?.(false)
 
@@ -152,7 +152,7 @@ const AnswerForm = ({
         <div className={`w-full ${!onEdit ? 'p-4' : ''}`} id={`answer-form${id ? `-${id}` : ''}`}>
             <div className="flex flex-col gap-2">
                 {!onEdit && (
-                    <span className="flex w-fit items-center text-xs font-medium text-primary-blue">
+                    <span className="flex w-fit items-center text-xs font-medium text-neutral-900">
                         Add Answer
                     </span>
                 )}
