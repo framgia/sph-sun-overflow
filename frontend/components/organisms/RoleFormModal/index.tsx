@@ -136,6 +136,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
     }
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault()
         const target = e.target as typeof e.target & {
             name: { value: string }
             description: { value: string }
