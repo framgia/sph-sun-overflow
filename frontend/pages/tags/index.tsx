@@ -1,18 +1,19 @@
-import Pill from '@/components/molecules/Pill'
-import SearchInput from '@/components/molecules/SearchInput'
+import { CustomIcons } from '@/components/atoms/Icons'
+import InputField from '@/components/atoms/InputField'
 import SortDropdown from '@/components/molecules/SortDropdown'
+import TagsCard from '@/components/molecules/TagsCard'
 import Paginate from '@/components/organisms/Paginate'
 import type { FilterType, PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TAGS from '@/helpers/graphql/queries/get_tags'
 import { useQuery } from '@apollo/client'
-import { Card, CardBody, CardFooter, Typography } from '@material-tailwind/react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { loadingScreenShow } from '../../helpers/loaderSpinnerHelper'
 import { errorNotify } from '../../helpers/toast'
 import type { TagType } from '../questions/[slug]'
 import type { OrderOption, RefetchType } from '../questions/index'
+
+const { FilterIcon, SearchIcon } = CustomIcons
 
 const filterOptions: OrderOption = {
     'Most Popular': { column: 'POPULARITY', order: 'DESC' },
@@ -32,7 +33,7 @@ const TagsListPage = (): JSX.Element => {
     const [term, setTerm] = useState('')
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_TAGS, {
         variables: {
-            first: 6,
+            first: 9,
             page: 1,
             name: `%${String(router.query.search ?? '')}%`,
             sort: [filterOptions[String(router.query.filter ?? 'Most Popular')]],
@@ -57,16 +58,11 @@ const TagsListPage = (): JSX.Element => {
         })
     }
 
-    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
 
-        const target = e.target as typeof e.target & {
-            search: { value: string }
-        }
-
-        setSearchKey(target.search.value)
-        setTerm(target.search.value)
-        routerHandler(selectedFilter, target.search.value)
+        setTerm(searchKey)
+        routerHandler(selectedFilter, searchKey)
     }
 
     const tagFilters: FilterType[][] = [
@@ -112,7 +108,7 @@ const TagsListPage = (): JSX.Element => {
                 name: 'Newest First',
                 onClick: async () => {
                     setSelectedFilter('Newest First')
-                    routerHandler('Most Popular', searchKey)
+                    routerHandler('Newest First', searchKey)
                 },
             },
             {
@@ -120,7 +116,7 @@ const TagsListPage = (): JSX.Element => {
                 name: 'Oldest First',
                 onClick: async () => {
                     setSelectedFilter('Oldest First')
-                    routerHandler('Most Popular', searchKey)
+                    routerHandler('Oldest First', searchKey)
                 },
             },
         ],
@@ -128,81 +124,65 @@ const TagsListPage = (): JSX.Element => {
 
     const onSearchInputChange = (value: string): void => {
         if (value === '') {
-            void refetch({ first: 6, page: 1, name: '%%' })
+            void refetch({ first: 9, page: 1, name: '%%' })
             setTerm('')
         }
         setSearchKey(value)
     }
 
     return (
-        <div className="flex flex-col">
-            <div className="w-full">
-                <div className="text-3xl font-bold text-gray-800">Tags</div>
+        <div className="flex max-h-full flex-col gap-4 overflow-hidden rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+            <h1 className="text-xl font-semibold text-neutral-900">All Tags</h1>
+            <div className="flex w-full flex-row items-center justify-between">
+                <form onSubmit={handleSearchSubmit}>
+                    <InputField
+                        name="tag_search"
+                        placeholder="Search tag"
+                        icon={
+                            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
+                                <SearchIcon />
+                            </div>
+                        }
+                        additionalClass="h-10 question-list-search-input pl-8"
+                        value={searchKey}
+                        onChange={(e) => {
+                            onSearchInputChange(e.target.value)
+                        }}
+                    />
+                </form>
+                <SortDropdown
+                    filters={tagFilters}
+                    selectedFilter={selectedFilter}
+                    grouped
+                    icon={
+                        <div className="ml-1 flex h-full items-center">
+                            <FilterIcon />
+                        </div>
+                    }
+                />
             </div>
-            <div className="mt-4 flex h-full w-full flex-col">
-                <div className="flex h-full w-full flex-row items-center justify-between">
-                    <div className="flex flex-row items-center justify-between">
-                        <form onSubmit={handleSearchSubmit}>
-                            <SearchInput
-                                placeholder="Search tag"
-                                value={searchKey}
-                                onChange={onSearchInputChange}
+            {term && (
+                <div className="truncate px-2 pt-1 text-sm text-gray-600">
+                    {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for {`"${term}"`}
+                </div>
+            )}
+            <div className="scrollbar flex flex-col gap-4 overflow-y-auto">
+                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {tagList.map((tag) => {
+                        return (
+                            <TagsCard
+                                key={tag.id}
+                                id={tag.id}
+                                slug={tag.slug}
+                                description={tag.description}
+                                name={tag.name}
+                                questionsCount={tag.count_tagged_questions ?? 0}
+                                watchersCount={tag.count_watching_users ?? 0}
                             />
-                        </form>
-                    </div>
-                    <SortDropdown filters={tagFilters} selectedFilter={selectedFilter} grouped />
+                        )
+                    })}
                 </div>
-                {term && (
-                    <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                        {`"${term}"`}
-                    </div>
-                )}
-                <div className="mt-4 flex h-full w-full flex-col justify-between gap-5">
-                    <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3">
-                        {tagList.map((tag) => {
-                            return (
-                                <Link key={tag.id} href={`questions/tagged/${tag.slug}`}>
-                                    <Card className="h-52 justify-between">
-                                        <CardBody>
-                                            <div
-                                                className="mb-3 w-fit"
-                                                onClick={(event) => {
-                                                    event.preventDefault()
-                                                }}
-                                            >
-                                                <Pill tag={tag} />
-                                            </div>
-                                            <Typography className="line-clamp-3">
-                                                {tag.description}
-                                            </Typography>
-                                        </CardBody>
-                                        <CardFooter
-                                            divider
-                                            className="flex items-center justify-between py-3"
-                                        >
-                                            <Typography variant="small">
-                                                {tag.count_tagged_questions}{' '}
-                                                {tag.count_tagged_questions === 1
-                                                    ? 'question'
-                                                    : 'questions'}
-                                            </Typography>
-                                            <Typography variant="small">
-                                                {tag.count_watching_users}{' '}
-                                                {tag.count_watching_users === 1
-                                                    ? 'watcher'
-                                                    : 'watchers'}
-                                            </Typography>
-                                        </CardFooter>
-                                    </Card>
-                                </Link>
-                            )
-                        })}
-                    </div>
-                    {pageInfo.lastPage > 1 && (
-                        <Paginate {...pageInfo} perPage={6} onPageChange={onPageChange} />
-                    )}
-                </div>
+                {pageInfo.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
             </div>
         </div>
     )

@@ -154,7 +154,7 @@ const QuestionsPage = (): JSX.Element => {
     }
 
     return (
-        <div className="h-full w-full overflow-y-auto border border-neutral-200 bg-neutral-white p-4">
+        <div className="h-full w-full overflow-y-auto rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
             <div className="flex w-full justify-between">
                 <div className="text-xl font-semibold text-neutral-900">All Questions</div>
                 <Button
@@ -172,7 +172,7 @@ const QuestionsPage = (): JSX.Element => {
                             name="question_search"
                             placeholder="Search"
                             icon={
-                                <div className="absolute top-1/2 left-1.5 -translate-y-1/2 transform">
+                                <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
                                     <Search />
                                 </div>
                             }

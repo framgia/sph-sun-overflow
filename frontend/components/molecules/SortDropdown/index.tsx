@@ -28,7 +28,7 @@ const SortDropdown = ({
                             <div
                                 className={`${
                                     active ? 'bg-primary-200' : 'bg-white-100'
-                                } w-full break-all py-2 px-4 text-sm text-primary-black`}
+                                } w-full break-all px-4 py-2 text-sm text-primary-black`}
                                 onClick={newFilter.onClick}
                             >
                                 {newFilter.name}
@@ -51,8 +51,8 @@ const SortDropdown = ({
                                 {({ active }) => (
                                     <div
                                         className={`${
-                                            active ? 'bg-light-red' : 'bg-white-100'
-                                        } w-full break-all py-2 px-4 text-sm text-primary-black`}
+                                            active ? 'bg-primary-200' : 'bg-white-100'
+                                        } w-full break-all px-4 py-2 text-sm text-primary-black`}
                                         onClick={newFilter.onClick}
                                     >
                                         {newFilter.name}

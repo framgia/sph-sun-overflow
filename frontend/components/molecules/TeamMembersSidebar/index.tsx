@@ -55,7 +55,7 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element 
 
     return (
         <div className="p-1 drop-shadow-md">
-            <div className="flex w-full justify-between rounded-tr-xl rounded-tl-xl bg-primary-200 p-4 text-neutral-900 drop-shadow-md">
+            <div className="flex w-full justify-between rounded-tl-xl rounded-tr-xl bg-primary-200 p-4 text-neutral-900 drop-shadow-md">
                 <span className="text-xl font-medium">Members</span>
                 {data?.team?.is_team_leader && (
                     <Link
@@ -68,13 +68,13 @@ const TeamMemberSidebar = ({ data, loading }: MembersSidebarProps): JSX.Element 
             </div>
 
             {members.length === 0 ? (
-                <div className="tags no-scrollbar flex  flex-wrap overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
+                <div className="tags no-scrollbar flex  flex-wrap overflow-y-scroll rounded-bl-md rounded-br-md bg-white">
                     <div className="w-full py-4 text-center text-xl font-medium">
                         No Other Members
                     </div>
                 </div>
             ) : (
-                <div className="tags h-[49vh] overflow-y-scroll rounded-br-md rounded-bl-md bg-white">
+                <div className="tags h-[49vh] overflow-y-scroll rounded-bl-md rounded-br-md bg-white">
                     {members.map((member, index) => {
                         return <UserTab user={member} key={index} usage="TeamMembers" />
                     })}

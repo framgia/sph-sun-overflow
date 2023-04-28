@@ -23,9 +23,11 @@ import { MdOutlineModeEditOutline } from 'react-icons/md'
 import ChevronIcon from './Chevron'
 import DotsIcon from './Dots'
 import EyeIcon from './Eye'
+import FilterIcon from './Filter'
 import GridIcon from './Grid'
 import ListIcon from './List'
 import LockIcon from './Lock'
+import SearchIcon from './Search'
 import ThumbUpIcon from './ThumbUp'
 import UnlockIcon from './Unlock'
 import UsersIcon from './Users'
@@ -134,6 +136,8 @@ export const CustomIcons = {
     ThumbUpIcon,
     UnlockIcon,
     UsersIcon,
+    FilterIcon,
+    SearchIcon,
 }
 
 export default Icons

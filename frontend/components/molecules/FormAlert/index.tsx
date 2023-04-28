@@ -26,7 +26,7 @@ const FormAlert = ({ errors }: FormAlertProps): JSX.Element => {
             <span className="sr-only">Info</span>
             <div>
                 <span className="font-medium">Ensure that these requirements are met:</span>
-                <ul className="mt-1.5 ml-4 list-inside list-disc">
+                <ul className="ml-4 mt-1.5 list-inside list-disc">
                     {Object.values(errors).map((error, index) => {
                         return <li key={index}>{error?.message?.toString()}</li>
                     })}

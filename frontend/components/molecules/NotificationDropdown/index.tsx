@@ -90,7 +90,7 @@ const NotificationDropdown = ({ notifications }: Notifications): JSX.Element => 
                     <TbBell className="h-6 w-6" />
                     <span className="sr-only">Notifications</span>
                     {unread.length > 0 && (
-                        <div className="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-primary-red p-0.5 text-xs font-semibold text-white">
+                        <div className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-primary-red p-0.5 text-xs font-semibold text-white">
                             {unread.length}
                         </div>
                     )}

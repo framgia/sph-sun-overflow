@@ -1,12 +1,12 @@
 import Button from '@/components/atoms/Button'
 import DropdownFilters from '@/components/molecules/DropdownFilters'
 import Paginate from '@/components/organisms/Paginate'
-import QuestionList from '@/components/organisms/QuestionList'
 import type { RefetchType } from '@/pages/questions'
 import type { QuestionType } from '@/pages/questions/[slug]'
 import type { ApolloQueryResult } from '@apollo/client'
 import { useRouter } from 'next/router'
 import React from 'react'
+import QuestionListItem from '../organisms/QuestionListItem'
 
 export interface PaginatorInfo {
     perPage: number
@@ -95,7 +95,7 @@ const QuestionsPageLayout = ({
             <div>
                 <div className="w-full border-b-2">
                     <div className=" pb-3 text-3xl font-semibold">Search Results</div>
-                    <div className="text-md mt-1 mb-2 pl-6 text-gray-800">
+                    <div className="text-md mb-2 mt-1 pl-6 text-gray-800">
                         {pageInfo.total} result for {`"${searchKey}"`}
                     </div>
                 </div>
@@ -113,13 +113,11 @@ const QuestionsPageLayout = ({
     const renderTaggedQuestionListHeader = (): JSX.Element => {
         return (
             <div>
-                <div className="w-full border-b-2">
-                    <h1 className="mb-6 text-2xl font-bold">
+                <div className="flex flex-col justify-between gap-2 xl:flex-row xl:items-center">
+                    <h1 className="text-base font-semibold">
                         Questions tagged with{' '}
-                        <span className="text-primary-red">{selectedTag}</span>
+                        <span className="text-primary-base">{selectedTag}</span>
                     </h1>
-                </div>
-                <div className="mt-2 flex flex-row items-center justify-end px-2">
                     {renderSortAndFilter()}
                 </div>
             </div>
@@ -139,12 +137,14 @@ const QuestionsPageLayout = ({
         return renderQuestionListHeader()
     }
 
-    const externalStyle = !isPrivate ? 'pt-8 px-10' : ''
+    const externalStyle = !isPrivate ? 'p-4' : ''
     return (
-        <div className={`flex h-full w-full flex-col gap-4 pb-5 ${externalStyle}`}>
+        <div
+            className={`flex flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white ${externalStyle}`}
+        >
             {renderHeader()}
             <div className="flex h-full flex-col justify-between">
-                <div className="flex flex-col gap-3 divide-y-2 divide-primary-gray pl-6 ">
+                <div className="flex flex-col gap-4">
                     {!questionList.length && (
                         <div className="mt-10 text-center text-2xl font-semibold">
                             No Questions to Show
@@ -152,7 +152,7 @@ const QuestionsPageLayout = ({
                     )}
                     {questionList.map(function (question) {
                         return (
-                            <QuestionList
+                            <QuestionListItem
                                 key={question.id}
                                 title={question.title}
                                 slug={question.slug}
@@ -167,8 +167,10 @@ const QuestionsPageLayout = ({
                             />
                         )
                     })}
+                    {pageInfo.lastPage > 1 && (
+                        <Paginate {...pageInfo} onPageChange={onPageChange} />
+                    )}
                 </div>
-                {pageInfo.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
             </div>
         </div>
     )
