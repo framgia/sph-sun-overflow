@@ -6,7 +6,6 @@ import Modal from '@/components/templates/Modal'
 import CREATE_ROLE from '@/helpers/graphql/mutations/create_role'
 import UPDATE_ROLE from '@/helpers/graphql/mutations/update_role'
 import GET_PERMISSIONS from '@/helpers/graphql/queries/get_permissions'
-import GET_ROLES_SELECTION from '@/helpers/graphql/queries/get_role_selection'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
@@ -67,12 +66,8 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
         fetchPolicy: 'network-only',
     })
 
-    const [createRole] = useMutation(CREATE_ROLE, {
-        refetchQueries: [{ query: GET_ROLES_SELECTION }],
-    })
-    const [updateRole] = useMutation(UPDATE_ROLE, {
-        refetchQueries: [{ query: GET_ROLES_SELECTION }],
-    })
+    const [createRole] = useMutation(CREATE_ROLE)
+    const [updateRole] = useMutation(UPDATE_ROLE)
 
     if (loading) loadingScreenShow()
     if (error) {

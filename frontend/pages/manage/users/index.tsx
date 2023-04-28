@@ -96,7 +96,7 @@ const AdminUsers = (): JSX.Element => {
             sort: { reputation: null },
         },
     })
-    const rolesQuery = useQuery(GET_ROLES_SELECTION)
+    const rolesQuery = useQuery(GET_ROLES_SELECTION, { fetchPolicy: 'network-only' })
     const [assignRole] = useMutation(ASSIGN_ROLE)
     const roles = rolesQuery?.data?.roles ?? []
     const mapRolesForSelection = roles.map((role: { id: number; name: string }) => {
