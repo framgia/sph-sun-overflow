@@ -2,7 +2,6 @@ import AnswerList from '@/components/organisms/AnswerList'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
-import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 
@@ -106,7 +105,6 @@ const QuestionDetailPage = (): JSX.Element => {
 
     if (loading) return loadingScreenShow()
     if (error) {
-        errorNotify('Question not Found')
         void router.replace('/404')
         return loadingScreenShow()
     }

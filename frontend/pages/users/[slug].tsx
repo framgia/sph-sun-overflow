@@ -27,7 +27,6 @@ const Profile = (): JSX.Element => {
         return loadingScreenShow()
     }
     if (data.user === null) {
-        errorNotify(`User does not exist`)
         void router.push('/404')
         return loadingScreenShow()
     }
