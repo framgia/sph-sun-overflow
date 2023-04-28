@@ -33,6 +33,7 @@ const TagsFormModal = ({
     const [updateTag] = useMutation(UPDATE_TAG)
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault()
         const target = e.target as typeof e.target & {
             tagName: { value: string }
             tagDescription: { value: string }
