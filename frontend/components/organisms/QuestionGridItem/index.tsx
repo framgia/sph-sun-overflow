@@ -34,7 +34,7 @@ const QuestionGridItem = ({
     createdAt,
 }: QuestionGridItemProps): JSX.Element => {
     return (
-        <div className="flex min-h-[166px] flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
+        <div className="flex h-[240px] flex-col gap-4 rounded-[5px] border border-neutral-200 p-2 text-neutral-900">
             <div className="flex justify-between">
                 <span
                     className="w-fit truncate text-sm font-semibold hover:text-primary-base"
