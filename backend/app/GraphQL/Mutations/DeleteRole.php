@@ -20,6 +20,7 @@ final class DeleteRole
         $role = Role::find($args['id']);
         User::where('role_id', $args['id'])->update(['role_id' => 3]);
         $role->delete();
+
         return $role;
     }
 }
