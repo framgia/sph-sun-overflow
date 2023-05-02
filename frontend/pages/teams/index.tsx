@@ -25,7 +25,7 @@ const TeamsListPage = (): JSX.Element => {
 
     const userQuery = useQuery(GET_TEAMS, {
         variables: {
-            first: 6,
+            first: 9,
             page: 1,
             name: '%%',
         },
@@ -34,7 +34,7 @@ const TeamsListPage = (): JSX.Element => {
     useEffect(() => {
         const seachString = isSearchResult ? searchKey : ''
         void userQuery.refetch({
-            first: 6,
+            first: 9,
             page: 1,
             name: `%${seachString}%`,
         })
@@ -71,7 +71,7 @@ const TeamsListPage = (): JSX.Element => {
     const onSearchInputChange = (value: string): void => {
         if (value === '') {
             void userQuery.refetch({
-                first: 6,
+                first: 9,
                 page: 1,
                 name: `%%`,
             })
@@ -125,7 +125,7 @@ const TeamsListPage = (): JSX.Element => {
             </div>
             {teams?.length !== 0 ? (
                 <div>
-                    <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="flex flex-wrap gap-4 pt-4 ">
                         {teams?.map((team) => {
                             return (
                                 <TeamCard
