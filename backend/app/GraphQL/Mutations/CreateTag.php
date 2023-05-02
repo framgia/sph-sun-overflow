@@ -17,6 +17,10 @@ final class CreateTag
             throw new CustomException('Please limit the title to less than 30 characters');
         }
 
+        if (strlen($args['description']) > 250) {
+            throw new CustomException('Please limit the description to less than 250 characters');
+        }
+
         if (Tag::where('name', $args['name'])->exists()) {
             throw new CustomException('Tag already exists.');
         }

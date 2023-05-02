@@ -18,19 +18,22 @@ const columns: ColumnType[] = [
     {
         title: 'Tag',
         key: 'name',
+        width: 240,
     },
     {
         title: 'Description',
         key: 'description',
+        width: 500,
     },
     {
         title: 'Questions',
         key: 'count_tagged_questions',
+        width: 96,
     },
     {
-        title: '',
+        title: 'Actions',
         key: 'action',
-        width: 20,
+        width: 96,
     },
 ]
 
@@ -62,14 +65,6 @@ const Tags: NextPage = () => {
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await refetch({ first, page })
-    }
-
-    const renderPagination = (): JSX.Element => {
-        return pageInfo.lastPage > 1 ? (
-            <Paginate {...pageInfo} perPage={6} onPageChange={onPageChange} />
-        ) : (
-            <></>
-        )
     }
 
     const closeModal = (): void => {
@@ -115,27 +110,38 @@ const Tags: NextPage = () => {
         }
     }
 
+    const renderFooter = (): JSX.Element | null => {
+        if (pageInfo.lastPage > 1) {
+            return (
+                <div className="flex w-full items-center justify-center">
+                    <Paginate {...pageInfo} onPageChange={onPageChange} />
+                </div>
+            )
+        }
+        return null
+    }
+
     return (
-        <div className="flex w-full flex-col">
-            <div className="flex h-full flex-col">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-gray-800">Tags</h1>
+        <div className="flex flex-col items-center">
+            <div className="flex h-full flex-col gap-4">
+                <div className="flex items-center justify-end">
                     <Button
-                        type="button"
+                        usage="stroke"
+                        size="large"
                         onClick={() => {
                             setIsOpen(true)
                         }}
                     >
-                        New Tag
+                        Add Tag
                     </Button>
                 </div>
                 <Table
                     columns={columns}
                     dataSource={getTagsDataTable(tags)}
                     actions={getTagsActions}
+                    footer={renderFooter()}
                 />
                 <TagsFormModal isOpen={isOpen} closeModal={closeModal} refetchHandler={refetch} />
-                <div className="mt-auto">{renderPagination()}</div>
             </div>
         </div>
     )
