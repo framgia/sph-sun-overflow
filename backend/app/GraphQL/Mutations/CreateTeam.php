@@ -26,12 +26,6 @@ final class CreateTeam
                 'user_id' => $user->id,
             ]);
 
-            Member::create([
-                'user_id' => $user->id,
-                'team_role_id' => 1,
-                'team_id' => $team->id,
-            ]);
-
             return $team;
         } catch (Exception $e) {
             $message = $e->getMessage();

@@ -57,6 +57,7 @@ const TeamDetail = (): JSX.Element => {
             }
             setVerified(true)
         },
+        fetchPolicy: 'network-only',
     })
 
     const team: TeamType = data?.team
