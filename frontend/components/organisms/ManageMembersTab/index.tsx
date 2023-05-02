@@ -252,7 +252,7 @@ const ManageMembersTab = ({ team, isUserTeamLeader }: Props): JSX.Element => {
                             hasActions={isUserTeamLeader}
                             roles={roles}
                             teamId={team.id}
-                            teamSlug={router.query.slug}
+                            teamSlug={(router.query.slug as string) ?? ''}
                             refetch={async () => {
                                 const { perPage, currentPage } = paginatorInfo
                                 await refetch({
