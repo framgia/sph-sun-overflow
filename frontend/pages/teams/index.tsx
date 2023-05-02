@@ -4,10 +4,11 @@ import TeamCard from '@/components/molecules/TeamCard'
 import Paginate from '@/components/organisms/Paginate'
 import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 type TeamType = {
     id: number
@@ -19,34 +20,26 @@ type TeamType = {
 
 const TeamsListPage = (): JSX.Element => {
     const router = useRouter()
-    const [searchKey, setSearchKey] = useState(String(router.query.searchKey ?? ''))
+    const [searchKey, setSearchKey] = useState(String(router.query.search ?? ''))
     const [term, setTerm] = useState('')
-    const [isSearchResult, setIsSearchResult] = useState(searchKey !== '')
 
     const userQuery = useQuery(GET_TEAMS, {
         variables: {
             first: 9,
             page: 1,
-            name: '%%',
+            name: `%${String(router.query.search ?? '')}%`,
         },
     })
 
-    useEffect(() => {
-        const seachString = isSearchResult ? searchKey : ''
-        void userQuery.refetch({
-            first: 9,
-            page: 1,
-            name: `%${seachString}%`,
-        })
-        setSearchKey(seachString)
-        setTerm(seachString)
-        setIsSearchResult(seachString !== '')
-    }, [router])
-
+    if (userQuery.loading) return loadingScreenShow()
     if (userQuery.error) return <span>{errorNotify(`Error! ${userQuery.error?.message}`)}</span>
 
     const pageInfo: PaginatorInfo = userQuery?.data?.getUserTeams.paginatorInfo
     const teams: TeamType[] = userQuery?.data?.getUserTeams.data
+
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await userQuery.refetch({ first, page })
+    }
 
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
@@ -57,13 +50,11 @@ const TeamsListPage = (): JSX.Element => {
 
         setSearchKey(target.search.value)
         setTerm(target.search.value)
-        target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
 
         void router.push({
             pathname: router.pathname,
             query: {
-                ...router.query,
-                searchKey: target.search.value,
+                search: target.search.value,
             },
         })
     }
@@ -76,25 +67,8 @@ const TeamsListPage = (): JSX.Element => {
                 name: `%%`,
             })
             setTerm('')
-            setIsSearchResult(false)
         }
         setSearchKey(value)
-    }
-
-    const onPageChange = async (first: number, page: number): Promise<void> => {
-        await userQuery.refetch({ first, page })
-    }
-
-    const renderSearchResultHeader = (): JSX.Element => {
-        return (
-            <div className="w-80">
-                <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                    {`${pageInfo?.total} search ${
-                        pageInfo?.total !== 1 ? `results` : `result`
-                    } for "${term}"`}
-                </div>
-            </div>
-        )
     }
 
     return (
@@ -120,7 +94,15 @@ const TeamsListPage = (): JSX.Element => {
                             }}
                         />
                     </form>
-                    {isSearchResult && renderSearchResultHeader()}
+                    {term && (
+                        <div className="w-80">
+                            <div className="truncate px-2 pt-1 text-sm text-gray-600">
+                                {`${pageInfo?.total} search ${
+                                    pageInfo?.total !== 1 ? `results` : `result`
+                                } for "${term}"`}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
             {teams?.length !== 0 ? (
