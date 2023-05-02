@@ -6,6 +6,7 @@ import Modal from '@/components/templates/Modal'
 import ADD_MEMBER from '@/helpers/graphql/mutations/add_member'
 import GET_ALL_USERS from '@/helpers/graphql/queries/get_all_users'
 import GET_MEMBERS from '@/helpers/graphql/queries/get_members'
+import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import GET_TEAM_ROLES from '@/helpers/graphql/queries/get_team_roles'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
@@ -38,6 +39,7 @@ interface Team {
     id: number
     name: string
     teamLeader: UserType
+    slug: string
 }
 
 type FormValues = {
@@ -73,7 +75,9 @@ const ManageMembersTab = ({ team, isUserTeamLeader }: Props): JSX.Element => {
 
     const teamRoles = useQuery(GET_TEAM_ROLES)
 
-    const [addMember] = useMutation(ADD_MEMBER)
+    const [addMember] = useMutation(ADD_MEMBER, {
+        refetchQueries: [{ query: GET_TEAM, variables: { slug: team.slug } }],
+    })
 
     const { handleSubmit, reset, setValue, control } = useForm<FormValues>({
         defaultValues: {
