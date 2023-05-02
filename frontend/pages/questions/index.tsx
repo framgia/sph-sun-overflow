@@ -73,6 +73,7 @@ const QuestionsPage = (): JSX.Element => {
             filter: { keyword: searchKeyForApi, tag: '', ...answerFilter },
             orderBy: [order],
         },
+        fetchPolicy: 'cache-and-network',
     })
 
     if (loading) return loadingScreenShow()

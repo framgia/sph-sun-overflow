@@ -27,7 +27,6 @@ extend type Query {
     question(
         slug: String! @eq
         shouldAddViewCount: Boolean = true
-        answerSort: [answerSort]
     ): Question @guard(with: ["api"])
     questions(
         orderBy: _ @orderBy(columns: ["created_at", "updated_at"])

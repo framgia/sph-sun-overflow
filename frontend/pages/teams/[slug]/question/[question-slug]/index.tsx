@@ -21,7 +21,6 @@ const QuestionDetailPage = (): JSX.Element => {
         variables: {
             slug: String(query['question-slug']),
             shouldAddViewCount: true,
-            answerSort: [{ column: 'VOTES', order: 'DESC' }],
         },
         fetchPolicy: 'network-only',
     })

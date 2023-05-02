@@ -34,7 +34,7 @@ class Question extends Model
 
             $duplicateCount = Question::where('title', $question->title)->count();
 
-            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-".time();
+            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$question->id";
         });
 
         static::updating(function ($question) {
@@ -44,7 +44,7 @@ class Question extends Model
             $duplicateCount = Question::where('title', $question->title)->count();
 
             if ($questionFirst?->id !== $question->id) {
-                $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-".time();
+                $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$question->id";
             }
         });
     }
