@@ -1,10 +1,11 @@
+import InputField from '@/components/atoms/InputField'
+import TextArea from '@/components/atoms/TextArea'
 import Modal from '@/components/templates/Modal'
 import CREATE_TAG from '@/helpers/graphql/mutations/create_tag'
 import UPDATE_TAG from '@/helpers/graphql/mutations/update_tag'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
-import { Input, Textarea } from '@material-tailwind/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 const tempData = {
     id: 0,
     name: '',
@@ -31,6 +32,14 @@ const TagsFormModal = ({
     const formTitle = initialData?.name ? 'Edit Tag' : 'Add Tag'
     const [createTag] = useMutation(CREATE_TAG)
     const [updateTag] = useMutation(UPDATE_TAG)
+    const [formErrors, setFormErrors] = useState({ name: '', description: '' })
+    const [tagName, setTagName] = useState(initialData?.name ?? '')
+    const [tagDescription, setTagDescription] = useState(initialData?.description ?? '')
+
+    useEffect(() => {
+        setTagName(initialData?.name ?? '')
+        setTagDescription(initialData?.description ?? '')
+    }, [initialData, refetchHandler])
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
@@ -38,12 +47,23 @@ const TagsFormModal = ({
             tagName: { value: string }
             tagDescription: { value: string }
         }
+
+        let valid = true
         const name = target.tagName.value
         const description = target.tagDescription.value
+        const errorFields = { name: '', description: '' }
 
-        if (name === '' || description === '') {
-            errorNotify('Please input some data')
-        } else {
+        if (name === '') {
+            valid = false
+            errorFields.name = `Name must not be empty`
+        }
+
+        if (description === '') {
+            valid = false
+            errorFields.description = `Description must not be empty`
+        }
+
+        if (valid) {
             if (formTitle === 'Add Tag') {
                 createTag({
                     variables: {
@@ -55,6 +75,7 @@ const TagsFormModal = ({
                         successNotify('Tag Successfully Added!')
                         refetchHandler()
                         closeModal()
+                        reset()
                     })
                     .catch((e) => {
                         errorNotify(e.message)
@@ -82,6 +103,13 @@ const TagsFormModal = ({
                 }
             }
         }
+        setFormErrors(errorFields)
+    }
+
+    const reset = (): void => {
+        setTagName(initialData?.name ?? '')
+        setTagDescription(initialData?.description ?? '')
+        setFormErrors({ name: '', description: '' })
     }
 
     return (
@@ -91,21 +119,30 @@ const TagsFormModal = ({
             isOpen={isOpen}
             handleClose={() => {
                 closeModal()
+                reset()
             }}
         >
             <form className="flex w-full flex-col gap-4 " onSubmit={onSubmit}>
-                <Input
-                    id="tagName"
+                <InputField
                     name="tagName"
                     label="Name"
-                    defaultValue={initialData.name || ''}
+                    value={tagName}
+                    placeholder="Name"
+                    onChange={(e) => {
+                        setTagName(e.target.value)
+                    }}
+                    isValid={formErrors.name.length === 0}
+                    error={formErrors.name}
                 />
-                <Textarea
-                    id="tagDescription"
+                <TextArea
                     name="tagDescription"
+                    value={tagDescription}
                     label="Description"
-                    defaultValue={initialData.description || ''}
-                    className="focus:ring-0"
+                    onChange={(e) => {
+                        setTagDescription(e.target.value)
+                    }}
+                    isValid={formErrors.description.length === 0}
+                    error={formErrors.description}
                 />
             </form>
         </Modal>

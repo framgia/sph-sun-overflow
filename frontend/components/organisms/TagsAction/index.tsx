@@ -48,7 +48,7 @@ const renderDeleteAction = (
                     setShowDeleteModal(true)
                 }}
             >
-                <Icons name="table_delete" additionalClass="fill-gray-500" />
+                <Icons name="trash" size="18" />
             </Button>
             <Modal
                 title="Delete Tag"
@@ -80,14 +80,14 @@ const TagsActions = ({ id, name, description, refetchHandler }: Props): JSX.Elem
     }
 
     return (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row justify-start gap-4">
             <Button
                 usage="toggle-modal"
                 onClick={(): void => {
                     setShowEditModal(true)
                 }}
             >
-                <Icons name="table_edit" />
+                <Icons name="pencil" size="18" />
             </Button>
             <TagsFormModal
                 isOpen={showEditModal}
