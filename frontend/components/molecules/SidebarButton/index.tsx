@@ -57,7 +57,7 @@ const SidebarButton = ({ IconName, Text, subMenu, url }: SidebarButtonProps): an
     }
 
     return (
-        <li className="sidebar-list">
+        <li className="sidebar-list pb-1">
             {subMenu ? (
                 <div>
                     <div

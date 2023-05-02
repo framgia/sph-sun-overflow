@@ -124,48 +124,54 @@ const TagsListPage = (): JSX.Element => {
 
     const onSearchInputChange = (value: string): void => {
         if (value === '') {
+            const { query } = router
             void refetch({ first: 9, page: 1, name: '%%' })
             setTerm('')
+            delete query.search
+            void router.replace({ query })
         }
         setSearchKey(value)
     }
 
     return (
-        <div className="flex max-h-full flex-col gap-4 overflow-hidden rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+        <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
             <h1 className="text-xl font-semibold text-neutral-900">All Tags</h1>
-            <div className="flex w-full flex-row items-center justify-between">
-                <form onSubmit={handleSearchSubmit}>
-                    <InputField
-                        name="tag_search"
-                        placeholder="Search tag"
+            <div className="flex flex-col gap-2">
+                <div className="flex w-full items-center justify-between">
+                    <form onSubmit={handleSearchSubmit}>
+                        <InputField
+                            name="tag_search"
+                            placeholder="Search tag"
+                            icon={
+                                <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
+                                    <SearchIcon />
+                                </div>
+                            }
+                            additionalClass="h-10 question-list-search-input pl-8"
+                            value={searchKey}
+                            onChange={(e) => {
+                                onSearchInputChange(e.target.value)
+                            }}
+                        />
+                    </form>
+                    <SortDropdown
+                        filters={tagFilters}
+                        selectedFilter={selectedFilter}
+                        grouped
                         icon={
-                            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
-                                <SearchIcon />
+                            <div className="ml-1 flex h-full items-center">
+                                <FilterIcon />
                             </div>
                         }
-                        additionalClass="h-10 question-list-search-input pl-8"
-                        value={searchKey}
-                        onChange={(e) => {
-                            onSearchInputChange(e.target.value)
-                        }}
                     />
-                </form>
-                <SortDropdown
-                    filters={tagFilters}
-                    selectedFilter={selectedFilter}
-                    grouped
-                    icon={
-                        <div className="ml-1 flex h-full items-center">
-                            <FilterIcon />
-                        </div>
-                    }
-                />
-            </div>
-            {term && (
-                <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                    {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for {`"${term}"`}
                 </div>
-            )}
+                {term && (
+                    <div className="truncate text-sm font-medium text-neutral-700">
+                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                        {`"${term}"`}
+                    </div>
+                )}
+            </div>
             <div className="scrollbar flex flex-col gap-4 overflow-y-auto">
                 <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {tagList.map((tag) => {
