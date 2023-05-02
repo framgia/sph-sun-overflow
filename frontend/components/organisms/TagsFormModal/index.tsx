@@ -75,6 +75,7 @@ const TagsFormModal = ({
                         successNotify('Tag Successfully Added!')
                         refetchHandler()
                         closeModal()
+                        reset()
                     })
                     .catch((e) => {
                         errorNotify(e.message)
