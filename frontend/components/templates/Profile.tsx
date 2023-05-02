@@ -195,7 +195,7 @@ const ProfileLayout = ({ data, toggleFollow, isPublic }: ProfileLayoutProps): JS
     }
     return (
         <Fragment>
-            <div className=" flex flex-col space-y-4 xl:flex-row xl:space-y-0 xl:space-x-4">
+            <div className=" flex flex-col space-y-4 xl:flex-row xl:space-x-4 xl:space-y-0">
                 <ProfileCard
                     {...omit(data, ['top_questions', 'top_answers'])}
                     toggleFollow={toggleFollow}

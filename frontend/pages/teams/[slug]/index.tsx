@@ -8,7 +8,7 @@ import DashboardEditContentForm from '@/components/organisms/DashboardEditConten
 import ManageMembersTab from '@/components/organisms/ManageMembersTab'
 import Paginate from '@/components/organisms/Paginate'
 import QuestionGridItem from '@/components/organisms/QuestionGridItem'
-import QuestionListItem from '@/components/organisms/QuestionList'
+import QuestionListItem from '@/components/organisms/QuestionListItem'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { parseHTML } from '@/helpers/htmlParsing'

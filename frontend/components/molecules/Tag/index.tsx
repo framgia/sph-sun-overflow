@@ -1,6 +1,7 @@
 import { CustomIcons } from '@/components/atoms/Icons'
 import type { TagType } from '@/pages/questions/[slug]'
 import { Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react'
+import { useRouter } from 'next/router'
 import TagPopover from '../TagPopover'
 
 const { EyeIcon } = CustomIcons
@@ -10,6 +11,8 @@ type TagProps = {
 }
 
 const Tag = ({ tag }: TagProps): JSX.Element => {
+    const router = useRouter()
+
     return (
         <Popover
             placement="bottom-start"
@@ -30,9 +33,11 @@ const Tag = ({ tag }: TagProps): JSX.Element => {
                     </span>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="z-20 rounded-[5px] border-neutral-200 bg-neutral-100 px-0 py-2">
-                <TagPopover tag={tag} />
-            </PopoverContent>
+            {!router.asPath.includes(tag.slug) && (
+                <PopoverContent className="z-20 rounded-[5px] border-neutral-200 bg-neutral-100 px-0 py-2">
+                    <TagPopover tag={tag} />
+                </PopoverContent>
+            )}
         </Popover>
     )
 }

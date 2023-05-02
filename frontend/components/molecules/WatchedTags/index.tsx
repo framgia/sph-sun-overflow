@@ -82,22 +82,22 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
 
     return (
         <div className="z-10 mb-0 drop-shadow-md" ref={detectorRef}>
-            <div className="flex h-12 w-full items-center justify-between rounded-tr-md rounded-tl-md bg-primary-200 p-2.5 text-neutral-900 drop-shadow-md">
+            <div className="flex h-12 w-full items-center justify-between rounded-tl-md rounded-tr-md bg-primary-200 p-2.5 text-neutral-900 drop-shadow-md">
                 <span className="align-left h-fit align-middle text-sm font-semibold">
                     Watched Tags
                 </span>
                 <HiOutlinePencilAlt className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>
-            <div className="rounded-br-xl rounded-bl-xl bg-white">
+            <div className="rounded-bl-xl rounded-br-xl bg-white">
                 <div
-                    className={`tags no-scrollbar flex max-h-36 flex-wrap overflow-y-scroll rounded-br-md rounded-bl-md bg-white p-4`}
+                    className={`tags no-scrollbar flex max-h-36 flex-wrap overflow-y-scroll rounded-bl-md rounded-br-md bg-white p-4`}
                 >
                     {watchedTags.length > 0 &&
                         watchedTags.map((tag, index) => {
                             return (
                                 <div
                                     key={index}
-                                    className="max-w-20 mx-0.5 my-1 flex items-center overflow-hidden text-ellipsis rounded-2xl bg-red-300 py-0.5 px-1"
+                                    className="max-w-20 mx-0.5 my-1 flex items-center overflow-hidden text-ellipsis rounded-2xl bg-red-300 px-1 py-0.5"
                                 >
                                     <Link
                                         className="label px-2 py-1 text-xs text-white"

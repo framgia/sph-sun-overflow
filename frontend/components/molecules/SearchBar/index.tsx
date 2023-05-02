@@ -23,7 +23,7 @@ const SearchBar = (): JSX.Element => {
     }
 
     return (
-        <div className="mt-[15px] mb-[13px] mr-[34px] flex h-[50px] w-[530px]">
+        <div className="mb-[13px] mr-[34px] mt-[15px] flex h-[50px] w-[530px]">
             <div className="relative h-full w-full">
                 <form onSubmit={handleSubmit} className="relative h-full w-full">
                     <input

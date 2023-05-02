@@ -4,6 +4,7 @@ const GET_TAGS = gql`
     query Tags($first: Int!, $page: Int!, $name: String, $sort: [tagSort]) {
         tags(first: $first, page: $page, name: $name, sort: $sort) {
             paginatorInfo {
+                perPage
                 lastPage
                 currentPage
                 hasMorePages
