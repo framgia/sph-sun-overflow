@@ -12,6 +12,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { type View } from '../manage/users/[slug]'
 import { type QuestionType } from './[slug]'
 
 export interface PaginatorInfo {
@@ -58,7 +59,7 @@ const QuestionsPage = (): JSX.Element => {
     const router = useRouter()
     const [searchKeyForInput, setSearchKeyForInput] = useState(String(router.query.searchKey ?? ''))
     const [searchKeyForApi, setSearchKeyForApi] = useState(String(router.query.searchKey ?? ''))
-    const [viewType, setViewType] = useState(String(router.query.viewType ?? 'List'))
+    const [viewType, setViewType] = useState<View>(String(router.query.viewType ?? 'List') as View)
 
     const orderFromParams = String(router.query.order ?? 'Newest first')
     const filterFromParams = String(router.query.filter ?? 'All Questions')
@@ -67,7 +68,7 @@ const QuestionsPage = (): JSX.Element => {
 
     const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_QUESTIONS, {
         variables: {
-            first: 10,
+            first: viewType === 'List' ? 10 : 12,
             page: 1,
             filter: { keyword: searchKeyForApi, tag: '', ...answerFilter },
             orderBy: [order],
@@ -154,8 +155,8 @@ const QuestionsPage = (): JSX.Element => {
     }
 
     return (
-        <div className="h-full w-full overflow-y-auto rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
-            <div className="flex w-full justify-between">
+        <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+            <div className="flex w-full items-center justify-between">
                 <div className="text-xl font-semibold text-neutral-900">All Questions</div>
                 <Button
                     usage="stroke"
@@ -165,8 +166,8 @@ const QuestionsPage = (): JSX.Element => {
                     Ask a Question
                 </Button>
             </div>
-            <div className="question-list-header mt-4 w-full">
-                <div>
+            <div className="question-list-header w-full">
+                <div className="flex flex-col gap-2">
                     <form onSubmit={handleSearchSubmit}>
                         <InputField
                             name="question_search"
@@ -181,26 +182,32 @@ const QuestionsPage = (): JSX.Element => {
                             onChange={(e) => {
                                 setSearchKeyForInput(e.target.value)
                                 if (e.target.value === '') {
+                                    const { query } = router
                                     setSearchKeyForApi('')
                                     void refetch({
-                                        first: 10,
+                                        first: viewType === 'List' ? 10 : 12,
                                         page: 1,
                                         filter: { keyword: '', tag: '' },
-                                        orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+                                        orderBy: [order],
                                     })
+                                    delete query.searchKey
+                                    void router.replace({ query })
                                 }
                             }}
                         />
                     </form>
-                    {searchKeyForApi && pageInfo ? (
-                        <div className="mt-2 text-sm text-neutral-700">
-                            {pageInfo.total} result for {`"${searchKeyForApi}"`}
+                    {searchKeyForApi && (
+                        <div className="truncate text-sm font-medium text-neutral-700">
+                            {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                            {`"${searchKeyForApi}"`}
                         </div>
-                    ) : (
-                        ''
                     )}
                 </div>
-                <div className="question-list-filters flex">
+                <div
+                    className={`${
+                        searchKeyForApi ? 'question-list-filters' : 'question-list-search-filters'
+                    } flex`}
+                >
                     <div className="mr-1">
                         <ViewToggle
                             view={viewType}
@@ -213,17 +220,16 @@ const QuestionsPage = (): JSX.Element => {
                 </div>
             </div>
 
-            <div
-                className={`${
-                    viewType === 'List'
-                        ? 'flex w-full flex-col justify-center gap-4'
-                        : 'grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
-                } pt-4`}
-            >
-                {renderQuestionsItems()}
-            </div>
-
-            <div className=" mt-4 flex h-14 w-full items-center justify-center">
+            <div className="question-list scrollbar flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
+                <div
+                    className={`${
+                        viewType === 'List'
+                            ? 'flex flex-col'
+                            : 'grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+                    } gap-4`}
+                >
+                    {renderQuestionsItems()}
+                </div>
                 {pageInfo?.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
             </div>
         </div>
