@@ -39,7 +39,6 @@ interface Team {
     id: number
     name: string
     teamLeader: UserType
-    slug: string
 }
 
 type FormValues = {
@@ -76,7 +75,7 @@ const ManageMembersTab = ({ team, isUserTeamLeader }: Props): JSX.Element => {
     const teamRoles = useQuery(GET_TEAM_ROLES)
 
     const [addMember] = useMutation(ADD_MEMBER, {
-        refetchQueries: [{ query: GET_TEAM, variables: { slug: team.slug } }],
+        refetchQueries: [{ query: GET_TEAM, variables: { slug: router.query.slug } }],
     })
 
     const { handleSubmit, reset, setValue, control } = useForm<FormValues>({
@@ -253,6 +252,7 @@ const ManageMembersTab = ({ team, isUserTeamLeader }: Props): JSX.Element => {
                             hasActions={isUserTeamLeader}
                             roles={roles}
                             teamId={team.id}
+                            teamSlug={router.query.slug}
                             refetch={async () => {
                                 const { perPage, currentPage } = paginatorInfo
                                 await refetch({

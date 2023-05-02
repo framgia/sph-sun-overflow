@@ -3,6 +3,7 @@ import Icons from '@/components/atoms/Icons'
 import Modal from '@/components/templates/Modal'
 import DELETE_MEMBER from '@/helpers/graphql/mutations/delete_member'
 import UPDATE_MEMBER from '@/helpers/graphql/mutations/update_member'
+import GET_TEAM from '@/helpers/graphql/queries/get_team'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
@@ -25,6 +26,7 @@ type Props = {
     hasActions: boolean
     roles: OptionType[]
     teamId: number
+    teamSlug: string
     refetch: () => void
     deleteRefetch: () => void
 }
@@ -39,6 +41,7 @@ const TeamUserCard = ({
     hasActions,
     roles,
     teamId,
+    teamSlug = '',
     refetch,
     deleteRefetch,
 }: Props): JSX.Element => {
@@ -50,8 +53,9 @@ const TeamUserCard = ({
         const initialRole = roles?.find((r) => r.label === role)
 
         const [updateMember] = useMutation(UPDATE_MEMBER)
-        const [deleteMember] = useMutation(DELETE_MEMBER)
-
+        const [deleteMember] = useMutation(DELETE_MEMBER, {
+            refetchQueries: [{ query: GET_TEAM, variables: { slug: teamSlug } }],
+        })
         const {
             handleSubmit,
             reset,

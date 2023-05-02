@@ -24,7 +24,6 @@ interface TeamType {
     questions_asked: number
     questions_answered: number
     truncated_name: string
-    slug: string
 }
 
 const getActiveTabClass = (status: boolean): string => {
@@ -58,6 +57,7 @@ const TeamDetail = (): JSX.Element => {
             }
             setVerified(true)
         },
+        fetchPolicy: 'network-only',
     })
 
     const team: TeamType = data?.team
