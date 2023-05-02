@@ -1,5 +1,6 @@
 import Button from '@/components/atoms/Button'
 import FormAlert from '@/components/molecules/FormAlert'
+import PublicToggle from '@/components/molecules/PublicToggle'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import SortDropdown from '@/components/molecules/SortDropdown'
 import type { FilterType } from '@/components/templates/QuestionsPageLayout'
@@ -13,12 +14,10 @@ import type { TeamType } from '@/pages/questions/[slug]'
 import { isObjectEmpty } from '@/utils'
 import { useMutation, useQuery } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Checkbox } from '@material-tailwind/react'
 import isEqual from 'lodash/isEqual'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { HiGlobeAlt } from 'react-icons/hi2'
 import type { ITag } from '../../molecules/TagsInput'
 import TagsInput from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
@@ -59,7 +58,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     const queryTeamId = isNaN(parseInt(router.query.id as string))
         ? undefined
         : parseInt(router.query.id as string)
-    let buttonText = 'Post Question'
+    let buttonText = 'Submit Question'
     let successMessage = 'Question Added Successfully'
     const errorMessage = 'Question Not Updated'
     if (router.query.slug) {
@@ -248,96 +247,98 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         successNotify(successMessage)
     }
     return (
-        <div className="w-[1204px]">
-            <form className="flex flex-col space-y-[30px]" onSubmit={handleSubmit(onSubmit)}>
-                <div className="QuestionTitle w-full space-y-[10px] self-center">
-                    <label htmlFor="titleInput" className="mt-[10px] text-2xl text-primary-black">
-                        Question Title
-                    </label>
-                    <input
-                        id="titleInput"
-                        type="text"
-                        className={` w-full rounded-lg border border-[#EEEEEE] bg-white`}
-                        {...register('title', {})}
-                    />
-                </div>
-                <div className="Description mb-[30px] w-full space-y-[10px] self-center">
-                    <label htmlFor="descriptionInput" className="mb-10 text-2xl text-primary-black">
-                        Description
-                    </label>
-                    <Controller
-                        control={control}
-                        name="description"
-                        render={({ field: { onChange, value } }) => (
-                            <RichTextEditor
-                                onChange={onChange}
-                                value={value}
-                                usage="description"
-                                id="descriptionInput"
+        <div className="w-[1204px] p-4">
+            <form className="flex flex-col gap-10 " onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex flex-col space-y-[30px] ">
+                    <div className="QuestionTitle flex w-full flex-col gap-1 self-center">
+                        <label
+                            htmlFor="titleInput"
+                            className="text-sm font-medium text-neutral-900"
+                        >
+                            Question Title
+                        </label>
+                        <div className="flex flex-row gap-1">
+                            <input
+                                id="titleInput"
+                                type="text"
+                                className={`w-2/3 rounded-lg border border-[#EEEEEE] bg-white`}
+                                {...register('title', {})}
                             />
-                        )}
-                    />
-                </div>
-                <div className="flex w-full flex-row  space-x-10">
-                    <div className="Tags w-1/2 self-center">
-                        <label htmlFor="tagsInput" className="mb-2.5 text-2xl">
-                            Tags (max. 5)
+                            {hasTeam && (
+                                <Controller
+                                    control={control}
+                                    name="is_public"
+                                    render={({ field: { value } }) => (
+                                        <PublicToggle value={value} setValue={setValue} />
+                                    )}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="Description mb-[30px] w-full space-y-1 self-center">
+                        <label htmlFor="descriptionInput" className="text-sm text-primary-black">
+                            Description
                         </label>
                         <Controller
                             control={control}
-                            name="tags"
-                            render={({ field: { value } }) => (
-                                <TagsInput
-                                    setValue={setValue}
+                            name="description"
+                            render={({ field: { onChange, value } }) => (
+                                <RichTextEditor
+                                    onChange={onChange}
                                     value={value}
-                                    suggestions={tagSuggest}
-                                    refetchSuggestions={refetchTags}
+                                    usage="description"
+                                    id="descriptionInput"
                                 />
                             )}
                         />
                     </div>
-                </div>
-                {tempTeams.length > 0 && (
-                    <div className="flex w-full flex-col">
-                        <label className="mb-2.5 w-full text-2xl">Privacy</label>
-                        <div className="flex flex-row ">
-                            <div className="mr-[30px]">
-                                <Controller
-                                    control={control}
-                                    name="team_id"
-                                    render={({ field: { value } }) => {
-                                        const teams = transformTeams()
-
-                                        return (
-                                            <SortDropdown
-                                                filters={teams}
-                                                selectedFilter={String(selectedFilter)}
-                                            />
-                                        )
-                                    }}
-                                />
-                            </div>
-                            {hasTeam && (
-                                <div className="flex flex-row">
-                                    <label htmlFor="isPublic" className="text-2xl font-bold">
-                                        <HiGlobeAlt size={40} color="#333333" />
-                                    </label>
-                                    <div className="">
-                                        <Checkbox
-                                            {...register('is_public')}
-                                            id="isPublic"
-                                            disabled={!hasTeam}
-                                        />
-                                    </div>
-                                </div>
-                            )}
+                    <div className="flex w-full flex-row  space-x-10">
+                        <div className="Tags w-1/2 space-y-1 self-center">
+                            <label htmlFor="tagsInput" className="text-sm">
+                                Tags (max. 5)
+                            </label>
+                            <Controller
+                                control={control}
+                                name="tags"
+                                render={({ field: { value } }) => (
+                                    <TagsInput
+                                        setValue={setValue}
+                                        value={value}
+                                        suggestions={tagSuggest}
+                                        refetchSuggestions={refetchTags}
+                                    />
+                                )}
+                            />
                         </div>
                     </div>
-                )}
+                    {tempTeams.length > 0 && (
+                        <div className="flex w-full flex-col">
+                            <div className="flex flex-row ">
+                                <div className="mr-[30px] space-y-1">
+                                    <label className="text-sm">Team (Optional)</label>
+                                    <Controller
+                                        control={control}
+                                        name="team_id"
+                                        render={({ field: { value } }) => {
+                                            const teams = transformTeams()
+
+                                            return (
+                                                <SortDropdown
+                                                    filters={teams}
+                                                    selectedFilter={String(selectedFilter)}
+                                                />
+                                            )
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
 
                 {!isObjectEmpty(errors) && <FormAlert errors={errors} />}
                 <div className="Submit w-full self-center py-4">
-                    <div className="float-right">
+                    <div className="float-left">
                         <Button
                             usage="question-form"
                             type="submit"
