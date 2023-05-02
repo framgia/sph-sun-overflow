@@ -33,8 +33,9 @@ class Question extends Model
             $slug = Str::slug($question->title);
 
             $duplicateCount = Question::where('title', $question->title)->count();
+            $lastQuestionId = Question::orderBy('created_at', 'DESC')->first()->id + 1;
 
-            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$question->id";
+            $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$lastQuestionId";
         });
 
         static::updating(function ($question) {
