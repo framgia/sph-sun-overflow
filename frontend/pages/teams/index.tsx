@@ -21,8 +21,7 @@ type TeamType = {
 const TeamsListPage = (): JSX.Element => {
     const router = useRouter()
     const [searchKey, setSearchKey] = useState(String(router.query.search ?? ''))
-    const [term, setTerm] = useState('')
-
+    const [term, setTerm] = useState(String(router.query.search ?? ''))
     const userQuery = useQuery(GET_TEAMS, {
         variables: {
             first: 9,
@@ -49,14 +48,17 @@ const TeamsListPage = (): JSX.Element => {
         }
 
         setSearchKey(target.search.value)
-        setTerm(target.search.value)
 
-        void router.push({
-            pathname: router.pathname,
-            query: {
-                search: target.search.value,
-            },
-        })
+        void router
+            .push({
+                pathname: router.pathname,
+                query: {
+                    search: target.search.value,
+                },
+            })
+            .then(() => {
+                setTerm(target.search.value)
+            })
     }
 
     const onSearchInputChange = (value: string): void => {
