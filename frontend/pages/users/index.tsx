@@ -99,6 +99,7 @@ const UsersPage = (): JSX.Element => {
 
     const onSearchInputChange = (value: string): void => {
         if (value === '') {
+            const { query } = router
             void userQuery({
                 variables: {
                     first: 12,
@@ -109,6 +110,8 @@ const UsersPage = (): JSX.Element => {
             })
             setTerm('')
             setIsSearchResult(false)
+            delete query.search
+            void router.replace({ query })
         }
         setSearchKey(value)
     }
