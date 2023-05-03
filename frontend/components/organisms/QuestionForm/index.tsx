@@ -247,9 +247,9 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
         successNotify(successMessage)
     }
     return (
-        <div className="w-[1204px] p-4">
+        <div className="h-[485px] w-[888px] p-4">
             <form className="flex flex-col gap-10 " onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col space-y-[30px] ">
+                <div className="flex flex-col gap-2 ">
                     <div className="QuestionTitle flex w-full flex-col gap-1 self-center">
                         <label
                             htmlFor="titleInput"
