@@ -3,7 +3,6 @@
     border-radius: 0 0 5px 5px;
     border-color: #33333380;
     border-width: 1px;
-    height: 128px;
 }
 
 .quill .ql-toolbar.ql-snow {
@@ -11,7 +10,6 @@
     border-radius: 5px 5px 0 0;
     border-color: #33333380;
     border-width: 1px;
-    height: 40px;
     vertical-align: middle !important;
     display: flex;
 }
@@ -39,4 +37,8 @@
     border-radius: 5px;
     left: 40% !important;
     top: 0 !important;
+}
+
+.quill.description > .ql-container.ql-snow > .ql-editor {
+    min-height: 168px;
 }

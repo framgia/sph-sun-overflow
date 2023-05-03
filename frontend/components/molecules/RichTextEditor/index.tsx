@@ -56,9 +56,6 @@ const RichTextEditor = ({
     let style
 
     switch (usage) {
-        case 'description':
-            style = { height: '168px' }
-            break
         case 'dashboard':
             style = { minHeight: '100%' }
             break
@@ -74,7 +71,7 @@ const RichTextEditor = ({
 
     return (
         <ReactQuill
-            className="flex flex-col"
+            className={`${usage}`}
             modules={modules}
             formats={formats}
             onChange={onChange}

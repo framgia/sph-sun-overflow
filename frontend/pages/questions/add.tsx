@@ -1,7 +1,7 @@
 import QuestionForm from '@/components/organisms/QuestionForm'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { IoIosArrowBack } from 'react-icons/io'
+import { HiArrowLeft } from 'react-icons/hi'
 
 const QuestionFormPage = (): JSX.Element => {
     let path
@@ -10,15 +10,13 @@ const QuestionFormPage = (): JSX.Element => {
     else path = `/teams/${router.query.prev as string}`
 
     return (
-        <div className="flex w-full flex-col">
-            <div className="w-full">
-                <Link href={path}>
-                    <div className="flex flex-row items-center text-2xl">
-                        <IoIosArrowBack size={24} /> Go Back
-                    </div>
-                </Link>
-            </div>
-            <div className="mt-[80px] flex w-full justify-center ">
+        <div className="flex w-full flex-row justify-center gap-2.5 ">
+            <Link href={path}>
+                <div className="py-4">
+                    <HiArrowLeft size={24} />
+                </div>
+            </Link>
+            <div className="">
                 <QuestionForm />
             </div>
         </div>
