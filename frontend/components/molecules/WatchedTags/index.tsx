@@ -1,6 +1,5 @@
 import CustomCombobox from '@/components/molecules/CustomComboBox'
 import { ADD_WATCHED_TAG, REMOVE_WATCHED_TAG } from '@/helpers/graphql/mutations/sidebar'
-import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import { GET_TAG_SUGGESTIONS, QTagsSidebar } from '@/helpers/graphql/queries/sidebar'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery } from '@apollo/client'
@@ -28,7 +27,7 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
         variables: { queryString: `%${queryText}%` },
     })
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
-        refetchQueries: [{ query: QTagsSidebar }, { query: GET_QUESTIONS }],
+        refetchQueries: ['Questions', { query: QTagsSidebar }],
         onCompleted: (data) => {
             if (data.addWatchedTag === 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
@@ -38,7 +37,7 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
         },
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
-        refetchQueries: [{ query: QTagsSidebar }, { query: GET_QUESTIONS }],
+        refetchQueries: ['Questions', { query: QTagsSidebar }],
         onCompleted: (data) => {
             if (data.removeWatchedTag === 'Successfully removed tag from WatchList') {
                 successNotify(data.removeWatchedTag)
