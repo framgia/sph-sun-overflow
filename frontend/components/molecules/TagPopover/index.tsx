@@ -59,8 +59,8 @@ const TagPopover = ({ tag }: TagType): JSX.Element => {
         else await addWatchedTagAPI({ variables: { tagId: tag.id } })
     }
     return (
-        <div className="flex min-h-[88px] w-72 flex-col gap-2">
-            <div className="border-b border-neutral-300 px-2 pb-2">
+        <div className="flex w-72 flex-col gap-2">
+            <div className="min-h-[50px] border-b border-neutral-300 px-2 pb-2">
                 <span className="text-[12px] text-neutral-900">{tag.description}</span>
             </div>
             <div className="flex items-center justify-center gap-2">
