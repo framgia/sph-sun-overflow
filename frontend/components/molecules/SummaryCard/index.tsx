@@ -1,7 +1,7 @@
 import TOGGLE_BOOKMARK from '@/helpers/graphql/mutations/toggle_bookmark'
 import GET_USER from '@/helpers/graphql/queries/get_user'
+import { parseHTML } from '@/helpers/htmlParsing'
 import { errorNotify, successNotify } from '@/helpers/toast'
-import { stripHtmlTags } from '@/utils'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -82,7 +82,7 @@ const SummaryCard = ({
             return (
                 <div className="">
                     <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
-                        {stripHtmlTags(content)}
+                        {parseHTML(content)}
                     </p>
                 </div>
             )

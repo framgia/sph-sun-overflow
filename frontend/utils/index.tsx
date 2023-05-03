@@ -31,11 +31,3 @@ export async function convertBase64(file: File): Promise<string> {
         }
     })
 }
-
-export function stripHtmlTags(str: string): string {
-    return str
-        .replace(/&gt;/g, '>')
-        .replace(/&lt;/g, '<')
-        .replace(/<\/?(p|br|strong)[^>]*>/gi, '')
-        .replace(/&[a-z]+;/gi, '')
-}
