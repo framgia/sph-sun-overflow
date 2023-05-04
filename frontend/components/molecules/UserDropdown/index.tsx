@@ -33,6 +33,8 @@ const UserDropdown = ({
                         name={`${first_name} ${last_name}`}
                         size="36"
                         alt={first_name}
+                        maxInitials={1}
+                        textSizeRatio={2}
                         src={
                             updated_at && updated_at.length > 0
                                 ? `${avatar}?${updated_at}`

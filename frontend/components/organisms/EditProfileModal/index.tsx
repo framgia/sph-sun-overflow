@@ -153,7 +153,9 @@ const EditProfileModal = ({
                         <div className="flex w-full flex-col items-center align-middle">
                             <Avatar
                                 round
+                                name={`${firstName} ${lastName}`}
                                 src={watch('avatar')}
+                                alt={firstName}
                                 maxInitials={1}
                                 textSizeRatio={2}
                                 className="object-cover"
