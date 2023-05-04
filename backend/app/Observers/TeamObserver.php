@@ -14,9 +14,10 @@ class TeamObserver
         $team->members()->create([
             'user_id' => $team->user_id,
             'team_id' => $team->id,
-            'team_role_id' => 1
+            'team_role_id' => 1,
         ]);
     }
+
     public function deleting(Team $team)
     {
         Member::where('team_id', $team->id)->delete();

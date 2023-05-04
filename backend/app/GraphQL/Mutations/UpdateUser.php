@@ -4,6 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 final class UpdateUser
@@ -12,7 +13,7 @@ final class UpdateUser
      * @param  null  $_
      * @param  array{}  $args
      */
-    public function uploadAvatar($avatar, $email, $path = 'avatar')
+    public function uploadAvatar($avatar, $email, $path, $previousAvatar)
     {
         if (! $avatar) {
             return null;
@@ -24,6 +25,11 @@ final class UpdateUser
 
         if (! file_exists($storagePath)) {
             mkdir($storagePath, 0777, true);
+        }
+
+        if (str_contains($previousAvatar, URL::to('/').'/storage/avatar/')) {
+            $parsePreviousAvatar = explode(URL::to('/').'/storage/avatar/', $previousAvatar);
+            Storage::delete("/public/$path/".$parsePreviousAvatar[1]);
         }
 
         file_put_contents($storagePath.$fileName, $data);
@@ -52,7 +58,7 @@ final class UpdateUser
             'last_name' => $args['last_name'],
             'about_me' => $args['about_me'],
             'avatar' => str_contains($args['avatar'], 'base64') ?
-                $this->uploadAvatar($args['avatar'], $user->email) : $user->avatar,
+                $this->uploadAvatar($args['avatar'], $user->email, 'avatar', $user->avatar) : $user->avatar,
         ]);
 
         return $user;

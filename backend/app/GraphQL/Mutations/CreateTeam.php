@@ -3,7 +3,6 @@
 namespace App\GraphQL\Mutations;
 
 use App\Exceptions\CustomException;
-use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
