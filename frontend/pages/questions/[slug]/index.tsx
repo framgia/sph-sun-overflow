@@ -100,7 +100,6 @@ const QuestionDetailPage = (): JSX.Element => {
             slug: String(query.slug),
             shouldAddViewCount: true,
         },
-        fetchPolicy: 'network-only',
     })
 
     if (loading) return loadingScreenShow()

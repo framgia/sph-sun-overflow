@@ -23,9 +23,7 @@ const Navbar = (): JSX.Element => {
         updated_at: useBoundStore((state) => state.updated_at),
     }
 
-    const [getNotifications, { data, error }] = useLazyQuery(GET_NOTIFICATIONS, {
-        fetchPolicy: 'network-only',
-    })
+    const [getNotifications, { data, error }] = useLazyQuery(GET_NOTIFICATIONS)
 
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY ?? '', {
         // encrypted: true,

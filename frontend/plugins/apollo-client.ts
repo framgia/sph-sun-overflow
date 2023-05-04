@@ -9,6 +9,11 @@ const client = new ApolloClient({
         authorization: getAuthToken ? `Bearer ${getAuthToken}` : '',
     },
     cache: new InMemoryCache(),
+    defaultOptions: {
+        watchQuery: {
+            fetchPolicy: 'network-only',
+        },
+    },
 })
 
 export default client

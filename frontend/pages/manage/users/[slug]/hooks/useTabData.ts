@@ -55,7 +55,7 @@ const useTabData = (activeTab: Tab, view: View) => {
             error: questionsError,
             refetch: questionsRefetch,
         },
-    ] = useLazyQuery<QuestionQueryType, RefetchType>(GET_QUESTIONS, { fetchPolicy: 'network-only' })
+    ] = useLazyQuery<QuestionQueryType, RefetchType>(GET_QUESTIONS)
 
     // Answers
     const [
@@ -66,15 +66,13 @@ const useTabData = (activeTab: Tab, view: View) => {
             error: answersError,
             refetch: answersRefetch,
         },
-    ] = useLazyQuery<AnswerQueryType, RefetchType>(GET_ANSWERS, {
-        fetchPolicy: 'network-only',
-    })
+    ] = useLazyQuery<AnswerQueryType, RefetchType>(GET_ANSWERS)
 
     // Teams
     const [
         getUserTeams,
         { data: userTeams, loading: teamsLoading, error: teamsError, refetch: teamsRefetch },
-    ] = useLazyQuery<TeamQueryType, TeamRefetchType>(GET_TEAMS, { fetchPolicy: 'network-only' })
+    ] = useLazyQuery<TeamQueryType, TeamRefetchType>(GET_TEAMS)
     useEffect(() => {
         if (activeTab === 'Questions') {
             void getUserQuestions({
