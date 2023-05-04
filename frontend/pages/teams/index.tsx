@@ -109,7 +109,7 @@ const TeamsListPage = (): JSX.Element => {
                     </div>
                 </div>
                 {teams?.length !== 0 ? (
-                    <div className="mt-4 flex h-full w-full flex-col justify-between gap-4 ">
+                    <div className="scrollbar mt-4 flex h-full w-full flex-col justify-between gap-4 overflow-y-auto">
                         <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
                             {teams?.map((team) => {
                                 return (
