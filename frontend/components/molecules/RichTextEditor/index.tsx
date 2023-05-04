@@ -67,9 +67,6 @@ const RichTextEditor = ({
         case 'dashboard':
             style = { minHeight: '100%' }
             break
-        case 'content':
-            style = { width: '100%', height: '168px' }
-            break
         case 'about_me':
             style = { width: '100%' }
             break

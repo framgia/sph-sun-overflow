@@ -1,5 +1,7 @@
 import Button from '@/components/atoms/Button'
+import EditorPreview from '@/components/molecules/EditorPreview'
 import FormAlert from '@/components/molecules/FormAlert'
+import PreviewToggle from '@/components/molecules/PreviewToggle'
 import PublicToggle from '@/components/molecules/PublicToggle'
 import RichTextEditor from '@/components/molecules/RichTextEditor'
 import SortDropdown from '@/components/molecules/SortDropdown'
@@ -55,6 +57,7 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     }
 
     const router = useRouter()
+    const [isPreview, setIsPreview] = useState<boolean>(false)
     const queryTeamId = isNaN(parseInt(router.query.id as string))
         ? undefined
         : parseInt(router.query.id as string)
@@ -276,19 +279,32 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                         </div>
                     </div>
                     <div className="Description mb-[30px] w-full space-y-1 self-center">
-                        <label htmlFor="descriptionInput" className="text-sm text-primary-black">
-                            Description
-                        </label>
+                        <div className="flex justify-between">
+                            <label
+                                htmlFor="descriptionInput"
+                                className="text-sm text-primary-black"
+                            >
+                                Description
+                            </label>
+
+                            <PreviewToggle isPreview={isPreview} setIsPreview={setIsPreview} />
+                        </div>
                         <Controller
                             control={control}
                             name="description"
                             render={({ field: { onChange, value } }) => (
-                                <RichTextEditor
-                                    onChange={onChange}
-                                    value={value}
-                                    usage="description"
-                                    id="descriptionInput"
-                                />
+                                <div>
+                                    {isPreview ? (
+                                        <RichTextEditor
+                                            onChange={onChange}
+                                            value={value}
+                                            usage="description"
+                                            id="descriptionInput"
+                                        />
+                                    ) : (
+                                        <EditorPreview value={value} />
+                                    )}
+                                </div>
                             )}
                         />
                     </div>
