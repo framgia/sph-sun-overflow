@@ -150,23 +150,21 @@ const QuestionsPageLayout = ({
                             No Questions to Show
                         </div>
                     )}
-                    {questionList.map(function (question) {
-                        return (
-                            <QuestionListItem
-                                key={question.id}
-                                title={question.title}
-                                slug={question.slug}
-                                content={question.content}
-                                createdAt={question.created_at}
-                                voteCount={question.vote_count}
-                                answerCount={question.answers.length}
-                                viewCount={question.views_count}
-                                tags={question.tags}
-                                author={question.user}
-                                isPublic={question.is_public}
-                            />
-                        )
-                    })}
+                    {questionList.map((question) => (
+                        <QuestionListItem
+                            key={question.id}
+                            title={question.title}
+                            slug={question.slug}
+                            content={question.content}
+                            createdAt={question.humanized_created_at}
+                            voteCount={question.vote_count}
+                            answerCount={question.answers.length}
+                            viewCount={question.views_count}
+                            tags={question.tags}
+                            author={question.user}
+                            isPublic={question.is_public}
+                        />
+                    ))}
                     {pageInfo.lastPage > 1 && (
                         <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
