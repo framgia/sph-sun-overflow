@@ -57,7 +57,7 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
                 }`}
             >
                 {teams.length === 0 && (
-                    <div className="text-md w-full rounded-bl-md rounded-br-md p-4 text-center font-medium">
+                    <div className="w-full rounded-bl-md rounded-br-md p-4 text-center text-sm font-medium text-neutral-disabled">
                         Not in any teams yet
                     </div>
                 )}

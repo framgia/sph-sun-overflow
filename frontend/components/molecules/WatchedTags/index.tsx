@@ -116,7 +116,7 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
                             )
                         })}
                     {watchedTags.length === 0 && (
-                        <div className="text-md w-full bg-white text-center font-medium">
+                        <div className="w-full bg-white text-center text-sm font-medium text-neutral-disabled">
                             No watched tags
                         </div>
                     )}
