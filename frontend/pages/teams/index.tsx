@@ -75,7 +75,7 @@ const TeamsListPage = (): JSX.Element => {
 
     return (
         <div className="flex w-full justify-center rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
-            <div className="flex w-[886px] flex-col gap-4 align-middle">
+            <div className="flex w-full flex-col gap-4 align-middle">
                 <div className="flex w-full justify-between">
                     <div className="text-xl font-semibold text-neutral-900">My Teams</div>
                 </div>
@@ -109,8 +109,8 @@ const TeamsListPage = (): JSX.Element => {
                     </div>
                 </div>
                 {teams?.length !== 0 ? (
-                    <div className="">
-                        <div className="flex min-h-[632px] flex-wrap gap-4">
+                    <div className="mt-4 flex h-full w-full flex-col justify-between gap-4 ">
+                        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
                             {teams?.map((team) => {
                                 return (
                                     <TeamCard
