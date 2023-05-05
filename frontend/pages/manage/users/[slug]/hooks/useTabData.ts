@@ -66,9 +66,7 @@ const useTabData = (activeTab: Tab, view: View) => {
             error: answersError,
             refetch: answersRefetch,
         },
-    ] = useLazyQuery<AnswerQueryType, RefetchType>(GET_ANSWERS, {
-        fetchPolicy: 'network-only',
-    })
+    ] = useLazyQuery<AnswerQueryType, RefetchType>(GET_ANSWERS, { fetchPolicy: 'network-only' })
 
     // Teams
     const [

@@ -146,7 +146,6 @@ const Team = (): JSX.Element => {
                 orderBy: [order],
                 filter: { team: slug, ...answerFilter },
             },
-            fetchPolicy: 'network-only',
         })
 
         if (loading) return <div></div>

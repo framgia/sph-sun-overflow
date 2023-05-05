@@ -58,13 +58,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
     const formTitle = role?.name ? (modalView ? 'View Role' : 'Edit Role') : 'Add New Role'
     const submitLabel = modalView ? 'Edit Role' : formTitle === 'Edit Role' ? 'Save' : 'Add'
 
-    const {
-        data: { permissions } = {},
-        loading,
-        error,
-    } = useQuery(GET_PERMISSIONS, {
-        fetchPolicy: 'network-only',
-    })
+    const { data: { permissions } = {}, loading, error } = useQuery(GET_PERMISSIONS)
 
     const [createRole] = useMutation(CREATE_ROLE)
     const [updateRole] = useMutation(UPDATE_ROLE)

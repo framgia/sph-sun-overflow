@@ -22,7 +22,6 @@ const QuestionDetailPage = (): JSX.Element => {
             slug: String(query['question-slug']),
             shouldAddViewCount: true,
         },
-        fetchPolicy: 'network-only',
     })
     if (loading) return loadingScreenShow()
     if (error) {

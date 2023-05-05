@@ -14,7 +14,6 @@ const Profile = (): JSX.Element => {
         variables: {
             slug: router.query.slug ?? '',
         },
-        fetchPolicy: 'network-only',
     })
     const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
         refetchQueries: [{ query: GET_USER, variables: { slug: router.query.slug } }],
