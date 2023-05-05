@@ -125,9 +125,9 @@ const TagsFormModal = ({
             <form className="flex w-full flex-col gap-4 " onSubmit={onSubmit}>
                 <InputField
                     name="tagName"
-                    label="Name"
+                    label="Tag Name"
                     value={tagName}
-                    placeholder="Name"
+                    placeholder="Tag Name"
                     onChange={(e) => {
                         setTagName(e.target.value)
                     }}
@@ -137,7 +137,7 @@ const TagsFormModal = ({
                 <TextArea
                     name="tagDescription"
                     value={tagDescription}
-                    label="Description"
+                    label="Tag Description"
                     onChange={(e) => {
                         setTagDescription(e.target.value)
                     }}

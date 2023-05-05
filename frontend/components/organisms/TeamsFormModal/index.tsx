@@ -181,6 +181,7 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
                             <InputField
                                 name="teamName"
                                 label="Team Name"
+                                placeholder="Team Name"
                                 value={value}
                                 onChange={onChange}
                                 isValid={formErrors.teamName.length === 0}

@@ -266,6 +266,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                             name="name"
                             value={roleName}
                             label="Role Name"
+                            placeholder="Role Name"
                             onChange={(e) => {
                                 setRoleName(e.target.value)
                             }}
@@ -277,7 +278,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         <TextArea
                             name="description"
                             value={roleDescription}
-                            label="Description"
+                            label="Role Description"
                             onChange={(e) => {
                                 setRoleDescription(e.target.value)
                             }}
