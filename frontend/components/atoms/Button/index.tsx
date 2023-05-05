@@ -75,7 +75,7 @@ const getButtonClasses = (usage: string, size: string): string => {
         case 'modal-submit':
             return 'items-center rounded-md bg-primary-red text-white px-4 text-sm hover:bg-secondary-red py-1'
         case 'question-form':
-            return 'px-10 inline-flex items-center justify-center rounded-md bg-primary-red p-4 text-center text-sm text-white hover:bg-dark-red focus:outline-none focus:ring-1 focus:ring-red-700'
+            return 'px-4 py-2 h-10 rounded-[5px] bg-neutral-white text-primary-red border border-primary-red font-semibold text-sm'
         case 'follow-modal-follow':
             return 'border-neutral-900 bg-primary-300 border rounded-md font-semibold text-xs text-neutral-900 w-20 h-7'
         case 'follow-modal-following':
