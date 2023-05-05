@@ -202,7 +202,7 @@ const AdminUsers = (): JSX.Element => {
     }
 
     return (
-        <div className="flex h-full flex-col gap-4">
+        <div className="flex flex-col gap-4">
             <Table
                 columns={columns}
                 dataSource={newUserArr}
