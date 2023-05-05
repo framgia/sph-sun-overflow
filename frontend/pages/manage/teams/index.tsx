@@ -6,9 +6,11 @@ import Table from '@/components/organisms/Table'
 import Modal from '@/components/templates/Modal'
 import { type PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import DELETE_TEAM from '@/helpers/graphql/mutations/delete_team'
+import GET_ALL_TEAM_LEADERS from '@/helpers/graphql/queries/get_all_team_leaders'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
+import { type UserType } from '@/pages/questions/[slug]'
 import { useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -59,88 +61,6 @@ const columns: ColumnType[] = [
     },
 ]
 
-const EditAction = ({ team, refetch }: { team?: DataType; refetch: () => void }): JSX.Element => {
-    const [showModal, setShowModal] = useState(false)
-    return (
-        <>
-            <Button
-                usage="toggle-modal"
-                onClick={() => {
-                    setShowModal(true)
-                }}
-            >
-                <Icons name="pencil" size="18" />
-            </Button>
-            <TeamsFormModal
-                initialData={{
-                    id: team?.key as number,
-                    title: team?.full_name as string,
-                    teamLeaderId: team?.teamLeaderId as number,
-                    teamLeaderName: team?.teamLeaderName as string,
-                    description: team?.full_description as string,
-                }}
-                isOpen={showModal}
-                closeModal={() => {
-                    setShowModal(false)
-                }}
-                refetch={refetch}
-            />
-        </>
-    )
-}
-const DeleteAction = ({
-    id,
-    name,
-    refetch,
-}: {
-    id: number
-    name: string
-    refetch: () => void
-}): JSX.Element => {
-    const [showModal, setShowModal] = useState(false)
-    const [deleteRole] = useMutation(DELETE_TEAM)
-
-    const onSubmit = (): void => {
-        deleteRole({ variables: { id } })
-            .then(() => {
-                successNotify('Team successfully deleted')
-                refetch()
-            })
-            .catch(() => {
-                errorNotify('Failed deleting the team')
-            })
-            .finally(() => {
-                setShowModal(false)
-            })
-    }
-
-    return (
-        <>
-            <Button
-                usage="toggle-modal"
-                onClick={() => {
-                    setShowModal(true)
-                }}
-            >
-                <Icons name="trash" size="18" />
-            </Button>
-            <Modal
-                title="Delete Team"
-                isOpen={showModal}
-                handleClose={() => {
-                    setShowModal(false)
-                }}
-                handleSubmit={onSubmit}
-                submitLabel="Delete"
-            >
-                <span>
-                    Are you sure you wish to delete <span className="font-bold">{name}</span>?
-                </span>
-            </Modal>
-        </>
-    )
-}
-
 const AdminTeams = (): JSX.Element => {
     const router = useRouter()
     const [showModal, setShowModal] = useState(false)
@@ -152,6 +72,7 @@ const AdminTeams = (): JSX.Element => {
             isAdmin: true,
         },
     })
+    const teamLeaders = useQuery(GET_ALL_TEAM_LEADERS)
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await refetch({ first, page, isAdmin: true })
@@ -165,12 +86,15 @@ const AdminTeams = (): JSX.Element => {
         })
     }, [router, refetch])
 
-    if (loading) return loadingScreenShow()
+    if (loading || teamLeaders.loading) return loadingScreenShow()
     if (error) {
         errorNotify(`Error! ${error.message}`)
         return <></>
     }
-
+    if (teamLeaders.error) {
+        errorNotify(`Error! ${teamLeaders.error.message}`)
+        return <></>
+    }
     const { data: teamArr, paginatorInfo } = data?.getUserTeams ?? {
         data: [],
         paginatorInfo: { currentPage: 1, hasMorePages: false, lastPage: 1 },
@@ -216,7 +140,6 @@ const AdminTeams = (): JSX.Element => {
 
     const renderTeamsActions = (key: number): JSX.Element | undefined => {
         const team = getTeamDataTable(teamArr).find((team) => +team.key === key)
-
         return (
             <div className="flex flex-row items-center gap-4">
                 <EditAction
@@ -228,6 +151,7 @@ const AdminTeams = (): JSX.Element => {
                             isAdmin: true,
                         })
                     }}
+                    leaderOptions={teamLeaders.data.teamLeaders}
                 />
                 <DeleteAction
                     id={key}
@@ -242,6 +166,97 @@ const AdminTeams = (): JSX.Element => {
                     }}
                 />
             </div>
+        )
+    }
+
+    const EditAction = ({
+        team,
+        refetch,
+        leaderOptions,
+    }: {
+        team?: DataType
+        refetch: () => void
+        leaderOptions: UserType[]
+    }): JSX.Element => {
+        const [showModal, setShowModal] = useState(false)
+        return (
+            <>
+                <Button
+                    usage="toggle-modal"
+                    onClick={() => {
+                        setShowModal(true)
+                    }}
+                >
+                    <Icons name="pencil" size="18" />
+                </Button>
+                <TeamsFormModal
+                    initialData={{
+                        id: team?.key as number,
+                        title: team?.full_name as string,
+                        teamLeaderId: team?.teamLeaderId as number,
+                        teamLeaderName: team?.teamLeaderName as string,
+                        description: team?.full_description as string,
+                    }}
+                    isOpen={showModal}
+                    closeModal={() => {
+                        setShowModal(false)
+                    }}
+                    refetch={refetch}
+                    leaderOptions={leaderOptions}
+                />
+            </>
+        )
+    }
+    const DeleteAction = ({
+        id,
+        name,
+        refetch,
+    }: {
+        id: number
+        name: string
+        refetch: () => void
+    }): JSX.Element => {
+        const [showModal, setShowModal] = useState(false)
+        const [deleteRole] = useMutation(DELETE_TEAM)
+
+        const onSubmit = (): void => {
+            deleteRole({ variables: { id } })
+                .then(() => {
+                    successNotify('Team successfully deleted')
+                    refetch()
+                })
+                .catch(() => {
+                    errorNotify('Failed deleting the team')
+                })
+                .finally(() => {
+                    setShowModal(false)
+                })
+        }
+
+        return (
+            <>
+                <Button
+                    usage="toggle-modal"
+                    onClick={() => {
+                        setShowModal(true)
+                    }}
+                >
+                    <Icons name="trash" size="18" />
+                </Button>
+                <Modal
+                    title="Delete Team"
+                    isOpen={showModal}
+                    handleClose={() => {
+                        setShowModal(false)
+                    }}
+                    handleSubmit={onSubmit}
+                    submitLabel="Delete"
+                >
+                    <span>
+                        Are you sure you wish to delete <span className="font-bold">{name}</span>?
+                    </span>
+                </Modal>
+            </>
         )
     }
 
@@ -291,6 +306,7 @@ const AdminTeams = (): JSX.Element => {
                         isAdmin: true,
                     })
                 }}
+                leaderOptions={teamLeaders.data.teamLeaders}
             />
         </div>
     )
