@@ -1,15 +1,14 @@
-import PageHeader from '@/components/atoms/PageHeader'
-import SearchInput from '@/components/molecules/SearchInput'
+import Search from '@/components/atoms/Icons/Search'
+import InputField from '@/components/atoms/InputField'
+import TeamCard from '@/components/molecules/TeamCard'
 import Paginate from '@/components/organisms/Paginate'
 import type { PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
+import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
-import { Card, CardBody, CardFooter, Typography } from '@material-tailwind/react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { BsPeopleFill } from 'react-icons/bs'
+import { useState } from 'react'
 
 type TeamType = {
     id: number
@@ -21,33 +20,25 @@ type TeamType = {
 
 const TeamsListPage = (): JSX.Element => {
     const router = useRouter()
-    const [searchKey, setSearchKey] = useState('')
-    const [term, setTerm] = useState('')
-    const [isSearchResult, setIsSearchResult] = useState(false)
-
+    const [searchKey, setSearchKey] = useState(String(router.query.search ?? ''))
+    const [term, setTerm] = useState(String(router.query.search ?? ''))
     const userQuery = useQuery(GET_TEAMS, {
         variables: {
-            first: 6,
+            first: 9,
             page: 1,
-            name: '%%',
+            name: `%${String(router.query.search ?? '')}%`,
         },
     })
 
-    useEffect(() => {
-        void userQuery.refetch({
-            first: 6,
-            page: 1,
-            name: '%%',
-        })
-        setSearchKey('')
-        setTerm('')
-        setIsSearchResult(false)
-    }, [router])
-
+    if (userQuery.loading) return loadingScreenShow()
     if (userQuery.error) return <span>{errorNotify(`Error! ${userQuery.error?.message}`)}</span>
 
     const pageInfo: PaginatorInfo = userQuery?.data?.getUserTeams.paginatorInfo
     const teams: TeamType[] = userQuery?.data?.getUserTeams.data
+
+    const onPageChange = async (first: number, page: number): Promise<void> => {
+        await userQuery.refetch({ first, page })
+    }
 
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
@@ -56,99 +47,92 @@ const TeamsListPage = (): JSX.Element => {
             search: { value: string }
         }
 
-        await userQuery.refetch({
-            first: 6,
-            page: 1,
-            name: `%${target.search.value}%`,
-        })
         setSearchKey(target.search.value)
-        setTerm(target.search.value)
-        target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
+
+        void router
+            .push({
+                pathname: router.pathname,
+                query: {
+                    search: target.search.value,
+                },
+            })
+            .then(() => {
+                setTerm(target.search.value)
+            })
     }
 
     const onSearchInputChange = (value: string): void => {
         if (value === '') {
             void userQuery.refetch({
-                first: 6,
+                first: 9,
                 page: 1,
                 name: `%%`,
             })
             setTerm('')
-            setIsSearchResult(false)
         }
         setSearchKey(value)
     }
 
-    const onPageChange = async (first: number, page: number): Promise<void> => {
-        await userQuery.refetch({ first, page })
-    }
-
-    const renderSearchResultHeader = (): JSX.Element => {
-        return (
-            <div className="w-80">
-                <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                    {`${pageInfo?.total} search ${
-                        pageInfo?.total !== 1 ? `results` : `result`
-                    } for "${term}"`}
-                </div>
-            </div>
-        )
-    }
-
     return (
-        <div className="flex h-full w-full flex-col">
-            <PageHeader>Teams</PageHeader>
-            <div className="flex h-full w-full flex-col">
-                <div className="flex w-full flex-row">
+        <div className="flex max-h-full w-full justify-center rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+            <div className="flex w-full flex-col gap-4 align-middle">
+                <div className="flex w-full justify-between">
+                    <div className="text-xl font-semibold text-neutral-900">My Teams</div>
+                </div>
+                <div className="w-full">
                     <div>
                         <form onSubmit={handleSearchSubmit}>
-                            <SearchInput
-                                placeholder="Search team"
+                            <InputField
+                                name="search"
+                                placeholder="Search"
+                                icon={
+                                    <div className="absolute top-1/2 left-1.5 -translate-y-1/2 transform">
+                                        <Search />
+                                    </div>
+                                }
+                                additionalClass="h-10 w-72 pl-8"
                                 value={searchKey}
-                                onChange={onSearchInputChange}
+                                onChange={(e) => {
+                                    onSearchInputChange(e.target.value)
+                                }}
                             />
                         </form>
-                        {isSearchResult && renderSearchResultHeader()}
+                        {term && (
+                            <div className="w-80">
+                                <div className="truncate px-2 pt-1 text-sm text-gray-600">
+                                    {`${pageInfo?.total} search ${
+                                        pageInfo?.total !== 1 ? `results` : `result`
+                                    } for "${term}"`}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
                 {teams?.length !== 0 ? (
-                    <div className="mt-6 flex h-full w-full flex-col justify-between">
-                        <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3">
-                            {teams?.map((team: TeamType) => (
-                                <Link key={team.id} href={`teams/${team.slug}`}>
-                                    <Card className="h-48 justify-between">
-                                        <CardBody className="justify-content-end items-center">
-                                            <Typography
-                                                variant="h5"
-                                                className="truncate text-gray-800"
-                                                title={`${team.name}`}
-                                            >
-                                                {team.name}
-                                            </Typography>
-                                            <div className="mt-2 leading-tight text-gray-600 line-clamp-3">
-                                                {team.description}
-                                            </div>
-                                        </CardBody>
-                                        <CardFooter className="py-3 text-sm text-gray-500">
-                                            <div className="flex justify-center gap-2">
-                                                <BsPeopleFill className="text-base" />
-                                                {team.members_count}
-                                            </div>
-                                        </CardFooter>
-                                    </Card>
-                                </Link>
-                            ))}
+                    <div className="scrollbar mt-4 flex w-full flex-col justify-between gap-4 overflow-y-auto ">
+                        <div className="grid-rows-9 grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3 2xl:grid-rows-3">
+                            {teams?.map((team) => {
+                                return (
+                                    <TeamCard
+                                        key={team.id}
+                                        slug={team.slug ?? ''}
+                                        name={team.name}
+                                        description={team.description}
+                                        usersCount={team.members_count}
+                                    />
+                                )
+                            })}
                         </div>
-                        {pageInfo?.lastPage > 1 && (
-                            <Paginate {...pageInfo} onPageChange={onPageChange} />
-                        )}
+                        <div className=" mt-4 flex h-14 w-full items-center justify-center">
+                            {pageInfo?.lastPage > 1 && (
+                                <Paginate {...pageInfo} onPageChange={onPageChange} />
+                            )}
+                        </div>
                     </div>
                 ) : (
-                    !isSearchResult && (
-                        <span className="mt-4 p-2 text-center text-lg font-bold text-primary-gray">
-                            No teams to show
-                        </span>
-                    )
+                    <span className="flex h-20 w-full items-center justify-center p-2 text-center text-lg font-bold text-primary-gray">
+                        No teams to show
+                    </span>
                 )}
             </div>
         </div>
