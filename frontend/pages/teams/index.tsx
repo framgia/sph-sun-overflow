@@ -74,7 +74,7 @@ const TeamsListPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full justify-center rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+        <div className="flex max-h-full w-full justify-center rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
             <div className="flex w-full flex-col gap-4 align-middle">
                 <div className="flex w-full justify-between">
                     <div className="text-xl font-semibold text-neutral-900">My Teams</div>
@@ -109,8 +109,8 @@ const TeamsListPage = (): JSX.Element => {
                     </div>
                 </div>
                 {teams?.length !== 0 ? (
-                    <div className=" mt-4 flex h-full w-full flex-col justify-between gap-4 ">
-                        <div className="grid min-h-[632px] w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+                    <div className="scrollbar mt-4 flex w-full flex-col justify-between gap-4 overflow-y-auto ">
+                        <div className="grid-rows-9 grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3 2xl:grid-rows-3">
                             {teams?.map((team) => {
                                 return (
                                     <TeamCard
