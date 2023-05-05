@@ -5,9 +5,8 @@ interface StatsProps {
 
 const PageStats = ({ label, value }: StatsProps): JSX.Element => {
     return (
-        <div className="flex flex-col items-center">
-            <div className="text-center text-lg">{label}</div>
-            <div className="text-md">{value}</div>
+        <div className="flex flex-row gap-2 text-sm">
+            <span className="font-medium">{label}:</span> {value}
         </div>
     )
 }
