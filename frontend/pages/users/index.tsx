@@ -104,8 +104,8 @@ const UsersPage = (): JSX.Element => {
                 variables: {
                     first: 12,
                     page: 1,
-                    filter: { keyword: '', role_id: null },
-                    sort: { reputation: null },
+                    filter: { keyword: '', role_id: selectedRole.id },
+                    sort: { reputation: selectedScore.sort },
                 },
             })
             setTerm('')
@@ -132,6 +132,22 @@ const UsersPage = (): JSX.Element => {
             setSelectedRole({ id: role.id, label: role.name })
         },
     }))
+
+    roleFilters.unshift({
+        id: 0,
+        name: 'All Users',
+        onClick: async () => {
+            await refetch({
+                first: 12,
+                page: 1,
+                filter: { keyword: searchKey },
+                sort: { reputation: selectedScore.sort },
+            })
+            delete router.query.role
+            void router.replace(router.query)
+            setSelectedRole({ id: null, label: 'All Users' })
+        },
+    })
 
     const scoreSort = [
         {
