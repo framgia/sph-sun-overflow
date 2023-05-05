@@ -1,4 +1,5 @@
 import DropdownFilters from '@/components/molecules/DropdownFilters'
+import Tabs from '@/components/molecules/Tabs'
 import ViewToggle from '@/components/molecules/ViewToggle'
 import ManageMembersTab from '@/components/organisms/ManageMembersTab'
 import Paginate from '@/components/organisms/Paginate'
@@ -31,13 +32,6 @@ interface TeamType {
     truncated_name: string
 }
 type View = 'Grid' | 'List'
-
-const getActiveTabClass = (status: boolean): string => {
-    if (status) {
-        return '-mb-[1px] px-6 font-semibold border-b-2 border-primary-red bg-red-100'
-    }
-    return '-mb-[1px] px-6 active:border-red-400'
-}
 
 const TeamDetail = (): JSX.Element => {
     const router = useRouter()
@@ -236,22 +230,20 @@ const TeamDetail = (): JSX.Element => {
 
             <div className="flex grow flex-col rounded-smd border border-neutral-200 bg-white p-4">
                 <div className="flex flex-row justify-start border-b-2 border-gray-300">
-                    <div
-                        className={`min-w-[120px] p-2.5 text-center hover:cursor-pointer ${getActiveTabClass(
-                            activeTab === 'Questions'
-                        )}`}
-                        onClick={onClickQuestionsTab}
-                    >
-                        Questions
-                    </div>
-                    <div
-                        className={`min-w-[120px] p-2.5 text-center hover:cursor-pointer ${getActiveTabClass(
-                            activeTab === 'Members'
-                        )}`}
-                        onClick={onClickMembersTab}
-                    >
-                        Members
-                    </div>
+                    <Tabs
+                        tabs={[
+                            {
+                                label: 'Questions',
+                                isSelected: activeTab === 'Questions',
+                                onClick: onClickQuestionsTab,
+                            },
+                            {
+                                label: 'Members',
+                                isSelected: activeTab === 'Members',
+                                onClick: onClickMembersTab,
+                            },
+                        ]}
+                    />
                 </div>
                 <div className="flex w-full">{renderActiveTab()}</div>
             </div>
