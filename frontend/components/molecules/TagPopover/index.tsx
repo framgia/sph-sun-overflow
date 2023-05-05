@@ -21,13 +21,12 @@ type TagType = {
 
 const TagPopover = ({ tag }: TagType): JSX.Element => {
     const router = useRouter()
-    const manageUsersSelectedTab = (router.query.tab ?? 'Questions') as Tab
+    const selectedTab = (router.query.tab ?? 'Questions') as Tab
+
+    const refetchQueries = ['getQuestion', selectedTab, { query: QTagsSidebar }]
 
     const [addWatchedTagAPI] = useMutation(ADD_WATCHED_TAG, {
-        refetchQueries: [
-            manageUsersSelectedTab === 'Questions' ? 'Questions' : 'Answers',
-            { query: QTagsSidebar },
-        ],
+        refetchQueries,
         onCompleted: (data) => {
             if (data.addWatchedTag === 'Successfully added the tag') {
                 successNotify(data.addWatchedTag)
@@ -37,11 +36,7 @@ const TagPopover = ({ tag }: TagType): JSX.Element => {
         },
     })
     const [removeWatchedTagAPI] = useMutation(REMOVE_WATCHED_TAG, {
-        refetchQueries: [
-            manageUsersSelectedTab === 'Questions' ? 'Questions' : 'Answers',
-            { query: QTagsSidebar },
-        ],
-
+        refetchQueries,
         onCompleted: (data) => {
             if (data.removeWatchedTag === 'Successfully removed tag from WatchList') {
                 successNotify(data.removeWatchedTag)
