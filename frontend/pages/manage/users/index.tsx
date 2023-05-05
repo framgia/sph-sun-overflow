@@ -19,18 +19,22 @@ const columns: ColumnType[] = [
     {
         title: 'Name',
         key: 'name',
+        width: 240,
     },
     {
         title: 'Questions',
         key: 'question_count',
+        width: 112,
     },
     {
         title: 'Answers',
         key: 'answer_count',
+        width: 112,
     },
     {
         title: 'Role',
         key: 'role',
+        width: 240,
     },
     {
         title: 'Actions',

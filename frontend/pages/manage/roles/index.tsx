@@ -161,7 +161,7 @@ const RolesPage = (): JSX.Element => {
         refetch,
     } = useQuery(GET_ROLES_PAGINATE, {
         variables: {
-            first: 10,
+            first: 6,
             page: 1,
         },
         fetchPolicy: 'network-only',
@@ -169,7 +169,7 @@ const RolesPage = (): JSX.Element => {
 
     useEffect(() => {
         void refetch({
-            first: 10,
+            first: 6,
             page: 1,
         })
     }, [refetch])
