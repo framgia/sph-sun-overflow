@@ -198,42 +198,40 @@ const AdminUsers = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col">
-            <div className="flex h-full flex-col gap-4">
-                <Table
-                    columns={columns}
-                    dataSource={newUserArr}
-                    actions={editAction}
-                    footer={renderFooter()}
-                    clickableArr={clickableArr}
-                />
-                {isOpenEdit && (
-                    <Modal
-                        title={`Assign Role`}
-                        submitLabel="Save"
-                        isOpen={isOpenEdit}
-                        handleClose={closeEdit}
-                        handleSubmit={handleSubmit(onSubmit)}
-                    >
-                        <form className="w-full">
-                            <Controller
-                                control={control}
-                                name="role"
-                                defaultValue={{ value: 0, label: '' }}
-                                render={({ field: { onChange, value } }) => (
-                                    <Dropdown
-                                        key="role-select"
-                                        label="Role"
-                                        options={mapRolesForSelection}
-                                        onChange={onChange}
-                                        value={value}
-                                    />
-                                )}
-                            />
-                        </form>
-                    </Modal>
-                )}
-            </div>
+        <div className="flex h-full flex-col gap-4">
+            <Table
+                columns={columns}
+                dataSource={newUserArr}
+                actions={editAction}
+                footer={renderFooter()}
+                clickableArr={clickableArr}
+            />
+            {isOpenEdit && (
+                <Modal
+                    title={`Assign Role`}
+                    submitLabel="Save"
+                    isOpen={isOpenEdit}
+                    handleClose={closeEdit}
+                    handleSubmit={handleSubmit(onSubmit)}
+                >
+                    <form className="w-full">
+                        <Controller
+                            control={control}
+                            name="role"
+                            defaultValue={{ value: 0, label: '' }}
+                            render={({ field: { onChange, value } }) => (
+                                <Dropdown
+                                    key="role-select"
+                                    label="Role"
+                                    options={mapRolesForSelection}
+                                    onChange={onChange}
+                                    value={value}
+                                />
+                            )}
+                        />
+                    </form>
+                </Modal>
+            )}
         </div>
     )
 }
