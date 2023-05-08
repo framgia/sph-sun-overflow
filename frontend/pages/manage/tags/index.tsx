@@ -14,6 +14,25 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+type TagType = {
+    id: number
+    slug: string
+    name: string
+    description: string
+    count_tagged_questions: number
+    is_watched_by_user: boolean
+    count_watching_users: number
+    truncated_name: string
+    truncated_description: string
+}
+
+type TagsQuery = {
+    tags: {
+        data: TagType[]
+        paginatorInfo: PaginatorInfo
+    }
+}
+
 const columns: ColumnType[] = [
     {
         title: 'Tag',
@@ -40,7 +59,7 @@ const columns: ColumnType[] = [
 const Tags: NextPage = () => {
     const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
-    const { data, loading, error, refetch } = useQuery<any, RefetchType>(GET_TAGS, {
+    const { data, loading, error, refetch } = useQuery<TagsQuery, RefetchType>(GET_TAGS, {
         variables: {
             first: 6,
             page: 1,
@@ -52,7 +71,6 @@ const Tags: NextPage = () => {
         void refetch({
             first: 6,
             page: 1,
-            name: '%%',
             sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
         })
     }, [router, refetch])
@@ -64,7 +82,6 @@ const Tags: NextPage = () => {
         data: [],
         paginatorInfo: { currentPage: 1, hasMorePages: false, lastPage: 1 },
     }
-    const pageInfo: PaginatorInfo = paginatorInfo
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await refetch({ first, page })
@@ -86,7 +103,7 @@ const Tags: NextPage = () => {
         })
     }
 
-    const getTagsDataTable = (tagList: DataType[], truncate: boolean = true): DataType[] => {
+    const getTagsDataTable = (tagList: TagType[], truncate: boolean = true): DataType[] => {
         return tagList.map((tag): DataType => {
             return {
                 key: tag.id,
@@ -114,10 +131,10 @@ const Tags: NextPage = () => {
     }
 
     const renderFooter = (): JSX.Element | null => {
-        if (pageInfo.lastPage > 1) {
+        if (paginatorInfo.lastPage > 1) {
             return (
                 <div className="flex w-full items-center justify-center">
-                    <Paginate {...pageInfo} onPageChange={onPageChange} />
+                    <Paginate {...paginatorInfo} onPageChange={onPageChange} />
                 </div>
             )
         }

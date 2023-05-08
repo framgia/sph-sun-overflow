@@ -42,7 +42,7 @@ const Table = ({
     dataSource,
     actions,
     footer = null,
-    isEmptyString = 'No members to show',
+    isEmptyString = 'No data to show',
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
