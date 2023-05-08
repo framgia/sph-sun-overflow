@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button'
+import PageTitle from '@/components/atoms/PageTitle'
 import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
@@ -125,28 +126,35 @@ const Tags: NextPage = () => {
     }
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="flex h-full flex-col gap-4">
-                <div className="flex items-center justify-end">
-                    <Button
-                        usage="stroke"
-                        size="large"
-                        onClick={() => {
-                            setIsOpen(true)
-                        }}
-                    >
-                        Add Tag
-                    </Button>
+        <>
+            <PageTitle title="Manage Tags" />
+            <div className="flex flex-col items-center">
+                <div className="flex h-full flex-col gap-4">
+                    <div className="flex items-center justify-end">
+                        <Button
+                            usage="stroke"
+                            size="large"
+                            onClick={() => {
+                                setIsOpen(true)
+                            }}
+                        >
+                            Add Tag
+                        </Button>
+                    </div>
+                    <Table
+                        columns={columns}
+                        dataSource={getTagsDataTable(tags)}
+                        actions={getTagsActions}
+                        footer={renderFooter()}
+                    />
+                    <TagsFormModal
+                        isOpen={isOpen}
+                        closeModal={closeModal}
+                        refetchHandler={refetch}
+                    />
                 </div>
-                <Table
-                    columns={columns}
-                    dataSource={getTagsDataTable(tags)}
-                    actions={getTagsActions}
-                    footer={renderFooter()}
-                />
-                <TagsFormModal isOpen={isOpen} closeModal={closeModal} refetchHandler={refetch} />
             </div>
-        </div>
+        </>
     )
 }
 

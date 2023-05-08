@@ -175,6 +175,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     role.description === description
                 ) {
                     errorNotify('No changes were made!')
+                    closeModal()
                 } else {
                     setModalButtonLoading(true)
                     updateRole({

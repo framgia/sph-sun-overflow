@@ -1,3 +1,4 @@
+import PageTitle from '@/components/atoms/PageTitle'
 import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
 import UserCard from '@/components/molecules/UserCard'
@@ -212,39 +213,44 @@ const UsersPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col gap-4 rounded-md border border-neutral-200 bg-white p-4">
-            <div className="w-full">
-                <div className="text-xl font-semibold leading-[120%] text-neutral-900">
-                    All Users
+        <>
+            <PageTitle title="Users" />
+            <div className="flex flex-col gap-4 rounded-md border border-neutral-200 bg-white p-4">
+                <div className="w-full">
+                    <div className="text-xl font-semibold leading-[120%] text-neutral-900">
+                        All Users
+                    </div>
+                </div>
+                <div className="flex w-full flex-row">
+                    <div className="mr-auto">
+                        <form onSubmit={handleSearchSubmit}>
+                            <SearchInput
+                                placeholder="Search"
+                                value={searchKey}
+                                onChange={onSearchInputChange}
+                            />
+                        </form>
+                        {isSearchResult && renderSearchResultHeader()}
+                    </div>
+                    <div className="flex flex-row justify-end gap-1">
+                        <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
+                        <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
+                    </div>
+                </div>
+                <div className="flex h-full w-full flex-col">
+                    <div className="grid grid-cols-3 justify-center gap-4">
+                        {userList?.map((user: IUser) => (
+                            <UserCard user={user} key={user.id} />
+                        ))}
+                    </div>
+                </div>
+                <div className="px-2.5 py-4 ">
+                    {pageInfo?.lastPage > 1 && (
+                        <Paginate {...pageInfo} onPageChange={onPageChange} />
+                    )}
                 </div>
             </div>
-            <div className="flex w-full flex-row">
-                <div className="mr-auto">
-                    <form onSubmit={handleSearchSubmit}>
-                        <SearchInput
-                            placeholder="Search"
-                            value={searchKey}
-                            onChange={onSearchInputChange}
-                        />
-                    </form>
-                    {isSearchResult && renderSearchResultHeader()}
-                </div>
-                <div className="flex flex-row justify-end gap-1">
-                    <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
-                    <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
-                </div>
-            </div>
-            <div className="flex h-full w-full flex-col">
-                <div className="grid grid-cols-3 justify-center gap-4">
-                    {userList?.map((user: IUser) => (
-                        <UserCard user={user} key={user.id} />
-                    ))}
-                </div>
-            </div>
-            <div className="px-2.5 py-4 ">
-                {pageInfo?.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
-            </div>
-        </div>
+        </>
     )
 }
 

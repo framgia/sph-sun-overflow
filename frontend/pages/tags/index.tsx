@@ -1,5 +1,6 @@
 import { CustomIcons } from '@/components/atoms/Icons'
 import InputField from '@/components/atoms/InputField'
+import PageTitle from '@/components/atoms/PageTitle'
 import SortDropdown from '@/components/molecules/SortDropdown'
 import TagsCard from '@/components/molecules/TagsCard'
 import Paginate from '@/components/organisms/Paginate'
@@ -134,63 +135,68 @@ const TagsListPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
-            <h1 className="text-xl font-semibold text-neutral-900">All Tags</h1>
-            <div className="flex flex-col gap-2">
-                <div className="flex w-full items-center justify-between">
-                    <form onSubmit={handleSearchSubmit}>
-                        <InputField
-                            name="tag_search"
-                            placeholder="Search tag"
+        <>
+            <PageTitle title="Tags" />
+            <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+                <h1 className="text-xl font-semibold text-neutral-900">All Tags</h1>
+                <div className="flex flex-col gap-2">
+                    <div className="flex w-full items-center justify-between">
+                        <form onSubmit={handleSearchSubmit}>
+                            <InputField
+                                name="tag_search"
+                                placeholder="Search tag"
+                                icon={
+                                    <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
+                                        <SearchIcon />
+                                    </div>
+                                }
+                                additionalClass="h-10 question-list-search-input pl-8"
+                                value={searchKey}
+                                onChange={(e) => {
+                                    onSearchInputChange(e.target.value)
+                                }}
+                            />
+                        </form>
+                        <SortDropdown
+                            filters={tagFilters}
+                            selectedFilter={selectedFilter}
+                            grouped
                             icon={
-                                <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
-                                    <SearchIcon />
+                                <div className="ml-1 flex h-full items-center">
+                                    <FilterIcon />
                                 </div>
                             }
-                            additionalClass="h-10 question-list-search-input pl-8"
-                            value={searchKey}
-                            onChange={(e) => {
-                                onSearchInputChange(e.target.value)
-                            }}
                         />
-                    </form>
-                    <SortDropdown
-                        filters={tagFilters}
-                        selectedFilter={selectedFilter}
-                        grouped
-                        icon={
-                            <div className="ml-1 flex h-full items-center">
-                                <FilterIcon />
-                            </div>
-                        }
-                    />
-                </div>
-                {term && (
-                    <div className="truncate text-sm font-medium text-neutral-700">
-                        {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                        {`"${term}"`}
                     </div>
-                )}
-            </div>
-            <div className="scrollbar flex flex-col gap-4 overflow-y-auto">
-                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {tagList.map((tag) => {
-                        return (
-                            <TagsCard
-                                key={tag.id}
-                                id={tag.id}
-                                slug={tag.slug}
-                                description={tag.description}
-                                name={tag.name}
-                                questionsCount={tag.count_tagged_questions ?? 0}
-                                watchersCount={tag.count_watching_users ?? 0}
-                            />
-                        )
-                    })}
+                    {term && (
+                        <div className="truncate text-sm font-medium text-neutral-700">
+                            {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                            {`"${term}"`}
+                        </div>
+                    )}
                 </div>
-                {pageInfo.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
+                <div className="scrollbar flex flex-col gap-4 overflow-y-auto">
+                    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        {tagList.map((tag) => {
+                            return (
+                                <TagsCard
+                                    key={tag.id}
+                                    id={tag.id}
+                                    slug={tag.slug}
+                                    description={tag.description}
+                                    name={tag.name}
+                                    questionsCount={tag.count_tagged_questions ?? 0}
+                                    watchersCount={tag.count_watching_users ?? 0}
+                                />
+                            )
+                        })}
+                    </div>
+                    {pageInfo.lastPage > 1 && (
+                        <Paginate {...pageInfo} onPageChange={onPageChange} />
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

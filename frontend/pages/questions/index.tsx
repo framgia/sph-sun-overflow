@@ -1,6 +1,7 @@
 import Button from '@/components/atoms/Button'
 import Search from '@/components/atoms/Icons/Search'
 import InputField from '@/components/atoms/InputField'
+import PageTitle from '@/components/atoms/PageTitle'
 import DropdownFilters from '@/components/molecules/DropdownFilters'
 import ViewToggle from '@/components/molecules/ViewToggle'
 import Paginate from '@/components/organisms/Paginate'
@@ -155,84 +156,91 @@ const QuestionsPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
-            <div className="flex w-full items-center justify-between">
-                <div className="text-xl font-semibold text-neutral-900">All Questions</div>
-                <Button
-                    usage="stroke"
-                    size="medium"
-                    onClick={async () => await router.push('/questions/add')}
-                >
-                    Ask a Question
-                </Button>
-            </div>
-            <div className="question-list-header w-full">
-                <div className="flex flex-col gap-2">
-                    <form onSubmit={handleSearchSubmit}>
-                        <InputField
-                            name="question_search"
-                            placeholder="Search"
-                            icon={
-                                <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
-                                    <Search />
-                                </div>
-                            }
-                            additionalClass="h-10 question-list-search-input pl-8"
-                            value={searchKeyForInput}
-                            onChange={(e) => {
-                                setSearchKeyForInput(e.target.value)
-                                if (e.target.value === '') {
-                                    const { query } = router
-                                    setSearchKeyForApi('')
-                                    void refetch({
-                                        first: viewType === 'List' ? 10 : 12,
-                                        page: 1,
-                                        filter: { keyword: '', tag: '' },
-                                        orderBy: [order],
-                                    })
-                                    delete query.searchKey
-                                    void router.replace({ query })
+        <>
+            <PageTitle title="Questions" />
+            <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+                <div className="flex w-full items-center justify-between">
+                    <div className="text-xl font-semibold text-neutral-900">All Questions</div>
+                    <Button
+                        usage="stroke"
+                        size="medium"
+                        onClick={async () => await router.push('/questions/add')}
+                    >
+                        Ask a Question
+                    </Button>
+                </div>
+                <div className="question-list-header w-full">
+                    <div className="flex flex-col gap-2">
+                        <form onSubmit={handleSearchSubmit}>
+                            <InputField
+                                name="question_search"
+                                placeholder="Search"
+                                icon={
+                                    <div className="absolute left-1.5 top-1/2 -translate-y-1/2 transform">
+                                        <Search />
+                                    </div>
                                 }
-                            }}
-                        />
-                    </form>
-                    {searchKeyForApi && (
-                        <div className="truncate text-sm font-medium text-neutral-700">
-                            {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                            {`"${searchKeyForApi}"`}
+                                additionalClass="h-10 question-list-search-input pl-8"
+                                value={searchKeyForInput}
+                                onChange={(e) => {
+                                    setSearchKeyForInput(e.target.value)
+                                    if (e.target.value === '') {
+                                        const { query } = router
+                                        setSearchKeyForApi('')
+                                        void refetch({
+                                            first: viewType === 'List' ? 10 : 12,
+                                            page: 1,
+                                            filter: { keyword: '', tag: '' },
+                                            orderBy: [order],
+                                        })
+                                        delete query.searchKey
+                                        void router.replace({ query })
+                                    }
+                                }}
+                            />
+                        </form>
+                        {searchKeyForApi && (
+                            <div className="truncate text-sm font-medium text-neutral-700">
+                                {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                                {`"${searchKeyForApi}"`}
+                            </div>
+                        )}
+                    </div>
+                    <div
+                        className={`${
+                            searchKeyForApi
+                                ? 'question-list-filters'
+                                : 'question-list-search-filters'
+                        } flex`}
+                    >
+                        <div className="mr-1">
+                            <ViewToggle
+                                view={viewType}
+                                onClick={() => {
+                                    toggleViewOnclick()
+                                }}
+                            ></ViewToggle>
                         </div>
+                        <DropdownFilters triggers={['DATE', 'ANSWER']} />
+                    </div>
+                </div>
+
+                <div className="question-list scrollbar flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
+                    <div
+                        className={`${
+                            viewType === 'List'
+                                ? 'flex flex-col'
+                                : 'grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+                        } gap-4`}
+                    >
+                        {renderQuestionsItems()}
+                    </div>
+                    {pageInfo?.lastPage > 1 && (
+                        <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
                 </div>
-                <div
-                    className={`${
-                        searchKeyForApi ? 'question-list-filters' : 'question-list-search-filters'
-                    } flex`}
-                >
-                    <div className="mr-1">
-                        <ViewToggle
-                            view={viewType}
-                            onClick={() => {
-                                toggleViewOnclick()
-                            }}
-                        ></ViewToggle>
-                    </div>
-                    <DropdownFilters triggers={['DATE', 'ANSWER']} />
-                </div>
             </div>
-
-            <div className="question-list scrollbar flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
-                <div
-                    className={`${
-                        viewType === 'List'
-                            ? 'flex flex-col'
-                            : 'grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
-                    } gap-4`}
-                >
-                    {renderQuestionsItems()}
-                </div>
-                {pageInfo?.lastPage > 1 && <Paginate {...pageInfo} onPageChange={onPageChange} />}
-            </div>
-        </div>
+        </>
     )
 }
 

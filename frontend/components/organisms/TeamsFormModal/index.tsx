@@ -109,6 +109,7 @@ const TeamsFormModal = ({
                     init_desc === teamDescription
                 ) {
                     errorNotify('No changes were made!')
+                    closeModal()
                     return
                 }
 
