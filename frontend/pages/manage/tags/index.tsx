@@ -60,7 +60,10 @@ const Tags: NextPage = () => {
     if (loading) return loadingScreenShow()
     if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
-    const { data: tags, paginatorInfo } = data.tags
+    const { data: tags, paginatorInfo } = data?.tags ?? {
+        data: [],
+        paginatorInfo: { currentPage: 1, hasMorePages: false, lastPage: 1 },
+    }
     const pageInfo: PaginatorInfo = paginatorInfo
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
