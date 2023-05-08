@@ -4,11 +4,9 @@ import Dropdown from '@/components/molecules/Dropdown'
 import Modal from '@/components/templates/Modal'
 import CREATE_TEAM from '@/helpers/graphql/mutations/create_team'
 import UPDATE_TEAM from '@/helpers/graphql/mutations/update_team'
-import GET_ALL_TEAM_LEADERS from '@/helpers/graphql/queries/get_all_team_leaders'
-import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import type { UserType } from '@/pages/questions/[slug]'
 import type { FetchResult } from '@apollo/client'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { errorNotify, successNotify } from '../../../helpers/toast'
@@ -25,6 +23,7 @@ type FormProps = {
     isOpen: boolean
     closeModal: () => void
     refetch: () => void
+    leaderOptions: UserType[]
 }
 
 type FormValues = {
@@ -33,7 +32,13 @@ type FormValues = {
     teamDescription: string
 }
 
-const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps): JSX.Element => {
+const TeamsFormModal = ({
+    initialData,
+    isOpen,
+    closeModal,
+    refetch,
+    leaderOptions,
+}: FormProps): JSX.Element => {
     const [formErrors, setFormErrors] = useState({
         teamName: '',
         teamLeader: '',
@@ -41,11 +46,10 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
     })
     const formTitle = initialData?.title ? 'Edit Team' : 'Add Team'
 
-    const { data, loading, error } = useQuery(GET_ALL_TEAM_LEADERS)
     const [createTeam] = useMutation(CREATE_TEAM)
     const [updateTeam] = useMutation(UPDATE_TEAM)
 
-    const teamLeaders: OptionType[] = data?.teamLeaders.map(
+    const teamLeaders: OptionType[] = leaderOptions?.map(
         ({ id, first_name, last_name }: UserType) =>
             ({
                 value: id ? +id : 0,
@@ -73,11 +77,6 @@ const TeamsFormModal = ({ initialData, isOpen, closeModal, refetch }: FormProps)
             teamDescription: initialData?.description ?? '',
         })
     }, [initialData])
-
-    if (loading) return loadingScreenShow()
-    if (error) {
-        return <>{errorNotify(`Error ${error.message}`)}</>
-    }
 
     const onSubmit = (data: FormValues): void => {
         const { teamName, teamLeader, teamDescription } = data
