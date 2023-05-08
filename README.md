@@ -3,6 +3,7 @@
 SunOverflow is an internal project for the employees of Sun Asterisk PH that aims to help the team with asking and answering questions.
 
 ## Technologies used:
+
 - Laravel
 - MySQL
 - GraphQL
@@ -11,31 +12,41 @@ SunOverflow is an internal project for the employees of Sun Asterisk PH that aim
 - Tailwind CSS
 
 ## Prerequisites:
+
 - [Docker-Desktop](https://www.docker.com/products/docker-desktop/)
 - [Nodejs](https://nodejs.org/en/download/)
 - [Composer](https://getcomposer.org/download/)
 
-
 ## Manual setup:
-1. ``git clone git@github.com:framgia/sph-sun-overflow.git``
-2. ``cd sph-sun-overflow``
-3. ``cd backend``
-4. ``cp .env.example .env``
-5. ``php artisan serve``
-7. Open another terminal then  ``cd sph-sun-overflow/frontend``
-8. ``npm install``
-9. ``npm run dev``
+
+1. `git clone git@github.com:framgia/sph-sun-overflow.git`
+2. `cd sph-sun-overflow`
+3. `cd backend`
+4. `cp .env.example .env`
+5. `php artisan serve`
+6. Open another terminal then `cd sph-sun-overflow/frontend`
+7. `npm install`
+8. `npm run dev`
 
 ## Docker setup:
-1. ``git clone git@github.com:framgia/sph-sun-overflow.git``
-2. ``cd sph-sun-overflow``
-3. ``cd backend``
-4. ``cp .env.example .env``
-5. ``composer install``
-6. ``cd ../frontend``
-7. ``npm install``
-8. ``cd ..``
-3. ``docker-compose up --build``
+
+1. `git clone git@github.com:framgia/sph-sun-overflow.git`
+2. `cd sph-sun-overflow`
+3. `cd backend`
+4. `cp .env.example .env`
+5. `composer install`
+6. `cd ../frontend`
+7. `npm install`
+8. `cd ..`
+9. `docker-compose up --build`
+
+## Pre commit setup:
+
+1. If you don't have python-pip just run this on your ubuntu/wsl `sudo apt install python3-pip` after follow the instructions 2 and 3
+2. [Required In system](https://github.com/johnpaul-sun/setup-php-cs-fixer#required-in-system)
+3. [Install php-cs-fixer via composer](https://github.com/johnpaul-sun/setup-php-cs-fixer#1-install-php-cs-fixer-via-composer)
+4. `pre-commit install`
+5. You are good to go, whenever you commit changes it will have a linter checks to run and show you error / success messages.
 
 ## Documents
 
