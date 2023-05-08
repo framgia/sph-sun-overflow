@@ -46,6 +46,7 @@ const TeamsFormModal = ({
     })
     const formTitle = initialData?.title ? 'Edit Team' : 'Add Team'
 
+    const [modalButtonLoading, setModalButtonLoading] = useState(false)
     const [createTeam] = useMutation(CREATE_TEAM)
     const [updateTeam] = useMutation(UPDATE_TEAM)
 
@@ -108,10 +109,10 @@ const TeamsFormModal = ({
                     init_desc === teamDescription
                 ) {
                     errorNotify('No changes were made!')
-                    closeModal()
                     return
                 }
 
+                setModalButtonLoading(true)
                 updateTeam({
                     variables: {
                         id: initialData.id,
@@ -130,8 +131,12 @@ const TeamsFormModal = ({
                     .finally(() => {
                         closeModal()
                         reset()
+                        setTimeout(() => {
+                            setModalButtonLoading(false)
+                        }, 500)
                     })
             } else {
+                setModalButtonLoading(true)
                 createTeam({
                     variables: {
                         name: teamName,
@@ -149,6 +154,9 @@ const TeamsFormModal = ({
                     .finally(() => {
                         closeModal()
                         reset()
+                        setTimeout(() => {
+                            setModalButtonLoading(false)
+                        }, 500)
                     })
             }
         }
@@ -159,6 +167,7 @@ const TeamsFormModal = ({
         <Modal
             title={formTitle}
             submitLabel={formTitle}
+            loading={modalButtonLoading}
             isOpen={isOpen}
             handleClose={() => {
                 closeModal()

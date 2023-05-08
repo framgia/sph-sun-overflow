@@ -37,11 +37,11 @@ const getButtonClasses = (usage: string, size: string): string => {
                 size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'stroke':
-            return `items-center rounded-[5px] px-4 border bg-neutral-white border-primary-900 text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 ${
+            return `items-center rounded-[5px] px-4 border bg-neutral-white border-primary-900 text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 hover:bg-primary-200 outline-none ${
                 size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'grayed':
-            return `items-center rounded-[5px] px-4 border bg-neutral-white border-neutral-900 text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 ${
+            return `items-center rounded-[5px] px-4 border bg-neutral-white border-neutral-900 text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 hover:bg-neutral-200 ${
                 size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'primary':

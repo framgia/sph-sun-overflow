@@ -216,10 +216,12 @@ const AdminTeams = (): JSX.Element => {
         name: string
         refetch: () => void
     }): JSX.Element => {
+        const [loading, setLoading] = useState(false)
         const [showModal, setShowModal] = useState(false)
         const [deleteRole] = useMutation(DELETE_TEAM)
 
         const onSubmit = (): void => {
+            setLoading(true)
             deleteRole({ variables: { id } })
                 .then(() => {
                     successNotify('Team successfully deleted')
@@ -230,6 +232,9 @@ const AdminTeams = (): JSX.Element => {
                 })
                 .finally(() => {
                     setShowModal(false)
+                    setTimeout(() => {
+                        setLoading(false)
+                    }, 500)
                 })
         }
 
@@ -245,6 +250,7 @@ const AdminTeams = (): JSX.Element => {
                 </Button>
                 <Modal
                     title="Delete Team"
+                    loading={loading}
                     isOpen={showModal}
                     handleClose={() => {
                         setShowModal(false)

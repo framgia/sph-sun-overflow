@@ -26,6 +26,7 @@ import EyeIcon from './Eye'
 import FilterIcon from './Filter'
 import GridIcon from './Grid'
 import ListIcon from './List'
+import LoadingSpinner from './Loading'
 import LockIcon from './Lock'
 import SearchIcon from './Search'
 import ThumbUpIcon from './ThumbUp'
@@ -127,6 +128,7 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
 }
 
 export const CustomIcons = {
+    LoadingSpinner,
     ChevronIcon,
     DotsIcon,
     EyeIcon,

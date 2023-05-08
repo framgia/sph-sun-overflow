@@ -19,6 +19,7 @@ const renderDeleteAction = (
     name: string,
     refetch: (isDelete?: boolean) => void
 ): JSX.Element => {
+    const [loading, setLoading] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [deleteTag] = useMutation(DELETE_TAG)
 
@@ -27,6 +28,7 @@ const renderDeleteAction = (
     }
 
     const handleSubmit = (): void => {
+        setLoading(true)
         deleteTag({ variables: { id } })
             .then(() => {
                 successNotify('Tag deleted.')
@@ -37,6 +39,9 @@ const renderDeleteAction = (
             })
             .finally(() => {
                 setShowDeleteModal(false)
+                setTimeout(() => {
+                    setLoading(false)
+                }, 500)
             })
     }
 
@@ -52,6 +57,7 @@ const renderDeleteAction = (
             </Button>
             <Modal
                 title="Delete Tag"
+                loading={loading}
                 isOpen={showDeleteModal}
                 handleClose={closeDeleteModal}
                 handleSubmit={handleSubmit}

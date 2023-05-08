@@ -30,11 +30,13 @@ const TagsFormModal = ({
     refetchHandler,
 }: FormProps): JSX.Element => {
     const formTitle = initialData?.name ? 'Edit Tag' : 'Add Tag'
-    const [createTag] = useMutation(CREATE_TAG)
-    const [updateTag] = useMutation(UPDATE_TAG)
+    const [modalButtonLoading, setModalButtonLoading] = useState(false)
     const [formErrors, setFormErrors] = useState({ name: '', description: '' })
     const [tagName, setTagName] = useState(initialData?.name ?? '')
     const [tagDescription, setTagDescription] = useState(initialData?.description ?? '')
+
+    const [createTag] = useMutation(CREATE_TAG)
+    const [updateTag] = useMutation(UPDATE_TAG)
 
     useEffect(() => {
         setTagName(initialData?.name ?? '')
@@ -65,6 +67,7 @@ const TagsFormModal = ({
 
         if (valid) {
             if (formTitle === 'Add Tag') {
+                setModalButtonLoading(true)
                 createTag({
                     variables: {
                         name,
@@ -80,11 +83,16 @@ const TagsFormModal = ({
                     .catch((e) => {
                         errorNotify(e.message)
                     })
+                    .finally(() =>
+                        setTimeout(() => {
+                            setModalButtonLoading(false)
+                        }, 500)
+                    )
             } else {
                 if (initialData.name === name && initialData.description === description) {
-                    errorNotify('Tag is not updated!')
-                    closeModal()
+                    errorNotify('No changes were made!')
                 } else {
+                    setModalButtonLoading(true)
                     updateTag({
                         variables: {
                             id: initialData?.id,
@@ -100,6 +108,11 @@ const TagsFormModal = ({
                         .catch((e) => {
                             errorNotify(e.message)
                         })
+                        .finally(() =>
+                            setTimeout(() => {
+                                setModalButtonLoading(false)
+                            }, 500)
+                        )
                 }
             }
         }
@@ -116,6 +129,7 @@ const TagsFormModal = ({
         <Modal
             title={formTitle}
             submitLabel={formTitle}
+            loading={modalButtonLoading}
             isOpen={isOpen}
             handleClose={() => {
                 closeModal()

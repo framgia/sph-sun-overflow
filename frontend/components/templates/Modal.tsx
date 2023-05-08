@@ -1,13 +1,16 @@
 import Button from '@/components/atoms/Button'
 import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment } from 'react'
-import Icons from '../atoms/Icons'
+import Icons, { CustomIcons } from '../atoms/Icons'
+
+const { LoadingSpinner } = CustomIcons
 
 type ModalProps = {
     title: string
     children: JSX.Element | string
     submitLabel?: string
     isOpen: boolean
+    loading?: boolean
     handleSubmit?: () => void
     handleClose: () => void
     footerAlign?: 'left' | 'center' | 'right'
@@ -19,6 +22,7 @@ const Modal = ({
     children,
     submitLabel,
     isOpen,
+    loading = false,
     handleSubmit,
     handleClose,
     footerAlign = 'left',
@@ -92,15 +96,26 @@ const Modal = ({
                                             <Button
                                                 usage="stroke"
                                                 size="large"
-                                                additionalClass={`w-36 ${flipButtons}`}
+                                                isDisabled={loading}
+                                                additionalClass={`w-36 ${
+                                                    loading ? 'pointer-events-none' : ''
+                                                } ${flipButtons}`}
                                                 onClick={onClickSubmit}
                                             >
-                                                {submitLabel}
+                                                {loading ? (
+                                                    <LoadingSpinner additionalClass="flex justify-center" />
+                                                ) : (
+                                                    submitLabel
+                                                )}
                                             </Button>
                                             <Button
                                                 usage="grayed"
                                                 size="large"
+                                                isDisabled={loading}
                                                 onClick={handleClose}
+                                                additionalClass={`${
+                                                    loading ? 'pointer-events-none' : ''
+                                                }`}
                                             >
                                                 Cancel
                                             </Button>

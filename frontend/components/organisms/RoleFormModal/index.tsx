@@ -36,6 +36,7 @@ type Props = {
 }
 
 const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Props): JSX.Element => {
+    const [modalButtonLoading, setModalButtonLoading] = useState(false)
     const [permissionsForm, setPermissionsForm] = useState<number[]>([])
     const [selectedPermissions, setSelectedPermissions] = useState<number[]>([])
     const [roleName, setRoleName] = useState(role?.name ?? '')
@@ -174,8 +175,8 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     role.description === description
                 ) {
                     errorNotify('No changes were made!')
-                    closeModal()
                 } else {
+                    setModalButtonLoading(true)
                     updateRole({
                         variables: {
                             id: role.id,
@@ -193,8 +194,14 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                         .catch((e) => {
                             errorNotify(e.message)
                         })
+                        .finally(() => {
+                            setTimeout(() => {
+                                setModalButtonLoading(false)
+                            }, 500)
+                        })
                 }
             } else {
+                setModalButtonLoading(true)
                 createRole({
                     variables: {
                         name,
@@ -211,6 +218,11 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     .catch((e) => {
                         errorNotify(e.message)
                     })
+                    .finally(() => {
+                        setTimeout(() => {
+                            setModalButtonLoading(false)
+                        }, 500)
+                    })
             }
         }
 
@@ -226,6 +238,7 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
     return (
         <Modal
             title={formTitle}
+            loading={modalButtonLoading}
             submitLabel={submitLabel}
             isOpen={isOpen}
             handleClose={() => {
