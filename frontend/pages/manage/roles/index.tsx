@@ -103,6 +103,7 @@ const DeleteRole = ({
     name: string
     refetch: () => void
 }): JSX.Element => {
+    const [loading, setLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [deleteRole] = useMutation(DELETE_ROLE)
 
@@ -113,6 +114,7 @@ const DeleteRole = ({
             return
         }
 
+        setLoading(true)
         deleteRole({ variables: { id } })
             .then(() => {
                 successNotify('Role deleted successfully!')
@@ -122,6 +124,11 @@ const DeleteRole = ({
             .catch(() => {
                 errorNotify('There was an error removing the role!')
             })
+            .finally(() =>
+                setTimeout(() => {
+                    setLoading(false)
+                }, 500)
+            )
     }
 
     return (
@@ -136,6 +143,7 @@ const DeleteRole = ({
             </Button>
             <Modal
                 title="Delete Role"
+                loading={loading}
                 isOpen={showModal}
                 handleClose={() => {
                     setShowModal(false)
