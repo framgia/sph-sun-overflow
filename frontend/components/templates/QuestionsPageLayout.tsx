@@ -137,11 +137,9 @@ const QuestionsPageLayout = ({
         return renderQuestionListHeader()
     }
 
-    const externalStyle = !isPrivate ? 'p-4' : ''
+    const externalStyle = !isPrivate ? 'rounded-[5px] border border-neutral-200' : ''
     return (
-        <div
-            className={`flex flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white ${externalStyle}`}
-        >
+        <div className={`flex flex-col gap-4 bg-neutral-white p-4 ${externalStyle}`}>
             {renderHeader()}
             <div className="flex h-full flex-col justify-between">
                 <div className="flex flex-col gap-4">

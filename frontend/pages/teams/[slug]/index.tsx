@@ -148,7 +148,7 @@ const Team = (): JSX.Element => {
             },
         })
 
-        if (loading) return <div></div>
+        if (loading) return loadingScreenShow()
         if (error) {
             errorNotify(`Error! ${error.message}`)
             return <div></div>

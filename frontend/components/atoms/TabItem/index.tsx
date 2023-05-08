@@ -9,7 +9,7 @@ export type TabType = {
 const TabItem = ({ label, isSelected, onClick }: TabType): JSX.Element => {
     return (
         <div
-            className={`space-x-2.5 p-2.5 text-sm ${
+            className={`min-w-[120px] space-x-2.5 p-2.5 text-sm ${
                 isSelected ? 'border-b-2 border-primary-base bg-primary-200' : ''
             }`}
             onClick={onClick}
