@@ -237,16 +237,22 @@ const UsersPage = (): JSX.Element => {
                         <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                     </div>
                 </div>
-                <div className="flex h-full w-full flex-col">
-                    <div className="grid grid-cols-3 justify-center gap-4">
-                        {userList?.map((user: IUser) => (
-                            <UserCard user={user} key={user.id} />
-                        ))}
-                    </div>
-                </div>
-                <div className="px-2.5 py-4 ">
-                    {pageInfo?.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
+                <div className="scrollbar flex w-full flex-col gap-4 overflow-y-auto">
+                    {!userList.length ? (
+                        <span className="items-center py-4 text-center text-sm font-semibold text-neutral-disabled">
+                            No users to show
+                        </span>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 justify-center gap-4 md:grid-cols-2 xl:grid-cols-3">
+                                {userList?.map((user: IUser) => (
+                                    <UserCard user={user} key={user.id} />
+                                ))}
+                            </div>
+                            {pageInfo?.lastPage > 1 && (
+                                <Paginate {...pageInfo} onPageChange={onPageChange} />
+                            )}
+                        </>
                     )}
                 </div>
             </div>
