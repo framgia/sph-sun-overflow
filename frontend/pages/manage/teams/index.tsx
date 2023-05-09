@@ -68,7 +68,7 @@ const AdminTeams = (): JSX.Element => {
 
     const { data, loading, error, refetch } = useQuery<TeamsQuery>(GET_TEAMS, {
         variables: {
-            first: 6,
+            first: 8,
             page: 1,
             isAdmin: true,
         },
@@ -81,7 +81,7 @@ const AdminTeams = (): JSX.Element => {
 
     useEffect(() => {
         void refetch({
-            first: 6,
+            first: 8,
             page: 1,
             isAdmin: true,
         })
