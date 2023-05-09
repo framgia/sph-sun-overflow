@@ -216,7 +216,11 @@ const TeamUserCard = ({
                 <div className="text-center text-sm font-medium leading-[120%] text-neutral-900 line-clamp-2">
                     {name}
                 </div>
-                <div className="text-xs font-normal text-neutral-disabled line-clamp-1">{role}</div>
+                {role && (
+                    <div className="text-xs font-normal text-neutral-disabled line-clamp-1">
+                        {role}
+                    </div>
+                )}
                 {isLeader && (
                     <div className="text-xs font-normal text-primary-700 line-clamp-1">
                         Team Leader
