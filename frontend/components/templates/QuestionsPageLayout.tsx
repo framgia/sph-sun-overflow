@@ -144,7 +144,7 @@ const QuestionsPageLayout = ({
             <div className="flex h-full flex-col justify-between">
                 <div className="flex flex-col gap-4">
                     {!questionList.length && (
-                        <div className="mt-10 text-center text-2xl font-semibold">
+                        <div className="text-center text-2xl font-semibold text-neutral-500">
                             No Questions to Show
                         </div>
                     )}
