@@ -1,9 +1,9 @@
 import type { FormValues } from '@/components/organisms/QuestionForm'
 import { removeItemViaId } from '@/utils'
 import { Combobox, Transition } from '@headlessui/react'
-import { Chip } from '@material-tailwind/react'
 import { Fragment, useEffect, useState } from 'react'
 import type { UseFormSetValue } from 'react-hook-form'
+import { HiX } from 'react-icons/hi'
 import { HiCheck } from 'react-icons/hi2'
 
 export type ITag = {
@@ -80,20 +80,22 @@ const TagsInput = ({
                 multiple
                 disabled={disableInput}
             >
-                <div className="mx-1 mt-1 flex w-full flex-row flex-wrap gap-x-0.5 gap-y-1 ">
+                <div className="mx-1 mt-1 flex h-[34px] w-full flex-row flex-wrap gap-x-0.5 gap-y-1">
                     {tagsSelected.map((tag, index) => {
                         const { name, id } = tag
                         return (
-                            <Chip
+                            <div
                                 key={id}
-                                value={name}
-                                color={'red'}
-                                dismissible={{
-                                    onClose: () => {
+                                className="max-w-20 mx-0.5 my-auto flex flex-wrap items-center gap-0.5 overflow-hidden text-ellipsis rounded-2xl bg-neutral-200 px-1 py-0.5  text-neutral-900"
+                            >
+                                <div className="label text-[10px] ">{name}</div>
+                                <HiX
+                                    className="bg cursor-pointer rounded-xl hover:text-primary-red"
+                                    onClick={() => {
                                         deleteTag(id)
-                                    },
-                                }}
-                            />
+                                    }}
+                                />
+                            </div>
                         )
                     })}
                     {tagsSelected.length < 5 && (
@@ -124,7 +126,7 @@ const TagsInput = ({
                     >
                         <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                             {filteredTags.length === 0 && queryText !== '' ? (
-                                <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
+                                <div className="relative z-10 cursor-default select-none  bg-white px-4 py-2 text-gray-700">
                                     Nothing found.
                                 </div>
                             ) : (

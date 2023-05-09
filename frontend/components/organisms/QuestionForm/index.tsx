@@ -8,13 +8,11 @@ import SortDropdown from '@/components/molecules/SortDropdown'
 import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
 import UPDATE_QUESTION from '@/helpers/graphql/mutations/update_question'
-import { GET_TAG_SUGGESTIONS } from '@/helpers/graphql/queries/sidebar'
-import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { useBoundStore } from '@/helpers/store'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import type { TeamType } from '@/pages/questions/[slug]'
 import { isObjectEmpty } from '@/utils'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation, type ApolloQueryResult } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import isEqual from 'lodash/isEqual'
 import { useRouter } from 'next/router'
@@ -42,9 +40,11 @@ type QuestionSkeleton = {
 }
 interface Props {
     initialState?: QuestionSkeleton
+    tagData: { tagSuggest: ITag[] }
+    refetch: (input: { queryString: string }) => Promise<ApolloQueryResult<any>>
 }
 
-const QuestionForm = ({ initialState }: Props): JSX.Element => {
+const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element => {
     let id: number | undefined
     let title: string | undefined
     let content: string | undefined
@@ -96,26 +96,12 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
     const [createQuestion] = useMutation(CREATE_QUESTION)
     const [updateQuestion] = useMutation(UPDATE_QUESTION)
     const [selectedFilter, setSelectedFilter] = useState(initial_team_name)
-    const {
-        data,
-        loading: tagLoading,
-        error,
-        refetch,
-    } = useQuery(GET_TAG_SUGGESTIONS, {
-        variables: { queryString: `%%` },
-    })
-
-    if (tagLoading) return loadingScreenShow()
-    if (error) {
-        errorNotify(`Error! ${error.message}`)
-        return <></>
-    }
 
     const refetchTags = async (queryText: string): Promise<void> => {
         await refetch({ queryString: `%${queryText}%` })
     }
 
-    const tagSuggest = data.tagSuggest
+    const tagSuggest = tagData.tagSuggest
 
     const tempTeams = useBoundStore.getState().teams
 
@@ -278,11 +264,11 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                             )}
                         </div>
                     </div>
-                    <div className="Description mb-[30px] w-full space-y-1 self-center">
+                    <div className="Description w-full gap-2 self-center">
                         <div className="flex justify-between">
                             <label
                                 htmlFor="descriptionInput"
-                                className="text-sm text-primary-black"
+                                className="text-sm font-medium text-neutral-900"
                             >
                                 Description
                             </label>
@@ -293,24 +279,27 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                             control={control}
                             name="description"
                             render={({ field: { onChange, value } }) => (
-                                <div>
+                                <div className="">
                                     {isPreview ? (
+                                        <EditorPreview value={value} />
+                                    ) : (
                                         <RichTextEditor
                                             onChange={onChange}
                                             value={value}
                                             usage="description"
                                             id="descriptionInput"
                                         />
-                                    ) : (
-                                        <EditorPreview value={value} />
                                     )}
                                 </div>
                             )}
                         />
                     </div>
-                    <div className="flex w-full flex-row  space-x-10">
+                    <div className="flex w-full flex-row gap-1">
                         <div className="Tags w-1/2 space-y-1 self-center">
-                            <label htmlFor="tagsInput" className="text-sm">
+                            <label
+                                htmlFor="tagsInput"
+                                className="text-sm font-medium text-neutral-900"
+                            >
                                 Tags (max. 5)
                             </label>
                             <Controller
@@ -330,8 +319,8 @@ const QuestionForm = ({ initialState }: Props): JSX.Element => {
                     {tempTeams.length > 0 && (
                         <div className="flex w-full flex-col">
                             <div className="flex flex-row ">
-                                <div className="mr-[30px] space-y-1">
-                                    <label className="text-sm">Team (Optional)</label>
+                                <div className="gap-1">
+                                    <label className="text-sm font-medium">Team (Optional)</label>
                                     <Controller
                                         control={control}
                                         name="team_id"

@@ -1,5 +1,5 @@
-import type { ComponentType } from 'react'
-import type { ReactQuillProps, Value } from 'react-quill'
+import { type ComponentType } from 'react'
+import type { ReactQuillProps } from 'react-quill'
 import 'react-quill/dist/quill.bubble.css'
 
 import dynamic from 'next/dynamic'
@@ -8,10 +8,13 @@ const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
     { ssr: false }
 )
 type PreviewProps = {
-    value: Value
+    value: string
 }
 
-const EditorPreview = ({ value }: PreviewProps): JSX.Element => {
+const EditorPreview = ({ value = 'Nothing to Preview' }: PreviewProps): JSX.Element => {
+    if (value.replace(/<(.|\n)*?>/g, '').trim().length === 0 && !value.includes('<img')) {
+        value = 'Nothing to Preview'
+    }
     return <ReactQuill value={value} readOnly={true} modules={{ toolbar: false }} />
 }
 export default EditorPreview
