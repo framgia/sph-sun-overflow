@@ -61,7 +61,7 @@ const Tags: NextPage = () => {
     const router = useRouter()
     const { data, loading, error, refetch } = useQuery<TagsQuery, RefetchType>(GET_TAGS, {
         variables: {
-            first: 6,
+            first: 8,
             page: 1,
             sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
         },
@@ -69,7 +69,7 @@ const Tags: NextPage = () => {
 
     useEffect(() => {
         void refetch({
-            first: 6,
+            first: 8,
             page: 1,
             sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
         })
@@ -93,7 +93,7 @@ const Tags: NextPage = () => {
 
     const refetchHandler = (isDelete = false): void => {
         void refetch({
-            first: 6,
+            first: 8,
             name: '%%',
             sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
             page:

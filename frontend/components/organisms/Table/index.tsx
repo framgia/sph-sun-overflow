@@ -47,7 +47,7 @@ const Table = ({
 }: TableProps): JSX.Element => {
     return (
         <div className="w-full place-self-center overflow-hidden rounded-md 2xl:w-[60rem]">
-            <div className="relative min-h-[60vh] overflow-x-auto border-2 bg-white shadow-md sm:rounded-lg">
+            <div className="relative min-h-[565px] overflow-x-auto border-2 bg-white shadow-md sm:rounded-lg">
                 <table className="w-full text-left">
                     <thead className="bg-primary-200 uppercase text-neutral-900">
                         <tr>
