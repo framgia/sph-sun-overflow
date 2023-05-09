@@ -7,7 +7,7 @@ type PageTitleProps = {
 const PageTitle = ({ title }: PageTitleProps): JSX.Element => {
     return (
         <Head>
-            <title>{title ? `${title} - Sun Overflow` : 'Sun Overflow'}</title>
+            <title>{title ? `${title} | Sun Overflow` : 'Sun Overflow'}</title>
         </Head>
     )
 }
