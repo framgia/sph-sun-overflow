@@ -1,3 +1,4 @@
+import PageTitle from '@/components/atoms/PageTitle'
 import AnswerList from '@/components/organisms/AnswerList'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
@@ -118,35 +119,38 @@ const QuestionDetailPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-col gap-4">
-            <QuestionDetail
-                id={question.id}
-                title={question.title}
-                content={question.content}
-                slug={question.slug}
-                created_at={question.created_at}
-                humanized_created_at={question.humanized_created_at}
-                vote_count={question.vote_count}
-                views_count={question.views_count}
-                tags={question.tags}
-                is_bookmarked={question.is_bookmarked}
-                user_vote={question.user_vote}
-                user={question.user}
-                refetchHandler={refetchHandler}
-                is_from_user={question.is_from_user}
-                is_public={question.is_public}
-                team_name={team}
-                comments={question.comments}
-            />
-            <AnswerList
-                slug={String(query.slug)}
-                answers={question.answers}
-                question_id={question.id}
-                question_is_from_user={question.is_from_user}
-                is_answered={question.is_answered}
-                refetchHandler={refetchHandler}
-            />
-        </div>
+        <>
+            <PageTitle title="Question Details" />
+            <div className="flex w-full flex-col gap-4">
+                <QuestionDetail
+                    id={question.id}
+                    title={question.title}
+                    content={question.content}
+                    slug={question.slug}
+                    created_at={question.created_at}
+                    humanized_created_at={question.humanized_created_at}
+                    vote_count={question.vote_count}
+                    views_count={question.views_count}
+                    tags={question.tags}
+                    is_bookmarked={question.is_bookmarked}
+                    user_vote={question.user_vote}
+                    user={question.user}
+                    refetchHandler={refetchHandler}
+                    is_from_user={question.is_from_user}
+                    is_public={question.is_public}
+                    team_name={team}
+                    comments={question.comments}
+                />
+                <AnswerList
+                    slug={String(query.slug)}
+                    answers={question.answers}
+                    question_id={question.id}
+                    question_is_from_user={question.is_from_user}
+                    is_answered={question.is_answered}
+                    refetchHandler={refetchHandler}
+                />
+            </div>
+        </>
     )
 }
 

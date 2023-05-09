@@ -91,6 +91,7 @@ const TagsFormModal = ({
             } else {
                 if (initialData.name === name && initialData.description === description) {
                     errorNotify('No changes were made!')
+                    closeModal()
                 } else {
                     setModalButtonLoading(true)
                     updateTag({

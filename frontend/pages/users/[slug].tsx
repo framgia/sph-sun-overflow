@@ -1,3 +1,4 @@
+import PageTitle from '@/components/atoms/PageTitle'
 import ProfileLayout from '@/components/templates/Profile'
 import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
 import GET_USER from '@/helpers/graphql/queries/get_user'
@@ -33,6 +34,11 @@ const Profile = (): JSX.Element => {
 
     const isPublic = userSlug !== router.query.slug
 
-    return <ProfileLayout data={data.user} toggleFollow={toggleFollow} isPublic={isPublic} />
+    return (
+        <>
+            <PageTitle title="Profile" />
+            <ProfileLayout data={data.user} toggleFollow={toggleFollow} isPublic={isPublic} />
+        </>
+    )
 }
 export default Profile

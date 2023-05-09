@@ -1,3 +1,4 @@
+import PageTitle from '@/components/atoms/PageTitle'
 import QuestionForm from '@/components/organisms/QuestionForm'
 import GET_QUESTION_SKELETON from '@/helpers/graphql/queries/get_question_skeleton'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
@@ -25,16 +26,19 @@ const EditQuestionFormPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-row justify-center gap-2.5 ">
-            <Link href={`/questions/${router.query.slug as string}`}>
-                <div className="py-4">
-                    <HiArrowLeft size={24} />
+        <>
+            <PageTitle title="Edit Question" />
+            <div className="flex w-full flex-row justify-center gap-2.5 ">
+                <Link href={`/questions/${router.query.slug as string}`}>
+                    <div className="py-4">
+                        <HiArrowLeft size={24} />
+                    </div>
+                </Link>
+                <div className="">
+                    <QuestionForm initialState={data?.question} />
                 </div>
-            </Link>
-            <div className="">
-                <QuestionForm initialState={data?.question} />
             </div>
-        </div>
+        </>
     )
 }
 export default EditQuestionFormPage

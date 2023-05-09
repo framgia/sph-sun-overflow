@@ -1,3 +1,4 @@
+import PageTitle from '@/components/atoms/PageTitle'
 import QuestionsPageLayout from '@/components/templates/QuestionsPageLayout'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TAG from '@/helpers/graphql/queries/get_tag'
@@ -41,14 +42,17 @@ const TagQuestionsPage = (): JSX.Element => {
     if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
     return (
-        <QuestionsPageLayout
-            refetch={questionsQuery.refetch}
-            data={questionsQuery.data}
-            isSearchResult={false}
-            isPrivate={false}
-            page_slug={'questions'}
-            selectedTag={tagQuery.data.tag.name}
-        />
+        <>
+            <PageTitle title="Tag Questions" />
+            <QuestionsPageLayout
+                refetch={questionsQuery.refetch}
+                data={questionsQuery.data}
+                isSearchResult={false}
+                isPrivate={false}
+                page_slug={'questions'}
+                selectedTag={tagQuery.data.tag.name}
+            />
+        </>
     )
 }
 

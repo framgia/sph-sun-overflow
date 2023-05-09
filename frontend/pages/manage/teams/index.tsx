@@ -1,5 +1,6 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
+import PageTitle from '@/components/atoms/PageTitle'
 import Paginate from '@/components/organisms/Paginate'
 import type { ColumnType, DataType } from '@/components/organisms/Table'
 import Table from '@/components/organisms/Table'
@@ -278,43 +279,46 @@ const AdminTeams = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="flex h-full flex-col gap-4">
-                <div className="flex items-center justify-end">
-                    <Button
-                        usage="stroke"
-                        size="large"
-                        onClick={() => {
-                            setShowModal(true)
-                        }}
-                    >
-                        Add Team
-                    </Button>
+        <>
+            <PageTitle title="Manage Teams" />
+            <div className="flex flex-col items-center">
+                <div className="flex h-full flex-col gap-4">
+                    <div className="flex items-center justify-end">
+                        <Button
+                            usage="stroke"
+                            size="large"
+                            onClick={() => {
+                                setShowModal(true)
+                            }}
+                        >
+                            Add Team
+                        </Button>
+                    </div>
+                    <Table
+                        columns={columns}
+                        dataSource={getTeamDataTable(teamArr)}
+                        isEmptyString="No Teams to Show"
+                        actions={renderTeamsActions}
+                        clickableArr={clickableArr}
+                        footer={renderFooter()}
+                    />
                 </div>
-                <Table
-                    columns={columns}
-                    dataSource={getTeamDataTable(teamArr)}
-                    isEmptyString="No Teams to Show"
-                    actions={renderTeamsActions}
-                    clickableArr={clickableArr}
-                    footer={renderFooter()}
+                <TeamsFormModal
+                    isOpen={showModal}
+                    closeModal={() => {
+                        setShowModal(false)
+                    }}
+                    refetch={async () => {
+                        await refetch({
+                            first: paginatorInfo.perPage,
+                            page: paginatorInfo.currentPage,
+                            isAdmin: true,
+                        })
+                    }}
+                    leaderOptions={teamLeaders.data.teamLeaders}
                 />
             </div>
-            <TeamsFormModal
-                isOpen={showModal}
-                closeModal={() => {
-                    setShowModal(false)
-                }}
-                refetch={async () => {
-                    await refetch({
-                        first: paginatorInfo.perPage,
-                        page: paginatorInfo.currentPage,
-                        isAdmin: true,
-                    })
-                }}
-                leaderOptions={teamLeaders.data.teamLeaders}
-            />
-        </div>
+        </>
     )
 }
 export default AdminTeams

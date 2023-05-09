@@ -1,3 +1,4 @@
+import PageTitle from '@/components/atoms/PageTitle'
 import QuestionForm from '@/components/organisms/QuestionForm'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -10,16 +11,19 @@ const QuestionFormPage = (): JSX.Element => {
     else path = `/teams/${router.query.prev as string}`
 
     return (
-        <div className="flex w-full flex-row justify-center gap-2.5 ">
-            <Link href={path}>
-                <div className="py-4">
-                    <HiArrowLeft size={24} />
+        <>
+            <PageTitle title="Add Question" />
+            <div className="flex w-full flex-row justify-center gap-2.5 ">
+                <Link href={path}>
+                    <div className="py-4">
+                        <HiArrowLeft size={24} />
+                    </div>
+                </Link>
+                <div className="">
+                    <QuestionForm />
                 </div>
-            </Link>
-            <div className="">
-                <QuestionForm />
             </div>
-        </div>
+        </>
     )
 }
 export default QuestionFormPage

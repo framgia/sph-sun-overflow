@@ -4,6 +4,7 @@ export default function Document(): JSX.Element {
     return (
         <Html lang="en">
             <Head>
+                <title>Sun Overflow</title>
                 <link rel="icon" href="/images/sun_logo.png" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />

@@ -1,5 +1,6 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
+import PageTitle from '@/components/atoms/PageTitle'
 import type { TabType } from '@/components/atoms/TabItem'
 import DropdownFilters from '@/components/molecules/DropdownFilters'
 import Tabs from '@/components/molecules/Tabs'
@@ -278,43 +279,46 @@ const Team = (): JSX.Element => {
     }
 
     return (
-        <div className="flex w-full flex-row justify-between gap-4">
-            <div className="flex h-fit w-64 flex-col gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[0_0_4px_0_#0000000D]">
-                <div className="flex flex-col gap-1 text-sm">
-                    <div className="font-bold uppercase text-neutral-900 line-clamp-1">
-                        {team?.name}
+        <>
+            <PageTitle title={team.name} />
+            <div className="flex w-full flex-row justify-between gap-4">
+                <div className="flex h-fit w-64 flex-col gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[0_0_4px_0_#0000000D]">
+                    <div className="flex flex-col gap-1 text-sm">
+                        <div className="font-bold uppercase text-neutral-900 line-clamp-1">
+                            {team?.name}
+                        </div>
+                        <div className="line-clamp-10 p-2 font-normal text-neutral-disabled">
+                            {team?.description}
+                        </div>
                     </div>
-                    <div className="line-clamp-10 p-2 font-normal text-neutral-disabled">
-                        {team?.description}
+                    <div className="flex flex-col gap-2 text-sm text-neutral-900">
+                        <div className="flex gap-2">
+                            <span className="font-medium">Questions asked:</span>
+                            <span className="font-normal">{team?.questions_asked}</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-medium">Questions answered:</span>
+                            <span className="font-normal">{team?.questions_answered}</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-medium">Members:</span>
+                            <span className="font-normal">{team?.members_count}</span>
+                        </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 text-sm text-neutral-900">
-                    <div className="flex gap-2">
-                        <span className="font-medium">Questions asked:</span>
-                        <span className="font-normal">{team?.questions_asked}</span>
-                    </div>
-                    <div className="flex gap-2">
-                        <span className="font-medium">Questions answered:</span>
-                        <span className="font-normal">{team?.questions_answered}</span>
-                    </div>
-                    <div className="flex gap-2">
-                        <span className="font-medium">Members:</span>
-                        <span className="font-normal">{team?.members_count}</span>
-                    </div>
+                <div className="min-h-80 flex flex-grow flex-col justify-start gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[2px_2px_4px_0_#0000000D]">
+                    {activeTab === 'Questions' && (
+                        <div className="flex flex-row items-center justify-end">
+                            <Button usage="stroke" size="large" onClick={onClickAskQuestion}>
+                                Ask a Question
+                            </Button>
+                        </div>
+                    )}
+                    <Tabs tabs={tabs} />
+                    {renderActiveTab(team?.dashboard_content)}
                 </div>
             </div>
-            <div className="min-h-80 flex flex-grow flex-col justify-start gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[2px_2px_4px_0_#0000000D]">
-                {activeTab === 'Questions' && (
-                    <div className="flex flex-row items-center justify-end">
-                        <Button usage="stroke" size="large" onClick={onClickAskQuestion}>
-                            Ask a Question
-                        </Button>
-                    </div>
-                )}
-                <Tabs tabs={tabs} />
-                {renderActiveTab(team?.dashboard_content)}
-            </div>
-        </div>
+        </>
     )
 }
 

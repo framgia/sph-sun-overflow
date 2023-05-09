@@ -1,5 +1,6 @@
 import Button from '@/components/atoms/Button'
 import Icons from '@/components/atoms/Icons'
+import PageTitle from '@/components/atoms/PageTitle'
 import Paginate from '@/components/organisms/Paginate'
 import type { PermissionType } from '@/components/organisms/RoleFormModal'
 import RoleFormModal from '@/components/organisms/RoleFormModal'
@@ -263,39 +264,42 @@ const RolesPage = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="flex h-full flex-col gap-4">
-                <div className="flex items-center justify-end">
-                    <Button
-                        usage="stroke"
-                        size="large"
-                        onClick={() => {
-                            setShowModal(true)
-                        }}
-                    >
-                        Add Role
-                    </Button>
+        <>
+            <PageTitle title="Manage Roles" />
+            <div className="flex flex-col items-center">
+                <div className="flex h-full flex-col gap-4">
+                    <div className="flex items-center justify-end">
+                        <Button
+                            usage="stroke"
+                            size="large"
+                            onClick={() => {
+                                setShowModal(true)
+                            }}
+                        >
+                            Add Role
+                        </Button>
+                    </div>
+                    <Table
+                        columns={columns}
+                        dataSource={getRolesDataTable(roles)}
+                        actions={getRolesActions}
+                        footer={renderFooter()}
+                    />
                 </div>
-                <Table
-                    columns={columns}
-                    dataSource={getRolesDataTable(roles)}
-                    actions={getRolesActions}
-                    footer={renderFooter()}
+                <RoleFormModal
+                    isOpen={showModal}
+                    closeModal={() => {
+                        setShowModal(false)
+                    }}
+                    refetch={async () => {
+                        await refetch({
+                            first: pageInfo.perPage,
+                            page: pageInfo.currentPage,
+                        })
+                    }}
                 />
             </div>
-            <RoleFormModal
-                isOpen={showModal}
-                closeModal={() => {
-                    setShowModal(false)
-                }}
-                refetch={async () => {
-                    await refetch({
-                        first: pageInfo.perPage,
-                        page: pageInfo.currentPage,
-                    })
-                }}
-            />
-        </div>
+        </>
     )
 }
 
