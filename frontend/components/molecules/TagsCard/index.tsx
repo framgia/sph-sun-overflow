@@ -81,7 +81,7 @@ const TagsCard = ({
                             </span>
                         </div>
                         <Button
-                            usage="popover"
+                            usage={`${isWatched ? 'stroke' : 'popover'}`}
                             type="submit"
                             onClick={async (e) => {
                                 e.preventDefault()

@@ -123,7 +123,10 @@ const ProfileCard = ({
                         </div>
                         {!isAdmin && isPublic && (
                             <div className="w-[187px]">
-                                <Button usage="main-follow" onClick={onClickFollow}>
+                                <Button
+                                    usage={`${is_following ? 'main-unfollow' : 'main-follow'}`}
+                                    onClick={onClickFollow}
+                                >
                                     {is_following ? 'Unfollow' : 'Follow'}
                                 </Button>
                             </div>
