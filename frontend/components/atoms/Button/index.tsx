@@ -33,15 +33,15 @@ type Props = {
 const getButtonClasses = (usage: string, size: string): string => {
     switch (usage) {
         case 'filled':
-            return `items-center rounded-[5px] px-4 bg-primary-900 text-white capitalize focus:ring-1 focus:ring-primary-900 focus:bg-primary-900 ${
+            return `items-center rounded-[5px] px-4 bg-primary-900 text-white capitalize active:ring-1 active:ring-primary-900 active:bg-primary-900 ${
                 size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'stroke':
-            return `items-center rounded-[5px] px-4 border bg-neutral-white border-primary-900 text-primary-900 capitalize focus:ring-1 focus:ring-primary-900 hover:bg-primary-200 outline-none ${
+            return `items-center rounded-[5px] px-4 border bg-neutral-white border-primary-900 text-primary-900 capitalize active:ring-1 active:ring-primary-900 hover:bg-primary-200 outline-none ${
                 size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'grayed':
-            return `items-center rounded-[5px] px-4 border bg-neutral-white border-neutral-900 text-neutral-900 capitalize focus:ring-1 focus:ring-neutral-900 hover:bg-neutral-200 ${
+            return `items-center rounded-[5px] px-4 border bg-neutral-white border-neutral-900 text-neutral-900 capitalize active:ring-1 active:ring-neutral-900 hover:bg-neutral-200 ${
                 size === 'regular' ? 'font-normal text-xs h-7' : 'text-sm h-9 font-semibold'
             }`
         case 'primary':
@@ -61,7 +61,7 @@ const getButtonClasses = (usage: string, size: string): string => {
         case 'icon':
             return 'absolute inset-y-0 right-0 mr-2 flex items-center'
         case 'popover':
-            return 'rounded-[5px] h-[28px] border-2 px-4 text-[12px] text-neutral-900 bg-white border-neutral-900 border-[1px] hover:bg-neutral-200 outline-none'
+            return 'rounded-[5px] h-7 border px-4 text-xs text-neutral-900 bg-white border-neutral-900 active:ring-1 active:ring-neutral-900 hover:bg-neutral-200 outline-none'
         case 'cancel-item':
             return 'items-center rounded-full border-2 outline-0 border-primary-red absolute outline-primary-red -top-2 -right-2 bg-white text-primary-red p-1 hover:bg-primary-red hover:text-white active:bg-primary-red active:text-white active:outline active:outline-[2px]'
         case 'edit-top-right':
@@ -83,7 +83,9 @@ const getButtonClasses = (usage: string, size: string): string => {
         case 'follow-modal-unfollow':
             return 'border-primary-700 border rounded-md font-semibold text-xs text-primary-700 bg-neutral-white w-[84px] h-7'
         case 'main-follow':
-            return 'w-full rounded border border-red-400 font-bold text-primary-900 text-sm px-4 py-2 h-9'
+            return 'w-full rounded border text-neutral-900 bg-white border-neutral-900 font-semibold text-sm px-4 py-2 h-9 hover:bg-neutral-200'
+        case 'main-unfollow':
+            return 'w-full rounded border border-primary-900 bg-white font-semibold text-primary-900 text-sm px-4 py-2 h-9 hover:bg-primary-200'
         case 'send':
             return 'absolute inset-y-0 right-2 flex cursor-pointer items-center text-neutral-disabled hover:text-primary-base'
         case 'primary-regular':
