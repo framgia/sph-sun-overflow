@@ -14,7 +14,7 @@ import { errorNotify } from '../../helpers/toast'
 import type { TagType } from '../questions/[slug]'
 import type { OrderOption, RefetchType } from '../questions/index'
 
-const { FilterIcon, SearchIcon } = CustomIcons
+const { FilterIcon, SearchIcon, LoadingSpinner } = CustomIcons
 
 const filterOptions: OrderOption = {
     'Most Popular': { column: 'POPULARITY', order: 'DESC' },
@@ -36,15 +36,15 @@ const TagsListPage = (): JSX.Element => {
         variables: {
             first: 9,
             page: 1,
-            name: `%${String(router.query.search ?? '')}%`,
+            name: `%${term}%`,
             sort: [filterOptions[String(router.query.filter ?? 'Most Popular')]],
         },
+        notifyOnNetworkStatusChange: true,
     })
 
-    if (loading) return loadingScreenShow()
     if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
-    const { data: tags, paginatorInfo } = data.tags
+    const { data: tags, paginatorInfo } = data?.tags ?? {}
     const tagList: TagType[] = tags
     const pageInfo: PaginatorInfo = paginatorInfo
 
@@ -71,17 +71,17 @@ const TagsListPage = (): JSX.Element => {
             {
                 id: 1,
                 name: 'Most Popular',
-                onClick: async () => {
+                onClick: () => {
                     setSelectedFilter('Most Popular')
-                    routerHandler('Most Popular', searchKey)
+                    routerHandler('Most Popular', term)
                 },
             },
             {
                 id: 2,
                 name: 'Least Popular',
-                onClick: async () => {
+                onClick: () => {
                     setSelectedFilter('Least Popular')
-                    routerHandler('Least Popular', searchKey)
+                    routerHandler('Least Popular', term)
                 },
             },
         ],
@@ -89,17 +89,17 @@ const TagsListPage = (): JSX.Element => {
             {
                 id: 1,
                 name: 'Most Watched',
-                onClick: async () => {
+                onClick: () => {
                     setSelectedFilter('Most Watched')
-                    routerHandler('Most Watched', searchKey)
+                    routerHandler('Most Watched', term)
                 },
             },
             {
                 id: 2,
                 name: 'Least Watched',
-                onClick: async () => {
+                onClick: () => {
                     setSelectedFilter('Least Watched')
-                    routerHandler('Least Watched', searchKey)
+                    routerHandler('Least Watched', term)
                 },
             },
         ],
@@ -107,24 +107,24 @@ const TagsListPage = (): JSX.Element => {
             {
                 id: 1,
                 name: 'Newest First',
-                onClick: async () => {
+                onClick: () => {
                     setSelectedFilter('Newest First')
-                    routerHandler('Newest First', searchKey)
+                    routerHandler('Newest First', term)
                 },
             },
             {
                 id: 2,
                 name: 'Oldest First',
-                onClick: async () => {
+                onClick: () => {
                     setSelectedFilter('Oldest First')
-                    routerHandler('Oldest First', searchKey)
+                    routerHandler('Oldest First', term)
                 },
             },
         ],
     ]
 
     const onSearchInputChange = (value: string): void => {
-        if (value === '') {
+        if (value === '' && term !== '') {
             const { query } = router
             void refetch({ first: 9, page: 1, name: '%%' })
             setTerm('')
@@ -137,7 +137,10 @@ const TagsListPage = (): JSX.Element => {
     return (
         <>
             <PageTitle title="Tags" />
-            <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+            <div
+                className={`flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4
+             ${loading ? 'pointer-events-none' : ''}`}
+            >
                 <h1 className="text-xl font-semibold text-neutral-900">All Tags</h1>
                 <div className="flex flex-col gap-2">
                     <div className="flex w-full items-center justify-between">
@@ -169,32 +172,40 @@ const TagsListPage = (): JSX.Element => {
                         />
                     </div>
                     {term && (
-                        <div className="truncate text-sm font-medium text-neutral-700">
-                            {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
-                            {`"${term}"`}
+                        <div className="flex gap-1 truncate text-sm font-medium text-neutral-700">
+                            {!pageInfo ? <LoadingSpinner /> : <span>{pageInfo.total} </span>}
+                            {pageInfo?.total === 1 ? 'result' : 'results'} for {`"${term}"`}
                         </div>
                     )}
                 </div>
-                <div className="scrollbar flex flex-col gap-4 overflow-y-auto">
-                    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        {tagList.map((tag) => {
-                            return (
-                                <TagsCard
-                                    key={tag.id}
-                                    id={tag.id}
-                                    slug={tag.slug}
-                                    description={tag.description}
-                                    name={tag.name}
-                                    questionsCount={tag.count_tagged_questions ?? 0}
-                                    watchersCount={tag.count_watching_users ?? 0}
-                                />
-                            )
-                        })}
+                {loading ? (
+                    loadingScreenShow()
+                ) : !tagList.length ? (
+                    <span className="p-2 text-center text-lg font-semibold text-neutral-500">
+                        No tags to show
+                    </span>
+                ) : (
+                    <div className="scrollbar flex flex-col gap-4 overflow-y-auto">
+                        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            {tagList.map((tag) => {
+                                return (
+                                    <TagsCard
+                                        key={tag.id}
+                                        id={tag.id}
+                                        slug={tag.slug}
+                                        description={tag.description}
+                                        name={tag.name}
+                                        questionsCount={tag.count_tagged_questions ?? 0}
+                                        watchersCount={tag.count_watching_users ?? 0}
+                                    />
+                                )
+                            })}
+                        </div>
+                        {!loading && pageInfo.lastPage > 1 && (
+                            <Paginate {...pageInfo} onPageChange={onPageChange} />
+                        )}
                     </div>
-                    {pageInfo.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
-                    )}
-                </div>
+                )}
             </div>
         </>
     )

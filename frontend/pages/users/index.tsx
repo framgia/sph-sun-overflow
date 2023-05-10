@@ -1,3 +1,4 @@
+import { CustomIcons } from '@/components/atoms/Icons'
 import PageTitle from '@/components/atoms/PageTitle'
 import SearchInput from '@/components/molecules/SearchInput'
 import SortDropdown from '@/components/molecules/SortDropdown'
@@ -12,6 +13,8 @@ import { errorNotify } from '@/helpers/toast'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+
+const { LoadingSpinner } = CustomIcons
 
 type Role = {
     id: number
@@ -32,6 +35,7 @@ const scoreFilterOptions: Record<string, string> = {
 
 const UsersPage = (): JSX.Element => {
     const router = useRouter()
+    const search = String(router.query.search ?? '')
     const roleFilter = String(router.query.role ?? '')
     const scoreFilter = String(router.query.score ?? '')
     const initialRole: { id: number | null; label: string } = {
@@ -42,8 +46,7 @@ const UsersPage = (): JSX.Element => {
         sort: scoreFilterOptions[scoreFilter] ?? null,
         label: scoreFilter || 'Sort by Score',
     }
-    const [isSearchResult, setIsSearchResult] = useState(false)
-    const [searchKey, setSearchKey] = useState(String(router.query.search ?? ''))
+    const [searchKey, setSearchKey] = useState(search)
     const [term, setTerm] = useState('')
     const [selectedRole, setSelectedRole] = useState<{ id: number | null; label: string }>(
         initialRole
@@ -53,7 +56,12 @@ const UsersPage = (): JSX.Element => {
     )
 
     const rolesQuery = useQuery(GET_ROLES)
-    const [userQuery, { data, loading, error, refetch }] = useLazyQuery<any, RefetchType>(GET_USERS)
+    const [userQuery, { data, loading, error, refetch }] = useLazyQuery<any, RefetchType>(
+        GET_USERS,
+        {
+            notifyOnNetworkStatusChange: true,
+        }
+    )
 
     useEffect(() => {
         const roleObj: Role = rolesQuery.data?.roles.find(
@@ -64,53 +72,36 @@ const UsersPage = (): JSX.Element => {
             variables: {
                 first: 12,
                 page: 1,
-                filter: { keyword: searchKey, role_id: roleObj?.id },
-                sort: { reputation: initialScore.sort },
+                filter: { keyword: term, role_id: roleObj?.id },
+                sort: { reputation: selectedScore.sort },
             },
         })
-    }, [rolesQuery])
+    }, [rolesQuery, term, selectedScore])
 
-    if (rolesQuery.loading || loading) return loadingScreenShow()
+    if (rolesQuery.loading) return loadingScreenShow()
     if (rolesQuery.error)
         return <span>{errorNotify(`Error! ${rolesQuery.error?.message ?? ''}`)}</span>
     if (error) return <span>{errorNotify(`Error! ${error?.message ?? ''}`)}</span>
 
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
-
-        const target = e.target as typeof e.target & {
-            search: { value: string }
-        }
-
-        await refetch({
-            first: 12,
-            page: 1,
-            filter: { keyword: target.search.value, role_id: selectedRole.id },
-            sort: { reputation: selectedScore.sort },
-        })
-
-        setSearchKey(target.search.value)
-        setTerm(target.search.value)
-        target.search.value ? setIsSearchResult(true) : setIsSearchResult(false)
-        void router.push({
+        setTerm(searchKey)
+        await router.push({
             pathname: router.pathname,
-            query: { ...router.query, search: target.search.value },
+            query: { ...router.query, search: searchKey },
         })
     }
 
     const onSearchInputChange = (value: string): void => {
-        if (value === '') {
+        if (value === '' && term !== '') {
             const { query } = router
-            void userQuery({
-                variables: {
-                    first: 12,
-                    page: 1,
-                    filter: { keyword: '', role_id: selectedRole.id },
-                    sort: { reputation: selectedScore.sort },
-                },
+            void refetch({
+                first: 12,
+                page: 1,
+                filter: { keyword: '', role_id: selectedRole.id },
+                sort: { reputation: selectedScore.sort },
             })
             setTerm('')
-            setIsSearchResult(false)
             delete query.search
             void router.replace({ query })
         }
@@ -155,15 +146,6 @@ const UsersPage = (): JSX.Element => {
             id: 1,
             name: 'Most Score',
             onClick: async () => {
-                await refetch({
-                    first: 12,
-                    page: 1,
-                    filter: {
-                        keyword: searchKey,
-                        role_id: selectedRole.id,
-                    },
-                    sort: { reputation: 'DESC' },
-                })
                 void router.push({
                     pathname: router.pathname,
                     query: { ...router.query, score: 'Most Score' },
@@ -175,15 +157,6 @@ const UsersPage = (): JSX.Element => {
             id: 2,
             name: 'Least Score',
             onClick: async () => {
-                await refetch({
-                    first: 12,
-                    page: 1,
-                    filter: {
-                        keyword: searchKey,
-                        role_id: selectedRole.id,
-                    },
-                    sort: { reputation: 'ASC' },
-                })
                 void router.push({
                     pathname: router.pathname,
                     query: { ...router.query, score: 'Least Score' },
@@ -193,8 +166,9 @@ const UsersPage = (): JSX.Element => {
         },
     ]
 
-    const userList: IUser[] = data?.users.data
-    const pageInfo: PaginatorInfo = data?.users.paginatorInfo
+    const { data: users, paginatorInfo } = data?.users ?? {}
+    const userList: IUser[] = users
+    const pageInfo: PaginatorInfo = paginatorInfo
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await refetch({ first, page })
@@ -202,12 +176,9 @@ const UsersPage = (): JSX.Element => {
 
     const renderSearchResultHeader = (): JSX.Element => {
         return (
-            <div className="w-80">
-                <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                    {`${pageInfo.total} search ${
-                        pageInfo.total !== 1 ? `results` : `result`
-                    } for "${term}"`}
-                </div>
+            <div className="flex gap-1 truncate text-sm font-medium text-neutral-700">
+                {!pageInfo ? <LoadingSpinner /> : <span>{pageInfo.total} </span>}
+                {pageInfo?.total === 1 ? 'result' : 'results'} for {`"${term}"`}
             </div>
         )
     }
@@ -215,14 +186,18 @@ const UsersPage = (): JSX.Element => {
     return (
         <>
             <PageTitle title="Users" />
-            <div className="flex flex-col gap-4 rounded-md border border-neutral-200 bg-white p-4">
+            <div
+                className={`flex flex-col gap-4 overflow-hidden rounded-md border border-neutral-200 bg-white p-4 ${
+                    loading ? 'pointer-events-none' : ''
+                }`}
+            >
                 <div className="w-full">
                     <div className="text-xl font-semibold leading-[120%] text-neutral-900">
                         All Users
                     </div>
                 </div>
                 <div className="flex w-full flex-row">
-                    <div className="mr-auto">
+                    <div className="mr-auto flex flex-col gap-2">
                         <form onSubmit={handleSearchSubmit}>
                             <SearchInput
                                 placeholder="Search"
@@ -230,31 +205,35 @@ const UsersPage = (): JSX.Element => {
                                 onChange={onSearchInputChange}
                             />
                         </form>
-                        {isSearchResult && renderSearchResultHeader()}
+                        {term && renderSearchResultHeader()}
                     </div>
                     <div className="flex flex-row justify-end gap-1">
                         <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
                         <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                     </div>
                 </div>
-                <div className="scrollbar flex w-full flex-col gap-4 overflow-y-auto">
-                    {!userList.length ? (
-                        <span className="items-center py-4 text-center text-sm font-semibold text-neutral-disabled">
-                            No users to show
-                        </span>
-                    ) : (
-                        <>
-                            <div className="grid grid-cols-1 justify-center gap-4 md:grid-cols-2 xl:grid-cols-3">
-                                {userList?.map((user: IUser) => (
-                                    <UserCard user={user} key={user.id} />
-                                ))}
-                            </div>
-                            {pageInfo?.lastPage > 1 && (
-                                <Paginate {...pageInfo} onPageChange={onPageChange} />
-                            )}
-                        </>
-                    )}
-                </div>
+                {loading ? (
+                    loadingScreenShow()
+                ) : (
+                    <div className="scrollbar flex w-full flex-col gap-4 overflow-y-auto">
+                        {!userList.length ? (
+                            <span className="p-2 text-center text-lg font-semibold text-neutral-500">
+                                No users to show
+                            </span>
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-1 justify-center gap-4 md:grid-cols-2 xl:grid-cols-3">
+                                    {userList?.map((user: IUser) => (
+                                        <UserCard user={user} key={user.id} />
+                                    ))}
+                                </div>
+                                {pageInfo?.lastPage > 1 && (
+                                    <Paginate {...pageInfo} onPageChange={onPageChange} />
+                                )}
+                            </>
+                        )}
+                    </div>
+                )}
             </div>
         </>
     )

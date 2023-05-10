@@ -100,6 +100,7 @@ const AdminUsers = (): JSX.Element => {
             filter: { keyword: '', role_id: null },
             sort: { reputation: null },
         },
+        notifyOnNetworkStatusChange: true,
     })
     const rolesQuery = useQuery(GET_ROLES_SELECTION)
     const [assignRole] = useMutation(ASSIGN_ROLE)
