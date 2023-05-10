@@ -1,5 +1,6 @@
 type Props = {
     name: string
+    type?: string
     label?: string
     placeholder?: string
     value: string
@@ -12,6 +13,7 @@ type Props = {
 
 const InputField = ({
     name,
+    type = 'text',
     label,
     placeholder,
     value,
@@ -37,7 +39,7 @@ const InputField = ({
             )}
             {renderIcon()}
             <input
-                type="text"
+                type={type}
                 id={name}
                 name={name}
                 value={value}

@@ -1,11 +1,16 @@
 import Button from '@/components/atoms/Button'
 import { CustomIcons } from '@/components/atoms/Icons'
 import InputField from '@/components/atoms/InputField'
+import ADMIN_LOGIN from '@/helpers/graphql/mutations/admin_login'
+import { setUserToken } from '@/helpers/localStorageHelper'
+import { errorNotify, successNotify } from '@/helpers/toast'
+import { useMutation } from '@apollo/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 const { LoadingSpinner } = CustomIcons
 
 type FormValues = {
@@ -14,19 +19,16 @@ type FormValues = {
 }
 
 const AdminLogin: NextPage = () => {
-    // const router = useRouter()
+    const [adminLogin] = useMutation(ADMIN_LOGIN)
 
     const [loading, setLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const [formErrors, setFormErrors] = useState({
         email: '',
         password: '',
     })
 
-    const {
-        handleSubmit,
-        control,
-        // reset
-    } = useForm<FormValues>({
+    const { handleSubmit, control } = useForm<FormValues>({
         defaultValues: {
             email: '',
             password: '',
@@ -56,8 +58,22 @@ const AdminLogin: NextPage = () => {
         })
 
         if (valid) {
-            console.log(email, password)
-            setLoading(false)
+            adminLogin({
+                variables: {
+                    email,
+                    password,
+                },
+            })
+                .then(({ data }) => {
+                    setLoading(false)
+                    successNotify('Admin login successful')
+                    setUserToken(data.adminLogin)
+                    window.location.href = '/questions'
+                })
+                .catch((error) => {
+                    errorNotify(error.message)
+                    setLoading(false)
+                })
         } else {
             setLoading(false)
         }
@@ -130,6 +146,22 @@ const AdminLogin: NextPage = () => {
                                             <InputField
                                                 name="password"
                                                 label="Password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                icon={
+                                                    <div
+                                                        className="absolute bottom-0.5 right-2.5 -translate-y-1/2 transform cursor-pointer"
+                                                        onClick={() => {
+                                                            setShowPassword(!showPassword)
+                                                        }}
+                                                    >
+                                                        {showPassword ? (
+                                                            <AiOutlineEye className="text-xl" />
+                                                        ) : (
+                                                            <AiOutlineEyeInvisible className="text-xl" />
+                                                        )}
+                                                    </div>
+                                                }
+                                                additionalClass="pr-8"
                                                 value={value}
                                                 onChange={onChange}
                                                 isValid={formErrors.password.length === 0}

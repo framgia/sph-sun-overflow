@@ -51,4 +51,6 @@ type Mutation {
             resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve"
         )
         @guard(with: ["api"])
+    adminLogin(email: String!, password: String!): String
+        @field(resolver: "AdminLogin")
 }
