@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
             CommentSeeder::class,
             VoteSeeder::class,
             TagSeeder::class,
-            TeamSeeder::class,
             TeamRoleSeeder::class,
+            TeamSeeder::class,
             MemberSeeder::class,
             BookmarkSeeder::class,
         ]);

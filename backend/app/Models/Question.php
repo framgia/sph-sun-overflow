@@ -32,8 +32,9 @@ class Question extends Model
         static::creating(function ($question) {
             $slug = Str::slug($question->title);
 
+            $latestQuestion = Question::orderBy('created_at', 'DESC')->first();
             $duplicateCount = Question::where('title', $question->title)->count();
-            $lastQuestionId = Question::orderBy('created_at', 'DESC')->first()->id + 1;
+            $lastQuestionId = $latestQuestion ? $latestQuestion->id + 1 : 1;
 
             $question->slug = $duplicateCount === 0 ? $slug : "$slug-duplicate-$lastQuestionId";
         });
