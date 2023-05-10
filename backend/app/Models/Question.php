@@ -128,4 +128,33 @@ class Question extends Model
     {
         return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
+
+    public function deleteNotification($notifiableIds, $type)
+    {
+        UserNotification::where('notifiable_type', $type)->whereIn('notifiable_id', $notifiableIds)->delete();
+    }
+
+    public function deleteQuestionRelations()
+    {
+        $this->bookmarks()->delete();
+
+        $this->deleteNotification($this->votes->pluck('id'), 'App\Models\Vote');
+        $this->votes()->delete();
+
+        $this->deleteNotification($this->comments->pluck('id'), 'App\Models\Comment');
+        $this->comments()->delete();
+
+        $this->answers->each(function ($answer) {
+            $answer->bookmarks()->delete();
+
+            $this->deleteNotification($answer->votes->pluck('id'), 'App\Models\Vote');
+            $answer->comments()->delete();
+
+            $this->deleteNotification($answer->comments->pluck('id'), 'App\Models\Comment');
+            $answer->comments()->delete();
+        });
+
+        $this->deleteNotification($this->answers->pluck('id'), 'App\Models\Answer');
+        $this->answers()->delete();
+    }
 }

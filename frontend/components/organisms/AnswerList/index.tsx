@@ -1,6 +1,7 @@
 import AnswerDetail from '@/components/organisms/AnswerDetail'
 import ContentCard from '@/components/templates/ContentCard'
 import { type AnswerType } from '@/pages/questions/[slug]'
+import { useEffect, useRef, useState } from 'react'
 import AnswerForm from '../AnswerForm'
 
 type Props = {
@@ -20,6 +21,21 @@ const AnswerList = ({
     slug,
     refetchHandler,
 }: Props): JSX.Element => {
+    const hash = window.location.hash
+    const hashRef = useRef(hash ? document.querySelector(hash) : null)
+    const [isRedirected, setIsRedirected] = useState<boolean>()
+
+    useEffect(() => {
+        if (isRedirected) return
+
+        const element = hash ? document.querySelector(hash) : null
+        if (element) {
+            setIsRedirected(true)
+            hashRef.current = element
+            hashRef.current?.scrollIntoView()
+        }
+    }, [isRedirected])
+
     return (
         <ContentCard header="Answers">
             <div className="flex w-full flex-col">

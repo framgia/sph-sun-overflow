@@ -8,6 +8,7 @@ import UserActions from '@/components/molecules/UserActions'
 import { useState } from 'react'
 import { useBoundStore } from '../../../helpers/store'
 import CommentForm from '../CommentForm'
+import DeleteComment from '../DeleteComment'
 
 dayjs().format()
 
@@ -33,7 +34,12 @@ const Comment = ({
     refetchHandler,
 }: Props): JSX.Element => {
     const [comment, setComment] = useState(false)
+    const [confirmDelete, setConfirmDelete] = useState(false)
     dayjs.extend(relativeTime)
+
+    const closeDelete = (): void => {
+        setConfirmDelete(false)
+    }
 
     const currentUserId = useBoundStore.getState().user_id
 
@@ -51,8 +57,21 @@ const Comment = ({
                                     setComment(!comment)
                                 }}
                             />
-                            {/* <LinkAction href="#" icon="trash" title="Delete" /> */}
+                            <ClickAction
+                                icon="trash"
+                                title="Delete"
+                                hoverColor="group-hover/action:text-primary-base"
+                                onClick={() => {
+                                    setConfirmDelete(true)
+                                }}
+                            />
                         </UserActions>
+                        <DeleteComment
+                            id={id}
+                            isOpen={confirmDelete}
+                            closeDelete={closeDelete}
+                            refetchHandler={refetchHandler}
+                        />
                     </div>
                 )}
             </div>

@@ -92,4 +92,22 @@ class Answer extends Model
     {
         return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
+
+    public function deleteNotification($notifiableIds, $type)
+    {
+        UserNotification::where('notifiable_type', $type)->whereIn('notifiable_id', $notifiableIds)->delete();
+    }
+
+    public function deleteAnswerRelations()
+    {
+        $this->deleteNotification($this->pluck('id'), 'App\Models\Answer');
+
+        $this->bookmarks()->delete();
+
+        $this->deleteNotification($this->votes->pluck('id'), 'App\Models\Vote');
+        $this->votes()->delete();
+
+        $this->deleteNotification($this->comments->pluck('id'), 'App\Models\Comment');
+        $this->comments()->delete();
+    }
 }
