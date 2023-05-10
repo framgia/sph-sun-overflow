@@ -113,7 +113,7 @@ const TeamsListPage = (): JSX.Element => {
                     </div>
                     {teams?.length !== 0 ? (
                         <div className="scrollbar mt-4 flex w-full flex-col justify-between gap-4 overflow-y-auto ">
-                            <div className="grid-rows-9 grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3 2xl:grid-rows-3">
+                            <div className="grid-rows-9 grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3 2xl:grid-rows-2">
                                 {teams?.map((team) => {
                                     return (
                                         <TeamCard
