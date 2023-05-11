@@ -35,7 +35,6 @@ final class UploadImage
     public function __invoke($_, array $args)
     {
         $user = Auth::user();
-        // return $user->first_name;
         return $this->uploadImage($args['img'], $user->slug, 'temp');
     }
 }

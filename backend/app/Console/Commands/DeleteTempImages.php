@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,7 +32,7 @@ class DeleteTempImages extends Command
         $temp_folder = storage_path('app/public/temp');
         $this->line($temp_folder, null, OutputInterface::OUTPUT_NORMAL);
         File::deleteDirectory($temp_folder);
-        mkdir($temp_folder,0777, true);
+        mkdir($temp_folder, 0777, true);
 
         return Command::SUCCESS;
     }
