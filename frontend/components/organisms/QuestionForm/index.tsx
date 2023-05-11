@@ -189,6 +189,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                 },
             })
                 .then(async (data) => {
+                    successNotify(successMessage)
                     let slug: string
                     if (id) {
                         slug = data.data.updateQuestion.slug
@@ -211,7 +212,9 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         await router.push(`/teams/${router.query.prev as string}/question/${slug}`)
                     }
                 })
-                .catch(() => {})
+                .catch((e) => {
+                    errorNotify(e.errorMessage)
+                })
         } else {
             await createQuestion({
                 variables: {
@@ -223,6 +226,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                 },
             })
                 .then(async (data) => {
+                    successNotify(successMessage)
                     console.log(data)
                     let slug: string
                     if (id) {
@@ -246,10 +250,10 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         await router.push(`/teams/${router.query.prev as string}/question/${slug}`)
                     }
                 })
-                .catch(() => {})
+                .catch((e) => {
+                    errorNotify(e.errorMessage)
+                })
         }
-
-        successNotify(successMessage)
     }
     return (
         <div className="w-[888px] p-4">
@@ -280,8 +284,8 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                             )}
                         </div>
                     </div>
-                    <div className="Description w-full gap-2 self-center">
-                        <div className="flex justify-between">
+                    <div className="Description flex w-full flex-col gap-2 self-center">
+                        <div className="flex items-center justify-between">
                             <label
                                 htmlFor="descriptionInput"
                                 className="text-sm font-medium text-neutral-900"
