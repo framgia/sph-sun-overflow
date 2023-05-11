@@ -46,10 +46,10 @@ const Table = ({
     clickableArr = [],
 }: TableProps): JSX.Element => {
     return (
-        <div className="w-full place-self-center overflow-hidden rounded-md 2xl:w-[60rem]">
-            <div className="relative min-h-[565px] overflow-x-auto border-2 bg-white shadow-md sm:rounded-lg">
+        <div className="w-full place-self-center overflow-hidden rounded-md drop-shadow-xsm 2xl:w-[60rem]">
+            <div className="relative overflow-x-auto bg-white sm:rounded-lg">
                 <table className="w-full text-left">
-                    <thead className="bg-primary-200 uppercase text-neutral-900">
+                    <thead className="border-0 bg-primary-200 uppercase text-neutral-900">
                         <tr>
                             {columns.map((column) => (
                                 <th
@@ -65,7 +65,7 @@ const Table = ({
                             ))}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="border border-t-0">
                         {dataSource.length > 0 ? (
                             dataSource.map((data, key) => {
                                 return (
@@ -112,7 +112,11 @@ const Table = ({
                         )}
                     </tbody>
                 </table>
-                {footer && <div className="cursor-default border-b bg-white p-4 ">{footer}</div>}
+                {footer && (
+                    <div className="cursor-default rounded-b-md border border-t-0 bg-white p-4 ">
+                        {footer}
+                    </div>
+                )}
             </div>
         </div>
     )
