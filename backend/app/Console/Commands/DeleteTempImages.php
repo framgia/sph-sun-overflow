@@ -21,7 +21,7 @@ class DeleteTempImages extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Deletes all Images on /storage/app/public/temp';
 
     /**
      * Execute the console command.
