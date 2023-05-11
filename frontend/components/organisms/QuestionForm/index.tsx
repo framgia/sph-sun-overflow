@@ -44,6 +44,19 @@ interface Props {
     refetch: (input: { queryString: string }) => Promise<ApolloQueryResult<any>>
 }
 
+export const parseImage = (value: string): string => {
+    const replacedStr = value.replace(
+        /<span\s+data-src="([^"]+)"\s+data-alt="([^"]+)">!image\(([^)]+)\)<\/span>/gi,
+        '<img src="$3" alt="$2">'
+    )
+    return replacedStr
+}
+
+const minimizeImage = (value: string): string => {
+    const imgRegex = /<img.*?src="(.+?)".*?>/g
+    return value.replace(imgRegex, '<span data-src="$1" data-alt="$1">!image($1)</span>')
+}
+
 const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element => {
     let id: number | undefined
     let title: string | undefined
@@ -53,6 +66,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
     let team: TeamType | undefined
 
     if (initialState) {
+        initialState.content = minimizeImage(initialState.content)
         ;({ id, content, title, tags, is_public, team } = initialState)
     }
 
@@ -162,6 +176,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
             errorNotify(errorMessage)
             return
         }
+        data.description = parseImage(data.description)
         if (id) {
             await updateQuestion({
                 variables: {
@@ -208,6 +223,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                 },
             })
                 .then(async (data) => {
+                    console.log(data)
                     let slug: string
                     if (id) {
                         slug = data.data.updateQuestion.slug
@@ -250,7 +266,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                             <input
                                 id="titleInput"
                                 type="text"
-                                className={`w-2/3 rounded-lg border border-[#EEEEEE] bg-white`}
+                                className={`w-2/3 rounded-lg border border-neutral-disabled bg-white`}
                                 {...register('title', {})}
                             />
                             {hasTeam && (
@@ -278,7 +294,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         <Controller
                             control={control}
                             name="description"
-                            render={({ field: { onChange, value } }) => (
+                            render={({ field: { onChange, value, ref } }) => (
                                 <div className="">
                                     {isPreview ? (
                                         <EditorPreview value={value} />

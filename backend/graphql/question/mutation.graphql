@@ -15,4 +15,5 @@ extend type Mutation {
         team_id: ID
     ): Question! @guard(with: ["api"])
     deleteQuestion(id: ID!): Question @guard(with: ["api"])
+    uploadImage(img: String!): String! @guard(with: ["api"])
 }
