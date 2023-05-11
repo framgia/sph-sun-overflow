@@ -72,6 +72,7 @@ const AdminTeams = (): JSX.Element => {
             page: 1,
             isAdmin: true,
         },
+        notifyOnNetworkStatusChange: true,
     })
     const teamLeaders = useQuery(GET_ALL_TEAM_LEADERS)
 

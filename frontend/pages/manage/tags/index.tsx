@@ -66,6 +66,7 @@ const Tags: NextPage = () => {
             page: 1,
             sort: [{ column: 'UPDATED_AT', order: 'DESC' }],
         },
+        notifyOnNetworkStatusChange: true,
     })
 
     useEffect(() => {

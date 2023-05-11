@@ -1,3 +1,4 @@
+import { CustomIcons } from '@/components/atoms/Icons'
 import Search from '@/components/atoms/Icons/Search'
 import InputField from '@/components/atoms/InputField'
 import PageTitle from '@/components/atoms/PageTitle'
@@ -10,6 +11,8 @@ import { errorNotify } from '@/helpers/toast'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+
+const { LoadingSpinner } = CustomIcons
 
 type TeamType = {
     id: number
@@ -31,11 +34,11 @@ const TeamsListPage = (): JSX.Element => {
         },
     })
 
-    if (userQuery.loading) return loadingScreenShow()
     if (userQuery.error) return <span>{errorNotify(`Error! ${userQuery.error?.message}`)}</span>
 
-    const pageInfo: PaginatorInfo = userQuery?.data?.getUserTeams.paginatorInfo
-    const teams: TeamType[] = userQuery?.data?.getUserTeams.data
+    const { data: teams, paginatorInfo } = userQuery.data?.getUserTeams ?? {}
+    const pageInfo: PaginatorInfo = paginatorInfo
+    const userTeams: TeamType[] = teams
 
     const onPageChange = async (first: number, page: number): Promise<void> => {
         await userQuery.refetch({ first, page })
@@ -63,13 +66,16 @@ const TeamsListPage = (): JSX.Element => {
     }
 
     const onSearchInputChange = (value: string): void => {
-        if (value === '') {
+        if (value === '' && term !== '') {
+            const { query } = router
             void userQuery.refetch({
                 first: 9,
                 page: 1,
                 name: `%%`,
             })
             setTerm('')
+            delete query.search
+            void router.replace({ query })
         }
         setSearchKey(value)
     }
@@ -77,44 +83,46 @@ const TeamsListPage = (): JSX.Element => {
     return (
         <>
             <PageTitle title="Teams" />
-            <div className="flex max-h-full w-full justify-center rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+            <div
+                className={`flex max-h-full w-full justify-center rounded-[5px] border border-neutral-200 bg-neutral-white p-4 ${
+                    userQuery.loading ? 'pointer-events-none' : ''
+                }`}
+            >
                 <div className="flex w-full flex-col gap-4 align-middle">
                     <div className="flex w-full justify-between">
                         <div className="text-xl font-semibold text-neutral-900">My Teams</div>
                     </div>
-                    <div className="w-full">
-                        <div>
-                            <form onSubmit={handleSearchSubmit}>
-                                <InputField
-                                    name="search"
-                                    placeholder="Search"
-                                    icon={
-                                        <div className="absolute top-1/2 left-1.5 -translate-y-1/2 transform">
-                                            <Search />
-                                        </div>
-                                    }
-                                    additionalClass="h-10 w-72 pl-8"
-                                    value={searchKey}
-                                    onChange={(e) => {
-                                        onSearchInputChange(e.target.value)
-                                    }}
-                                />
-                            </form>
-                            {term && (
-                                <div className="w-80">
-                                    <div className="truncate px-2 pt-1 text-sm text-gray-600">
-                                        {`${pageInfo?.total} search ${
-                                            pageInfo?.total !== 1 ? `results` : `result`
-                                        } for "${term}"`}
+                    <div className="flex flex-col gap-2">
+                        <form onSubmit={handleSearchSubmit}>
+                            <InputField
+                                name="search"
+                                placeholder="Search"
+                                icon={
+                                    <div className="absolute top-1/2 left-1.5 -translate-y-1/2 transform">
+                                        <Search />
                                     </div>
-                                </div>
-                            )}
-                        </div>
+                                }
+                                additionalClass="h-10 w-72 pl-8"
+                                value={searchKey}
+                                onChange={(e) => {
+                                    onSearchInputChange(e.target.value)
+                                }}
+                            />
+                        </form>
+                        {term && (
+                            <div className="flex gap-1 truncate text-sm font-medium text-neutral-700">
+                                {!pageInfo ? <LoadingSpinner /> : <span>{pageInfo.total} </span>}
+                                {pageInfo?.total === 1 ? 'result' : 'results'} for {`"${term}"`}
+                            </div>
+                        )}
                     </div>
-                    {teams?.length !== 0 ? (
+
+                    {userQuery.loading ? (
+                        loadingScreenShow()
+                    ) : userTeams.length ? (
                         <div className="scrollbar mt-4 flex w-full flex-col justify-between gap-4 overflow-y-auto ">
                             <div className="grid-rows-9 grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3 2xl:grid-rows-2">
-                                {teams?.map((team) => {
+                                {userTeams?.map((team) => {
                                     return (
                                         <TeamCard
                                             key={team.id}
@@ -126,14 +134,12 @@ const TeamsListPage = (): JSX.Element => {
                                     )
                                 })}
                             </div>
-                            <div className=" mt-4 flex h-14 w-full items-center justify-center">
-                                {pageInfo?.lastPage > 1 && (
-                                    <Paginate {...pageInfo} onPageChange={onPageChange} />
-                                )}
-                            </div>
+                            {!userQuery.loading && pageInfo?.lastPage > 1 && (
+                                <Paginate {...pageInfo} onPageChange={onPageChange} />
+                            )}
                         </div>
                     ) : (
-                        <span className="flex h-20 w-full items-center justify-center p-2 text-center text-lg font-bold text-primary-gray">
+                        <span className="p-2 text-center text-lg font-semibold text-neutral-500">
                             No teams to show
                         </span>
                     )}

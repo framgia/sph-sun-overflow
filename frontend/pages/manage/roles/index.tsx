@@ -173,6 +173,7 @@ const RolesPage = (): JSX.Element => {
             first: 8,
             page: 1,
         },
+        notifyOnNetworkStatusChange: true,
     })
 
     useEffect(() => {

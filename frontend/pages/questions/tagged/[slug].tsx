@@ -21,9 +21,10 @@ const TagQuestionsPage = (): JSX.Element => {
         variables: {
             first: 10,
             page: 1,
-            orderBy: [{ column: 'CREATED_AT', order: 'DESC' }],
+            orderBy: [order],
             filter: { tag: selectedTag },
         },
+        notifyOnNetworkStatusChange: true,
     })
 
     useEffect(() => {

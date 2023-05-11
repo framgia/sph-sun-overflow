@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button'
+import { CustomIcons } from '@/components/atoms/Icons'
 import Search from '@/components/atoms/Icons/Search'
 import InputField from '@/components/atoms/InputField'
 import PageTitle from '@/components/atoms/PageTitle'
@@ -15,6 +16,8 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { type View } from '../manage/users/[slug]'
 import { type QuestionType } from './[slug]'
+
+const { LoadingSpinner } = CustomIcons
 
 export interface PaginatorInfo {
     perPage: number
@@ -74,24 +77,11 @@ const QuestionsPage = (): JSX.Element => {
             filter: { keyword: searchKeyForApi, tag: '', ...answerFilter },
             orderBy: [order],
         },
+        notifyOnNetworkStatusChange: true,
     })
-
-    if (loading) return loadingScreenShow()
     if (error) return <span>{errorNotify(`Error! ${error.message}`)}</span>
 
-    const { data: questions, paginatorInfo } = data?.questions ?? {
-        data: {
-            questions: [],
-            paginatorInfo: {
-                perPage: 0,
-                currentPage: 0,
-                lastPage: 0,
-                total: 0,
-                hasMorePages: false,
-                count: 0,
-            },
-        },
-    }
+    const { data: questions, paginatorInfo } = data?.questions ?? {}
     const questionList: QuestionType[] = questions
     const pageInfo: PaginatorInfo = paginatorInfo
 
@@ -127,9 +117,9 @@ const QuestionsPage = (): JSX.Element => {
         })
     }
 
-    const renderQuestionsItems = (): JSX.Element[] | null | JSX.Element => {
+    const renderQuestionsItems = (): JSX.Element[] | null => {
         return (
-            questionList?.map((question: QuestionType) => {
+            questionList.map((question: QuestionType) => {
                 const props = {
                     key: question.id,
                     slug: question.slug,
@@ -158,13 +148,19 @@ const QuestionsPage = (): JSX.Element => {
     return (
         <>
             <PageTitle title="Questions" />
-            <div className="flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4">
+            <div
+                className={`flex max-h-full flex-col gap-4 rounded-[5px] border border-neutral-200 bg-neutral-white p-4 ${
+                    loading ? 'pointer-events-none' : ''
+                }`}
+            >
                 <div className="flex w-full items-center justify-between">
                     <div className="text-xl font-semibold text-neutral-900">All Questions</div>
                     <Button
                         usage="stroke"
                         size="medium"
-                        onClick={async () => await router.push('/questions/add')}
+                        onClick={() => {
+                            void router.push('/questions/add')
+                        }}
                     >
                         Ask a Question
                     </Button>
@@ -184,7 +180,7 @@ const QuestionsPage = (): JSX.Element => {
                                 value={searchKeyForInput}
                                 onChange={(e) => {
                                     setSearchKeyForInput(e.target.value)
-                                    if (e.target.value === '') {
+                                    if (e.target.value === '' && searchKeyForApi !== '') {
                                         const { query } = router
                                         setSearchKeyForApi('')
                                         void refetch({
@@ -200,8 +196,9 @@ const QuestionsPage = (): JSX.Element => {
                             />
                         </form>
                         {searchKeyForApi && (
-                            <div className="truncate text-sm font-medium text-neutral-700">
-                                {pageInfo.total} {pageInfo.total === 1 ? 'result' : 'results'} for{' '}
+                            <div className="flex gap-1 truncate text-sm font-medium text-neutral-700">
+                                {!pageInfo ? <LoadingSpinner /> : <span>{pageInfo.total} </span>}
+                                {pageInfo?.total === 1 ? 'result' : 'results'} for{' '}
                                 {`"${searchKeyForApi}"`}
                             </div>
                         )}
@@ -226,16 +223,24 @@ const QuestionsPage = (): JSX.Element => {
                 </div>
 
                 <div className="question-list scrollbar flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
-                    <div
-                        className={`${
-                            viewType === 'List'
-                                ? 'flex flex-col'
-                                : 'grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
-                        } gap-4`}
-                    >
-                        {renderQuestionsItems()}
-                    </div>
-                    {pageInfo?.lastPage > 1 && (
+                    {loading ? (
+                        loadingScreenShow()
+                    ) : !questionList.length ? (
+                        <span className="p-2 text-center text-lg font-semibold text-neutral-500">
+                            No questions to show
+                        </span>
+                    ) : (
+                        <div
+                            className={`${
+                                viewType === 'List'
+                                    ? 'flex flex-col'
+                                    : 'grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+                            } gap-4`}
+                        >
+                            {renderQuestionsItems()}
+                        </div>
+                    )}
+                    {!loading && pageInfo?.lastPage > 1 && (
                         <Paginate {...pageInfo} onPageChange={onPageChange} />
                     )}
                 </div>
