@@ -13,6 +13,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { type UserType } from '@/pages/questions/[slug]'
 import { useMutation, useQuery } from '@apollo/client'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import TeamsFormModal from '../../../components/organisms/TeamsFormModal/index'
@@ -58,7 +59,7 @@ const columns: ColumnType[] = [
     {
         title: 'Actions',
         key: 'action',
-        width: 96,
+        width: 128,
     },
 ]
 
@@ -143,6 +144,9 @@ const AdminTeams = (): JSX.Element => {
         const team = getTeamDataTable(teamArr).find((team) => +team.key === key)
         return (
             <div className="flex flex-row items-center gap-4">
+                <Link href={`/manage/teams/${team?.slug as string}`}>
+                    <Icons name="eye" size="18" />
+                </Link>
                 <EditAction
                     team={team}
                     refetch={async () => {
