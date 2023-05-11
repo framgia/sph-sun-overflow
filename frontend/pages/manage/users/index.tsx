@@ -12,6 +12,7 @@ import GET_USERS_ADMIN from '@/helpers/graphql/queries/get_users_admin'
 import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify, successNotify } from '@/helpers/toast'
 import { useMutation, useQuery, type ApolloError } from '@apollo/client'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -154,20 +155,25 @@ const AdminUsers = (): JSX.Element => {
     } = usersQuery.data
     const newUserArr = convertUserArr(userArr)
 
-    const editAction = (key: number): JSX.Element => {
+    const renderActions = (key: number): JSX.Element => {
         return (
-            <Button
-                usage="toggle-modal"
-                onClick={() => {
-                    setIsOpenEdit(true)
-                    reset({
-                        role: getRole(mapRolesForSelection, newUserArr[key].role),
-                        userId: newUserArr[key].id,
-                    })
-                }}
-            >
-                <Icons name="pencil" size="18" />
-            </Button>
+            <div className="flex flex-row items-center gap-4">
+                <Link href={`/manage/users/${newUserArr[key].slug}`}>
+                    <Icons name="eye" size="18" />
+                </Link>
+                <Button
+                    usage="toggle-modal"
+                    onClick={() => {
+                        setIsOpenEdit(true)
+                        reset({
+                            role: getRole(mapRolesForSelection, newUserArr[key].role),
+                            userId: newUserArr[key].id,
+                        })
+                    }}
+                >
+                    <Icons name="pencil" size="18" />
+                </Button>
+            </div>
         )
     }
 
@@ -210,7 +216,7 @@ const AdminUsers = (): JSX.Element => {
                 <Table
                     columns={columns}
                     dataSource={newUserArr}
-                    actions={editAction}
+                    actions={renderActions}
                     footer={renderFooter()}
                     clickableArr={clickableArr}
                 />
