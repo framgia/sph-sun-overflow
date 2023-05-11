@@ -4,8 +4,14 @@ type Props = {
     onClick: () => void
     icon: string
     title: string
+    hoverColor?: string
 }
-const ClickAction = ({ onClick, icon, title }: Props): JSX.Element => {
+const ClickAction = ({
+    onClick,
+    icon,
+    title,
+    hoverColor = 'group-hover/action:text-primary-blue',
+}: Props): JSX.Element => {
     return (
         <div
             onClick={onClick}
@@ -14,11 +20,9 @@ const ClickAction = ({ onClick, icon, title }: Props): JSX.Element => {
             <Icons
                 name={icon}
                 size="16"
-                additionalClass="flex items-center text-neutral-900 group-hover/action:text-primary-blue"
+                additionalClass={`flex items-center text-neutral-900 ${hoverColor}`}
             />
-            <span className="flex text-xs text-neutral-900 group-hover/action:text-primary-blue">
-                {title}
-            </span>
+            <span className={`flex text-xs text-neutral-900 ${hoverColor}`}>{title}</span>
         </div>
     )
 }

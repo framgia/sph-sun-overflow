@@ -8,4 +8,5 @@ extend type Mutation {
         id: ID! @rules(apply: ["required", "integer"])
         content: String! @rules(apply: ["required"])
     ): Comment! @guard(with: ["api"])
+    deleteComment(id: ID!): Comment @guard(with: ["api"])
 }

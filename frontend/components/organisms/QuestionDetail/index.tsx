@@ -1,3 +1,4 @@
+import ClickAction from '@/components/atoms/ClickAction'
 import LinkAction from '@/components/atoms/LinkAction'
 import Bookmark from '@/components/molecules/Bookmark'
 import Privacy from '@/components/molecules/Privacy'
@@ -6,13 +7,17 @@ import Tags from '@/components/molecules/Tags'
 import UserActions from '@/components/molecules/UserActions'
 import Votes from '@/components/molecules/Votes'
 import ContentCard from '@/components/templates/ContentCard'
+import copyLink from '@/helpers/copyLink'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { Fragment, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
 import type { CommentType, TagType, UserType } from '../../../pages/questions/[slug]'
 import Comments from '../Comments'
+import DeleteQuestion from '../DeleteQuestion'
 
 type QuestionDetailProps = {
     id: number
@@ -56,6 +61,8 @@ const QuestionDetail = ({
     comments,
 }: QuestionDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
+    const [confirmDelete, setConfirmDelete] = useState(false)
+    const router = useRouter()
 
     const voteHandler = async (value: number): Promise<void> => {
         if (is_from_user) {
@@ -66,10 +73,19 @@ const QuestionDetail = ({
         refetchHandler()
     }
 
+    const closeDelete = (): void => {
+        setConfirmDelete(false)
+    }
+
     const editLink = team_slug ? `/teams/${team_slug}/question/${slug}/edit` : `${slug}/edit`
+    const shareLink = location.href
+    const redirectLink =
+        router.asPath.split('/')[1] === 'teams'
+            ? `/teams/${String(router.query.slug)}`
+            : `/questions`
 
     return (
-        <ContentCard header="Question">
+        <ContentCard header="Question" closeRedirect={redirectLink}>
             <div className="flex w-full flex-row gap-4 p-4">
                 <div className="flex flex-col items-center gap-1">
                     <Votes
@@ -90,11 +106,36 @@ const QuestionDetail = ({
                             <span className="text-sm font-semibold text-neutral-900">{title}</span>
                             <div className="flex flex-row items-center gap-2">
                                 {is_from_user && (
-                                    <UserActions>
-                                        {/* <LinkAction href="#" icon="share" title="Share" /> */}
-                                        <LinkAction href={editLink} icon="pencil" title="Edit" />
-                                        {/* <LinkAction href="#" icon="trash" title="Delete" /> */}
-                                    </UserActions>
+                                    <Fragment>
+                                        <UserActions>
+                                            <ClickAction
+                                                icon="share"
+                                                title="Share"
+                                                onClick={async (): Promise<void> => {
+                                                    await copyLink(shareLink)
+                                                }}
+                                            />
+                                            <LinkAction
+                                                href={editLink}
+                                                icon="pencil"
+                                                title="Edit"
+                                            />
+                                            <ClickAction
+                                                icon="trash"
+                                                title="Delete"
+                                                hoverColor="group-hover/action:text-primary-base"
+                                                onClick={() => {
+                                                    setConfirmDelete(true)
+                                                }}
+                                            />
+                                        </UserActions>
+                                        <DeleteQuestion
+                                            id={id}
+                                            isOpen={confirmDelete}
+                                            closeDelete={closeDelete}
+                                            redirectLink={redirectLink}
+                                        />
+                                    </Fragment>
                                 )}
                                 <Privacy name={is_public ? 'Public' : 'Private'} />
                             </div>
