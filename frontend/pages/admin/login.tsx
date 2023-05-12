@@ -3,7 +3,7 @@ import { CustomIcons } from '@/components/atoms/Icons'
 import InputField from '@/components/atoms/InputField'
 import ADMIN_LOGIN from '@/helpers/graphql/mutations/admin_login'
 import { setUserToken } from '@/helpers/localStorageHelper'
-import { errorNotify, successNotify } from '@/helpers/toast'
+import { errorNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -66,7 +66,6 @@ const AdminLogin: NextPage = () => {
             })
                 .then(({ data }) => {
                     setLoading(false)
-                    successNotify('Admin login successful')
                     setUserToken(data.adminLogin)
                     window.location.href = '/questions'
                 })
@@ -180,7 +179,10 @@ const AdminLogin: NextPage = () => {
                                     } `}
                                 >
                                     {loading ? (
-                                        <LoadingSpinner additionalClass="flex justify-center" />
+                                        <LoadingSpinner
+                                            additionalClass="flex justify-center"
+                                            color="white"
+                                        />
                                     ) : (
                                         'Sign in'
                                     )}
