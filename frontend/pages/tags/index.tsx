@@ -181,7 +181,7 @@ const TagsListPage = (): JSX.Element => {
                 {loading ? (
                     loadingScreenShow()
                 ) : !tagList.length ? (
-                    <span className="p-2 text-center text-lg font-semibold text-neutral-500">
+                    <span className="p-2 text-center text-base font-semibold text-primary-gray">
                         No tags to show
                     </span>
                 ) : (

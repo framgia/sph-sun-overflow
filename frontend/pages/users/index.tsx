@@ -217,7 +217,7 @@ const UsersPage = (): JSX.Element => {
                 ) : (
                     <div className="scrollbar flex w-full flex-col gap-4 overflow-y-auto">
                         {!userList.length ? (
-                            <span className="p-2 text-center text-lg font-semibold text-neutral-500">
+                            <span className="p-2 text-center text-base font-semibold text-primary-gray">
                                 No users to show
                             </span>
                         ) : (
