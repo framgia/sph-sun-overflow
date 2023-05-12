@@ -18,7 +18,7 @@ const TagsTeamSidebar = (): JSX.Element => {
     const watchedTags = useBoundStore((state) => state.watchedTags)
     const { data, loading } = useQuery(QTagsTeamSidebar)
     return (
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col gap-4">
             <WatchedTags watchedTags={watchedTags} />
             {!router.asPath.includes('/teams') && <TeamSidebar data={data} loading={loading} />}
         </div>
