@@ -59,9 +59,9 @@ const CustomCombobox = ({
     }, [debounceText])
 
     return (
-        <div className="flex w-full flex-wrap p-4">
+        <div className="flex w-full flex-wrap items-center">
             <Combobox value={selected} onChange={setSelected} nullable>
-                <div className="flex w-full py-2">
+                <div className="flex w-full">
                     <Combobox.Input
                         id="comboBoxInput"
                         placeholder={placeholder}
@@ -85,7 +85,7 @@ const CustomCombobox = ({
                     )}
                 </div>
 
-                <div className="relative mt-1 w-full">
+                <div className="relative w-full">
                     <Transition
                         as={Fragment}
                         leave="transition ease-in duration-100"

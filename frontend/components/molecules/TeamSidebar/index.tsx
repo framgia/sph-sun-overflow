@@ -47,17 +47,17 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
     }, [data])
 
     return (
-        <div className="mt-4 rounded-bl-md rounded-br-md  drop-shadow-md">
-            <div className="flex h-12 w-full items-center justify-between rounded-tl-md rounded-tr-md bg-primary-200 p-2.5 text-neutral-900 drop-shadow-md">
+        <div className="rounded-smd rounded-br-md border border-neutral-200 drop-shadow-xsm">
+            <div className="flex h-12 w-full items-center justify-between rounded-t-smd bg-primary-200 p-4 text-neutral-900">
                 <div className="h-fit text-sm font-semibold">My Teams</div>
             </div>
             <div
-                className={`hide-scrollbar flex max-h-[384px] flex-wrap rounded-bl-md rounded-br-md bg-white ${
+                className={`hide-scrollbar flex max-h-[384px] flex-wrap rounded-b-smd bg-white ${
                     teams.length > 0 ? 'overflow-y-auto' : ''
                 }`}
             >
                 {teams.length === 0 && (
-                    <div className="w-full rounded-bl-md rounded-br-md p-4 text-center text-sm font-medium text-neutral-disabled">
+                    <div className="w-full rounded-b-smd p-4 text-center text-sm font-medium text-neutral-disabled">
                         Not in any teams yet
                     </div>
                 )}
@@ -98,14 +98,14 @@ const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
         extractAvatars()
         return (
             <Link
-                className="flex h-20 w-full items-center justify-between border-b-2 border-b-secondary-gray bg-neutral-white px-2 last:rounded-bl-md last:rounded-br-md last:border-b-0 hover:bg-red-50"
+                className="flex h-[72px] w-full items-center justify-between border-b border-neutral-200 bg-neutral-white px-4 last:rounded-bl-md last:rounded-br-md last:border-b-0 hover:bg-red-50"
                 href={`/teams/${team.slug}`}
             >
-                <div className="ml-2 flex flex-col overflow-hidden align-middle">
-                    <div className="w-36 overflow-hidden text-ellipsis text-sm text-gray-800 line-clamp-2">
+                <div className="flex flex flex-col overflow-hidden align-middle">
+                    <div className="w-36 overflow-hidden text-ellipsis text-sm font-medium text-neutral-900 line-clamp-2">
                         {team.name}
                     </div>
-                    <div className="text-md align-center hidden text-gray-600 md:text-sm lg:flex">
+                    <div className="align-center hidden text-xs text-gray-900 md:text-xs lg:flex">
                         {team.members.length} {team.members.length !== 1 ? 'members' : 'member'}
                     </div>
                 </div>
