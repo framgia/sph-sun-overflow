@@ -269,7 +269,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                             <input
                                 id="titleInput"
                                 type="text"
-                                className={`w-2/3 rounded-lg border border-neutral-disabled bg-white`}
+                                className={`w-2/3 rounded-lg border border-neutral-disabled bg-white pl-4`}
                                 {...register('title', {})}
                             />
                             {hasTeam && (
