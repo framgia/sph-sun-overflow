@@ -71,7 +71,7 @@ const TagsInput = ({
     }, [suggestions])
 
     return (
-        <div className="flex w-full flex-wrap rounded-lg border border-[#EEEEEE] bg-white focus-within:ring-2 focus-within:ring-blue-500 ">
+        <div className="flex w-full flex-wrap rounded-lg border border-neutral-disabled bg-white focus-within:ring-2 focus-within:ring-blue-500 ">
             <Combobox
                 value={tagsSelected}
                 onChange={(e) => {

@@ -44,6 +44,19 @@ interface Props {
     refetch: (input: { queryString: string }) => Promise<ApolloQueryResult<any>>
 }
 
+export const parseImage = (value: string): string => {
+    const replacedStr = value.replace(
+        /<span\s+data-src="([^"]+)"\s+data-alt="([^"]+)">!image\(([^)]+)\)<\/span>/gi,
+        '<img src="$3" alt="$2">'
+    )
+    return replacedStr
+}
+
+const minimizeImage = (value: string): string => {
+    const imgRegex = /<img.*?src="(.+?)".*?>/g
+    return value.replace(imgRegex, '<span data-src="$1" data-alt="$1">!image($1)</span>')
+}
+
 const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element => {
     let id: number | undefined
     let title: string | undefined
@@ -53,6 +66,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
     let team: TeamType | undefined
 
     if (initialState) {
+        initialState.content = minimizeImage(initialState.content)
         ;({ id, content, title, tags, is_public, team } = initialState)
     }
 
@@ -162,6 +176,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
             errorNotify(errorMessage)
             return
         }
+        data.description = parseImage(data.description)
         if (id) {
             await updateQuestion({
                 variables: {
@@ -174,6 +189,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                 },
             })
                 .then(async (data) => {
+                    successNotify(successMessage)
                     let slug: string
                     if (id) {
                         slug = data.data.updateQuestion.slug
@@ -196,7 +212,9 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         await router.push(`/teams/${router.query.prev as string}/question/${slug}`)
                     }
                 })
-                .catch(() => {})
+                .catch((e) => {
+                    errorNotify(e.errorMessage)
+                })
         } else {
             await createQuestion({
                 variables: {
@@ -208,6 +226,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                 },
             })
                 .then(async (data) => {
+                    successNotify(successMessage)
                     let slug: string
                     if (id) {
                         slug = data.data.updateQuestion.slug
@@ -230,10 +249,10 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         await router.push(`/teams/${router.query.prev as string}/question/${slug}`)
                     }
                 })
-                .catch(() => {})
+                .catch((e) => {
+                    errorNotify(e.errorMessage)
+                })
         }
-
-        successNotify(successMessage)
     }
     return (
         <div className="w-[888px] p-4">
@@ -250,7 +269,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                             <input
                                 id="titleInput"
                                 type="text"
-                                className={`w-2/3 rounded-lg border border-[#EEEEEE] bg-white`}
+                                className={`w-2/3 rounded-lg border border-neutral-disabled bg-white`}
                                 {...register('title', {})}
                             />
                             {hasTeam && (
@@ -264,8 +283,8 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                             )}
                         </div>
                     </div>
-                    <div className="Description w-full gap-2 self-center">
-                        <div className="flex justify-between">
+                    <div className="Description flex w-full flex-col gap-1 self-center">
+                        <div className="flex items-center justify-between">
                             <label
                                 htmlFor="descriptionInput"
                                 className="text-sm font-medium text-neutral-900"
@@ -278,7 +297,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         <Controller
                             control={control}
                             name="description"
-                            render={({ field: { onChange, value } }) => (
+                            render={({ field: { onChange, value, ref } }) => (
                                 <div className="">
                                     {isPreview ? (
                                         <EditorPreview value={value} />
@@ -317,26 +336,24 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         </div>
                     </div>
                     {tempTeams.length > 0 && (
-                        <div className="flex w-full flex-col">
-                            <div className="flex flex-row ">
-                                <div className="gap-1">
-                                    <label className="text-sm font-medium">Team (Optional)</label>
-                                    <Controller
-                                        control={control}
-                                        name="team_id"
-                                        render={({ field: { value } }) => {
-                                            const teams = transformTeams()
+                        <div className="flex w-full flex-col gap-1">
+                            <label className="text-sm font-medium text-neutral-900">
+                                Team (Optional)
+                            </label>
+                            <Controller
+                                control={control}
+                                name="team_id"
+                                render={({ field: { value } }) => {
+                                    const teams = transformTeams()
 
-                                            return (
-                                                <SortDropdown
-                                                    filters={teams}
-                                                    selectedFilter={String(selectedFilter)}
-                                                />
-                                            )
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                                    return (
+                                        <SortDropdown
+                                            filters={teams}
+                                            selectedFilter={String(selectedFilter)}
+                                        />
+                                    )
+                                }}
+                            />
                         </div>
                     )}
                 </div>

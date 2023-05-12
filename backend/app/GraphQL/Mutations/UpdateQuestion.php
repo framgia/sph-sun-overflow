@@ -4,6 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Exceptions\CustomException;
 use Illuminate\Support\Arr;
+use App\Helpers\MoveImages;
 
 final class UpdateQuestion
 {
@@ -15,6 +16,7 @@ final class UpdateQuestion
     {
         $questionData = Arr::except($args, ['tags', 'id']);
         $question = auth()->user()->questions()->find($args['id']);
+        $questionData['content'] = MoveImages::move($args['content']);
 
         $hasNoTeam = ! isset($args['team_id']) || ! $args['team_id'];
 
