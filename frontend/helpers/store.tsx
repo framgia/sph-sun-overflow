@@ -17,6 +17,7 @@ interface UserSlice {
     email: string
     avatar: string
     slug: string
+    google_id: string
     teams: UserTeamType[]
     watchedTags: ITag[]
     updated_at: string
@@ -32,6 +33,7 @@ interface UserSlice {
         email: string,
         avatar: string,
         slug: string,
+        google_id: string,
         teams: UserTeamType[],
         watchedTags: ITag[],
         updated_at: string,
@@ -53,6 +55,7 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
     email: '',
     avatar: '',
     slug: '',
+    google_id: '',
     teams: [],
     watchedTags: [],
     updated_at: '',
@@ -65,6 +68,7 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
         email,
         avatar,
         slug,
+        google_id,
         teams,
         watchedTags,
         updated_at,
@@ -78,6 +82,7 @@ const createUserSlice: StateCreator<UserSlice> = (set) => ({
             email,
             avatar,
             slug,
+            google_id,
             teams,
             watchedTags,
             updated_at,

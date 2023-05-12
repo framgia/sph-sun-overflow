@@ -29,6 +29,7 @@ const RouteWrapper = ({ children }: LayoutProps): JSX.Element => {
             data?.me.email,
             data?.me.avatar,
             data?.me.slug,
+            data?.me.google_id,
             data?.me.teams,
             data?.me.watchedTags,
             data?.me.updated_at,

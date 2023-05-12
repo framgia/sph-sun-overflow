@@ -8,6 +8,7 @@ const GET_AUTHENTICATED_USER = gql`
             last_name
             email
             avatar
+            google_id
             slug
             teams {
                 id

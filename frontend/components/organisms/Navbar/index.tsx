@@ -20,6 +20,7 @@ const Navbar = (): JSX.Element => {
         last_name: useBoundStore((state) => state.last_name),
         avatar: useBoundStore((state) => state.avatar),
         slug: useBoundStore((state) => state.slug),
+        google_id: useBoundStore((state) => state.google_id),
         updated_at: useBoundStore((state) => state.updated_at),
     }
 
@@ -90,6 +91,7 @@ const Navbar = (): JSX.Element => {
                         last_name={user.last_name}
                         avatar={user.avatar}
                         slug={user.slug}
+                        google_id={user.google_id}
                         updated_at={user.updated_at}
                     />
                 </div>

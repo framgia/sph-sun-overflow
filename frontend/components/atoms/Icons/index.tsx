@@ -21,6 +21,7 @@ import {
 import { HiCheck, HiChevronDown, HiChevronUp } from 'react-icons/hi2'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
+import ChangePassIcon from './ChangePass'
 import ChevronIcon from './Chevron'
 import DotsIcon from './Dots'
 import EyeIcon from './Eye'
@@ -132,6 +133,7 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
 
 export const CustomIcons = {
     LoadingSpinner,
+    ChangePassIcon,
     ChevronIcon,
     DotsIcon,
     EyeIcon,
