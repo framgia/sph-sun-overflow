@@ -337,26 +337,24 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                         </div>
                     </div>
                     {tempTeams.length > 0 && (
-                        <div className="flex w-full flex-col">
-                            <div className="flex flex-row ">
-                                <div className="gap-1">
-                                    <label className="text-sm font-medium">Team (Optional)</label>
-                                    <Controller
-                                        control={control}
-                                        name="team_id"
-                                        render={({ field: { value } }) => {
-                                            const teams = transformTeams()
+                        <div className="flex w-full flex-col gap-1">
+                            <label className="text-sm font-medium text-neutral-900">
+                                Team (Optional)
+                            </label>
+                            <Controller
+                                control={control}
+                                name="team_id"
+                                render={({ field: { value } }) => {
+                                    const teams = transformTeams()
 
-                                            return (
-                                                <SortDropdown
-                                                    filters={teams}
-                                                    selectedFilter={String(selectedFilter)}
-                                                />
-                                            )
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                                    return (
+                                        <SortDropdown
+                                            filters={teams}
+                                            selectedFilter={String(selectedFilter)}
+                                        />
+                                    )
+                                }}
+                            />
                         </div>
                     )}
                 </div>
