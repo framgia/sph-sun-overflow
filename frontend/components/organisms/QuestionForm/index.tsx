@@ -284,7 +284,7 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
                             )}
                         </div>
                     </div>
-                    <div className="Description flex w-full flex-col gap-2 self-center">
+                    <div className="Description flex w-full flex-col gap-1 self-center">
                         <div className="flex items-center justify-between">
                             <label
                                 htmlFor="descriptionInput"
