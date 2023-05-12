@@ -105,7 +105,10 @@ const Table = ({
                             })
                         ) : (
                             <tr className="bg-white">
-                                <td colSpan={columns.length} className="p-4">
+                                <td
+                                    colSpan={columns.length}
+                                    className="p-4 font-semibold text-primary-gray"
+                                >
                                     {isEmptyString}
                                 </td>
                             </tr>

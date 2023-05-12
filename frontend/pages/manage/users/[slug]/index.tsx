@@ -106,7 +106,7 @@ const UserDetail = (): JSX.Element => {
         }
 
         return (
-            <div className="flex justify-center py-2 text-neutral-500">
+            <div className="flex justify-center py-2 text-base font-semibold text-primary-gray">
                 <span>No {activeTab} to Show</span>
             </div>
         )

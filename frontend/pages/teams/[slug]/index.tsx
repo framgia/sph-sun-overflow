@@ -179,7 +179,7 @@ const Team = (): JSX.Element => {
                     </div>
                 </div>
                 {!questions.length && (
-                    <div className="text-center text-sm font-medium text-neutral-disabled">
+                    <div className="text-center text-base font-semibold text-neutral-disabled">
                         No Questions to Show
                     </div>
                 )}

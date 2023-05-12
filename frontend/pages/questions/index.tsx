@@ -226,7 +226,7 @@ const QuestionsPage = (): JSX.Element => {
                     {loading ? (
                         loadingScreenShow()
                     ) : !questionList.length ? (
-                        <span className="p-2 text-center text-lg font-semibold text-neutral-500">
+                        <span className="p-2 text-center text-base font-semibold text-primary-gray">
                             No questions to show
                         </span>
                     ) : (
