@@ -71,7 +71,7 @@ const TagsInput = ({
     }, [suggestions])
 
     return (
-        <div className="flex w-full flex-wrap rounded-lg border border-neutral-disabled bg-white focus-within:ring-2 focus-within:ring-blue-500 ">
+        <div className="flex w-full flex-wrap rounded-lg border border-neutral-disabled bg-white focus-within:ring-2 focus-within:ring-blue-500">
             <Combobox
                 value={tagsSelected}
                 onChange={(e) => {
@@ -80,15 +80,15 @@ const TagsInput = ({
                 multiple
                 disabled={disableInput}
             >
-                <div className="mx-1 mt-1 flex h-[34px] w-full flex-row flex-wrap gap-x-0.5 gap-y-1">
+                <div className="mx-2 mt-0.5 flex h-[34px] w-full flex-row flex-wrap gap-2.5">
                     {tagsSelected.map((tag, index) => {
                         const { name, id } = tag
                         return (
                             <div
                                 key={id}
-                                className="max-w-20 mx-0.5 my-auto flex flex-wrap items-center gap-0.5 overflow-hidden text-ellipsis rounded-2xl bg-neutral-200 px-1 py-0.5  text-neutral-900"
+                                className="max-w-20 my-auto flex flex-wrap items-center gap-0.5 overflow-hidden text-ellipsis rounded-2xl bg-neutral-200 px-1 py-0.5  text-neutral-900"
                             >
-                                <div className="label text-[10px] ">{name}</div>
+                                <div className="label text-[10px]">{name}</div>
                                 <HiX
                                     className="bg cursor-pointer rounded-xl hover:text-primary-red"
                                     onClick={() => {
@@ -99,11 +99,13 @@ const TagsInput = ({
                         )
                     })}
                     {tagsSelected.length < 5 && (
-                        <div className="flex min-w-0  flex-grow">
+                        <div className="flex min-w-0 flex-grow">
                             <Combobox.Input
                                 id="comboBoxInput"
                                 size={1}
-                                className="mx-2 flex flex-grow border-none text-sm text-gray-900 focus:ring-0 sm:w-auto"
+                                className={`flex flex-grow border-none text-sm text-gray-900 focus:ring-0 sm:w-auto ${
+                                    tagsSelected.length !== 0 ? 'pl-0' : 'pl-2'
+                                }`}
                                 onChange={(event) => {
                                     setQueryText(event.target.value)
                                 }}
@@ -124,9 +126,9 @@ const TagsInput = ({
                             setQueryText('')
                         }}
                     >
-                        <Combobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Combobox.Options className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                             {filteredTags.length === 0 && queryText !== '' ? (
-                                <div className="relative z-10 cursor-default select-none  bg-white px-4 py-2 text-gray-700">
+                                <div className="relative cursor-default select-none  bg-white px-4 py-2 text-gray-700">
                                     Nothing found.
                                 </div>
                             ) : (
@@ -134,7 +136,7 @@ const TagsInput = ({
                                     <Combobox.Option
                                         key={tag.id}
                                         className={({ active }) =>
-                                            `relative z-10 cursor-default select-none py-2 pl-10 pr-4 ${
+                                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                                 active
                                                     ? 'bg-teal-600 text-white'
                                                     : 'bg-white text-gray-900'
