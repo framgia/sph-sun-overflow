@@ -70,7 +70,7 @@ const SortDropdown = ({
         <div className="flex items-center">
             <Menu as="div" className="relative inline-block w-full text-left">
                 <div>
-                    <Menu.Button className="flex h-9 justify-end rounded-[5px] border border-neutral-500 p-2 text-sm text-neutral-900">
+                    <Menu.Button className="flex h-9 justify-end rounded-[5px] border border-neutral-900 p-2 text-sm text-neutral-900">
                         <span className="">{selectedFilter}</span>
                         {!icon ? (
                             <div className="m-auto">
