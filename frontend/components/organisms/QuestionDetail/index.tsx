@@ -140,7 +140,7 @@ const QuestionDetail = ({
                                 <Privacy name={is_public ? 'Public' : 'Private'} />
                             </div>
                         </div>
-                        <div className="ql-editor remove-padding break-all text-xs text-neutral-900">
+                        <div className="ql-editor remove-padding break-words text-xs text-neutral-900">
                             {parseHTML(content)}
                         </div>
                         <div className="w-full">
