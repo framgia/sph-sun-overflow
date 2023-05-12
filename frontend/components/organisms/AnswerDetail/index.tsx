@@ -137,7 +137,7 @@ const AnswerDetail = ({
                     <div
                         className={`${
                             !isEdit ? 'ql-editor' : ''
-                        } remove-padding break-all text-xs text-neutral-900`}
+                        } remove-padding break-words text-xs text-neutral-900`}
                     >
                         {isEdit ? (
                             <AnswerForm

@@ -68,7 +68,7 @@ const TagsCard = ({
                     <span title={name}>{name}</span>
                 </div>
                 <div className="flex h-full flex-col items-center justify-between p-4">
-                    <p className=" break-all px-4 text-center text-xs line-clamp-4">
+                    <p className=" break-words px-4 text-center text-xs line-clamp-4">
                         {description}
                     </p>
                     <div className="flex flex-col gap-2">

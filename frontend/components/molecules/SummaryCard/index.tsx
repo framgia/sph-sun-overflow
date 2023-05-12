@@ -81,7 +81,9 @@ const SummaryCard = ({
         if (content) {
             return (
                 <div className="">
-                    <p className={`break-all text-xs leading-[125%] ${lineClamp} `}>
+                    <p
+                        className={`overflow-hidden break-words text-xs leading-[125%] ${lineClamp} `}
+                    >
                         {parseHTML(content)}
                     </p>
                 </div>
