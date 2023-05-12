@@ -132,6 +132,7 @@ const UpdatePasswordModal = ({ isOpen, closeModal }: UpdatePasswordModalProps): 
                     name="currentPassword"
                     render={({ field: { onChange, value } }) => (
                         <InputField
+                            additionalClass="pr-8"
                             name="currentPassword"
                             type={showCurrentPassword ? 'text' : 'password'}
                             icon={renderEyeIcon(showCurrentPassword, () => {
@@ -151,6 +152,7 @@ const UpdatePasswordModal = ({ isOpen, closeModal }: UpdatePasswordModalProps): 
                     name="newPassword"
                     render={({ field: { onChange, value } }) => (
                         <InputField
+                            additionalClass="pr-8"
                             name="newPassword"
                             type={showNewPassword ? 'text' : 'password'}
                             icon={renderEyeIcon(showNewPassword, () => {
@@ -170,6 +172,7 @@ const UpdatePasswordModal = ({ isOpen, closeModal }: UpdatePasswordModalProps): 
                     name="confirmPassword"
                     render={({ field: { onChange, value } }) => (
                         <InputField
+                            additionalClass="pr-8"
                             name="confirmPassword"
                             type={showConfirmPassword ? 'text' : 'password'}
                             icon={renderEyeIcon(showConfirmPassword, () => {

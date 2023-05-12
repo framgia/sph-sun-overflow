@@ -18,15 +18,11 @@ const InputField = ({
     placeholder,
     value,
     icon,
-    additionalClass,
+    additionalClass = '',
     isValid = true,
     error = '',
     onChange,
 }: Props): JSX.Element => {
-    const renderIcon = (): JSX.Element | null => {
-        return icon ?? null
-    }
-
     return (
         <>
             <div className="relative">
@@ -38,15 +34,15 @@ const InputField = ({
                         {label}
                     </label>
                 )}
-                {renderIcon()}
+                {icon}
                 <input
                     type={type}
                     id={name}
                     name={name}
                     value={value}
-                    className={`${
-                        additionalClass ?? ''
-                    } w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 placeholder-neutral-disabled focus:border-blue-500 focus:ring-blue-500`}
+                    className={`${additionalClass} ${
+                        !isValid ? 'border-primary-base' : 'border-neutral-300'
+                    } w-full rounded-md border p-2.5 text-sm text-neutral-900 placeholder-neutral-disabled focus:border-blue-500 focus:ring-blue-500`}
                     placeholder={placeholder ?? ''}
                     onChange={onChange}
                 />

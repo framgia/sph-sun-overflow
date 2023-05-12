@@ -27,7 +27,9 @@ const TextArea = ({
                 name={name}
                 rows={rows}
                 value={value}
-                className="w-full rounded-md border border-neutral-300 p-2.5 text-sm text-neutral-900 focus:border-primary-blue focus:ring-primary-blue"
+                className={`${
+                    !isValid ? 'border-primary-base' : 'border-neutral-300'
+                } w-full rounded-md border p-2.5 text-sm text-neutral-900 focus:border-primary-blue focus:ring-primary-blue`}
                 placeholder={label}
                 onChange={onChange}
             />

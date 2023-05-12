@@ -15,39 +15,39 @@ type FormProps = {
     isError?: boolean
 }
 
-const selectStyles: StylesConfig<any, false, any> = {
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-        const design: CSSObjectWithLabel = {
-            ...styles,
-            // borderColor: '#F5D3CF',
-            backgroundColor: isSelected ? '#F5D3CF' : isFocused ? '#FFF4F2' : '',
-            color: '#333333',
-
-            ':active': {
-                ...styles[':active'],
-                backgroundColor: !isDisabled ? (isSelected ? '#EEB4AC' : '#F5D3CF') : undefined,
-            },
-        }
-
-        return design
-    },
-    control: (base, state) => {
-        const design: CSSObjectWithLabel = {
-            ...base,
-            borderColor: '#B8ABAB',
-            // Removes weird border around container
-            boxShadow: '',
-            '&:hover': {
-                // Overwrittes the different states of border
-                borderColor: '#B8ABAB',
-            },
-        }
-
-        return design
-    },
-}
-
 const Dropdown = ({ name, label, options, onChange, value, isError }: FormProps): JSX.Element => {
+    const selectStyles: StylesConfig<any, false, any> = {
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            const design: CSSObjectWithLabel = {
+                ...styles,
+                // borderColor: '#F5D3CF',
+                backgroundColor: isSelected ? '#F5D3CF' : isFocused ? '#FFF4F2' : '',
+                color: '#333333',
+
+                ':active': {
+                    ...styles[':active'],
+                    backgroundColor: !isDisabled ? (isSelected ? '#EEB4AC' : '#F5D3CF') : undefined,
+                },
+            }
+
+            return design
+        },
+        control: (base, state) => {
+            const design: CSSObjectWithLabel = {
+                ...base,
+                borderColor: isError ? '#FF2200' : '#B8ABAB',
+                // Removes weird border around container
+                boxShadow: '',
+                '&:hover': {
+                    // Overwrittes the different states of border
+                    borderColor: '#B8ABAB',
+                },
+            }
+
+            return design
+        },
+    }
+
     return (
         <div className="w-full">
             {label && (

@@ -23,6 +23,11 @@
     }
 }
 
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
 .loading-screen {
     height: 90vh;
     @apply flex w-full items-center justify-center;

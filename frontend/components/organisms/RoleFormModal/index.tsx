@@ -302,7 +302,13 @@ const RoleFormModal = ({ role, isOpen, closeModal, refetch, view = false }: Prop
                     </div>
                     <div>
                         <div className="text-neutral-800 text-sm font-medium">Set Permissions</div>
-                        <div className="grid h-72 w-full grid-cols-4 overflow-y-auto rounded-md border border-neutral-300 p-2">
+                        <div
+                            className={`${
+                                formErrors.permissions.length
+                                    ? 'border-primary-base'
+                                    : 'border-neutral-300'
+                            } scrollbar grid h-72 w-full grid-cols-4 overflow-y-auto rounded-md border p-2`}
+                        >
                             {renderPermissionSelection()}
                         </div>
                         {formErrors.permissions.length > 0 && (
