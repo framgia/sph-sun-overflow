@@ -227,7 +227,6 @@ const QuestionForm = ({ initialState, tagData, refetch }: Props): JSX.Element =>
             })
                 .then(async (data) => {
                     successNotify(successMessage)
-                    console.log(data)
                     let slug: string
                     if (id) {
                         slug = data.data.updateQuestion.slug
