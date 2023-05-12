@@ -13,7 +13,7 @@ type TeamCardProps = {
 const TeamCard = ({ slug, name, description, usersCount }: TeamCardProps): JSX.Element => {
     return (
         <Link href={`/teams/${slug}`}>
-            <div className="group flex h-[200px] flex-col rounded-[5px] border border-neutral-200 text-neutral-900">
+            <div className="group flex h-[200px] flex-col overflow-hidden rounded-[5px] border border-neutral-200 text-neutral-900">
                 <div className="bg-primary-200 p-2 text-center text-sm font-semibold group-hover:text-primary-base">
                     {name}
                 </div>

@@ -9,7 +9,7 @@ type Props = {
 
 const ContentCard = ({ header, children, closeRedirect }: Props): JSX.Element => {
     return (
-        <div className="flex w-full flex-col rounded-smd border border-neutral-200 bg-neutral-white drop-shadow-xsm">
+        <div className="flex w-full flex-col overflow-hidden rounded-smd border border-neutral-200 bg-neutral-white drop-shadow-xsm">
             <div className="flex h-13 w-full items-center justify-between bg-primary-200 p-4 font-semibold text-neutral-900">
                 {header}
                 {closeRedirect && closeRedirect.length > 0 && (

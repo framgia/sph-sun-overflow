@@ -58,7 +58,7 @@ const TagsCard = ({
 
     return (
         <Link href={`questions/tagged/${slug}`}>
-            <div className="group flex h-[200px] flex-col rounded-[5px] border border-neutral-200 text-neutral-900">
+            <div className="group flex h-[200px] flex-col overflow-hidden rounded-[5px] border border-neutral-200 text-neutral-900">
                 <div className="flex justify-center gap-1 truncate bg-primary-200 p-2 text-center text-sm font-semibold group-hover:text-primary-base">
                     {isWatched && (
                         <div className="pt-[2px]">
