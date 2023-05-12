@@ -101,7 +101,7 @@ const QuestionDetail = ({
                     />
                 </div>
                 <div className="flex grow flex-col gap-4">
-                    <div className="ql-snow flex w-full flex-col gap-1">
+                    <div className="ql-snow flex w-full flex-col gap-2">
                         <div className="flex w-full flex-row justify-between gap-2">
                             <span className="text-sm font-semibold text-neutral-900">{title}</span>
                             <div className="flex flex-row items-center gap-2">
