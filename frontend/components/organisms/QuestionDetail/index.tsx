@@ -11,7 +11,6 @@ import copyLink from '@/helpers/copyLink'
 import UPSERT_VOTE from '@/helpers/graphql/mutations/upsert_vote'
 import { parseHTML } from '@/helpers/htmlParsing'
 import { useMutation } from '@apollo/client'
-import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { errorNotify } from '../../../helpers/toast'
@@ -62,7 +61,6 @@ const QuestionDetail = ({
 }: QuestionDetailProps): JSX.Element => {
     const [upsertVote] = useMutation(UPSERT_VOTE)
     const [confirmDelete, setConfirmDelete] = useState(false)
-    const router = useRouter()
 
     const voteHandler = async (value: number): Promise<void> => {
         if (is_from_user) {
@@ -79,13 +77,9 @@ const QuestionDetail = ({
 
     const editLink = team_slug ? `/teams/${team_slug}/question/${slug}/edit` : `${slug}/edit`
     const shareLink = location.href
-    const redirectLink =
-        router.asPath.split('/')[1] === 'teams'
-            ? `/teams/${String(router.query.slug)}`
-            : `/questions`
 
     return (
-        <ContentCard header="Question" closeRedirect={redirectLink}>
+        <ContentCard header="Question">
             <div className="flex w-full flex-row gap-4 p-4">
                 <div className="flex flex-col items-center gap-1">
                     <Votes
@@ -133,7 +127,6 @@ const QuestionDetail = ({
                                             id={id}
                                             isOpen={confirmDelete}
                                             closeDelete={closeDelete}
-                                            redirectLink={redirectLink}
                                         />
                                     </Fragment>
                                 )}
