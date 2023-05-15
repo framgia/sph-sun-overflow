@@ -211,6 +211,7 @@ const TeamsFormModal = ({
                                 options={teamLeaders}
                                 onChange={onChange}
                                 value={value}
+                                isError={!!formErrors.teamLeader.length}
                             />
                         )}
                     />
