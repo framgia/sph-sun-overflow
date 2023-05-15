@@ -41,7 +41,10 @@ const ReactQuill: ComponentType<CustomQuillProps> = dynamic(
     async () => {
         const { default: RQ } = await import('react-quill')
         const { default: ImagePreviewBlot } = await import('@/helpers/reactQuill/imagePreview')
+        const { default: CustomClipboard } = await import('@/helpers/reactQuill/customClipboard')
+
         RQ.Quill.register('formats/imagePreview', ImagePreviewBlot, true)
+        RQ.Quill.register('modules/clipboard', CustomClipboard, true)
         const CustomQuill = ({ forwardedRef, ...props }: CustomQuillProps): JSX.Element => (
             <RQ ref={forwardedRef} {...props} />
         )
@@ -143,6 +146,7 @@ const RichTextEditor = ({
         default:
             style = undefined
     }
+
     return (
         <ReactQuill
             forwardedRef={quillRef}

@@ -8,6 +8,7 @@ const ReactQuill: ComponentType<ReactQuillProps> = dynamic(
     async (): Promise<any> => await import('react-quill'),
     { ssr: false }
 )
+
 type PreviewProps = {
     value: string
 }
@@ -18,7 +19,6 @@ const EditorPreview = ({ value = 'Nothing to Preview' }: PreviewProps): JSX.Elem
     }
 
     const replacedStr = parseImage(value)
-
     return <ReactQuill value={replacedStr} readOnly={true} modules={{ toolbar: false }} />
 }
 export default EditorPreview
