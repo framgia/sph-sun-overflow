@@ -1,4 +1,5 @@
 import PageTitle from '@/components/atoms/PageTitle'
+import ClickBack from '@/components/molecules/ClickBack'
 import AnswerList from '@/components/organisms/AnswerList'
 import QuestionDetail from '@/components/organisms/QuestionDetail'
 import GET_QUESTION from '@/helpers/graphql/queries/get_question'
@@ -119,9 +120,10 @@ const QuestionDetailPage = (): JSX.Element => {
     }
 
     return (
-        <>
+        <div className="flex w-full flex-row gap-2.5">
             <PageTitle title="Question Details" />
-            <div className="flex w-full flex-col gap-4">
+            <ClickBack />
+            <div className="flex w-[calc(100%-50px)] flex-col gap-4">
                 <QuestionDetail
                     id={question.id}
                     title={question.title}
@@ -150,7 +152,7 @@ const QuestionDetailPage = (): JSX.Element => {
                     refetchHandler={refetchHandler}
                 />
             </div>
-        </>
+        </div>
     )
 }
 

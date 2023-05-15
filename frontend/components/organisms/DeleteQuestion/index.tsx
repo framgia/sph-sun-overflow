@@ -9,10 +9,9 @@ type Props = {
     isOpen: boolean
     closeDelete: () => void
     children?: string | JSX.Element
-    redirectLink: string
 }
 
-const DeleteQuestion = ({ id, isOpen, closeDelete, redirectLink }: Props): JSX.Element => {
+const DeleteQuestion = ({ id, isOpen, closeDelete }: Props): JSX.Element => {
     const [deleteQuestion] = useMutation(DELETE_QUESTION)
     const router = useRouter()
 
@@ -21,9 +20,9 @@ const DeleteQuestion = ({ id, isOpen, closeDelete, redirectLink }: Props): JSX.E
             .then(async () => {
                 successNotify('Question deleted successfully!')
 
-                void router.push(redirectLink)
-
                 closeDelete()
+
+                router.back()
             })
             .catch((err) => {
                 errorNotify(err.message)

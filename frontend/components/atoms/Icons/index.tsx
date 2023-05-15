@@ -1,5 +1,6 @@
 import { FaLock, FaLockOpen } from 'react-icons/fa'
 import {
+    HiArrowLeft,
     HiBookmark,
     HiCheckCircle,
     HiChevronDoubleLeft,
@@ -53,6 +54,8 @@ const Icons = ({ name, size = '20', additionalClass = '' }: IconsProps): JSX.Ele
             return <HiOutlineTrash size={size} className={`cursor-pointer ${additionalClass}`} />
         case 'close':
             return <HiX size={size} className="cursor-pointer" />
+        case 'back_arrow':
+            return <HiArrowLeft size={size} className={`cursor-pointer ${additionalClass}`} />
         case 'exit':
             return <HiLogout size={size} className={`cursor-pointer ${additionalClass}`} />
         case 'dot':
