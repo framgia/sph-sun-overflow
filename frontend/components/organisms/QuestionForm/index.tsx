@@ -3,7 +3,6 @@ import EditorPreview from '@/components/molecules/EditorPreview'
 import FormAlert from '@/components/molecules/FormAlert'
 import PreviewToggle from '@/components/molecules/PreviewToggle'
 import PublicToggle from '@/components/molecules/PublicToggle'
-import RichTextEditor from '@/components/molecules/RichTextEditor'
 import SortDropdown from '@/components/molecules/SortDropdown'
 import type { FilterType } from '@/components/templates/QuestionsPageLayout'
 import CREATE_QUESTION from '@/helpers/graphql/mutations/create_question'
@@ -15,12 +14,17 @@ import { isObjectEmpty } from '@/utils'
 import { useMutation, type ApolloQueryResult } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import isEqual from 'lodash/isEqual'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { ITag } from '../../molecules/TagsInput'
 import TagsInput from '../../molecules/TagsInput'
 import QuestionFormSchema from './schema'
+
+const RichTextEditor = dynamic(async () => await import('@/components/molecules/RichTextEditor'), {
+    ssr: false,
+})
 export type FormValues = {
     title: string
     description: string

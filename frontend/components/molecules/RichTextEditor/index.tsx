@@ -1,4 +1,5 @@
 import UPLOAD_IMAGE from '@/helpers/graphql/mutations/upload_image'
+import PlainClipboard from '@/helpers/reactQuill/customClipboard'
 import { errorNotify } from '@/helpers/toast'
 import { convertBase64 } from '@/utils'
 import { useMutation } from '@apollo/client'
@@ -42,6 +43,7 @@ const ReactQuill: ComponentType<CustomQuillProps> = dynamic(
         const { default: RQ } = await import('react-quill')
         const { default: ImagePreviewBlot } = await import('@/helpers/reactQuill/imagePreview')
         RQ.Quill.register('formats/imagePreview', ImagePreviewBlot, true)
+        RQ.Quill.register('modules/clipboard', PlainClipboard, true)
         const CustomQuill = ({ forwardedRef, ...props }: CustomQuillProps): JSX.Element => (
             <RQ ref={forwardedRef} {...props} />
         )
@@ -143,6 +145,7 @@ const RichTextEditor = ({
         default:
             style = undefined
     }
+
     return (
         <ReactQuill
             forwardedRef={quillRef}
