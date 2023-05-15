@@ -47,17 +47,17 @@ const TeamSidebar = ({ data, loading = true }: TeamSidebarProps): JSX.Element =>
     }, [data])
 
     return (
-        <div className="rounded-smd rounded-br-md border border-neutral-200 drop-shadow-xsm">
-            <div className="flex h-12 w-full items-center justify-between rounded-t-smd bg-primary-200 p-4 text-neutral-900">
+        <div className="rounded-smd drop-shadow-xsm">
+            <div className="flex h-12 w-full items-center justify-between rounded-t-smd border-x border-t border-neutral-200 bg-primary-200 p-4 text-neutral-900">
                 <div className="h-fit text-sm font-semibold">My Teams</div>
             </div>
             <div
-                className={`hide-scrollbar flex max-h-[384px] flex-wrap rounded-b-smd bg-white ${
+                className={`hide-scrollbar flex max-h-[384px] flex-wrap rounded-b-smd border-x border-b border-neutral-200 bg-white ${
                     teams.length > 0 ? 'overflow-y-auto' : ''
                 }`}
             >
                 {teams.length === 0 && (
-                    <div className="w-full rounded-b-smd p-4 text-center text-sm font-medium text-neutral-disabled">
+                    <div className="w-full p-4 text-center text-sm font-medium text-neutral-disabled">
                         Not in any teams yet
                     </div>
                 )}
@@ -98,7 +98,7 @@ const TeamTab = ({ team }: TeamTabProps): JSX.Element => {
         extractAvatars()
         return (
             <Link
-                className="flex h-[72px] w-full items-center justify-between border-b border-neutral-200 bg-neutral-white px-4 last:rounded-bl-md last:rounded-br-md last:border-b-0 hover:bg-red-50"
+                className="flex h-[72px] w-full items-center justify-between border-b border-neutral-200 bg-neutral-white px-4 last:border-b-0 hover:bg-red-50"
                 href={`/teams/${team.slug}`}
             >
                 <div className="flex flex flex-col overflow-hidden align-middle">

@@ -80,19 +80,16 @@ const WatchedTags = ({ watchedTags }: WatchedTagsProps): JSX.Element => {
     }
 
     return (
-        <div
-            className="z-10 mb-0 rounded-smd border border-neutral-200 drop-shadow-xsm"
-            ref={detectorRef}
-        >
-            <div className="flex h-12 w-full items-center justify-between rounded-t-smd bg-primary-200 p-4 text-neutral-900">
+        <div className="z-10 mb-0 rounded-smd drop-shadow-xsm" ref={detectorRef}>
+            <div className="flex h-12 w-full items-center justify-between rounded-t-smd border-x border-t border-neutral-200 bg-primary-200 p-4 text-neutral-900">
                 <span className="align-left h-fit align-middle text-sm font-semibold">
                     Watched Tags
                 </span>
                 <HiOutlinePencilAlt className="cursor-pointer text-xl" onClick={toggleVisible} />
             </div>
-            <div className="flex flex-col gap-4 rounded-b-smd bg-white p-4">
+            <div className="flex flex-col gap-4 rounded-b-smd border-x border-b border-neutral-200 bg-white p-4">
                 <div
-                    className={`tags no-scrollbar flex max-h-36 flex-wrap gap-2 overflow-y-scroll rounded-bl-md rounded-br-md bg-white`}
+                    className={`tags no-scrollbar flex max-h-36 flex-wrap gap-2 overflow-y-scroll`}
                 >
                     {watchedTags.length > 0 &&
                         watchedTags.map((tag, index) => {
