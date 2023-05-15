@@ -47,11 +47,13 @@ const QuestionListItem = ({
                         </span>
                     )}
                 </div>
-                <div className="flex h-32 w-9/12 flex-col gap-2 xl:w-full">
+                <div className="flex min-h-[8rem] w-9/12 flex-col gap-2 xl:w-full">
                     <span className="truncate text-sm font-semibold hover:text-primary-base">
                         <Link href={`/questions/${slug}`}>{title}</Link>
                     </span>
-                    <p className="break-words text-[12px] line-clamp-2">{parseHTML(content)}</p>
+                    <p className="contentParse break-words text-[12px] line-clamp-2">
+                        {parseHTML(content)}
+                    </p>
                     <Tags values={tags} />
                 </div>
                 <div className="flex w-[5.5rem] justify-end">

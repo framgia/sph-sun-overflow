@@ -28,6 +28,10 @@ input::-ms-clear {
     display: none;
 }
 
+.contentParse > p > img {
+    @apply w-full max-w-xs rounded-md;
+}
+
 .loading-screen {
     height: 90vh;
     @apply flex w-full items-center justify-center;
