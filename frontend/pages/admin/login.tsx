@@ -1,13 +1,13 @@
 import Button from '@/components/atoms/Button'
 import { CustomIcons } from '@/components/atoms/Icons'
 import InputField from '@/components/atoms/InputField'
+import LoginCard from '@/components/organisms/LoginCard'
 import ADMIN_LOGIN from '@/helpers/graphql/mutations/admin_login'
 import { setUserToken } from '@/helpers/localStorageHelper'
 import { errorNotify } from '@/helpers/toast'
 import { useMutation } from '@apollo/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
@@ -87,34 +87,12 @@ const AdminLogin: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="grid h-full w-full place-items-center ">
-                <div className="flex h-96 rounded border border-neutral-200 bg-neutral-white">
-                    <div className="mr-5 grid w-96 place-items-center bg-gradient-to-t from-primary-200">
-                        <div>
-                            <Image
-                                height="104"
-                                width="104"
-                                alt="Sun Bear Logo"
-                                className="mx-auto"
-                                src="/images/sun_logo.png"
-                            />
-                            <div className="mt-1 flex justify-center text-3xl font-bold">
-                                <div className="text-primary-base">Sun</div>
-                                <div className="text-neutral-900">Overflow</div>
-                            </div>
-                            <div className="mt-2 text-center text-base tracking-widest text-neutral-700">
-                                <div>
-                                    <div>Where your</div>
-                                    <div>programming questions</div>
-                                    <div>are answered</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="ml-5 w-96 bg-neutral-white p-8">
-                        <div className="text-center text-3xl font-semibold tracking-widest text-neutral-900">
+                <LoginCard>
+                    <div className="flex h-full flex-col justify-center gap-5">
+                        <div className="text-center text-[32px] font-semibold leading-[117%] tracking-widest text-neutral-900">
                             ADMIN LOGIN
                         </div>
-                        <div className=" mt-7">
+                        <div>
                             <form
                                 className="flex w-full flex-col gap-4"
                                 onSubmit={handleSubmit(onSubmit)}
@@ -190,7 +168,7 @@ const AdminLogin: NextPage = () => {
                             </form>
                         </div>
                     </div>
-                </div>
+                </LoginCard>
             </div>
         </>
     )
