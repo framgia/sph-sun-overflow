@@ -234,7 +234,7 @@ const QuestionsPage = (): JSX.Element => {
                             className={`${
                                 viewType === 'List'
                                     ? 'flex flex-col'
-                                    : 'grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+                                    : 'grid md:grid-cols-2 xl:grid-cols-3'
                             } gap-4`}
                         >
                             {renderQuestionsItems()}

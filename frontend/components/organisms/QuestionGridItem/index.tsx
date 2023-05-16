@@ -48,7 +48,7 @@ const QuestionGridItem = ({
             <div className="flex flex-1 gap-3">
                 <div className="flex flex-1 flex-col gap-2">
                     <p className="break-all text-[12px] leading-4 line-clamp-3">
-                        {parseHTML(content)}
+                        {parseHTML(content, true)}
                     </p>
                     <div className="mt-auto flex h-5 w-fit items-center gap-[1px] rounded-[4px] border border-primary-base px-1 text-primary-base">
                         <div className="m-auto">
