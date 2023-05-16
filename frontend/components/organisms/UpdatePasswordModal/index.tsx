@@ -135,9 +135,15 @@ const UpdatePasswordModal = ({ isOpen, closeModal }: UpdatePasswordModalProps): 
                             additionalClass="pr-8"
                             name="currentPassword"
                             type={showCurrentPassword ? 'text' : 'password'}
-                            icon={renderEyeIcon(showCurrentPassword, () => {
-                                setShowCurrentPassword(!showCurrentPassword)
-                            })}
+                            icon={
+                                value ? (
+                                    renderEyeIcon(showCurrentPassword, () => {
+                                        setShowCurrentPassword(!showCurrentPassword)
+                                    })
+                                ) : (
+                                    <></>
+                                )
+                            }
                             value={value}
                             label="Current Password"
                             onChange={onChange}
@@ -155,9 +161,15 @@ const UpdatePasswordModal = ({ isOpen, closeModal }: UpdatePasswordModalProps): 
                             additionalClass="pr-8"
                             name="newPassword"
                             type={showNewPassword ? 'text' : 'password'}
-                            icon={renderEyeIcon(showNewPassword, () => {
-                                setShowNewPassword(!showNewPassword)
-                            })}
+                            icon={
+                                value ? (
+                                    renderEyeIcon(showNewPassword, () => {
+                                        setShowNewPassword(!showNewPassword)
+                                    })
+                                ) : (
+                                    <></>
+                                )
+                            }
                             value={value}
                             label="New Password"
                             onChange={onChange}
@@ -175,9 +187,15 @@ const UpdatePasswordModal = ({ isOpen, closeModal }: UpdatePasswordModalProps): 
                             additionalClass="pr-8"
                             name="confirmPassword"
                             type={showConfirmPassword ? 'text' : 'password'}
-                            icon={renderEyeIcon(showConfirmPassword, () => {
-                                setShowConfirmPassword(!showConfirmPassword)
-                            })}
+                            icon={
+                                value ? (
+                                    renderEyeIcon(showConfirmPassword, () => {
+                                        setShowConfirmPassword(!showConfirmPassword)
+                                    })
+                                ) : (
+                                    <></>
+                                )
+                            }
                             value={value}
                             label="Confirm Password"
                             onChange={onChange}
