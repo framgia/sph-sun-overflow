@@ -17,8 +17,10 @@ export function parseHTML(
             }
 
             if (newDOMNode.type === 'tag' && newDOMNode.name === 'img') {
-                const { alt } = newDOMNode.attribs
-                const filename = alt.split('/').pop()
+                const { alt, src } = newDOMNode.attribs
+
+                if (!alt && !src) return
+                const filename = alt ? alt.split('/').pop() : src.split('/').pop()
                 return <span title={filename}>{filename}</span>
             }
         },
