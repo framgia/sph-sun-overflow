@@ -125,18 +125,22 @@ const AdminLogin: NextPage = () => {
                                                 label="Password"
                                                 type={showPassword ? 'text' : 'password'}
                                                 icon={
-                                                    <div
-                                                        className="absolute bottom-0.5 right-2.5 -translate-y-1/2 transform cursor-pointer"
-                                                        onClick={() => {
-                                                            setShowPassword(!showPassword)
-                                                        }}
-                                                    >
-                                                        {showPassword ? (
-                                                            <AiOutlineEye className="text-xl" />
-                                                        ) : (
-                                                            <AiOutlineEyeInvisible className="text-xl" />
-                                                        )}
-                                                    </div>
+                                                    value ? (
+                                                        <div
+                                                            className="absolute bottom-0.5 right-2.5 -translate-y-1/2 transform cursor-pointer"
+                                                            onClick={() => {
+                                                                setShowPassword(!showPassword)
+                                                            }}
+                                                        >
+                                                            {showPassword ? (
+                                                                <AiOutlineEye className="text-xl" />
+                                                            ) : (
+                                                                <AiOutlineEyeInvisible className="text-xl" />
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <></>
+                                                    )
                                                 }
                                                 additionalClass="pr-8"
                                                 value={value}
