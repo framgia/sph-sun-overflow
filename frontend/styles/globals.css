@@ -23,6 +23,10 @@
     }
 }
 
+pre {
+    white-space: pre-wrap;
+}
+
 input::-ms-reveal,
 input::-ms-clear {
     display: none;
