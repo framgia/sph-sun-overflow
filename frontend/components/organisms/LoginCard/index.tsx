@@ -6,7 +6,7 @@ type Props = {
 
 const LoginCard = ({ children }: Props): JSX.Element => {
     return (
-        <div className="flex h-96 gap-10 rounded border border-neutral-200 bg-neutral-white">
+        <div className="flex h-96 gap-10 overflow-hidden rounded border border-neutral-200 bg-neutral-white">
             <div className="grid w-96 place-items-center bg-gradient-to-t from-primary-200">
                 <div>
                     <Image
