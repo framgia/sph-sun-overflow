@@ -149,13 +149,12 @@ const Team = (): JSX.Element => {
             },
         })
 
-        if (loading) return loadingScreenShow()
         if (error) {
             errorNotify(`Error! ${error.message}`)
             return <div></div>
         }
 
-        const { paginatorInfo, data: questions } = data.questions
+        const { paginatorInfo, data: questions } = data?.questions ?? {}
 
         const onPageChange = async (first: number, page: number): Promise<void> => {
             await refetch({
@@ -167,7 +166,7 @@ const Team = (): JSX.Element => {
         }
 
         return (
-            <div className="flex flex-col gap-4">
+            <div className="flex h-0 flex-1 flex-col gap-4">
                 <div className="flex justify-end gap-1 p-2.5">
                     <div>
                         <ViewToggle view={view} onClick={toggleView} />
@@ -178,56 +177,62 @@ const Team = (): JSX.Element => {
                         />
                     </div>
                 </div>
-                {!questions.length && (
-                    <div className="text-center text-base font-semibold text-neutral-disabled">
-                        No Questions to Show
-                    </div>
-                )}
-                {view === 'List' ? (
-                    <div className="flex w-full flex-col justify-center gap-4">
-                        {questions.map((question: any) => {
-                            return (
-                                <QuestionListItem
-                                    key={question.id}
-                                    slug={question.slug}
-                                    title={question.title}
-                                    content={question.content}
-                                    voteCount={question.vote_count}
-                                    answerCount={question.answers?.length}
-                                    viewCount={question.views_count}
-                                    isPublic={question.is_public}
-                                    tags={question.tags}
-                                    author={question.user}
-                                    createdAt={question.humanized_created_at}
-                                />
-                            )
-                        })}
-                    </div>
+                {loading ? (
+                    loadingScreenShow()
                 ) : (
-                    <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-                        {questions.map((question: any) => {
-                            return (
-                                <QuestionGridItem
-                                    key={question.id}
-                                    slug={question.slug}
-                                    title={question.title}
-                                    content={question.content}
-                                    voteCount={question.vote_count}
-                                    upvotePercentage={question.upvote_percentage}
-                                    answerCount={question.answers?.length}
-                                    viewCount={question.views_count}
-                                    isPublic={question.is_public}
-                                    tags={question.tags}
-                                    author={question.user}
-                                    createdAt={question.created_at}
-                                />
-                            )
-                        })}
-                    </div>
-                )}
-                {paginatorInfo && paginatorInfo.lastPage > 1 && (
-                    <div className="px-2.5 py-4">
-                        <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+                    <div className="scrollbar overflow-y-auto">
+                        {!questions.length && (
+                            <div className="text-center text-base font-semibold text-neutral-disabled">
+                                No Questions to Show
+                            </div>
+                        )}
+                        {view === 'List' ? (
+                            <div className="flex w-full flex-col justify-center gap-4">
+                                {questions.map((question: any) => {
+                                    return (
+                                        <QuestionListItem
+                                            key={question.id}
+                                            slug={question.slug}
+                                            title={question.title}
+                                            content={question.content}
+                                            voteCount={question.vote_count}
+                                            answerCount={question.answers?.length}
+                                            viewCount={question.views_count}
+                                            isPublic={question.is_public}
+                                            tags={question.tags}
+                                            author={question.user}
+                                            createdAt={question.humanized_created_at}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        ) : (
+                            <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+                                {questions.map((question: any) => {
+                                    return (
+                                        <QuestionGridItem
+                                            key={question.id}
+                                            slug={question.slug}
+                                            title={question.title}
+                                            content={question.content}
+                                            voteCount={question.vote_count}
+                                            upvotePercentage={question.upvote_percentage}
+                                            answerCount={question.answers?.length}
+                                            viewCount={question.views_count}
+                                            isPublic={question.is_public}
+                                            tags={question.tags}
+                                            author={question.user}
+                                            createdAt={question.created_at}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        )}
+                        {paginatorInfo && paginatorInfo.lastPage > 1 && (
+                            <div className="px-2.5 py-4">
+                                <Paginate {...paginatorInfo} onPageChange={onPageChange} />
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -281,7 +286,7 @@ const Team = (): JSX.Element => {
     return (
         <>
             <PageTitle title={team.name} />
-            <div className="flex w-full flex-row justify-between gap-4">
+            <div className="flex max-h-full w-full flex-row justify-between gap-4">
                 <div className="flex h-fit w-64 flex-col gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[0_0_4px_0_#0000000D]">
                     <div className="flex flex-col gap-1 text-sm">
                         <div className="font-bold uppercase text-neutral-900 line-clamp-1">
@@ -306,7 +311,7 @@ const Team = (): JSX.Element => {
                         </div>
                     </div>
                 </div>
-                <div className="min-h-80 flex flex-grow flex-col justify-start gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[2px_2px_4px_0_#0000000D]">
+                <div className="flex flex-1 flex-col justify-start gap-4 rounded-[5px] border border-neutral-200 bg-white p-4 shadow-[2px_2px_4px_0_#0000000D]">
                     {activeTab === 'Questions' && (
                         <div className="flex flex-row items-center justify-end">
                             <Button usage="stroke" size="large" onClick={onClickAskQuestion}>
