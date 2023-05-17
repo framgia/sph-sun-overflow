@@ -184,9 +184,9 @@ const UserDetail = (): JSX.Element => {
     const pageInfo = getPageInfo()
     const user = userData.user
     return (
-        <div className="flex flex-col gap-4 p-4 xl:flex-row">
+        <div className="flex flex-col gap-4 xl:flex-row">
             <ProfileCard isAdmin {...user} isPublic={true} toggleFollow={() => {}} />
-            <div className="h-full w-full rounded-[5px] border border-neutral-200 bg-white p-4 text-sm text-neutral-900">
+            <div className="h-full w-0 flex-grow basis-0 rounded-[5px] border border-neutral-200 bg-white p-4 text-sm text-neutral-900">
                 <div className="flex h-full flex-col gap-4">
                     <div className="flex h-[37px] border-b-[0.5px] border-neutral-disabled">
                         <div
