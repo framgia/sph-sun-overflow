@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Member extends Model
@@ -25,5 +26,10 @@ class Member extends Model
     public function teamRole()
     {
         return $this->belongsTo(TeamRole::class);
+    }
+
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(UserNotification::class, 'notifiable');
     }
 }

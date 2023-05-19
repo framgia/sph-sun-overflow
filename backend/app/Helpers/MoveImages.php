@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -10,31 +9,36 @@ use Illuminate\Support\Str;
 final class MoveImages
 {
     private static $temp_str = 'temp';
+
     private static $desc_str = 'description';
+
     private static $src_regex = '/src="([^"]*)"/i';
+
     public static function move($string)
     {
-        if (!Str::contains($string, '<img')) {
+        if (! Str::contains($string, '<img')) {
             return $string;
         }
         $newString = preg_replace_callback('/<img([^>]*)>/i', function ($match) {
             $src = self::extractImgUrl($match);
             $new_src = self::moveFileIfTemp($src);
-            return '<img src="' . $new_src . '" alt="' . $new_src . '">';
+
+            return '<img src="'.$new_src.'" alt="'.$new_src.'">';
         }, $string);
+
         return $newString;
     }
 
     private static function extractImgUrl($match)
     {
         preg_match(self::$src_regex, $match[1], $srcMatch);
+
         return $srcMatch[1];
     }
 
-
     private static function generateIfMissingPath($path)
     {
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             mkdir($path, 0777, true);
         }
     }
@@ -49,8 +53,10 @@ final class MoveImages
         if (preg_match('/\/temp\//', $string)) {
             $file_str = explode(URL::to('/').'/storage/temp/', $string)[1];
             Storage::move('/public/'.self::$temp_str.'/'.$file_str, '/public/'.self::$desc_str.'/'.$file_str);
+
             return URL::to('/').'/storage/'.self::$desc_str.'/'.$file_str;
         }
+
         return $string;
     }
 }

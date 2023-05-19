@@ -3,8 +3,8 @@
 namespace App\GraphQL\Mutations;
 
 use App\Exceptions\CustomException;
-use Illuminate\Support\Arr;
 use App\Helpers\MoveImages;
+use Illuminate\Support\Arr;
 
 final class UpdateQuestion
 {

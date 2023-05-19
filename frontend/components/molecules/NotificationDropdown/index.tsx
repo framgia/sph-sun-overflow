@@ -21,6 +21,7 @@ type UserRelation = {
     id: number
     following: User
     follower: User
+    __typename: string
 }
 
 type Morphable = {
@@ -66,11 +67,27 @@ type Vote = {
     __typename: string
 }
 
+type Team = {
+    id: number
+    name: string
+    slug: string
+    __typename: string
+}
+
+type Member = {
+    id: number
+    team: Team
+    teamRole: {
+        name: string
+    }
+    __typename: string
+}
+
 export type NotificationProps = {
     id: number
     is_read: boolean
     humanized_created_at: string
-    notifiable: Answer | Comment | Vote | UserRelation
+    notifiable: Answer | Comment | Vote | UserRelation | Member | Team
     __typename: string
 }
 
@@ -162,14 +179,32 @@ const RenderNotifications = (notifications: NotificationProps[]): JSX.Element[] 
                     }
                 }}
             >
-                <div className="flex-shrink-0">{setAvatar(n.notifiable)}</div>
-                <div className="w-full pl-3">
-                    <div className="mb-1 text-sm text-gray-600 line-clamp-3">
-                        <span className="font-semibold text-gray-900">{setName(n.notifiable)}</span>
-                        {setDetails(n.notifiable)}
-                    </div>
-                    <div className="text-xs text-gray-500">{n.humanized_created_at}</div>
-                </div>
+                {n.notifiable.__typename === 'Team' || n.notifiable.__typename === 'Member' ? (
+                    <>
+                        <div className="w-full">
+                            <div className="mb-1 text-sm text-gray-600 line-clamp-3">
+                                {setDetails(n.notifiable)}
+                                <span className="font-semibold text-gray-900">
+                                    {setName(n.notifiable)}
+                                </span>
+                            </div>
+                            <div className="text-xs text-gray-500">{n.humanized_created_at}</div>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="flex-shrink-0">{setAvatar(n.notifiable)}</div>
+                        <div className="w-full pl-3">
+                            <div className="mb-1 text-sm text-gray-600 line-clamp-3">
+                                <span className="font-semibold text-gray-900">
+                                    {setName(n.notifiable)}
+                                </span>
+                                {setDetails(n.notifiable)}
+                            </div>
+                            <div className="text-xs text-gray-500">{n.humanized_created_at}</div>
+                        </div>
+                    </>
+                )}
             </Link>
         </Menu.Item>
     ))
@@ -218,6 +253,12 @@ const setLink = (notifiable: any): string => {
         case 'UserRelation':
             link = `/users/${notifiable.follower.slug as string}`
             break
+        case 'Member':
+            link = `/teams/${notifiable.team.slug as string}`
+            break
+        case 'Team':
+            link = `/teams/${notifiable.slug as string}`
+            break
     }
     return link
 }
@@ -232,6 +273,10 @@ const setName = (notifiable: any): string => {
         name = `${notifiable.follower.first_name as string} ${
             notifiable.follower.last_name as string
         } `
+    } else if (notifiable.__typename === 'Team') {
+        name = `${notifiable.name as string} `
+    } else if (notifiable.__typename === 'Member') {
+        name = `${notifiable.team.name as string} `
     } else {
         name = `${notifiable.user.first_name as string} ${notifiable.user.last_name as string} `
     }
@@ -268,6 +313,12 @@ const setDetails = (notifiable: any): string => {
             break
         case 'UserRelation':
             details = 'followed you.'
+            break
+        case 'Team':
+            details = 'You have been assigned as Team Leader to Team: '
+            break
+        case 'Member':
+            details = `You have been assigned as ${notifiable.teamRole.name as string} to Team: `
             break
         default:
             details = ''

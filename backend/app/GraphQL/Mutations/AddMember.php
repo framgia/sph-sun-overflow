@@ -2,9 +2,11 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Events\NotificationEvent;
 use App\Exceptions\CustomException;
 use App\Models\Member;
 use App\Models\Team;
+use App\Models\UserNotification;
 use Illuminate\Support\Facades\Auth;
 
 final class AddMember
@@ -23,6 +25,18 @@ final class AddMember
         }
 
         $member = Member::create($args);
+
+        if ($authUser->id != $args['user_id']) {
+            UserNotification::create([
+                'user_id' => $args['user_id'],
+                'notifiable_type' => 'App\Models\Member',
+                'notifiable_id' => $member->id,
+            ]);
+
+            if (env('NOTIFY_USERS')) {
+                event(new NotificationEvent($args['user_id']));
+            }
+        }
 
         return $member;
     }
