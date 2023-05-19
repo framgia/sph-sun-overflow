@@ -46,7 +46,9 @@ const Comment = ({
     return (
         <div className="group flex w-full flex-col flex-wrap gap-1">
             <div className="flex w-full items-center">
-                <span className="break-words text-xs font-light text-neutral-900">{text}</span>
+                <span className="w-0 flex-1 break-words text-xs font-light text-neutral-900">
+                    {text}
+                </span>
                 {currentUserId === userId && (
                     <div className="invisible group-hover:visible">
                         <UserActions>

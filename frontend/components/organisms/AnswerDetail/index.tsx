@@ -90,7 +90,7 @@ const AnswerDetail = ({
                 />
             </div>
             <div className={`flex grow flex-col gap-4`}>
-                <div className={`${!isEdit ? 'ql-snow' : ''}} flex w-full flex-col gap-1`}>
+                <div className={`${!isEdit ? 'ql-snow' : ''} flex w-full flex-col gap-1`}>
                     <div className="flex w-full flex-row justify-between gap-2">
                         <AnswerAuthor
                             slug={user?.slug}
@@ -137,18 +137,20 @@ const AnswerDetail = ({
                     <div
                         className={`${
                             !isEdit ? 'ql-editor' : ''
-                        } remove-padding break-words text-xs text-neutral-900`}
+                        } remove-padding flex break-words  text-xs text-neutral-900`}
                     >
                         {isEdit ? (
-                            <AnswerForm
-                                question_id={question_id}
-                                id={id}
-                                onEdit={setIsEdit}
-                                content={content}
-                                refetchHandler={refetchHandler}
-                            />
+                            <div className="w-0 flex-1">
+                                <AnswerForm
+                                    question_id={question_id}
+                                    id={id}
+                                    onEdit={setIsEdit}
+                                    content={content}
+                                    refetchHandler={refetchHandler}
+                                />
+                            </div>
                         ) : (
-                            parseHTML(content)
+                            <div className="w-0 flex-1">{parseHTML(content)}</div>
                         )}
                     </div>
                 </div>
