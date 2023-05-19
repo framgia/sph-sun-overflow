@@ -14,7 +14,7 @@ import { errorNotify } from '../../helpers/toast'
 import type { TagType } from '../questions/[slug]'
 import type { OrderOption, RefetchType } from '../questions/index'
 
-const { FilterIcon, SearchIcon, LoadingSpinner } = CustomIcons
+const { SearchIcon, LoadingSpinner } = CustomIcons
 
 const filterOptions: OrderOption = {
     'Most Popular': { column: 'POPULARITY', order: 'DESC' },
