@@ -164,11 +164,6 @@ const TagsListPage = (): JSX.Element => {
                             filters={tagFilters}
                             selectedFilter={selectedFilter}
                             grouped
-                            icon={
-                                <div className="ml-1 flex h-full items-center">
-                                    <FilterIcon />
-                                </div>
-                            }
                         />
                     </div>
                     {term && (

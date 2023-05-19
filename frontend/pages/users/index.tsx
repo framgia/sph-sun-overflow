@@ -13,8 +13,7 @@ import { errorNotify } from '@/helpers/toast'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-
-const { LoadingSpinner } = CustomIcons
+const { FilterIcon, LoadingSpinner } = CustomIcons
 
 type Role = {
     id: number
@@ -40,7 +39,7 @@ const UsersPage = (): JSX.Element => {
     const scoreFilter = String(router.query.score ?? '')
     const initialRole: { id: number | null; label: string } = {
         id: null,
-        label: roleFilter || 'Sort by Role',
+        label: roleFilter || 'Filter by Role',
     }
     const initialScore: { sort: string | null; label: string } = {
         sort: scoreFilterOptions[scoreFilter] ?? null,
@@ -208,7 +207,15 @@ const UsersPage = (): JSX.Element => {
                         {term && renderSearchResultHeader()}
                     </div>
                     <div className="flex flex-row justify-end gap-1">
-                        <SortDropdown filters={roleFilters} selectedFilter={selectedRole.label} />
+                        <SortDropdown
+                            filters={roleFilters}
+                            selectedFilter={selectedRole.label}
+                            icon={
+                                <div className="ml-1 flex h-full items-center">
+                                    <FilterIcon />
+                                </div>
+                            }
+                        />
                         <SortDropdown filters={scoreSort} selectedFilter={selectedScore.label} />
                     </div>
                 </div>
