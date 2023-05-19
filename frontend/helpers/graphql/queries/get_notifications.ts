@@ -25,6 +25,22 @@ const GET_NOTIFICATIONS = gql`
                         slug
                     }
                 }
+                ... on Member {
+                    id
+                    teamRole {
+                        name
+                    }
+                    team {
+                        id
+                        name
+                        slug
+                    }
+                }
+                ... on Team {
+                    id
+                    name
+                    slug
+                }
                 ... on Answer {
                     id
                     content

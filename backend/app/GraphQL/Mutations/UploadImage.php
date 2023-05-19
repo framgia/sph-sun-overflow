@@ -2,9 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 final class UploadImage
@@ -35,6 +33,7 @@ final class UploadImage
     public function __invoke($_, array $args)
     {
         $user = Auth::user();
+
         return $this->uploadImage($args['img'], $user->slug, 'temp');
     }
 }

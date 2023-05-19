@@ -2,9 +2,9 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Helpers\MoveImages;
 use App\Models\Question;
 use Illuminate\Support\Arr;
-use App\Helpers\MoveImages;
 
 final class CreateQuestion
 {

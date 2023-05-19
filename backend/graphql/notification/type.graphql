@@ -1,4 +1,11 @@
-union Notifiable = UserNotification | Answer | Comment | Vote | UserRelation
+union Notifiable =
+      UserNotification
+    | Answer
+    | Comment
+    | Vote
+    | UserRelation
+    | Team
+    | Member
 
 type UserNotification {
     id: ID!
