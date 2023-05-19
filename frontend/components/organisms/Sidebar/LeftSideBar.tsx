@@ -75,7 +75,7 @@ const LeftSideBar = (): JSX.Element => {
             },
             {
                 IconName: 'Teams',
-                Text: 'Teams',
+                Text: 'My Teams',
                 url: 'teams',
             },
         ]
