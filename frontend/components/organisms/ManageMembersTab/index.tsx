@@ -220,7 +220,7 @@ const ManageMembersTab = ({ team, isUserTeamLeader }: Props): JSX.Element => {
                                         render={({ field: { onChange, value } }) => (
                                             <Dropdown
                                                 key="role-select"
-                                                label="Select Role"
+                                                label="Select Designation"
                                                 options={roles}
                                                 onChange={onChange}
                                                 value={value}
