@@ -2,6 +2,7 @@ import DropdownFilters from '@/components/molecules/DropdownFilters'
 import ProfileCard from '@/components/molecules/ProfileCard'
 import TeamCard from '@/components/molecules/TeamCard'
 import ViewToggle from '@/components/molecules/ViewToggle'
+import FollowModal from '@/components/organisms/FollowModal'
 import Paginate from '@/components/organisms/Paginate'
 import QuestionGridItem from '@/components/organisms/QuestionGridItem'
 import QuestionListItem from '@/components/organisms/QuestionListItem'
@@ -10,6 +11,7 @@ import { loadingScreenShow } from '@/helpers/loaderSpinnerHelper'
 import { errorNotify } from '@/helpers/toast'
 import { answerFilterOption, orderByOptions } from '@/pages/questions'
 import { useRouter } from 'next/router'
+import { Fragment } from 'react'
 import useTabData from './hooks/useTabData'
 
 export type View = 'Grid' | 'List'
@@ -33,9 +35,14 @@ const UserDetail = (): JSX.Element => {
         userTeams,
         loading,
         error,
+        isOpenFollower,
+        isOpenFollowing,
+        handleFollower,
+        handleFollowing,
         questionsRefetch,
         answersRefetch,
         teamsRefetch,
+        toggleFollow,
     } = useTabData(activeTab, view)
 
     if (loading) return loadingScreenShow()
@@ -184,101 +191,126 @@ const UserDetail = (): JSX.Element => {
     const pageInfo = getPageInfo()
     const user = userData.user
     return (
-        <div className="flex flex-col gap-4 xl:flex-row">
-            <ProfileCard isAdmin {...user} isPublic={true} toggleFollow={() => {}} />
-            <div className="h-full w-0 flex-grow basis-0 rounded-[5px] border border-neutral-200 bg-white p-4 text-sm text-neutral-900">
-                <div className="flex h-full flex-col gap-4">
-                    <div className="flex h-[37px] border-b-[0.5px] border-neutral-disabled">
-                        <div
-                            className={getActiveTabClass(activeTab === 'Questions')}
-                            onClick={() => {
-                                tabHandler('Questions')
-                            }}
-                        >
-                            Questions
+        <Fragment>
+            <div className="flex flex-col gap-4 xl:flex-row">
+                <ProfileCard
+                    isAdmin
+                    {...user}
+                    isPublic={true}
+                    toggleFollow={toggleFollow}
+                    handleFollower={handleFollower}
+                    handleFollowing={handleFollowing}
+                />
+                <div className="h-full w-0 flex-grow basis-0 rounded-[5px] border border-neutral-200 bg-white p-4 text-sm text-neutral-900">
+                    <div className="flex h-full flex-col gap-4">
+                        <div className="flex h-[37px] border-b-[0.5px] border-neutral-disabled">
+                            <div
+                                className={getActiveTabClass(activeTab === 'Questions')}
+                                onClick={() => {
+                                    tabHandler('Questions')
+                                }}
+                            >
+                                Questions
+                            </div>
+                            <div
+                                className={getActiveTabClass(activeTab === 'Answers')}
+                                onClick={() => {
+                                    const { query } = router
+                                    delete query.filter
+                                    tabHandler('Answers')
+                                }}
+                            >
+                                Answers
+                            </div>
+                            <div
+                                className={getActiveTabClass(activeTab === 'Teams')}
+                                onClick={() => {
+                                    const { query } = router
+                                    delete query.view
+                                    delete query.order
+                                    delete query.filter
+                                    tabHandler('Teams')
+                                }}
+                            >
+                                Teams
+                            </div>
                         </div>
-                        <div
-                            className={getActiveTabClass(activeTab === 'Answers')}
-                            onClick={() => {
-                                const { query } = router
-                                delete query.filter
-                                tabHandler('Answers')
-                            }}
-                        >
-                            Answers
-                        </div>
-                        <div
-                            className={getActiveTabClass(activeTab === 'Teams')}
-                            onClick={() => {
-                                const { query } = router
-                                delete query.view
-                                delete query.order
-                                delete query.filter
-                                tabHandler('Teams')
-                            }}
-                        >
-                            Teams
-                        </div>
-                    </div>
-                    {activeTab !== 'Teams' && (
-                        <div className="flex justify-end gap-1">
+                        {activeTab !== 'Teams' && (
+                            <div className="flex justify-end gap-1">
+                                <div>
+                                    <ViewToggle
+                                        view={view}
+                                        onClick={() => {
+                                            toggleView()
+                                        }}
+                                    />
+                                </div>
+                                <div className="">
+                                    <DropdownFilters
+                                        triggers={
+                                            activeTab === 'Questions'
+                                                ? ['DATE', 'ANSWER']
+                                                : ['DATE']
+                                        }
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        {renderEmptyList()}
+                        {activeTab === 'Teams' ? (
                             <div>
-                                <ViewToggle
-                                    view={view}
-                                    onClick={() => {
-                                        toggleView()
-                                    }}
-                                />
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                                    {userTeams?.data.map((team) => {
+                                        return (
+                                            <TeamCard
+                                                key={team.id}
+                                                slug={team.slug ?? ''}
+                                                name={team.name}
+                                                description={team.description}
+                                                usersCount={team.members_count}
+                                            />
+                                        )
+                                    })}
+                                </div>
                             </div>
-                            <div className="">
-                                <DropdownFilters
-                                    triggers={
-                                        activeTab === 'Questions' ? ['DATE', 'ANSWER'] : ['DATE']
-                                    }
-                                />
+                        ) : view === 'List' ? (
+                            <div>
+                                <div className="flex w-full flex-col justify-center gap-4">
+                                    {activeTab === 'Questions'
+                                        ? renderUserQuestions()
+                                        : renderUserAnswers()}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    {renderEmptyList()}
-                    {activeTab === 'Teams' ? (
-                        <div>
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                                {userTeams?.data.map((team) => {
-                                    return (
-                                        <TeamCard
-                                            key={team.id}
-                                            slug={team.slug ?? ''}
-                                            name={team.name}
-                                            description={team.description}
-                                            usersCount={team.members_count}
-                                        />
-                                    )
-                                })}
+                        ) : (
+                            <div>
+                                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                                    {activeTab === 'Questions'
+                                        ? renderUserQuestions()
+                                        : renderUserAnswers()}
+                                </div>
                             </div>
-                        </div>
-                    ) : view === 'List' ? (
-                        <div>
-                            <div className="flex w-full flex-col justify-center gap-4">
-                                {activeTab === 'Questions'
-                                    ? renderUserQuestions()
-                                    : renderUserAnswers()}
-                            </div>
-                        </div>
-                    ) : (
-                        <div>
-                            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                                {activeTab === 'Questions'
-                                    ? renderUserQuestions()
-                                    : renderUserAnswers()}
-                            </div>
-                        </div>
-                    )}
-                    {pageInfo && pageInfo.lastPage > 1 && (
-                        <Paginate {...pageInfo} onPageChange={onPageChange} />
-                    )}
+                        )}
+                        {pageInfo && pageInfo.lastPage > 1 && (
+                            <Paginate {...pageInfo} onPageChange={onPageChange} />
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+            <FollowModal
+                title="Followers"
+                content={user.followers}
+                isOpen={isOpenFollower}
+                setIsOpen={handleFollower}
+                toggleFollow={toggleFollow}
+            />
+            <FollowModal
+                title="Following"
+                content={user.following}
+                isOpen={isOpenFollowing}
+                setIsOpen={handleFollowing}
+                toggleFollow={toggleFollow}
+            />
+        </Fragment>
     )
 }
 
