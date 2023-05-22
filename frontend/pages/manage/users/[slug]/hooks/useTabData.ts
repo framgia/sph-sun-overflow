@@ -1,13 +1,15 @@
 import { type PaginatorInfo } from '@/components/templates/QuestionsPageLayout'
+import TOGGLE_FOLLOW from '@/helpers/graphql/mutations/toggle_follow'
 import GET_ANSWERS from '@/helpers/graphql/queries/get_answers'
 import GET_QUESTIONS from '@/helpers/graphql/queries/get_questions'
 import GET_TEAMS from '@/helpers/graphql/queries/get_teams'
 import GET_USER from '@/helpers/graphql/queries/get_user'
+import { successNotify } from '@/helpers/toast'
 import { answerFilterOption, orderByOptions, type RefetchType } from '@/pages/questions'
 import { type AnswerType, type QuestionType, type TeamType } from '@/pages/questions/[slug]'
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { type Tab, type View } from '..'
 
 type QuestionQueryType = {
@@ -31,7 +33,14 @@ type TeamRefetchType = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useTabData = (activeTab: Tab, view: View) => {
     const router = useRouter()
-
+    const [isOpenFollower, setIsOpenFollower] = useState<boolean>(false)
+    const [isOpenFollowing, setIsOpenFollowing] = useState<boolean>(false)
+    const handleFollower = (input: boolean): void => {
+        setIsOpenFollower(input)
+    }
+    const handleFollowing = (input: boolean): void => {
+        setIsOpenFollowing(input)
+    }
     const order = orderByOptions[String(router.query.order ?? 'Newest first')]
     const answerFilter = answerFilterOption[String(router.query.filter ?? '')]
 
@@ -104,6 +113,12 @@ const useTabData = (activeTab: Tab, view: View) => {
         }
     }, [activeTab, view, router])
 
+    // Follows
+    const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
+        refetchQueries: [{ query: GET_USER, variables: { slug: router.query.slug } }],
+        onCompleted: (data) => successNotify(data.toggleFollow),
+    })
+
     const loading = questionsLoading || answersLoading || teamsLoading || userLoading
     const error = questionsError ?? answersError ?? teamsError ?? userError
 
@@ -114,9 +129,14 @@ const useTabData = (activeTab: Tab, view: View) => {
         userTeams: userTeams?.getUserTeams,
         loading,
         error,
+        isOpenFollower,
+        isOpenFollowing,
         questionsRefetch,
         answersRefetch,
         teamsRefetch,
+        handleFollower,
+        handleFollowing,
+        toggleFollow,
     }
 }
 
