@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import UPDATE_TEAM_DASHBOARD from '../../../helpers/graphql/mutations/update_team_dashboard'
+import { parseImage } from '../QuestionForm'
 
 type DashboardContentFormValues = {
     content: string
@@ -32,6 +33,7 @@ const DashboardEditContentForm = ({ teamId, content, toggleEdit }: Props): JSX.E
 
     const onSubmit = async (data: DashboardContentFormValues): Promise<void> => {
         const cleanContent = data.content.replace(/<\/?[^>]+(>|$)/g, '')
+        data.content = parseImage(data.content)
         if (cleanContent.length <= 0) {
             setInputError({ ...inputError, content: 'Content must not be empty' })
             return
