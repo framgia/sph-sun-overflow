@@ -241,7 +241,7 @@ const Team = (): JSX.Element => {
 
     const renderDashboard = (content: string): JSX.Element => {
         return (
-            <div className="flex w-full flex-col">
+            <div className="flex h-full w-full flex-col">
                 {dashboardContentEditing ? (
                     <DashboardEditContentForm
                         toggleEdit={toggleDashboardContentEdit}
@@ -249,7 +249,7 @@ const Team = (): JSX.Element => {
                         teamId={team.id}
                     />
                 ) : (
-                    <div className="relative w-full">
+                    <div className="relative flex h-full w-full">
                         {isUserTeamLeader && (
                             <Button
                                 usage="toggle-modal"
@@ -259,9 +259,15 @@ const Team = (): JSX.Element => {
                                 <Icons name="pencil" />
                             </Button>
                         )}
-                        <div className="ql-snow mx-5 my-4">
-                            <div className="ql-editor w-full">{parseHTML(content)}</div>
-                        </div>
+                        {content === null ? (
+                            <div className="ql-snow m-auto w-full text-center text-base font-semibold text-neutral-disabled">
+                                Please add info about the team
+                            </div>
+                        ) : (
+                            <div className="ql-snow mx-5 my-4">
+                                <div className="ql-editor w-full">{parseHTML(content)}</div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
